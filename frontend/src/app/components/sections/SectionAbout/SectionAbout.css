@@ -11,6 +11,11 @@
   color: white;
 }
 
+.ParameterDescriptionText {
+  color: white;
+  font-weight: bold;
+}
+
 .AboutText {
   width: 80vw;
   color: white;
@@ -23,5 +28,5 @@
 }
 
 .Screenshot {
-   width: 40vw;
+   width: 24vw;
 }

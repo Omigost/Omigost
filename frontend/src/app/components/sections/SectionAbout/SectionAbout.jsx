@@ -40,16 +40,26 @@ class SectionAbout extends React.Component {
                   </div>
                 </td>
                 <td>
-                    <Rate disabled defaultValue={5} />
-                    <p>
-                        Flexibility
-                    </p>
-                </td>
-                <td>
-                    <Rate disabled defaultValue={4} />
-                    <p>
-                        Optimalization
-                    </p>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <Rate disabled defaultValue={5} />
+                                    <p styleName='ParameterDescriptionText'>
+                                        Flexibility
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                   <Rate disabled defaultValue={4} />
+                                   <p styleName='ParameterDescriptionText'>
+                                        Optimalization
+                                   </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </td>
               </tr>
             </tbody>
