@@ -1,0 +1,18 @@
+@import "../../../css/Theme.less";
+
+.SectionAbout {
+  font-family: @SecondaryFont;
+}
+
+.AboutText {
+  width: 80vw;
+  color: white;
+}
+
+.ExamplesTable {
+  width: 78vw;
+}
+
+.Screenshot {
+   width: 40vw;
+}

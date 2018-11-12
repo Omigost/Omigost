@@ -1,0 +1,29 @@
+@import "../../../css/Theme.less";
+
+.HeaderMenu {
+  padding-top: 0;
+  transition: all @HeaderAnimationTime;
+  position: absolute;
+  width: 100vw;
+  text-align: center;
+  background: linear-gradient(to right, #f12711 ,#f5af19);
+}
+
+.HeaderMenuSmall {
+  padding-top: 0.5vw;
+  transition: all @HeaderAnimationTime;
+}
+
+.HeaderMenuInExpander {
+
+}
+
+.HeaderMenuNotInExpander {
+
+}
+
+@media only screen and (max-width: 1024px) {
+  .HeaderMenu {
+    max-width: 93vw;
+  }
+}

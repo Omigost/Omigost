@@ -1,0 +1,66 @@
+@import "../../../css/Theme.less";
+
+.TopExpandableMenu {
+    display: inline-block;
+}
+
+.Bar {
+    padding: 0.2vh;
+    display: inline-block;
+}
+
+.BarButtonExpand {
+    display: inline-block;
+    padding: 1vh;
+    color: @AccentColor;
+    font-size: 7vh;
+}
+
+.ExpandedContent {
+    background: white;
+    background: white;
+    border-bottom: 1px solid #dedede;
+    box-shadow: 0px 2px 10px -7px rgba(0, 0, 0, 0.5);
+    font-size: @SecondaryColor;
+    position: fixed;
+    top: 12vh;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    animation: ExpandedContentAnimation;
+    animation-duration: 0.1s;
+}
+
+@keyframes ExpandedContentAnimation {
+    0% {
+        height: 0;
+    }
+    100% {
+        height: 100vh;
+    }
+}
+
+.CoverScreen {
+
+}
+
+.CoverScreen .Bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99999999;
+}
+
+.CoverScreen .ExpandedContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.CoverScreen .BarButtonExpand {
+  color: white;
+}
+
+.CoverScreen .BarButtonExpand:hover {
+  color: @AccentColor;
+}

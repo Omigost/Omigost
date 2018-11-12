@@ -1,0 +1,12 @@
+@import "../../../css/Theme.less";
+
+.Page {
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+.PageSingle {
+  max-height: 100vh;
+  overflow-y: hidden;
+  position: absolute;
+}

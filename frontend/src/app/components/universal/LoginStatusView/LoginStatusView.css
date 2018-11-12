@@ -1,0 +1,212 @@
+@import "../../../css/Theme.less";
+
+.LoginStatusViewHidden {
+    display: none !important;
+}
+
+.LoginStatusView {
+  font-family: @PrimaryFont;
+}
+
+.LoginStatusViewFree {
+  width: 16vw;
+  height: 6vw;
+  margin: 0;
+  padding: 0;
+}
+
+.LoginStatusViewInExpander {
+
+}
+
+.UserStatusWrapper {
+
+}
+
+.UserIcon {
+  display: inline;
+  margin: 0;
+  font-size: 10px;
+  margin-right: 1vw;
+}
+
+.UserName {
+  font-size: 120%;
+  color: white;
+  padding: 0.5vw;
+  cursor: pointer;
+  width: 19vw;
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 18vw;
+  max-height: 4vw;
+}
+
+.UserName:hover {
+  color: white;
+  text-decoration: none;
+}
+
+.UserAvatar {
+  width: 3vw;
+  height: 3vw;
+  border-radius: 15vw;
+}
+
+.LoginStatusViewInExpander .UserName {
+  background: transparent;
+}
+
+.LoginButton {
+  background: transparent;
+  color: @LightAccentColor;
+  border: none;
+  padding-right: 1vw;
+  padding-left: 1vw;
+  padding-top: 0.5vw;
+  padding-bottom: 0.5vw;
+  margin-top: 0.3vw;
+  display: block;
+  transition: all 0s;
+  font-size: 2vw;
+  max-width: 14vw;
+  position: relative;
+  top: -1.2vw;
+}
+
+.LoginButton:hover {
+  color: @LightAccentColor;
+}
+
+.LoginButtonSmall {
+  font-size: 1vw;
+  padding-left: 2vw;
+  margin-left: 1vw;
+}
+
+.LoginButtonMenu {
+   margin-top: 1.6vw;
+   /* border: 0.15vw solid white; */
+   color: white;
+   text-align: center;
+   border-radius: 1vw;
+}
+
+.LoginButtonMenu:hover {
+  color: #155799;
+}
+
+.LoginButtonCollapsed {
+  font-size: 1.2vw;
+  margin-top: 1.45vw;
+}
+
+.LoginButtonIcon {
+  margin-right: 0.4vw;
+}
+
+.UserIconSmall {
+  color: white;
+  height: 12vw;
+}
+
+.UserIconSmallText {
+  margin-left: 1vw;
+  display: inline-block;
+  font-size: 1vw;
+  color: black;
+}
+
+.UserIconText {
+  margin-left: 1vw;
+  display: inline-block;
+  font-size: 1vw;
+  color: white;
+}
+
+@media only screen and (max-width: 1200px) {
+  .UserIconSmallText {
+    top: 12vw;
+  }
+
+  .UserIconSmall {
+    height: 14vw;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .UserIconSmallText {
+    top: 15vw;
+    left: -3vw;
+    font-size: 1.4vw;
+  }
+
+  .UserIconSmall {
+    height: 19vw;
+  }
+}
+
+
+@media only screen and (max-width: 425px) {
+  .UserIconSmallText {
+    position: absolute;
+    font-size: 4vw;
+    transform: unset;
+    left: 18vw;
+    top: 6vw;
+  }
+
+  .UserIconSmall {
+    height: 8vw;
+    width: 53vw;
+  }
+
+  .UserName {
+    width: 65vw;
+  }
+}
+
+@media only screen and (max-width: 312px) {
+  .UserIconSmallText {
+    position: absolute;
+    left: 23vw;
+    top: 8vw;
+  }
+
+  .UserIconSmall {
+    height: 10vw;
+  }
+
+  .UserName {
+    width: 58vw;
+  }
+}
+
+.LoginStatusViewInExpander .LoginButton {
+  font-size: 5vh;
+  background: transparent;
+  color: @AccentColor;
+  font-weight: bold;
+}
+
+.LoginStatusViewInExpander .UserName {
+  color: black;
+}
+
+.LoginStatusViewPlainButton .LoginButton {
+  font-size: unset;
+  /*background: transparent;
+  font-size: unset;
+  font-weight: unset;
+  color: unset;*/
+}
+
+
+/* Disable for mobile devices */
+/* TODO: Remove and fix styling for mobile devices */
+@media only screen and (max-width: 600px) {
+  .LoginStatusView {
+    display: none;
+  }
+}

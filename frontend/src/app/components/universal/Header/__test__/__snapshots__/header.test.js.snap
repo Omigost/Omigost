@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot test of Header 1`] = `
+<div
+  styleName="Header"
+>
+  <HeaderBar />
+  <div
+    styleName="HeaderMenuWrapper"
+  >
+    <PropsContentProvider />
+  </div>
+  <PropsContentProvider />
+  <div
+    styleName="BackgroundImageWrapper"
+  >
+    <img
+      src="img/backgrounds/home2g.png"
+      styleName="BackgroundImage"
+    />
+  </div>
+  <div
+    styleName="HeaderElementWrapper"
+  >
+    <PropsContentProvider />
+  </div>
+  <div
+    styleName="ExpandableMenuWrapper"
+  >
+    <TopExpandableMenu
+      coverScreen={true}
+    />
+  </div>
+</div>
+`;

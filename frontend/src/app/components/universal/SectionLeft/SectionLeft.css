@@ -1,0 +1,13 @@
+@import "../../../css/Theme.less";
+
+.SectionLeft {
+  padding-top: 1vw;
+  padding-bottom: 1vw;
+  padding-left: 0;
+  padding-right: 15vw;
+}
+
+.SectionLeftNoMargin {
+  position: relative;
+  left: -20vw;
+}

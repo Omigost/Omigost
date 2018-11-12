@@ -1,0 +1,130 @@
+@import "../../../css/Theme.less";
+
+.Header {
+  font-family: @PrimaryFont;
+  background-color: black;
+  color: white;
+  height: 100vh;
+  max-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+.HeaderMenuWrapper {
+  position: absolute;
+  width: 100%;
+  z-index: 9999999;
+}
+
+.ExpandableMenuWrapper {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  z-index: 99999999;
+}
+
+.FullHeader {
+  font-family: @PrimaryFont;
+  background-color: black;
+  color: white;
+  height: 100vh;
+  max-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+.NotLimitedImageHeader {
+    height: unset !important;
+    max-height: unset !important;
+    overflow-y: visible !important;
+}
+
+.HeaderElementWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.HeaderElementWrapperCentered {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  height: @HeaderHeight;
+  padding-top: @HeaderHeight / 4;
+}
+
+.BackgroundImageWrapperFilter {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.478431);
+}
+
+.BackgroundImage {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to right, #f12711 ,#f5af19);
+}
+
+.BackgroundImageWrapper {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.BackgroundImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.BackgroundImageFull {
+  min-height: 100vw;
+}
+
+.ForegroundWrapper {
+  position: absolute;
+  overflow: hidden;
+  max-width: 100vw;
+}
+
+.Foreground {
+  height: 131vh;
+  position: relative;
+  top: -31vh;
+  left: -3vw;
+}
+
+@media only screen and (max-width: 600px) {
+  .Foreground {
+    height: 133vh;
+    top: 28vh;
+  }
+}
+
+@media only screen and (max-width: 435px) {
+  .ExpandableMenuWrapper {
+    display: block;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .Foreground {
+    height: 111vh;
+    top: 51vh;
+  }
+}
+
+@media only screen and (max-width: 215px) {
+  .Foreground {
+    height: 101vh;
+    top: 45vh;
+    left: -58vw;
+  }
+}

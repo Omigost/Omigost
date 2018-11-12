@@ -1,0 +1,43 @@
+{
+  "registration": {
+    "enabled": false
+  },
+  "langs": {
+    "hidden": true,
+    "list": [
+      "pl",
+      "en"
+    ]
+  },
+  "menu": {
+    "Home": {
+      "page": "/",
+      "scroll": "top"
+    },
+    "The issue": {
+      "page": "/",
+      "element": "understand"
+    },
+    "The solution": {
+      "page": "/",
+      "element": "about"
+    }
+  },
+  "social": {
+    "show_header_links": true,
+    "facebook": {
+      "layout": "box_count",
+      "action": "like",
+      "size": "large",
+      "showFaces": true,
+      "share": false
+    },
+    "links": [
+      {
+        "title": "Omigost Email",
+        "url": "mailto:piotr@styczynski.in",
+        "icon": "far fa-envelope"
+      }
+    ]
+  }
+}

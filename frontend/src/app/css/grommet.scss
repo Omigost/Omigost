@@ -1,0 +1,24 @@
+@import "../../../node_modules/grommet/scss/vanilla/index.scss";
+
+.grommetux-border-color-index-transparent {
+   border: none !important;
+   border-left: 0.3vw solid white !important;
+}
+
+.grommetux-paragraph {
+    color: white !important;
+}
+
+.grommetux-color-index-light-1 {
+    color: white !important;
+}
+
+.grommetux-tab__label {
+    color: black;
+    border-color: black;
+}
+
+.grommetux-tab--active .grommetux-tab__label {
+    color: #155799;
+    border-color: #155799;
+}

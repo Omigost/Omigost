@@ -1,0 +1,11 @@
+@import "../../../css/Theme.less";
+
+.Content {
+  font-family: @PrimaryFont;
+  background-color: white;
+  min-height: 100vw;
+  position: absolute;
+  padding-top: 3vw;
+  width: 100vw;
+  overflow-x: hidden;
+}

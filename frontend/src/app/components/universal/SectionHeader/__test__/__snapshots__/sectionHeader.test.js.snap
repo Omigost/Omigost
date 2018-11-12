@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot test of SectionHeader 1`] = `
+<div
+  styleName="SectionHeader"
+>
+  <div
+    styleName="IconWrapper"
+  >
+    <div
+      styleName="CustomIcon"
+    />
+  </div>
+  <div
+    styleName="TitleWrapper"
+  >
+    <a
+      href="#mysectionid"
+      styleName="TitleAutolink"
+    >
+      #
+    </a>
+    My Section!
+  </div>
+</div>
+`;

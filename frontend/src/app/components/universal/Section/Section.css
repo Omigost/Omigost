@@ -1,0 +1,39 @@
+@import "../../../css/Theme.less";
+
+.Section {
+  margin-bottom: 10vw;
+}
+
+.SectionInverted {
+  margin-bottom: 10vw;
+  padding: 5vw;
+  background: linear-gradient(to left, #f12711, #f5af19);
+}
+
+.SectionRotated {
+  transform: rotate(5deg);
+  width: 150vw;
+  position: relative;
+  left: -30vw;
+  padding-bottom: 10vw;
+
+  background: url('http://plinml.mimuw.edu.pl/img/backgrounds/speakers.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-x: 17vw;
+}
+
+.SectionRotated .SectionContent {
+  transform: rotate(-5deg);
+}
+
+.SectionContent {
+  position: relative;
+  left: 30vw;
+}
+
+@media only screen and (max-width: 425px) {
+  .SectionRotated {
+    min-height: 35vh;
+  }
+}

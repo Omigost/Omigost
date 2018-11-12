@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot test of App main component 1`] = `
+<div
+  className=""
+  styleName="Page"
+>
+  <div
+    styleName="Loading"
+  >
+    <img
+      src="img/web_logo_eye_loading.svg"
+      styleName="EyeGraph"
+    />
+  </div>
+</div>
+`;
