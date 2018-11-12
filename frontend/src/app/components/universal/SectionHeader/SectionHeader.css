@@ -24,14 +24,14 @@
 }
 
 .TitleAutolink {
-  color: #ff471f;
+  color: @PrimaryColor;
   text-decoration: none;
   cursor: pointer;
   margin-right: 2vw;
 }
 
 .TitleAutolink:hover {
-  color: #ff471f;
+  color: @PrimaryColor;
   text-decoration: none;
   font-weight: bold;
 }

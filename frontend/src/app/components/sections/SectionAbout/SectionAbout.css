@@ -5,12 +5,16 @@
 }
 
 .Quotes {
-    border-left: 1vw solid white;
-    padding-left: 1vw;
+  border-left: 0.3vw solid white;
+  padding-left: 1vw;
+  font-family: @SecondaryFont;
+  color: white;
 }
 
 .AboutText {
   width: 80vw;
+  color: white;
+  font-family: @SecondaryFont;
   color: white;
 }
 
