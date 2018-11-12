@@ -1,8 +1,6 @@
 # Omigost
-<<<<<<< HEAD
-
 [![Build Status](https://travis-ci.org/Omigost/Omigost.svg?branch=master)](https://travis-ci.org/Omigost/Omigost)
-=======
+
 Manage and optimize development cost for Amazon Web Services.
 
 ## Project status: ** Early development not ready for public use yet **
@@ -42,4 +40,3 @@ Client (Single Page App) - Server - Database architecture
 Project created by students of the [University of Warsaw, Faculty of Mathematics, Informatics and Mechanics](https://www.mimuw.edu.pl/en) with mentorship from [Sumo Logic](https://www.sumologic.com/).
 
 It is team project will result in [Bachelor's Thesis](https://github.com/Omigost/Docs).
->>>>>>> Add Readme.md
