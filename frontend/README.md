@@ -61,8 +61,8 @@ then you should change the settings to:
 ```js
 'prod': {
     /* ... */
-    "$ROUTER_BASE": "'/a/b/c/plinml2018'",
-    "$API_BASE":    "'/a/b/c/plinml2018'",
+    "$ROUTER_BASE": "'/a/b/c/omigost'",
+    "$API_BASE":    "'/a/b/c/omigost'",
     /* ... */
 },
 ```
