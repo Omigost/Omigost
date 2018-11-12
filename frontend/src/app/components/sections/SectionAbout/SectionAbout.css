@@ -5,12 +5,21 @@
 }
 
 .Quotes {
-    border-left: 1vw solid white;
-    padding-left: 1vw;
+  border-left: 0.3vw solid white;
+  padding-left: 1vw;
+  font-family: @SecondaryFont;
+  color: white;
+}
+
+.ParameterDescriptionText {
+  color: white;
+  font-weight: bold;
 }
 
 .AboutText {
   width: 80vw;
+  color: white;
+  font-family: @SecondaryFont;
   color: white;
 }
 
@@ -19,5 +28,5 @@
 }
 
 .Screenshot {
-   width: 40vw;
+   width: 24vw;
 }
