@@ -2,6 +2,7 @@
 
 exports[`Snapshot test of Header 1`] = `
 <div
+  className={null}
   styleName="Header"
 >
   <HeaderBar />
@@ -14,8 +15,8 @@ exports[`Snapshot test of Header 1`] = `
   <div
     styleName="BackgroundImageWrapper"
   >
-    <img
-      src="img/backgrounds/home2g.png"
+    <div
+      className=""
       styleName="BackgroundImage"
     />
   </div>

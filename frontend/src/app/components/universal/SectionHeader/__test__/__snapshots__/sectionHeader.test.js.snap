@@ -5,22 +5,15 @@ exports[`Snapshot test of SectionHeader 1`] = `
   styleName="SectionHeader"
 >
   <div
-    styleName="IconWrapper"
-  >
-    <div
-      styleName="CustomIcon"
-    />
-  </div>
-  <div
     styleName="TitleWrapper"
   >
     <a
+      className={null}
       href="#mysectionid"
       styleName="TitleAutolink"
     >
-      #
+      My Section!
     </a>
-    My Section!
   </div>
 </div>
 `;
