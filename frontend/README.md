@@ -118,6 +118,17 @@ You can also build the application without launching development server:
     $ npm run build:dev
 ```
 
+## Testing
+
+The application uses Jest testing framework.
+To perform testing please execute the following command:
+
+```bash
+    $ bpm run test
+```
+
+Then in folder `/docs/` the file `test-report.html` will appear with the report of tests.
+
 ## Release the production! 
 
 Firstly ensure the development server (see `npm run dev` command) is down
