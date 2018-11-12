@@ -12,12 +12,12 @@ exports[`Snapshot test of Section 1`] = `
       styleName="CenteredTitleWrapper"
     >
       <a
+        className={null}
         href="#mysectionid"
         styleName="TitleAutolink"
       >
-        #
+        My Section!
       </a>
-      My Section!
     </div>
   </div>
   <div
