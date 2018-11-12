@@ -1,6 +1,5 @@
 require('formdata-polyfill');
 
-import 'css/grommet.scss';
 import Loader from 'css/Loader.js'
 
 import React from 'react'

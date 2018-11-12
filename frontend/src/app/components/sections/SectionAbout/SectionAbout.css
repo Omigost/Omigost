@@ -4,6 +4,11 @@
   font-family: @SecondaryFont;
 }
 
+.Quotes {
+    border-left: 1vw solid white;
+    padding-left: 1vw;
+}
+
 .AboutText {
   width: 80vw;
   color: white;
