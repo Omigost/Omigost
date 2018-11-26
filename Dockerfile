@@ -7,4 +7,5 @@ ARG FRONTEND=frontend/public
 COPY ${JAR_FILE} server.jar
 COPY ${FRONTEND} frontend/
 
+EXPOSE 8080
 ENTRYPOINT ["java","-jar","server.jar"]
