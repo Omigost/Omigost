@@ -7,7 +7,8 @@
     "dev": "node ./node_modules/gulp/bin/gulp.js start:dev --gulpfile ./bin/build.js",
     "build:dev": "node ./node_modules/gulp/bin/gulp.js build:dev --gulpfile ./bin/build.js",
     "build:prod": "node ./node_modules/gulp/bin/gulp.js build:prod --gulpfile ./bin/build.js",
-    "build:stage": "node ./node_modules/gulp/bin/gulp.js build:stage --gulpfile ./bin/build.js"
+    "build:stage": "node ./node_modules/gulp/bin/gulp.js build:stage --gulpfile ./bin/build.js",
+    "test": "node ./node_modules/jest/bin/jest.js"
   },
   "repository": {
     "type": "git",
@@ -157,7 +158,7 @@
     "verbose": true,
     "testURL": "http://localhost/",
     "moduleNameMapper": {
-      ".*\\.(less|css)$": "<rootDir>/src/test-util/stylesMock.js",
+      ".*\\.(less|css|md)$": "<rootDir>/src/test-util/stylesMock.js",
       "^utils/(.*)$": "<rootDir>/src/app/utils/__mocks__/$1",
       "^requests/(.*)$": "<rootDir>/src/app/requests/$1",
       "^pages/(.*)$": "<rootDir>/src/app/components/pages/$1",
@@ -178,7 +179,7 @@
     "setupTestFrameworkScriptFile": "./src/test-util/setupTests.js"
   },
   "jest-html-reporter": {
-    "pageTitle": "DeepBait Test Results",
+    "pageTitle": "Omigost Test Results",
     "outputPath": "./docs/test-report.html",
     "includeFailureMsg": true
   }

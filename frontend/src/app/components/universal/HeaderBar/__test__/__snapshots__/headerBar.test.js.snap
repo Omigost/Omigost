@@ -15,15 +15,9 @@ exports[`Snapshot test of Header 1`] = `
     styleName="MenuWrapper"
   >
     <PropsContentProvider
+      isCollapsed={false}
       plainLoginButton={true}
       small={true}
-    />
-  </div>
-  <div
-    styleName="LoginViewWrapper"
-  >
-    <PropsContentProvider
-      plainButton={false}
     />
   </div>
 </div>
