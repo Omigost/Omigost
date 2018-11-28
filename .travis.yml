@@ -1,0 +1,29 @@
+sudo: required
+
+cache: npm
+
+notifications:
+  - email: false
+
+services:
+  - docker
+
+stages:
+  - name: deploy
+    if: branch = master
+
+install:
+  - cd frontend
+  - npm install
+  - npm run build:dev
+  - cd ../server
+  - ./gradlew bootJar
+  - cd ..
+
+script:
+  - docker build .
+
+# Frontend tests
+  - cd frontend
+  - npm run test
+  - cd ..

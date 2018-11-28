@@ -32,4 +32,7 @@ bootJar {
 dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-web')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
+	// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-iam
+	implementation('com.amazonaws:aws-java-sdk-iam:1.11.457')
+	implementation('org.projectlombok:lombok:1.18.4')
 }
