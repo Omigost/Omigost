@@ -1,9 +1,0 @@
-@import "../../../css/Theme.less";
-
-.Loading {
-    height: 50vh;
-    /* overflow: hidden; */
-    /* width: 30vw; */
-    /* height: 30vw; */
-    text-align: center;
-}

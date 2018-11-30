@@ -1,140 +1,44 @@
-# Omigost Project (Interface)
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-This project is still in heavy development phase.
-Please note that the problems with Grommet dependency may occur.
+## Available Scripts
 
-### Preinstallation requirements
+In the project directory, you can run:
 
-* **Node.js** at least 7.10.0
-* **npm** at least 4.2.0
+### `npm start`
 
-Please not that all the following commands should be correctly executed in your terminal:
-```bash
-    $ node -v
-    $ npm -v
-```
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### Installation of dependencies
+The page will reload if you make edits.<br>
+You will also see any lint errors in the console.
 
-Please enter the cloned repo root directory and 
-execute the following command in your terminal:
-```bash
-    $ npm install
-```
+### `npm test`
 
-### Development/production configuration
+Launches the test runner in the interactive watch mode.<br>
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-Please look into `./buildConfig.ini`
-The file should look like a bit like this (some fields may be altered):
+### `npm run build`
 
-```ini
-    [prod]
-    $DEBUG=true
-    $SENTRY=false
-    $SENTRY_DSN=''
-    $DEPLOY_URL=http://localhost
-    $ROUTER_BASE=''
-    $API_BASE=''
-    $OUT_PATH=public
+Builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-    [dev]
-    $DEBUG=true
-    $SENTRY=false
-    $SENTRY_DSN=''
-    $DEPLOY_URL=http://localhost
-    $ROUTER_BASE=''
-    $API_BASE=''
-    $OUT_PATH=public
-```
+The build is minified and the filenames include the hashes.<br>
+Your app is ready to be deployed!
 
- 
-Firstly note that there are two kinds of evironment (production and development).
-Development settings are used when you run the application locally and production is used...
-obviously on production servers!
- 
-Then please take a look at ..._BASE settings.
-Each of them stores root url path for the application component.
-This settings are used e.g. when you deploy your application to subfolder/subroute
-on your hosting (https://www.server.com/a/b/c/)
-then you should change the settings to:
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-```js
-'prod': {
-    /* ... */
-    "$ROUTER_BASE": "'/a/b/c/omigost'",
-    "$API_BASE":    "'/a/b/c/omigost'",
-    /* ... */
-},
-```
+### `npm run eject`
 
-All of these properties are accessible from the level of Javascript.
-You need to reference the variables directly:
-```js
-console.log($API_BASE);
-```
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-For variables you are willing to hide inside environmental variables please do the following:
-* Edit bin/configLoader.js and add entries to ENV_VARIABLES_MAPPING
-* Add the values to buildConfig.ini
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-For eaxmple:
+Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-```js
-ENV_VARIABLES_MAPPING = {
-    '$DB_PASSWORD':   '$DB_PASSWORD_ENV_NAME'
-};
-```
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-Then inside buildConfig.ini:
-```ini
-   [prod]
-   $DB_PASSWORD_ENV_NAME=MY_PASSWORD
-```
+## Learn More
 
-Then during compile-time setup the env variable called 'MY_PASSWORD' will be saved into variable '$DB_PASSWORD' which you can access from the level of the code:
-```js
-  console.log($DB_PASSWORD);
-```
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-The variables can be also accessed using config loader:
-```js
-  const prodConfig = (require('./bin/configLoader.js')).loadBuildConfig('prod');
-  console.log(prodConfig['$DB_PASSWORD']);
-```
-
-
-## Development
-
-The application contains live-reload development server to
-make the life a bit easier.
-
-Firstly run the following command to start development server:
-```bash
-    $ npm run dev
-```
-
-You can also build the application without launching development server:
-```bash
-    $ npm run build:dev
-```
-
-## Testing
-
-The application uses Jest testing framework.
-To perform testing please execute the following command:
-
-```bash
-    $ bpm run test
-```
-
-Then in folder `/docs/` the file `test-report.html` will appear with the report of tests.
-
-## Release the production! 
-
-Firstly ensure the development server (see `npm run dev` command) is down
-as it may affect the production build.
-
-To build your application with production settings please use:
-```bash
-    $ npm run build:prod
-```
+To learn React, check out the [React documentation](https://reactjs.org/).

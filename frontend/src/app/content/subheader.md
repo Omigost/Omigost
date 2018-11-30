@@ -1,1 +1,0 @@
-The Omigost is a tool for extensively elastic Clouds systems management. Forget about enterprise tools and manage your cloud services and payments easily saving your money!
