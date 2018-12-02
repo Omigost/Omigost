@@ -1,9 +1,0 @@
-@import "../../../css/Theme.less";
-
-.SectionAbout {
-  font-family: @PrimaryFont;
-}
-
-.AboutText {
-  width: 80vw;
-}

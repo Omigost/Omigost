@@ -1,9 +1,0 @@
-@import "../../../css/Theme.less";
-
-.SectionRight {
-  padding: 1vw;
-  padding-left: 19vw;
-  position: relative;
-  top: -3vw;
-  width: 68vw;
-}

@@ -1,1 +1,0 @@
-The Omigost Optimization Tool

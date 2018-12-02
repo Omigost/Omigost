@@ -15,7 +15,7 @@ stages:
 install:
   - cd frontend
   - npm install
-  - npm run build:dev
+  - npm run build
   - cd ../server
   - ./gradlew bootJar
   - cd ..
@@ -24,6 +24,6 @@ script:
   - docker build .
 
 # Frontend tests
-  - cd frontend
-  - npm run test
-  - cd ..
+#  - cd frontend
+#  - npm run test
+#  - cd ..
