@@ -23,6 +23,11 @@ install:
 script:
   - docker build .
 
+# Backend tests
+  - cd server
+  - ./gradlew test
+  - cd ..
+
 # Frontend tests
 #  - cd frontend
 #  - npm run test

@@ -62,9 +62,14 @@ public class SlackService {
     }
 
     public void sendAlertToUser(String username, String message) {
+        sendAlertToUser(username, new SlackMessage.Builder().withMainText(message).build());
+    }
+
+    public void sendAlertToUser(String username, SlackMessage message) {
         MultiValueMap<String, String> args = getArgsMapWithAuth();
         args.add("channel", getConversationId(username));
-        args.add("text", message);
+        args.add("text", message.getMainText());
+        args.add("attachments", message.getAttachmentsString());
 
         restTemplate.postForEntity(
                 SLACK_API_URL + CHAT_POST_MESSAGE,
