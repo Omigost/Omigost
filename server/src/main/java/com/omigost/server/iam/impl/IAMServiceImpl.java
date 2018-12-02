@@ -1,12 +1,6 @@
 package com.omigost.server.iam.impl;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.PropertiesFileCredentialsProvider;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagement;
-import com.amazonaws.services.identitymanagement.AmazonIdentityManagementClient;
-import com.amazonaws.services.identitymanagement.AmazonIdentityManagementClientBuilder;
 import com.amazonaws.services.identitymanagement.model.ListUsersRequest;
 import com.amazonaws.services.identitymanagement.model.ListUsersResult;
 import com.amazonaws.services.identitymanagement.model.User;
@@ -24,6 +18,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class IAMServiceImpl implements IAMService {
     private AmazonIdentityManagement iam;
+
     @Override
     public List<AwsUser> users() {
 
@@ -31,24 +26,28 @@ public class IAMServiceImpl implements IAMService {
         List<AwsUser> resultList = new ArrayList<>();
         ListUsersRequest request = new ListUsersRequest();
 
-        //results are paginated
+        // results are paginated
         while (!gotAllUsers) {
             ListUsersResult response = iam.listUsers(request);
             List<User> users = response.getUsers();
 
-            List<AwsUser> awsUsers = users.stream()
-                    .map(user -> AwsUser.builder()
-                            .arn(user.getArn())
-                            .awsPath(user.getPath())
-                            .awsUserName(user.getUserName())
-                            .tags(
-                                    user.getTags().stream()
-                                            .map(tag -> new Tag(tag.getKey(), tag.getValue()))
-                                            .collect(Collectors.toCollection(ArrayList::new)))
-                            .build())
-                    .collect(Collectors.toCollection(ArrayList::new));
-            resultList.addAll(awsUsers);
+            for (User u : users) {
+                List<Tag> tags = u.getTags().stream()
+                        .map(t -> new Tag(t.getKey(), t.getValue()))
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+                AwsUser awsUser = AwsUser.builder()
+                        .arn(u.getArn())
+                        .awsPath(u.getPath())
+                        .awsUserName(u.getUserName())
+                        .tags(tags)
+                        .build();
+
+                resultList.add(awsUser);
+            }
+
             request.setMarker(response.getMarker());
+
             if (!response.getIsTruncated()) {
                 gotAllUsers = true;
             }

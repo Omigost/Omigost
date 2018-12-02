@@ -1,13 +1,13 @@
 buildscript {
-	ext {
-		springBootVersion = '2.1.0.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '2.1.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
@@ -21,18 +21,17 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 bootJar {
-	baseName = 'omigost-server'
-	version =  '0.1.0'
+    baseName = 'omigost-server'
+    version = '0.1.0'
 }
 
 dependencies {
-	implementation('org.springframework.boot:spring-boot-starter-web')
-	testImplementation('org.springframework.boot:spring-boot-starter-test')
-	// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-iam
-	implementation('com.amazonaws:aws-java-sdk-iam:1.11.457')
-	implementation('org.projectlombok:lombok:1.18.4')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    implementation('com.amazonaws:aws-java-sdk-iam:1.11.457')
+    implementation('org.projectlombok:lombok:1.18.4')
 }
