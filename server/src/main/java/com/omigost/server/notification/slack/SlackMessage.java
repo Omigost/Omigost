@@ -1,4 +1,4 @@
-package com.omigost.server.slack;
+package com.omigost.server.notification.slack;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;

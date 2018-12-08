@@ -1,4 +1,4 @@
-package com.omigost.server.slack;
+package com.omigost.server.notification.slack;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
