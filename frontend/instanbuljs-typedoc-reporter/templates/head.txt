@@ -1,0 +1,117 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Omigost Docs</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+    
+    <
+{{#if prettify}}
+    <link rel="stylesheet" href="{{prettify.css}}" />
+{{/if}}
+    <link rel="stylesheet" href="{{base.css}}" />  
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url({{sorter.image}});
+        }
+    </style>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">Omigost Docs</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> Omigost Docs </h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+            <div class='wrapper'>
+              <div class='pad1'>
+                <h1>
+                  {{{pathHtml}}}
+                </h1>
+                <div class='clearfix'>
+                  {{#with metrics.statements}}
+                  <div class='fl pad1y space-right2'>
+                    <span class="strong">{{pct}}% </span>
+                    <span class="quiet">Statements</span>
+                    <span class='fraction'>{{covered}}/{{total}}</span>
+                  </div>
+                  {{/with}}
+                  {{#with metrics.branches}}
+                  <div class='fl pad1y space-right2'>
+                    <span class="strong">{{pct}}% </span>
+                    <span class="quiet">Branches</span>
+                    <span class='fraction'>{{covered}}/{{total}}</span>
+                  </div>
+                  {{/with}}
+                  {{#with metrics.functions}}
+                  <div class='fl pad1y space-right2'>
+                    <span class="strong">{{pct}}% </span>
+                    <span class="quiet">Functions</span>
+                    <span class='fraction'>{{covered}}/{{total}}</span>
+                  </div>
+                  {{/with}}
+                  {{#with metrics.lines}}
+                  <div class='fl pad1y space-right2'>
+                    <span class="strong">{{pct}}% </span>
+                    <span class="quiet">Lines</span>
+                    <span class='fraction'>{{covered}}/{{total}}</span>
+                  </div>
+                  {{/with}}
+                  {{#if_has_ignores metrics}}
+                  <div class='fl pad1y'>
+                    <span class="strong">{{#show_ignores metrics}}{{/show_ignores}}</span>
+                    <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
+                  </div>
+                  {{/if_has_ignores}}
+                </div>
+              </div>
+              <div class='status-line {{reportClass}}'></div>
