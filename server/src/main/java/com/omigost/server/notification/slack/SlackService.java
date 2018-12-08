@@ -3,6 +3,8 @@ package com.omigost.server.notification.slack;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.omigost.server.exception.SlackUserNotFoundException;
+import com.omigost.server.notification.NotificationMessage;
+import com.omigost.server.notification.NotificationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,7 +13,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class SlackService {
+public class SlackService implements NotificationService {
     private static final String SLACK_API_URL = "https://slack.com/api/";
     private static final String USERS_LIST = "users.list";
     private static final String IM_OPEN = "im.open";
@@ -65,7 +67,7 @@ public class SlackService {
         sendAlertToUser(username, new SlackMessage.Builder().withMainText(message).build());
     }
 
-    public void sendAlertToUser(String username, SlackMessage message) {
+    public void sendAlertToUser(String username, NotificationMessage message) {
         MultiValueMap<String, String> args = getArgsMapWithAuth();
         args.add("channel", getConversationId(username));
         args.add("text", message.getMainText());
