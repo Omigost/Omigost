@@ -1,10 +1,17 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
 # Omigost
 
-![Omigost logo](https://raw.githubusercontent.com/Omigost/Omigost/master/frontend/src/assets/img/omigost_logo.svg)
+![media://omigost_logo.svg](media://omigost_logo.svg)
 
-# About
+## See latest reports
 
-This is project that provides user interface and client-side code for Omigost.
+<div class="ReportsButton">
+    <a href="./report.html">
+        <i class="fas fa-vial"></i>
+        <span> Coverage </span>
+    </a>
+</div>
 
 ## Installation
 1. Clone/download repo
