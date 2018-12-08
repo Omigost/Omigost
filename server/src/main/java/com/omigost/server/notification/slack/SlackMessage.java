@@ -1,13 +1,14 @@
-package com.omigost.server.slack;
+package com.omigost.server.notification.slack;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.omigost.server.notification.NotificationMessage;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class SlackMessage {
+public class SlackMessage implements NotificationMessage {
     private static final String FALLBACK_TEXT = "Something went wrong...";
     private String mainText = "";
     private String attachmentText = "";
@@ -35,7 +36,7 @@ public class SlackMessage {
         return mapper.createArrayNode().add(attachment).toString();
     }
 
-    public static class Builder {
+    public static class Builder implements NotificationMessage.Builder {
         private SlackMessage slackMessage = new SlackMessage();
 
         public SlackMessage build() {
