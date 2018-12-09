@@ -11,7 +11,9 @@ public class Channel {
     Medium medium;
 
     public boolean userWantsToReceive(NotificationMessage message) {
-        return true; // TODO use `configuration` attribute to check
+        // TODO figure out the kind of message we're trying to deliver
+        // TODO use `configuration` attribute to check if user wants it to be delivered this way
+        return true;
     }
 
     public void notify(NotificationMessage message) {
@@ -22,6 +24,8 @@ public class Channel {
 
     private String getRecipientDetails () {
         // TODO do some magic with the `configuration` attribute...
+        // TODO figure out what the notificationService needs to deliver properly
+        // TODO make String username param in the alerting function universal (other services need other data)
         return "TODO";
     }
 
