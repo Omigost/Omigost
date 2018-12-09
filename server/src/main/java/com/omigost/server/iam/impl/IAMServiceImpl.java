@@ -5,7 +5,7 @@ import com.amazonaws.services.identitymanagement.model.ListUsersRequest;
 import com.amazonaws.services.identitymanagement.model.ListUsersResult;
 import com.amazonaws.services.identitymanagement.model.User;
 import com.omigost.server.iam.IAMService;
-import com.omigost.server.model.AwsUser;
+import com.omigost.server.model.AwsAccount;
 import com.omigost.server.model.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,10 @@ public class IAMServiceImpl implements IAMService {
     private AmazonIdentityManagement iam;
 
     @Override
-    public List<AwsUser> users() {
+    public List<AwsAccount> users() {
 
         boolean gotAllUsers = false;
-        List<AwsUser> resultList = new ArrayList<>();
+        List<AwsAccount> resultList = new ArrayList<>();
         ListUsersRequest request = new ListUsersRequest();
 
         // results are paginated
@@ -36,14 +36,14 @@ public class IAMServiceImpl implements IAMService {
                         .map(t -> new Tag(t.getKey(), t.getValue()))
                         .collect(Collectors.toCollection(ArrayList::new));
 
-                AwsUser awsUser = AwsUser.builder()
+                AwsAccount awsAccount = AwsAccount.builder()
                         .arn(u.getArn())
                         .awsPath(u.getPath())
                         .awsUserName(u.getUserName())
                         .tags(tags)
                         .build();
 
-                resultList.add(awsUser);
+                resultList.add(awsAccount);
             }
 
             request.setMarker(response.getMarker());

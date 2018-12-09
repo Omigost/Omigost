@@ -7,8 +7,8 @@ import java.util.List;
 
 @Builder
 @Data
-public class AwsUser {
-    AwsUser manager;
+public class AwsAccount {
+    AwsAccount manager;
     String awsPath;
     String awsUserName;
     String awsUserId;
