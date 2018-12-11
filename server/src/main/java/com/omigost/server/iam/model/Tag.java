@@ -1,4 +1,4 @@
-package com.omigost.server.model;
+package com.omigost.server.iam.model;
 
 
 import lombok.AllArgsConstructor;

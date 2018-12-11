@@ -1,6 +1,6 @@
 package com.omigost.server.iam;
 
-import com.omigost.server.model.AwsUser;
+import com.omigost.server.iam.model.AwsUser;
 
 import java.util.List;
 

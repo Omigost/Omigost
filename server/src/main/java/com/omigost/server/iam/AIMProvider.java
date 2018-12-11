@@ -1,4 +1,4 @@
-package com.omigost.server.iam.impl;
+package com.omigost.server.iam;
 
 import com.amazonaws.auth.PropertiesFileCredentialsProvider;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagement;

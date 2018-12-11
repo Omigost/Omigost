@@ -1,12 +1,11 @@
-package com.omigost.server.iam.impl;
+package com.omigost.server.iam;
 
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagement;
 import com.amazonaws.services.identitymanagement.model.ListUsersRequest;
 import com.amazonaws.services.identitymanagement.model.ListUsersResult;
 import com.amazonaws.services.identitymanagement.model.User;
-import com.omigost.server.iam.IAMService;
-import com.omigost.server.model.AwsUser;
-import com.omigost.server.model.Tag;
+import com.omigost.server.iam.model.AwsUser;
+import com.omigost.server.iam.model.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
