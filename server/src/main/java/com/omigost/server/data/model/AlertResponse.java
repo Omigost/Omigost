@@ -1,8 +1,11 @@
 package com.omigost.server.data.model;
 
+import lombok.Data;
+
+@Data
 public class AlertResponse {
     long id;
-    AlertType alertType;
+    String alertType;
     String text;
     String value;
 }
