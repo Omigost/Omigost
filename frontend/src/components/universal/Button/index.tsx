@@ -7,8 +7,8 @@ const Wrapper = styled.div`
 `;
 
 interface ButtonComponentProps {
-  fontSize?: string,
-  theme?: any
+  fontSize?: string;
+  theme?: any;
 };
 
 const ButtonComponent = styled.button<ButtonComponentProps>`
@@ -25,8 +25,9 @@ const ButtonComponent = styled.button<ButtonComponentProps>`
 `;
 
 export interface ButtonProps {
-    size?: string,
-    children?: any
+    size?: string;
+    children?: any;
+    onClick?: (event?: any) => void;
 }
 
 export default class Button extends React.Component<ButtonProps, undefined> {
@@ -35,6 +36,7 @@ export default class Button extends React.Component<ButtonProps, undefined> {
             <Wrapper>
                 <ButtonComponent
                     fontSize={this.props.size}
+                    onClick={this.props.onClick}
                 >
                     {this.props.children}
                 </ButtonComponent>

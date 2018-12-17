@@ -2,8 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { ThemeProvider } from 'styled-components';
 import { I18n } from 'react-polyglot';
-
-import LoginPage from 'pages/Loading';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const AppWrapper = styled.div`
   background: ${props => props.theme.colors.background};
@@ -19,8 +18,8 @@ const AppWrapper = styled.div`
 
 const locale = 'en';
 import messages from 'langs/en';
-
 import defaultTheme from 'themes/default';
+import routes from 'routes/index';
 
 export interface AppProps {
 }
@@ -30,9 +29,11 @@ export default class App extends React.Component<AppProps, undefined> {
         return (
             <I18n locale={locale} messages={messages}>
                 <ThemeProvider theme={defaultTheme}>
-                    <AppWrapper>
-                        <LoginPage />
-                    </AppWrapper>
+                    <Router>
+                        <AppWrapper>
+                            {routes}
+                        </AppWrapper>
+                    </Router>
                 </ThemeProvider>
             </I18n>
         );

@@ -1,15 +1,20 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+import { withRouter } from 'react-router-dom';
+
 import TextInput from 'components/TextInput';
 import Button from 'components/Button';
 import Description from 'components/Description';
 import Text from 'components/Text';
 
 export interface LoginPanelProps {
+    history: any,
+    location: any,
+    match: any
 }
 
-export default class LoginPanel extends React.Component<LoginPanelProps, undefined> {
+class LoginPanel extends React.Component<LoginPanelProps, undefined> {
     render() {
         return (
             <Description
@@ -25,7 +30,12 @@ export default class LoginPanel extends React.Component<LoginPanelProps, undefin
                   type='password'
                   label={<Text translate compact>password_label</Text>}
                 />
-                <Button size='XL'>
+                <Button
+                  size='XL'
+                  onClick={() => {
+                      this.props.history.push('/loading');
+                  }}
+                >
                     <Text translate compact>login_button_label</Text>
                 </Button>
                 <Button size='XL'>
@@ -35,3 +45,5 @@ export default class LoginPanel extends React.Component<LoginPanelProps, undefin
         );
     }
 };
+
+export default withRouter(LoginPanel);
