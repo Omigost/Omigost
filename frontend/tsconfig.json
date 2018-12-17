@@ -6,7 +6,13 @@
         "module": "commonjs",
         "target": "es5",
         "jsx": "react",
-        "lib": ["es5", "es6", "dom"]
+        "lib": ["es5", "es6", "dom"],
+        "baseUrl": "./",
+        "paths": {
+            "scss/*": ["src/scss/*"],
+            "components/*": ["src/components/universal/*"],
+            "img/*": ["src/assets/img/*"]
+        }
     },
     "include": [
         "./src/**/*"
