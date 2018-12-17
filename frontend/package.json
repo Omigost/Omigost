@@ -70,7 +70,9 @@
     "webpack-merge": "^4.1.4"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/styled-components": "^4.1.4",
+    "axios": "^0.18.0",
     "node-polyglot": "^2.3.0",
     "react-markdown": "^4.0.4",
     "react-polyglot": "^0.2.6",
