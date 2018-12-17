@@ -9,6 +9,9 @@ module.exports = {
     alias: {
       'scss': path.join(__dirname, '..', '..', 'src', 'scss'),
       'components': path.join(__dirname, '..', '..', 'src', 'components', 'universal'),
+      'pages': path.join(__dirname, '..', '..', 'src', 'components', 'pages'),
+      'langs': path.join(__dirname, '..', '..', 'src', 'langs'),
+      'themes': path.join(__dirname, '..', '..', 'src', 'themes'),
       'img': path.join(__dirname, '..', '..', 'src', 'assets', 'img')
     }
   },

@@ -1,11 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { ThemeProvider } from 'styled-components';
+import { I18n } from 'react-polyglot';
 
-import Page from 'components/Page';
-import TextInput from 'components/TextInput';
-import Button from 'components/Button';
-import Description from 'components/Description';
+import LoginPage from 'pages/Loading';
 
 const AppWrapper = styled.div`
   background: ${props => props.theme.colors.background};
@@ -19,25 +17,10 @@ const AppWrapper = styled.div`
   top: 0;
 `;
 
-const theme = {
-  primaryFont: 'Raleway, sans-serif',
-  colors: {
-    background: '#F7F7F7',
-    primary: '#EB3349',
-    secondary: '#F45C43',
-    primaryText: '#1B0000',
-    accent: '#474747',
-    primaryGradient: 'linear-gradient(to right, #EB3349, #F45C43)',
-    lightAccent: 'white'
-  },
-  fontSize: {
-    S: '0.7vw',
-    default: '1vw',
-    M: '1.2vw',
-    XL: '2vw',
-    XXL: '3vw',   
-  },
-};
+const locale = 'en';
+import messages from 'langs/en';
+
+import defaultTheme from 'themes/default';
 
 export interface AppProps {
 }
@@ -45,18 +28,13 @@ export interface AppProps {
 export default class App extends React.Component<AppProps, undefined> {
     render() {
         return (
-            <ThemeProvider theme={theme}>
-                <AppWrapper>
-                    <Page>
-                        <Description text='Hello here!' size='XL'>
-                            <TextInput size='XXL' type='password' label='Hello'/>
-                            <Button size='XL'>
-                                Hello!
-                            </Button>
-                        </Description>
-                    </Page>
-                </AppWrapper>
-            </ThemeProvider>
+            <I18n locale={locale} messages={messages}>
+                <ThemeProvider theme={defaultTheme}>
+                    <AppWrapper>
+                        <LoginPage />
+                    </AppWrapper>
+                </ThemeProvider>
+            </I18n>
         );
     }
 }

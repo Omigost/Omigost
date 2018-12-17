@@ -11,6 +11,9 @@
         "paths": {
             "scss/*": ["src/scss/*"],
             "components/*": ["src/components/universal/*"],
+            "pages/*": ["src/components/pages/*"],
+            "langs/*": ["src/langs/*"],
+            "themes/*": ["src/themes/*"],
             "img/*": ["src/assets/img/*"]
         }
     },

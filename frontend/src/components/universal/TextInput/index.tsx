@@ -40,7 +40,7 @@ const Label = styled.div<InputProps>`
 export interface TextInputProps {
     size?: string,
     type?: string,
-    label?: string
+    label?: any
 }
 
 export default class TextInput extends React.Component<TextInputProps, undefined> {
