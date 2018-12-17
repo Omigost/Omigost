@@ -32,6 +32,7 @@ interface DescriptionWrapperProps {
 const DescriptionWrapper = styled.td<DescriptionWrapperProps>`
   width: 45%;
   padding-left: 10vw;
+  height: 1px;
 `;
 
 const Divider = styled.div<DescriptionWrapperProps>`
@@ -62,7 +63,7 @@ const DescriptionTextWrapper = styled.div<DescriptionTextWrapperProps>`
 export interface DescriptionProps {
     size?: string,
     children?: any,
-    text?: string
+    text?: any
 }
 
 export default class Description extends React.Component<DescriptionProps, undefined> {
