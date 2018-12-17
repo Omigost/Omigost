@@ -13,6 +13,7 @@
             "components/*": ["src/components/universal/*"],
             "pages/*": ["src/components/pages/*"],
             "langs/*": ["src/langs/*"],
+            "routes/*": ["src/routes/*"],
             "themes/*": ["src/themes/*"],
             "img/*": ["src/assets/img/*"]
         }

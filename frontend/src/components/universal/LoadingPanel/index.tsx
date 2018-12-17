@@ -1,6 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+import { withRouter } from 'react-router-dom';
+
 import Loading from 'components/Loading';
 import TextBox from 'components/TextBox';
 
@@ -21,16 +23,31 @@ const LoadingMessageWrapper = styled.div`
 `;
 
 export interface LoadingPanelProps {
+    history: any,
+    location: any,
+    match: any
 }
 
 const WELCOME_MESSAGES_COUNT = 4;
 
-export default class LoadingPanel extends React.Component<LoadingPanelProps, undefined> {
+class LoadingPanel extends React.Component<LoadingPanelProps, undefined> {
     render() {
         
         let welcomeMessageIndex = Math.floor(Math.random()*WELCOME_MESSAGES_COUNT);
         if(welcomeMessageIndex == 0) {
             welcomeMessageIndex = WELCOME_MESSAGES_COUNT;
+        }
+        
+        console.warn('HELLO :=> '+this.props.location);
+        console.log(this.props.location);
+        
+        /*
+         * FIXME: This is for autoredirect to home page
+         */
+        if(this.props.location.pathname === '/loading') {
+          setTimeout(() => {
+            this.props.history.push('/home');   
+          }, 2000);
         }
         
         return (
@@ -48,3 +65,5 @@ export default class LoadingPanel extends React.Component<LoadingPanelProps, und
         );
     }
 };
+
+export default withRouter(LoadingPanel);
