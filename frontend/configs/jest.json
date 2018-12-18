@@ -15,7 +15,8 @@
     "^pages/(.*)$": "<rootDir>/src/components/pages/$1",
     "^langs/(.*)$": "<rootDir>/src/langs/$1",
     "^routes/(.*)$": "<rootDir>/src/routes/$1",
-    "^themes/(.*)$": "<rootDir>/src/themes/$1"
+    "^themes/(.*)$": "<rootDir>/src/themes/$1",
+    "^modules/(.*)$": "<rootDir>/src/modules/$1"
   },
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
   "transform": {

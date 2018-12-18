@@ -13,6 +13,7 @@ module.exports = {
       'langs': path.join(__dirname, '..', '..', 'src', 'langs'),
       'routes': path.join(__dirname, '..', '..', 'src', 'routes'),
       'themes': path.join(__dirname, '..', '..', 'src', 'themes'),
+      'modules': path.join(__dirname, '..', '..', 'src', 'modules'),
       'img': path.join(__dirname, '..', '..', 'src', 'assets', 'img')
     }
   },

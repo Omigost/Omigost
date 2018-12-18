@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import SinglePage from './SinglePage';
+import FillPage from './FillPage';
 import Logo from 'components/Logo';
 
 
@@ -30,13 +31,21 @@ export interface PageProps {
 
 export default class Page extends React.Component<PageProps, undefined> {
     render() {
-        const PageComponent = SinglePage;
+        let PageComponent = SinglePage;
+        
+        if(this.props.type === 'fill') {
+            PageComponent = FillPage;
+        }
         
         return (
             <Wrapper>
-                <LogoWrapper>
-                    <Logo />
-                </LogoWrapper>
+                {
+                    (this.props.type === 'fill')?(null):(
+                        <LogoWrapper>
+                            <Logo />
+                        </LogoWrapper>
+                    )
+                }
                 <ContentWrapper>
                     <PageComponent {...this.props} />
                 </ContentWrapper>

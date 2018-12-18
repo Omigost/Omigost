@@ -4,6 +4,20 @@ import { ThemeProvider } from 'styled-components';
 import { I18n } from 'react-polyglot';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import ModulesProvider from 'modules/ModulesProvider';
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faUserCircle,
+    faTachometerAlt,
+    faSearchDollar,
+    faTools,
+    faChartBar
+} from '@fortawesome/free-solid-svg-icons';
+
+library.add(faUserCircle, faTachometerAlt, faSearchDollar, faTools, faChartBar);
+
 const AppWrapper = styled.div`
   background: ${props => props.theme.colors.background};
   min-width: 100vw;
@@ -29,11 +43,13 @@ export default class App extends React.Component<AppProps, undefined> {
         return (
             <I18n locale={locale} messages={messages}>
                 <ThemeProvider theme={defaultTheme}>
-                    <Router>
-                        <AppWrapper>
-                            {routes}
-                        </AppWrapper>
-                    </Router>
+                    <ModulesProvider modules={[ 'dashboard-view', 'settings-view' ]}>
+                        <Router>
+                            <AppWrapper>
+                                {routes}
+                            </AppWrapper>
+                        </Router>
+                    </ModulesProvider>
                 </ThemeProvider>
             </I18n>
         );

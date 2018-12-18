@@ -10,7 +10,7 @@ export interface DashboardPageProps {
 export default class DashboardPage extends React.Component<DashboardPageProps, undefined> {
     render() {
         return (
-            <Page>
+            <Page type='fill'>
                 <DashboardPanel />
             </Page>
         );
