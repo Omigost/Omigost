@@ -15,6 +15,7 @@
             "langs/*": ["src/langs/*"],
             "routes/*": ["src/routes/*"],
             "themes/*": ["src/themes/*"],
+            "modules/*": ["src/modules/*"],
             "img/*": ["src/assets/img/*"]
         }
     },
