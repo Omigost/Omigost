@@ -13,7 +13,9 @@ export default class SettingsViewModule implements OmigostModule {
     renderDashboardView(props: any) {
         return (
             <div>
-                <this.app.UI.ButtonPanel>
+                <this.app.UI.ButtonPanel
+                    icon='tools'
+                >
                     Heheszki
                 </this.app.UI.ButtonPanel>
             </div>
