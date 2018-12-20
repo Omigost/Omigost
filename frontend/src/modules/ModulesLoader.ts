@@ -22,14 +22,21 @@ export interface OmigostModule {
     getIcon(): IconName | null;
     getName(): string | null;
     renderDashboardView?(props: any): React.ReactElement<any> | null;
+    getRoutes?(): Array<OmigostModuleRoute>;
 };
 
 export type ModuleSource = String | OmigostModule;
+
+export interface OmigostModuleRoute {
+    name: string;
+    component: React.ReactNode;
+};
 
 export interface OmigostModulesLoaderInterface {
     loadModule(src: ModuleSource);
     loadAllModules(srcs: Array<ModuleSource>);
     getActiveModules(): Array<OmigostModule>;
+    getRegisteredRoutes(): Array<OmigostModuleRoute>;
 };
 
 export interface OmigostModuleInstance {
@@ -48,6 +55,26 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
         return {
             UI: OmigostUI
         };
+    }
+    
+    getRegisteredRoutes() {
+        let routes: Array<OmigostModuleRoute> = [];
+        this.modules.forEach(instance => {
+            if(instance.module.getRoutes) {
+                routes = routes.concat(
+                    instance.module.getRoutes()
+                      .filter(e => !!e)
+                      .map(route => {
+                          return {
+                              name: '/' + instance.module.getName() + '-' + route.name,
+                              component: route.component
+                          };
+                      })
+                );
+            }
+        });
+        
+        return routes;
     }
     
     loadModule(src: ModuleSource) {

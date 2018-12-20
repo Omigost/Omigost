@@ -11,6 +11,8 @@ import SideMenu from './SideMenu';
 import Text from './Text';
 import TextBox from './TextBox';
 import TextInput from './TextInput';
+import InteractiveGrid from './InteractiveGrid';
+import InteractiveNestedGrid from './InteractiveNestedGrid';
 
 export default {
     Button,
@@ -25,5 +27,7 @@ export default {
     SideMenu,
     Text,
     TextBox,
-    TextInput
+    TextInput,
+    InteractiveGrid,
+    InteractiveNestedGrid
 };
