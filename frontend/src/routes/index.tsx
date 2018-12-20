@@ -6,6 +6,8 @@ import LoginPage from 'pages/Login';
 import LoadingPage from 'pages/Loading';
 import DashboardPage from 'pages/Dashboard';
 
+import { ModulesLoader, WithLoaderProps } from 'modules/ModulesProvider';
+
 const ROUTES = {
     '/home': DashboardPage,
     '/login': LoginPage,
@@ -24,4 +26,15 @@ function mapper(key, index, options) {
     );
 };
 
-export default Object.keys(ROUTES).map((key, index) => mapper(key, index, ROUTES[key])).filter(e => !!e);
+export default function(modulesLoader: ModulesLoader) {
+    let baseRoutes = Object.keys(ROUTES)
+      .map((key, index) => mapper(key, index, ROUTES[key]))
+      .filter(e => !!e);
+      
+    let loaderRoutes = modulesLoader
+      .getRegisteredRoutes()
+      .map((route, index) => mapper(route.name, index, route.component))
+      .filter(e => !!e);
+        
+    return baseRoutes.concat(loaderRoutes);
+};

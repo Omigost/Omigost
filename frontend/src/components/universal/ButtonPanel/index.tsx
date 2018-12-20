@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 const Wrapper = styled.div`
-  padding: 1.2vw;
+  padding: 0;
   width: 100%;
 `;
 

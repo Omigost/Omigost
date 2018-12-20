@@ -78,7 +78,9 @@
     "@types/styled-components": "^4.1.4",
     "axios": "^0.18.0",
     "node-polyglot": "^2.3.0",
+    "react-absolute-grid": "^3.0.1",
     "react-markdown": "^4.0.4",
+    "react-muuri": "^0.2.0",
     "react-polyglot": "^0.2.6",
     "react-router-dom": "^4.3.1",
     "styled-components": "^4.1.3"

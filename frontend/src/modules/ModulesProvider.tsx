@@ -48,10 +48,10 @@ export class ModulesConsumer extends React.Component<any & { children: Array<Rea
 };
 
 export interface WithLoaderProps {
-    loader?: OmigostModulesLoaderInterface;
+    modulesLoader?: OmigostModulesLoaderInterface;
 };
 
-export function withModules<P>(Component: React.ComponentType<P & WithLoaderProps>): React.SFC<P> {
+export function withModules<P>(Component: React.ComponentType<P & WithLoaderProps> | React.SFC<P & WithLoaderProps>): React.SFC<P> {
     return (props: P) => {
         return (
             <ModulesConsumer>

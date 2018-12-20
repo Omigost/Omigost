@@ -4195,6 +4195,11 @@ growly@^1.3.0:
   resolved "https://registry.yarnpkg.com/growly/-/growly-1.3.0.tgz#f10748cbe76af964b7c96c93c6bcc28af120c081"
   integrity sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
 
+hammerjs@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/hammerjs/-/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
+  integrity sha1-BO93hiz/K7edMPdpIJWTAiK/YPE=
+
 handle-thing@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/handle-thing/-/handle-thing-1.2.5.tgz#fd7aad726bf1a5fd16dfc29b2f7a6601d27139c4"
@@ -7486,6 +7491,11 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-absolute-grid@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-absolute-grid/-/react-absolute-grid-3.0.1.tgz#a97b8dded6083770215967e4cc277d1eca68dbc8"
+  integrity sha512-Eh1WqFk/jPA2CN6aci5WRgYKKmiwl52WLSB9+DHHa/b1iUIZ00qKC7IUfkIhhi3Iz9uVzsUwap0HfDO6zkeIWA==
+
 react-addons-test-utils@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/react-addons-test-utils/-/react-addons-test-utils-15.6.2.tgz#c12b6efdc2247c10da7b8770d185080a7b047156"
@@ -7535,6 +7545,14 @@ react-markdown@^4.0.4:
     unified "^6.1.5"
     unist-util-visit "^1.3.0"
     xtend "^4.0.1"
+
+react-muuri@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-muuri/-/react-muuri-0.2.0.tgz#c695edc9f9973186ee5d1f639a705d5e8f5645f5"
+  integrity sha512-ypUWW1JenH6YPYahI1yEz3Sd1fxuAQN+3uxn/q+7lQHAsCntMRh3EixM8wrOQB/kdMoHPakzoLIktJq3iuar8w==
+  dependencies:
+    hammerjs "^2.0.8"
+    web-animations-js "^2.3.1"
 
 react-polyglot@^0.2.6:
   version "0.2.6"
@@ -9458,6 +9476,11 @@ wbuf@^1.1.0, wbuf@^1.7.2:
   integrity sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==
   dependencies:
     minimalistic-assert "^1.0.0"
+
+web-animations-js@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/web-animations-js/-/web-animations-js-2.3.1.tgz#3a6d9bc15196377a90f8e2803fa5262165b04510"
+  integrity sha1-Om2bwVGWN3qQ+OKAP6UmIWWwRRA=
 
 webidl-conversions@^4.0.2:
   version "4.0.2"
