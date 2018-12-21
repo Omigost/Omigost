@@ -13,6 +13,7 @@ import TextBox from './TextBox';
 import TextInput from './TextInput';
 import InteractiveGrid from './InteractiveGrid';
 import InteractiveNestedGrid from './InteractiveNestedGrid';
+import Breadcrumbs from './Breadcrumbs';
 
 export default {
     Button,
@@ -29,5 +30,6 @@ export default {
     TextBox,
     TextInput,
     InteractiveGrid,
-    InteractiveNestedGrid
+    InteractiveNestedGrid,
+    Breadcrumbs
 };
