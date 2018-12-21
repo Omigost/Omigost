@@ -14,13 +14,21 @@ const BUILTIN_MODULES: Array<OmigostModule> = [
 
 export interface OmigostApp {
     UI: any;
-    
+    modulesLoader: OmigostModulesLoaderInterface;
+};
+
+export interface OmigostModuleDetails {
+    description?: string;
+    author?: string;
+    version?: string;
+    lastUpdate?: string;
 };
 
 export interface OmigostModule {
     onLoad(app: OmigostApp, loader: OmigostModulesLoaderInterface);
     getIcon(): IconName | null;
     getName(): string | null;
+    getDetails(): OmigostModuleDetails;
     renderDashboardView?(props: any): React.ReactElement<any> | null;
     getRoutes?(): Array<OmigostModuleRoute>;
 };
@@ -36,6 +44,7 @@ export interface OmigostModulesLoaderInterface {
     loadModule(src: ModuleSource);
     loadAllModules(srcs: Array<ModuleSource>);
     getActiveModules(): Array<OmigostModule>;
+    getAllModules(): Array<OmigostModule>;
     getRegisteredRoutes(): Array<OmigostModuleRoute>;
 };
 
@@ -53,7 +62,8 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
     
     getApp(): OmigostApp {
         return {
-            UI: OmigostUI
+            UI: OmigostUI,
+            modulesLoader: this
         };
     }
     
@@ -99,6 +109,10 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
     
     loadAllModules(srcs: Array<ModuleSource>) {
         srcs.forEach(module => this.loadModule(module));
+    }
+    
+    getAllModules() {
+        return this.modules.map(instance => instance.module);
     }
     
     getActiveModules() {
