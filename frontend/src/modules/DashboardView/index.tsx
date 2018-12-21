@@ -16,6 +16,10 @@ export default class DashBoardViewModule implements OmigostModule {
         );
     }
     
+    getDetails() {
+        return {};
+    }
+    
     getIcon(): IconName {
         return 'chart-bar';
     }

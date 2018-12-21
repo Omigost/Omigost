@@ -83,17 +83,19 @@ export default class Panel extends React.Component<any, any> {
         
         if(this.state.openedPaneName) {
             return (
-                <this.props.app.UI.Breadcrumbs>
-                    {[
-                        {
-                            name: 'Settings',
-                            onClick: () => this.setState({ openedPaneName: null })
-                        },
-                        {
-                            name: this.state.openedPaneName
-                        }
-                    ]}
-                </this.props.app.UI.Breadcrumbs>
+                <div>
+                    <this.props.app.UI.Breadcrumbs>
+                        {[
+                            {
+                                name: 'Settings',
+                                onClick: () => this.setState({ openedPaneName: null })
+                            },
+                            {
+                                name: this.state.openedPaneName
+                            }
+                        ]}
+                    </this.props.app.UI.Breadcrumbs>
+                </div>
             );
         }
         

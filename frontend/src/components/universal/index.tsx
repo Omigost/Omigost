@@ -14,6 +14,8 @@ import TextInput from './TextInput';
 import InteractiveGrid from './InteractiveGrid';
 import InteractiveNestedGrid from './InteractiveNestedGrid';
 import Breadcrumbs from './Breadcrumbs';
+import SearchableList from './SearchableList';
+import Card from './Card';
 
 export default {
     Button,
@@ -31,5 +33,7 @@ export default {
     TextInput,
     InteractiveGrid,
     InteractiveNestedGrid,
-    Breadcrumbs
+    Breadcrumbs,
+    SearchableList,
+    Card
 };

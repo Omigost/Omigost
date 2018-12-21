@@ -37,6 +37,12 @@ export default class SettingsViewModule implements OmigostModule {
         this.app = app;
     }
     
+    getDetails() {
+        return {
+            description: 'The builtin module to display settings view.'
+        };
+    }
+    
     getRoutes() {
         return [{
             name: 'test',
@@ -48,6 +54,20 @@ export default class SettingsViewModule implements OmigostModule {
         return (
             <Wrapper>
                 <Panel app={this.app} />
+                <this.app.UI.SearchableList
+                    renderItem={(item) => {
+                        return (
+                            <this.app.UI.Card>
+                                {item.name}
+                                {(item.details.description)?(item.details.description):(null)}
+                            </this.app.UI.Card>
+                        );
+                    }}
+                >
+                    {
+                        this.app.modulesLoader.getAllModules().map(module => ({ name: module.getName(), details: module.getDetails() }))
+                    }
+                </this.app.UI.SearchableList>
             </Wrapper>
         );
     }
