@@ -71,6 +71,13 @@ export default class InteractiveNestedGrid extends React.Component<InteractiveNe
                                 </CatogryTitle>
                                 <CategoryContent>
                                     <InteractiveGrid
+                                        muuriOptions={{
+                                            dragStartPredicate: {
+                                                distance: 0,
+                                                delay: 0,
+                                                handle: '.nestedGridHandler'
+                                            }
+                                        }}
                                         items={props.item.options}
                                         renderItem={(props) => {
                                             return (this.props.renderItem || DEFAULT_ITEM_RENDERER)(props);

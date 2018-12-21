@@ -5,6 +5,8 @@ import styled  from 'styled-components';
 import { IconName } from '@fortawesome/fontawesome-svg-core';
 import { OmigostModule, OmigostApp, OmigostModulesLoaderInterface } from 'modules/ModulesLoader';
 
+import Panel from './src/Panel';
+
 const Wrapper = styled.div`
   margin-left: 5vw;
   position: relative;
@@ -28,48 +30,6 @@ const CategoryContent = styled.div`
   position: relative;
 `;
 
-const SETTINGS_OPTIONS = [
-    {
-        name: 'Dump configs',
-        options: [
-            {
-                name: 'Export settings',
-                icon: 'download'
-            },
-            {
-                name: 'Import settings',
-                icon: 'upload'
-            }
-        ]
-    },
-    {
-        name: 'Customize',
-        options: [
-            {
-                name: 'Security',
-                icon: 'shield-alt'
-            },
-            {
-                name: 'Notification settings',
-                icon: 'comment-alt'
-            },
-            {
-                name: 'Instance settings',
-                icon: 'flag'
-            }
-        ]
-    },
-    {
-        name: 'Extend',
-        options: [
-            {
-                name: 'Integrations and Extensions',
-                icon: 'plus'
-            }
-        ]
-    }
-];
-
 export default class SettingsViewModule implements OmigostModule {
     app: OmigostApp;
     
@@ -87,18 +47,7 @@ export default class SettingsViewModule implements OmigostModule {
     renderDashboardView(props: any) {
         return (
             <Wrapper>
-                <this.app.UI.InteractiveNestedGrid
-                    options={SETTINGS_OPTIONS}
-                    renderItem={(props) => {
-                        return (
-                            <this.app.UI.ButtonPanel
-                                icon={props.item.icon}
-                            >
-                                {props.item.name}
-                            </this.app.UI.ButtonPanel>
-                        );
-                    }}
-                />
+                <Panel app={this.app} />
             </Wrapper>
         );
     }
