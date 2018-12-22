@@ -1,0 +1,18 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - 8080:8080
+  postgresql:
+    build: postgresql/
+    restart: always
+    environment:
+        POSTGRES_USER: admin
+        POSTGRES_PASSWORD: admin1
+        POSTGRES_DB: docker_dev
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
