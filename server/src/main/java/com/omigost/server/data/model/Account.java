@@ -1,15 +1,11 @@
 package com.omigost.server.data.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
+@AllArgsConstructor
 public class Account {
-    long id;
-    String name;
-    List<Group> groups;
-    List<AccountLimit> accountLimits;
-    List<CostHistoryDaily> costHistoryDaily;
-    List<CostHistoryHourly> costHistoryHourly;
+    private long id;
+    private String name;
 }

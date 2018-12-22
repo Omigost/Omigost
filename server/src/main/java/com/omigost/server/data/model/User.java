@@ -1,14 +1,16 @@
 package com.omigost.server.data.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class User {
-    long id;
-    String name;
-    boolean isAdmin;
-    List<Account> accounts;
-    List<UserCommunication> communications;
+    private long id;
+    private String name;
+    private boolean isAdmin;
+    private List<Account> accounts;
+    private List<Communication> communications;
 }
