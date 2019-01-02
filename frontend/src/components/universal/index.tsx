@@ -19,6 +19,7 @@ import Card from './Card';
 import Tooltip from './Tooltip';
 import DataProvider from './DataProvider';
 import TinyButtons from './TinyButtons';
+import DataGrid from './DataGrid';
 
 export default {
     Button,
@@ -41,5 +42,6 @@ export default {
     Card,
     Tooltip,
     DataProvider,
-    TinyButtons
+    TinyButtons,
+    DataGrid
 };
