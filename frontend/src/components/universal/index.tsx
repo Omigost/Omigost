@@ -17,6 +17,7 @@ import Breadcrumbs from './Breadcrumbs';
 import SearchableList from './SearchableList';
 import Card from './Card';
 import Tooltip from './Tooltip';
+import DataProvider from './DataProvider';
 
 export default {
     Button,
@@ -37,5 +38,6 @@ export default {
     Breadcrumbs,
     SearchableList,
     Card,
-    Tooltip
+    Tooltip,
+    DataProvider
 };
