@@ -1,18 +1,23 @@
 package com.omigost.server.notification;
 
-public interface NotificationMessage {
-    String getMainText();
+import lombok.*;
 
-    String getAttachmentsString();
+import java.util.LinkedList;
+import java.util.List;
 
-    interface Builder {
-        NotificationMessage build();
+@Getter
+@AllArgsConstructor
+@Builder(toBuilder = true)
+public class NotificationMessage {
+    @Builder.Default
+    protected String mainText = "";
+    @Builder.Default
+    protected String attachmentText = "";
 
-        Builder withMainText(String text);
-        Builder withAttachmentText(String text);
+    @Singular
+    protected List<NotificationMessageAction> actions;
 
-        Builder withCallbackId(String callbackId);
-
-        Builder addButton(String actionName, String text, String actionValue);
+    protected NotificationMessage (NotificationMessage message) {
+        this(message.mainText, message.attachmentText, message.actions);
     }
 }
