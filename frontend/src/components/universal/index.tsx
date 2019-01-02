@@ -16,6 +16,7 @@ import InteractiveNestedGrid from './InteractiveNestedGrid';
 import Breadcrumbs from './Breadcrumbs';
 import SearchableList from './SearchableList';
 import Card from './Card';
+import Tooltip from './Tooltip';
 
 export default {
     Button,
@@ -35,5 +36,6 @@ export default {
     InteractiveNestedGrid,
     Breadcrumbs,
     SearchableList,
-    Card
+    Card,
+    Tooltip
 };

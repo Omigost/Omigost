@@ -78,6 +78,7 @@
     "@types/styled-components": "^4.1.4",
     "axios": "^0.18.0",
     "node-polyglot": "^2.3.0",
+    "rc-tooltip": "^3.7.3",
     "react-absolute-grid": "^3.0.1",
     "react-flip-move": "^3.0.3",
     "react-markdown": "^4.0.4",
