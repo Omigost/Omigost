@@ -1,13 +1,23 @@
 // shared config (dev and prod)
-const {resolve} = require('path');
+const path = require('path');
 const {CheckerPlugin} = require('awesome-typescript-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', 'index.ts', 'index.tsx', 'index.js', 'index.jsx'],
+    alias: {
+      'scss': path.join(__dirname, '..', '..', 'src', 'scss'),
+      'components': path.join(__dirname, '..', '..', 'src', 'components', 'universal'),
+      'pages': path.join(__dirname, '..', '..', 'src', 'components', 'pages'),
+      'langs': path.join(__dirname, '..', '..', 'src', 'langs'),
+      'routes': path.join(__dirname, '..', '..', 'src', 'routes'),
+      'themes': path.join(__dirname, '..', '..', 'src', 'themes'),
+      'modules': path.join(__dirname, '..', '..', 'src', 'modules'),
+      'img': path.join(__dirname, '..', '..', 'src', 'assets', 'img')
+    }
   },
-  context: resolve(__dirname, '../../src'),
+  context: path.resolve(__dirname, '../../src'),
   module: {
     rules: [
       {
