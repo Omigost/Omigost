@@ -9,7 +9,7 @@ import com.omigost.server.notification.NotificationMessageAction;
 public class SlackMessageAction extends NotificationMessageAction {
     private String type = "button";
 
-    public SlackMessageAction(String name, String text, String value, String type = ) {
+    public SlackMessageAction(String name, String text, String value) {
         super (name, text, value);
     }
 
