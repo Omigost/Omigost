@@ -7,18 +7,19 @@ import com.omigost.server.notification.NotificationMessage;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class SlackMessage implements NotificationMessage {
+public class SlackMessage extends NotificationMessage {
     private static final String FALLBACK_TEXT = "Something went wrong...";
-    private String mainText = "";
-    private String attachmentText = "";
-    private String callbackId = "";
-    private List<SlackMessageAction> actions = new LinkedList<>();
+    protected List<SlackMessageAction> actions = new LinkedList<>();
+    protected String callbackId = "";
 
-    private SlackMessage() {}
-
-    public String getMainText() {
-        return mainText;
+    public SlackMessage(NotificationMessage message, String callbackId) {
+        super(message);
+        this.actions = message.getActions().stream()
+                .map(SlackMessageAction::new)
+                .collect(Collectors.toList());
+        this.callbackId = callbackId;
     }
 
     public String getAttachmentsString() {
@@ -34,33 +35,5 @@ public class SlackMessage implements NotificationMessage {
         }
 
         return mapper.createArrayNode().add(attachment).toString();
-    }
-
-    public static class Builder implements NotificationMessage.Builder {
-        private SlackMessage slackMessage = new SlackMessage();
-
-        public SlackMessage build() {
-            return slackMessage;
-        }
-
-        public Builder withMainText(String text) {
-            slackMessage.mainText = text;
-            return this;
-        }
-
-        public Builder withAttachmentText(String text) {
-            slackMessage.attachmentText = text;
-            return this;
-        }
-
-        public Builder withCallbackId(String callbackId) {
-            slackMessage.callbackId = callbackId;
-            return this;
-        }
-
-        public Builder addButton(String actionName, String text, String actionValue) {
-            slackMessage.actions.add(new SlackMessageAction(actionName, text, "button", actionValue));
-            return this;
-        }
     }
 }
