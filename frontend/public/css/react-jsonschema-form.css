@@ -1,0 +1,5 @@
+/* @PrimaryColor: #373d54; */
+/* @AccentColor: rgb(192, 26, 44); */
+ul.error-detail.bs-callout {
+  display: none !important;
+}
