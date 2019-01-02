@@ -1,6 +1,6 @@
 package com.omigost.server.aws;
 
-import com.amazonaws.auth.PropertiesFileCredentialsProvider;
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.organizations.AWSOrganizations;
 import com.amazonaws.services.organizations.AWSOrganizationsClientBuilder;
 import com.amazonaws.services.organizations.model.Account;
@@ -19,7 +19,7 @@ public class Organization {
     @Value("${aws-region}")
     String region;
     @Autowired
-    PropertiesFileCredentialsProvider credentialsProvider;
+    AWSCredentialsProvider credentialsProvider;
 
     private AWSOrganizations orgClient;
 
