@@ -28,5 +28,4 @@ public class AWSConfig {
         return credentialsProvider;
     }
 
-
 }
