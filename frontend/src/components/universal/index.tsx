@@ -18,6 +18,7 @@ import SearchableList from './SearchableList';
 import Card from './Card';
 import Tooltip from './Tooltip';
 import DataProvider from './DataProvider';
+import TinyButtons from './TinyButtons';
 
 export default {
     Button,
@@ -39,5 +40,6 @@ export default {
     SearchableList,
     Card,
     Tooltip,
-    DataProvider
+    DataProvider,
+    TinyButtons
 };
