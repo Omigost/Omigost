@@ -15,9 +15,9 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
-public class Organization {
+public class OrganizationService {
 
-    @Value("${aws-region}")
+    @Value("${aws.region}")
     String region;
     @Autowired
     AWSCredentialsProvider credentialsProvider;
@@ -28,17 +28,15 @@ public class Organization {
     private List<Account> accounts;
 
     @PostConstruct
-    void initializeOrganizationClient() {
+    private void initializeOrganizationClient() {
         orgClient = AWSOrganizationsClientBuilder
                 .standard()
                 .withCredentials(credentialsProvider)
                 .withRegion(region)
                 .build();
-
-        fetchAccounts();
     }
 
-    void fetchAccounts() {
+    public void fetchAccounts() {
         ListAccountsRequest request = new ListAccountsRequest();
         ListAccountsResult result = orgClient.listAccounts(request);
         List<Account> accountList = result.getAccounts();
