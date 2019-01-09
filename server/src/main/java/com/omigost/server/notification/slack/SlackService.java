@@ -64,10 +64,18 @@ public class SlackService implements NotificationService {
     }
 
     public void sendAlertToUser(String username, String message) {
-        sendAlertToUser(username, new SlackMessage.Builder().withMainText(message).build());
+        sendAlertToUser(username, SlackMessage.builder().mainText(message).build());
+    }
+
+    private String pullCallbackId() {
+        return "42"; // TODO mock - not sure what the callback_id should be
     }
 
     public void sendAlertToUser(String username, NotificationMessage message) {
+        sendAlertToUser(username, new SlackMessage(message, pullCallbackId()));
+    }
+
+    public void sendAlertToUser(String username, SlackMessage message) {
         MultiValueMap<String, String> args = getArgsMapWithAuth();
         args.add("channel", getConversationId(username));
         args.add("text", message.getMainText());

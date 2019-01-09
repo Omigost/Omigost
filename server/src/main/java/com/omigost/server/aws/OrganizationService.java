@@ -18,9 +18,9 @@ import java.util.List;
 public class OrganizationService {
 
     @Value("${aws.region}")
-    String region;
+    private String region;
     @Autowired
-    AWSCredentialsProvider credentialsProvider;
+    private AWSCredentialsProvider credentialsProvider;
 
     private AWSOrganizations orgClient;
 
@@ -42,6 +42,4 @@ public class OrganizationService {
         List<Account> accountList = result.getAccounts();
         accounts = accountList;
     }
-
-
 }

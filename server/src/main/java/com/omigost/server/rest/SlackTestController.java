@@ -2,7 +2,10 @@ package com.omigost.server.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omigost.server.notification.NotificationMessage;
+import com.omigost.server.notification.NotificationMessageAction;
 import com.omigost.server.notification.slack.SlackMessage;
+import com.omigost.server.notification.slack.SlackMessageAction;
 import com.omigost.server.notification.slack.SlackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,13 +26,13 @@ public class SlackTestController {
 
     @PostMapping("/sendMessageWithAttachment")
     public void sendMessageWithAttachment(@RequestParam String username) {
-        SlackMessage slackMessage = new SlackMessage.Builder()
-                .withMainText("Hi!")
-                .withAttachmentText("Do you wanna coffee?")
-                .addButton("coffee", "YES", "yes")
-                .addButton("coffee", "NO", "no")
+        NotificationMessage message = NotificationMessage.builder()
+                .mainText("Hi!")
+                .attachmentText("Do you wanna coffee?")
+                .action(new SlackMessageAction("coffee", "YES", "yes"))
+                .action(new SlackMessageAction("coffee", "NO", "no"))
                 .build();
-        slack.sendAlertToUser(username, slackMessage);
+        slack.sendAlertToUser(username, message);
     }
 
     @PostMapping("/slackAction")
