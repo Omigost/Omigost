@@ -1,5 +1,6 @@
 package com.omigost.server.rest;
 
+import com.amazonaws.services.budgets.model.Budget;
 import com.amazonaws.services.organizations.model.Account;
 import com.omigost.server.aws.BudgetService;
 import com.omigost.server.aws.OrganizationService;
@@ -25,5 +26,10 @@ public class AWSTestController {
     @GetMapping("/setLimit")
     public void setLimit() {
         budgets.setLimitForAll();
+    }
+
+    @GetMapping("/budgets")
+    public List<Budget> budgets() {
+        return budgets.getBudgets();
     }
 }
