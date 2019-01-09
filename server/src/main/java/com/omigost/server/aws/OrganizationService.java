@@ -6,6 +6,8 @@ import com.amazonaws.services.organizations.AWSOrganizationsClientBuilder;
 import com.amazonaws.services.organizations.model.Account;
 import com.amazonaws.services.organizations.model.ListAccountsRequest;
 import com.amazonaws.services.organizations.model.ListAccountsResult;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,31 +16,32 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
-public class Organization {
+@Slf4j
+public class OrganizationService {
 
-    @Value("${aws-region}")
-    String region;
+    @Value("${aws.region}")
+    private String region;
     @Autowired
-    AWSCredentialsProvider credentialsProvider;
+    private AWSCredentialsProvider credentialsProvider;
 
     private AWSOrganizations orgClient;
 
+    @Getter
+    private List<Account> accounts;
+
     @PostConstruct
-    void initializeOrganizationClient() {
+    private void initializeOrganizationClient() {
         orgClient = AWSOrganizationsClientBuilder
                 .standard()
                 .withCredentials(credentialsProvider)
                 .withRegion(region)
                 .build();
-
     }
 
-
-    public List<Account> fetchAccounts() {
+    public void fetchAccounts() {
         ListAccountsRequest request = new ListAccountsRequest();
         ListAccountsResult result = orgClient.listAccounts(request);
         List<Account> accountList = result.getAccounts();
-        return accountList;
+        accounts = accountList;
     }
-
 }
