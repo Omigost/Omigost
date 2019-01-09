@@ -21,20 +21,24 @@ public class NewBudgetRequestBuilder {
     @Autowired
     private MasterUserProvider masterUserProvider;
 
-    public void withName(String name) {
+    public NewBudgetRequestBuilder withName(String name) {
         this.name = name;
+        return this;
     }
 
-    public void withLimit(int limit) {
+    public NewBudgetRequestBuilder withLimit(int limit) {
         this.limit = limit;
+        return this;
     }
 
-    public void withLinkedAccountFilter(String accountId) {
-        linkedAccountsFilter.add(accountId);
+    public NewBudgetRequestBuilder withLinkedAccountsFilter(List<String> linkedAccounts) {
+        linkedAccountsFilter = linkedAccounts;
+        return this;
     }
 
-    public void withTagFilter(String key, String value) {
-        tagsFilter.add(key, value);
+    public NewBudgetRequestBuilder withTagsFilter(MultiValueMap<String, String> tags) {
+        tagsFilter = tags;
+        return this;
     }
 
     public CreateBudgetRequest build() {

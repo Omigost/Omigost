@@ -23,11 +23,6 @@ public class AWSTestController {
         return organization.getAccounts();
     }
 
-    @GetMapping("/setLimit")
-    public void setLimit() {
-        budgets.setLimitForAll();
-    }
-
     @GetMapping("/budgets")
     public List<Budget> budgets() {
         return budgets.getBudgets();
