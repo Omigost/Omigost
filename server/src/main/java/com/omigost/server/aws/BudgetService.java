@@ -21,6 +21,7 @@ import org.springframework.util.MultiValueMap;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -99,7 +100,9 @@ public class BudgetService {
     }
 
     public List<Budget> getBudgets() {
-        return budgetsClient.describeBudgets(new DescribeBudgetsRequest().withAccountId(accountId)).getBudgets();
+        List<Budget> budgets = budgetsClient.describeBudgets(new DescribeBudgetsRequest().withAccountId(accountId)).getBudgets();
+        if (budgets == null) return Collections.emptyList();
+        return budgets;
     }
 
     private int getStartingNextBudgetNumber() {

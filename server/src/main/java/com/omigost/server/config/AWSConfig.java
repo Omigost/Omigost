@@ -1,4 +1,4 @@
-package com.omigost.server.aws;
+package com.omigost.server.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
