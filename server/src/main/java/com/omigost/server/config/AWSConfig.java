@@ -1,9 +1,10 @@
-package com.omigost.server.aws;
+package com.omigost.server.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,11 +23,11 @@ public class AWSConfig {
         @Value("${aws.accessKey}")
         private String AWSAccessKey;
         @Value("${aws.secretKey}")
-        private String AWSSecretKey;
+        private String AWSSecretkey;
 
         @Override
         public AWSCredentials getCredentials() {
-            return new BasicAWSCredentials(AWSAccessKey, AWSSecretKey);
+            return new BasicAWSCredentials(AWSAccessKey, AWSSecretkey);
         }
 
         @Override
