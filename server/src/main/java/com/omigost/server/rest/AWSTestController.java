@@ -5,8 +5,9 @@ import com.amazonaws.services.organizations.model.Account;
 import com.omigost.server.aws.BudgetService;
 import com.omigost.server.aws.CostService;
 import com.omigost.server.aws.OrganizationService;
-import com.omigost.server.rest.dto.AWSDailySpending;
+import com.omigost.server.rest.dto.AWSDailySpendingDTO;
 import com.omigost.server.rest.dto.AccountSpendingDTO;
+import com.omigost.server.rest.dto.TagSpendingDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,8 +36,12 @@ public class AWSTestController {
         return budgets.getBudgets();
     }
 
-    @PostMapping("/spending")
-    public List<AWSDailySpending> spending(@RequestBody AccountSpendingDTO request) {
-        return costService.getSpendingForAccount(request.getInterval(), request.getUserId());
+    @PostMapping("/spending/account")
+    public List<AWSDailySpendingDTO> spending(@RequestBody AccountSpendingDTO request) {
+        return costService.getSpendingForAccount(request.getDateInterval(), request.getUserId());
+    }
+    @PostMapping("/spending/tag")
+    public List<AWSDailySpendingDTO> tagSpending(@RequestBody TagSpendingDTO tagSpendingDTO){
+        return costService.getSpendingForTags(tagSpendingDTO.getDateInterval(),tagSpendingDTO.getTags());
     }
 }
