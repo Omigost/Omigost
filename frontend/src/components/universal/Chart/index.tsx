@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled, { withTheme }  from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 
 import * as moment from 'moment';
 
@@ -31,16 +31,13 @@ export const ChartTypeSwitchPanel = ChartTypeSwitchPanelComponent;
 import ChartDataOptionsPanelComponent from './ChartDataOptionsPanel';
 export const ChartDataOptionsPanel = ChartDataOptionsPanelComponent;
 
-interface WrapperProps {
-};
-
-const Wrapper = styled.div<WrapperProps>`
+const Wrapper = styled.div`
     padding: 0;
     width: 100%;
     height: 100%;
 `;
 
-const ChartWrapper = styled.div<WrapperProps>`
+const ChartWrapper = styled.div`
     position: relative;
     top: 0;
     width: 100%;
@@ -113,7 +110,7 @@ class Chart extends React.Component<ChartProps, any> implements ChartInstance {
     }
     
     setChartOrientation(type: string) {
-        if(this.state.graphType == 'area') {
+        if (this.state.graphType == 'area') {
             this.setState({
                 graphType: 'line',
                 graphOrientation: type
@@ -130,7 +127,7 @@ class Chart extends React.Component<ChartProps, any> implements ChartInstance {
     }
     
     static getDerivedStateFromProps(props, state) {
-        if(
+        if (
             state.lastGraphType != props.graphType
             || state.lastGraphOrientation != props.graphOrientation
         ) {
@@ -169,7 +166,7 @@ class Chart extends React.Component<ChartProps, any> implements ChartInstance {
             return [this.props.theme.colors.primary, this.props.theme.colors.secondary][index % 2];
         };
         
-        if(dataFormatOptions.graphType === 'area') {
+        if (dataFormatOptions.graphType === 'area') {
             ChartComponent = AreaChart;
             SeriesComponent = Area;
             getSeriesStyle = (column, index) => ({
@@ -178,7 +175,7 @@ class Chart extends React.Component<ChartProps, any> implements ChartInstance {
                 stroke: getGraphColor(index),
                 fill: getGraphColor(index)
             });
-        } else if(dataFormatOptions.graphType === 'bar') {
+        } else if (dataFormatOptions.graphType === 'bar') {
             ChartComponent = BarChart;
             SeriesComponent = Bar;
             getSeriesStyle = (column, index) => ({
@@ -202,7 +199,7 @@ class Chart extends React.Component<ChartProps, any> implements ChartInstance {
             />
         ];
         
-        if(dataFormatOptions.rotate90) {
+        if (dataFormatOptions.rotate90) {
             AxesComponents = [
                 <XAxis
                   type='number'
@@ -223,13 +220,13 @@ class Chart extends React.Component<ChartProps, any> implements ChartInstance {
         let cursorRawValue = null;
         
         this.props.data.rows.forEach((row, index) => {
-            if(row.hovered) {
+            if (row.hovered) {
                 cursorValue = data.rows[index];
                 cursorRawValue = row;
             }
         });
         
-        if(cursorValue) {
+        if (cursorValue) {
             referenceLines = [
                 {
                     x: cursorValue[inputColumn],

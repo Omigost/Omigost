@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled, { withTheme }  from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 
 import { ChartInstance } from './index';
 import TinyButtons from 'components/TinyButtons';
