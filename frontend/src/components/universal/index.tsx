@@ -16,6 +16,10 @@ import InteractiveNestedGrid from './InteractiveNestedGrid';
 import Breadcrumbs from './Breadcrumbs';
 import SearchableList from './SearchableList';
 import Card from './Card';
+import Tooltip from './Tooltip';
+import Meter from './Meter';
+import DataProvider from './DataProvider';
+import TinyButtons from './TinyButtons';
 
 export default {
     Button,
@@ -35,5 +39,9 @@ export default {
     InteractiveNestedGrid,
     Breadcrumbs,
     SearchableList,
-    Card
+    Card,
+    Tooltip,
+    Meter,
+    DataProvider,
+    TinyButtons
 };
