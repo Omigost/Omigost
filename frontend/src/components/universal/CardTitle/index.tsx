@@ -6,7 +6,7 @@ interface WrapperProps {
   theme?: any;
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<WrapperProps>`
   font-family: ${(props: WrapperProps) => props.theme.primaryFont};
   color: ${(props: WrapperProps) => props.theme.colors.accent};
   font-family: ${(props: WrapperProps) => props.theme.primaryFont};
@@ -15,13 +15,14 @@ const Wrapper = styled.div`
 
 export interface CardTitleProps {
     children: string;
+    fontSize?: string;
 };
 
 export default class CardTitle extends React.Component<CardTitleProps, undefined> {
     
     render() {
         return (
-            <Wrapper>
+            <Wrapper fontSize={this.props.fontSize}>
                 {this.props.children}
             </Wrapper>
         );

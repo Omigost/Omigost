@@ -15,12 +15,16 @@ const Wrapper = styled.div`
   color: ${(props) => props.theme.colors.accent};
 `;
 
-const CardImageCell = styled.td`
-  padding-top: 0;
+const ContentRow = styled.div`
+ display: flex;
 `;
 
-const CardTitleCell = styled.td`
-  padding-top: 0;
+const CardImageWrapper = styled.div`
+  flex: 50%;
+`;
+
+const CardTitleWrapper = styled.div`
+  flex: 50%;
 `;
 
 export interface CardProps {
@@ -34,33 +38,31 @@ export default class Card extends React.Component<CardProps, undefined> {
     render() {
         return (
             <Wrapper>
-                <table>
-                    <tbody>
-                        <tr>
-                            {
-                                (!this.props.image)?(null):(
-                                    <CardImageCell>
-                                        <CardImage src={this.props.image} />
-                                    </CardImageCell>
-                                )
-                            }
-                            <CardTitleCell>
-                                <CardTitle>
-                                    {this.props.title}
-                                </CardTitle>
-                            </CardTitleCell>
-                        </tr>
-                    </tbody>
-                </table>
-                {
-                    (!this.props.description)?(null):(
-                        <div>
-                            <CardDescription>
-                                {this.props.description}
-                            </CardDescription>
-                        </div>
-                    )
-                }
+                <ContentRow>
+                    {
+                        (!this.props.image)?(null):(
+                            <CardImageWrapper>
+                                <CardImage src={this.props.image} />
+                            </CardImageWrapper>
+                        )
+                    }
+                    <CardTitleWrapper>
+                        <CardTitle>
+                            {this.props.title}
+                        </CardTitle>
+                    </CardTitleWrapper>
+                </ContentRow>
+                <ContentRow>
+                    {
+                        (!this.props.description)?(null):(
+                            <div>
+                                <CardDescription>
+                                    {this.props.description}
+                                </CardDescription>
+                            </div>
+                        )
+                    }
+                </ContentRow>
             </Wrapper>
         );
     }

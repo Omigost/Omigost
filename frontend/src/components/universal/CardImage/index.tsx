@@ -3,11 +3,6 @@ import styled  from 'styled-components';
 
 import Logo, { LogoType } from 'components/Logo';
 
-interface WrapperProps {
-  fontSize?: string;
-  theme?: any;
-};
-
 const Wrapper = styled.div`
   width: 3vw;
   display: inline-block;
