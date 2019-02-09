@@ -18,6 +18,8 @@ import SearchableList from './SearchableList';
 import Card from './Card';
 import Tooltip from './Tooltip';
 import Meter from './Meter';
+import DataProvider from './DataProvider';
+import TinyButtons from './TinyButtons';
 
 export default {
     Button,
@@ -39,5 +41,7 @@ export default {
     SearchableList,
     Card,
     Tooltip,
-    Meter
+    Meter,
+    DataProvider,
+    TinyButtons
 };
