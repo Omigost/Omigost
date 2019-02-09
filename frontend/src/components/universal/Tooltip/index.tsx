@@ -17,8 +17,8 @@ const TooltipContent = styled.div`
 
 export interface TooltipProps {
     theme: any;
-    children?: Array<React.ReactElement<any>> | React.ReactElement<any>;
-    content?: React.ReactElement<any>;
+    children?: React.ReactNode;
+    content?: React.ReactNode;
     clickTrigger?: boolean;
     show?: boolean;
 }; 
@@ -27,17 +27,6 @@ class Tooltip extends React.Component<TooltipProps, undefined> {
     render() {
         if(!this.props.content) {
             return this.props.children;
-        }
-        
-        let additionalProps = {};
-        if(this.props.show) {
-            additionalProps = {
-                visible: true
-            };
-        } else if(this.props.show !== null && typeof this.props.show !== 'undefined') {
-            additionalProps = {
-                visible: false
-            };
         }
         
         return (
@@ -51,7 +40,11 @@ class Tooltip extends React.Component<TooltipProps, undefined> {
                             {this.props.content}
                         </TooltipContent>
                     }
-                    {...additionalProps}
+                    {
+                        ...((this.props.show === null || typeof this.props.show === 'undefined')?({}):({
+                            visible: this.props.show
+                        }))
+                    }
                 >
                     {this.props.children}
                 </TooltipComponent>
