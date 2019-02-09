@@ -4,6 +4,10 @@ import styled, { withTheme } from 'styled-components';
 import { ChartInstance } from './index';
 import TinyButtons from 'components/TinyButtons';
 
+import {
+    faChartLine, faChartBar, faChartArea
+} from '@fortawesome/free-solid-svg-icons';
+
 const Wrapper = styled.div`
   padding: 0;
 `;
@@ -18,25 +22,25 @@ class ChartTypeSwitchPanel extends React.Component<ChartTypeSwitchPanelProps, an
         return (
             <Wrapper>
                 <TinyButtons>
-                    {[
-                        {
-                            icon: 'chart-line',
+                    {{
+                            icon: faChartLine.iconName,
                             active: this.props.chart.getChartType() === 'line',
                             onClick: () => {this.props.chart.setChartType('line');}
-                        },
-                        {
-                            icon: 'chart-bar',
+                    }}
+                    {{
+                            icon: faChartBar.iconName,
                             active: this.props.chart.getChartType() === 'bar',
                             onClick: () => {this.props.chart.setChartType('bar');}
-                        },
+                    }}
+                    {
                         ((this.props.chart.getChartOrientation() != 'horizontal')?(
                             {
-                                icon: 'chart-area',
+                                icon: faChartArea.iconName,
                                 active: this.props.chart.getChartType() === 'area',
                                 onClick: () => {this.props.chart.setChartType('area');}
                             }
                         ):(null))
-                    ]}
+                    }
                 </TinyButtons>
             </Wrapper>
                
