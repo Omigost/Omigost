@@ -4,9 +4,10 @@ import styled, { withTheme }  from 'styled-components';
 import Gauge from 'react-svg-gauge';
 import Tooltip from 'components/Tooltip';
 
-const Wrapper = styled.div`
-  padding: 0;
-`;
+const Wrapper = styled.div``;
+
+const DEFAULT_WIDTH = 200;
+const DEFAULT_HEIGHT = 150;
 
 export interface MeterProps {
     theme: any;
@@ -14,6 +15,8 @@ export interface MeterProps {
     value: number;
     format?: (number) => string;
     tooltipContent?: React.ReactElement<any>;
+    width?: number;
+    height?: number;
 };
 
 class Meter extends React.Component<MeterProps, undefined> {
@@ -29,8 +32,8 @@ class Meter extends React.Component<MeterProps, undefined> {
                     <div>
                         <GaugeComponent
                             value={this.props.value}
-                            width={200}
-                            height={150}
+                            width={this.props.width || DEFAULT_WIDTH}
+                            height={this.props.height || DEFAULT_HEIGHT}
                             label={this.props.label}
                             valueFormatter={this.props.format || ((value) => `${value}`)}
                             color={this.props.theme.colors.primary}
