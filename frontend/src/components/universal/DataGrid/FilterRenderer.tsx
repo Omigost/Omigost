@@ -47,10 +47,6 @@ export default class FilterRenderer extends React.Component<FilterRendererProps,
         this.state.text = model ? model.value : '';
     }
 
-    componentMethod(message) {
-        alert(`Alert from PartialMatchFilterComponent ${message}`);
-    }
-
     onChange(event) {
         let newValue = event.target.value;
         if (this.state.text !== newValue) {

@@ -80,11 +80,11 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
     }
     
     handleRowUnhovered(api: GridApi, rowIndex: number, row: RowNode) {
-        if(this.props.onDataChanged) {
+        if (this.props.onDataChanged) {
             this.props.onDataChanged(
                 Object.assign({}, this.props.data, {
                     rows: this.props.data.rows.map((row: RowSpecs, index: number) => {
-                        if(index != rowIndex) return row;
+                        if (index != rowIndex) return row;
                         return Object.assign({}, row, {
                             hovered: false
                         });
@@ -96,7 +96,7 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
     
     handleRowHovered(api: GridApi, rowIndex: number, row: RowNode) {
         console.log("@handleRowHovered "+rowIndex);
-        if(this.props.onDataChanged) {
+        if (this.props.onDataChanged) {
             this.props.onDataChanged(
                 Object.assign({}, this.props.data, {
                     rows: this.props.data.rows.map((row: RowSpecs, index: number) => {

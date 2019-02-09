@@ -34,13 +34,13 @@ class CellRenderer extends React.Component<CellRendererProps, undefined> {
     }
     
     handleMouseEnter() {
-        if(this.props.context.enableHoverMode) {
+        if (this.props.context.enableHoverMode) {
             this.props.context.onRowHovered(this.props.api, this.props.rowIndex, this.props.node);
         }
     }
     
     handleMouseLeave() {
-        if(this.props.context.enableHoverMode) {
+        if (this.props.context.enableHoverMode) {
             this.props.context.onRowUnhovered(this.props.api, this.props.rowIndex, this.props.node);
         }
     }
