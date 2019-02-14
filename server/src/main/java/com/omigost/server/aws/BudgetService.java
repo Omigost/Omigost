@@ -3,10 +3,7 @@ package com.omigost.server.aws;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.budgets.AWSBudgets;
 import com.amazonaws.services.budgets.AWSBudgetsClientBuilder;
-import com.amazonaws.services.budgets.model.Budget;
-import com.amazonaws.services.budgets.model.CreateBudgetRequest;
-import com.amazonaws.services.budgets.model.DeleteBudgetRequest;
-import com.amazonaws.services.budgets.model.DescribeBudgetsRequest;
+import com.amazonaws.services.budgets.model.*;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sns.model.CreateTopicRequest;
@@ -103,6 +100,12 @@ public class BudgetService {
         List<Budget> budgets = budgetsClient.describeBudgets(new DescribeBudgetsRequest().withAccountId(accountId)).getBudgets();
         if (budgets == null) return Collections.emptyList();
         return budgets;
+    }
+
+    public Budget getBudgetByName(String name) {
+        return budgetsClient
+                .describeBudget(new DescribeBudgetRequest().withBudgetName(name))
+                .getBudget();
     }
 
     private int getStartingNextBudgetNumber() {
