@@ -67,13 +67,13 @@ public class NewBudgetRequestBuilder {
     private Collection<NotificationWithSubscribers> getNotificationsWithSubscribers() {
         // Not sure if "withAdress" takes name or arn of the SNS topic
         List<NotificationWithSubscribers> result = new ArrayList<>();
-        Subscriber snsTopic = new Subscriber()
+        Subscriber snsSubscriber = new Subscriber()
                 .withSubscriptionType(SubscriptionType.SNS)
                 .withAddress(name);
 
         // Notification for surpassing limit
         result.add(new NotificationWithSubscribers()
-                .withSubscribers(snsTopic)
+                .withSubscribers(snsSubscriber)
                 .withNotification(new Notification()
                         .withNotificationType(NotificationType.ACTUAL)
                         .withThresholdType(ThresholdType.PERCENTAGE)
@@ -81,7 +81,7 @@ public class NewBudgetRequestBuilder {
                         .withThreshold(100.0)));
         // Notification for forecasted surpassing limit
         result.add(new NotificationWithSubscribers()
-                .withSubscribers(snsTopic)
+                .withSubscribers(snsSubscriber)
                 .withNotification(new Notification()
                         .withNotificationType(NotificationType.FORECASTED)
                         .withThresholdType(ThresholdType.PERCENTAGE)

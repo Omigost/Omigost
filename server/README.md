@@ -10,3 +10,7 @@ To develop in IntelliJ:
 ./gradlew idea
 ```
 and open existing project *'server.ipr'*.
+
+## Setup
+
+Token configuration is available in `src/main/resources/application.properties` file.
