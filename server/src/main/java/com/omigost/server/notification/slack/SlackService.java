@@ -3,6 +3,7 @@ package com.omigost.server.notification.slack;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.omigost.server.exception.SlackUserNotFoundException;
+import com.omigost.server.model.UserConnection;
 import com.omigost.server.notification.NotificationMessage;
 import com.omigost.server.notification.NotificationService;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,12 +64,16 @@ public class SlackService implements NotificationService {
         return response.getBody().get("channel").get("id").asText();
     }
 
-    public void sendAlertToUser(String username, String message) {
-        sendAlertToUser(username, SlackMessage.builder().mainText(message).build());
-    }
-
     private String pullCallbackId() {
         return "42"; // TODO mock - not sure what the callback_id should be
+    }
+
+    public void sendAlertToUser(UserConnection userConnection, NotificationMessage message) {
+        sendAlertToUser(userConnection.serviceUsername, new SlackMessage(message, pullCallbackId()));
+    }
+
+    public void sendAlertToUser(String username, String message) {
+        sendAlertToUser(username, SlackMessage.builder().mainText(message).build());
     }
 
     public void sendAlertToUser(String username, NotificationMessage message) {

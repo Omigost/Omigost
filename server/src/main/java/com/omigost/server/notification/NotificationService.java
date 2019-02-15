@@ -1,5 +1,7 @@
 package com.omigost.server.notification;
 
+import com.omigost.server.model.UserConnection;
+
 public interface NotificationService {
-    void sendAlertToUser(String username, NotificationMessage message);
+    void sendAlertToUser(UserConnection userConnection, NotificationMessage message);
 }
