@@ -4,7 +4,9 @@ import com.amazonaws.services.budgets.model.Budget;
 import com.amazonaws.services.organizations.model.Account;
 import com.omigost.server.aws.BudgetService;
 import com.omigost.server.aws.OrganizationService;
-import com.omigost.server.aws.TerminationService;
+import com.omigost.server.aws.termination.EBSTerminationService;
+import com.omigost.server.aws.termination.EC2TerminationService;
+import com.omigost.server.aws.termination.RDSTerminationService;
 import com.omigost.server.rest.dto.TerminationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +21,18 @@ public class AWSTestController {
 
     @Autowired
     private OrganizationService organization;
+
     @Autowired
     private BudgetService budgets;
 
     @Autowired
-    private TerminationService terminationService;
+    private EC2TerminationService ec2TerminationService;
+
+    @Autowired
+    private RDSTerminationService rdsTerminationService;
+
+    @Autowired
+    private EBSTerminationService ebsTerminationService;
 
     @GetMapping("/organizations")
     public List<Account> accounts() {
@@ -35,18 +44,28 @@ public class AWSTestController {
         return budgets.getBudgets();
     }
 
-    @PostMapping("/hibernate")
-    public void hibernate(@RequestBody TerminationRequest request) {
-        terminationService.hibernate(request.getMachineId());
+    @PostMapping("/ec2/hibernate")
+    public void hibernateEC2(@RequestBody TerminationRequest request) {
+        ec2TerminationService.hibernate(request.getMachineId());
     }
 
-    @PostMapping("/stop")
-    public void stop(@RequestBody TerminationRequest request) {
-        terminationService.stop(request.getMachineId());
+    @PostMapping("/ec2/stop")
+    public void stopEC2(@RequestBody TerminationRequest request) {
+        ec2TerminationService.stop(request.getMachineId());
     }
 
-    @PostMapping("/terminate")
-    public void terminate(@RequestBody TerminationRequest request) {
-        terminationService.terminate(request.getMachineId());
+    @PostMapping("/ec2/terminate")
+    public void terminateEC2(@RequestBody TerminationRequest request) {
+        ec2TerminationService.terminate(request.getMachineId());
+    }
+
+    @PostMapping("/rds/stop")
+    public void stopRDS(@RequestBody TerminationRequest request) {
+        rdsTerminationService.stop(request.getMachineId());
+    }
+
+    @PostMapping("/ebs/stop")
+    public void stopEBS(@RequestBody TerminationRequest request) {
+        ebsTerminationService.stop(request.getMachineId());
     }
 }

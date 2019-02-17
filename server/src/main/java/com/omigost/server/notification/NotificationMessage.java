@@ -1,8 +1,10 @@
 package com.omigost.server.notification;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Singular;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Getter
@@ -17,7 +19,7 @@ public class NotificationMessage {
     @Singular
     protected List<NotificationMessageAction> actions;
 
-    protected NotificationMessage (NotificationMessage message) {
+    protected NotificationMessage(NotificationMessage message) {
         this(message.mainText, message.attachmentText, message.actions);
     }
 }

@@ -1,8 +1,10 @@
-package com.omigost.server.aws;
+package com.omigost.server.aws.termination;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.services.ec2.*;
-import com.amazonaws.services.ec2.model.*;
+import com.amazonaws.services.ec2.AmazonEC2;
+import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
+import com.amazonaws.services.ec2.model.StopInstancesRequest;
+import com.amazonaws.services.ec2.model.TerminateInstancesRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,7 @@ import java.util.List;
 
 
 @Service
-public class TerminationService {
+public class EC2TerminationService {
     @Value("${aws.region}")
     private String region;
 
