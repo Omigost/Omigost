@@ -7,7 +7,6 @@ interface WrapperProps {
 };
 
 const Wrapper = styled.div<WrapperProps>`
-  font-family: ${(props: WrapperProps) => props.theme.primaryFont};
   color: ${(props: WrapperProps) => props.theme.colors.accent};
   font-family: ${(props: WrapperProps) => props.theme.primaryFont};
   font-size: ${(props: WrapperProps) => props.theme.fontSize[props.fontSize || 'XL']};
