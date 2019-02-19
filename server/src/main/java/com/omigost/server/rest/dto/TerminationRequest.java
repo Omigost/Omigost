@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class TerminationRequest {
-    public List<String> machineId;
+    public List<String> machineIds;
 }

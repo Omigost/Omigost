@@ -46,26 +46,26 @@ public class AWSTestController {
 
     @PostMapping("/ec2/hibernate")
     public void hibernateEC2(@RequestBody TerminationRequest request) {
-        ec2TerminationService.hibernate(request.getMachineId());
+        ec2TerminationService.hibernate(request.getMachineIds());
     }
 
     @PostMapping("/ec2/stop")
     public void stopEC2(@RequestBody TerminationRequest request) {
-        ec2TerminationService.stop(request.getMachineId());
+        ec2TerminationService.stop(request.getMachineIds());
     }
 
     @PostMapping("/ec2/terminate")
     public void terminateEC2(@RequestBody TerminationRequest request) {
-        ec2TerminationService.terminate(request.getMachineId());
+        ec2TerminationService.terminate(request.getMachineIds());
     }
 
     @PostMapping("/rds/stop")
     public void stopRDS(@RequestBody TerminationRequest request) {
-        rdsTerminationService.stop(request.getMachineId());
+        rdsTerminationService.stop(request.getMachineIds());
     }
 
     @PostMapping("/ebs/stop")
     public void stopEBS(@RequestBody TerminationRequest request) {
-        ebsTerminationService.stop(request.getMachineId());
+        ebsTerminationService.stop(request.getMachineIds());
     }
 }
