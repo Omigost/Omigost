@@ -13,8 +13,8 @@ public class BudgetDecorator extends Budget {
     @Delegate(types=Budget.class)
     public final Budget budget;
 
-    private final static String LINKED_ACCOUNT_FILTER = "LinkedAccount";
-    private final static String TAG_FILTER = "TagKeyValue";
+    public final static String LINKED_ACCOUNT_FILTER = "LinkedAccount";
+    public final static String TAG_FILTER = "TagKeyValue";
 
     public BudgetDecorator (Budget budget) {
         this.budget = budget;
