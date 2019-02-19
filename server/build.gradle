@@ -35,6 +35,7 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     implementation('org.projectlombok:lombok:1.18.4')
 
+    implementation('org.postgresql:postgresql:42.2.1')
     implementation('com.amazonaws:aws-java-sdk-iam:1.11.457')
     implementation('com.amazonaws:aws-java-sdk-organizations:1.11.457')
     implementation('com.amazonaws:aws-java-sdk-budgets:1.11.475')
