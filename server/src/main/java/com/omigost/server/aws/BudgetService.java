@@ -125,7 +125,8 @@ public class BudgetService {
 
     private void createSNSTopic(String name, boolean isHttps) {
         CreateTopicResult result = snsClient.createTopic(new CreateTopicRequest(name));
-        snsClient.subscribe(new SubscribeRequest(result.getTopicArn(), isHttps ? "https" : "http", notificationsEndpoint)); // TODO support separate endpoint for alarm trigger and for forecasts
+        snsClient.subscribe(new SubscribeRequest(result.getTopicArn(), isHttps ? "https" : "http",
+                notificationsEndpoint + "?budgetName=" + name));
     }
 
     private String getTopicArn(String topicName) {
