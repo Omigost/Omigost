@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class CostService {
@@ -46,15 +47,7 @@ public class CostService {
 
     private List<AWSDailySpendingDTO> fetchSpending(GetCostAndUsageRequest request) {
 
-        List<ResultByTime> results = new ArrayList<>();
-        GetCostAndUsageResult response = null;
-
-        while (response == null || response.getNextPageToken() != null) {
-            response = client.getCostAndUsage(request);
-
-            results.addAll(response.getResultsByTime());
-            request.setNextPageToken(response.getNextPageToken());
-        }
+        List<ResultByTime> results = fetchPaginatedSpendings(request);
 
         List<AWSDailySpendingDTO> spendings = new ArrayList<>();
         for (ResultByTime resultByTime : results) {
@@ -70,6 +63,19 @@ public class CostService {
         return spendings;
     }
 
+    private List<ResultByTime> fetchPaginatedSpendings(GetCostAndUsageRequest request) {
+        List<ResultByTime> results = new ArrayList<>();
+        GetCostAndUsageResult response = null;
+
+        while (response == null || response.getNextPageToken() != null) {
+            response = client.getCostAndUsage(request);
+
+            results.addAll(response.getResultsByTime());
+            request.setNextPageToken(response.getNextPageToken());
+        }
+        return results;
+    }
+
 
     public List<AWSDailySpendingDTO> getSpendingForAccount(DateInterval interval, String userId) {
         Expression linkedAccountFilter = new Expression()
@@ -83,18 +89,17 @@ public class CostService {
     }
 
     //tags should be activated from amazon account
-    public List<AWSDailySpendingDTO> getSpendingForTags(DateInterval interval, Map<String, List<String>> tagValues) {
+    public List<AWSDailySpendingDTO> getSpendingForTags(DateInterval interval, Map<String, List<String>> tagValueMap) {
         Expression accumulativeExpression = new Expression();
 
-        tagValues.entrySet().stream()
-                .findFirst()
-                .map(entry-> new TagValues().withKey(entry.getKey()).withValues(entry.getValue()))
-                .ifPresent(accumulativeExpression::setTags);
+        List<TagValues> tagValuesList = tagValueMap.entrySet().stream()
+                .map(entry -> new TagValues().withKey(entry.getKey()).withValues(entry.getValue()))
+                .collect(Collectors.toList());
 
-        tagValues.entrySet().stream()
-                .skip(1)
-                .map(entry-> new TagValues().withKey(entry.getKey()).withValues(entry.getValue()))
-                .map(tag ->new Expression().withTags(tag) )
+        tagValuesList.stream().findFirst().ifPresent(accumulativeExpression::setTags);
+
+        tagValuesList.stream().skip(1)
+                .map(t -> new Expression().withTags(t))
                 .forEach(accumulativeExpression::withAnd);
 
         GetCostAndUsageRequest request = defaultRequest()

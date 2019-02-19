@@ -41,7 +41,7 @@ public class AWSTestController {
         return costService.getSpendingForAccount(request.getDateInterval(), request.getUserId());
     }
     @PostMapping("/spending/tag")
-    public List<AWSDailySpendingDTO> tagSpending(@RequestBody TagSpendingDTO tagSpendingDTO){
-        return costService.getSpendingForTags(tagSpendingDTO.getDateInterval(),tagSpendingDTO.getTags());
+    public List<AWSDailySpendingDTO> tagSpending(@RequestBody TagSpendingDTO request){
+        return costService.getSpendingForTags(request.getDateInterval(),request.getTags());
     }
 }
