@@ -6,7 +6,6 @@ import com.amazonaws.services.organizations.AWSOrganizationsClientBuilder;
 import com.amazonaws.services.organizations.model.Account;
 import com.amazonaws.services.organizations.model.ListAccountsRequest;
 import com.amazonaws.services.organizations.model.ListAccountsResult;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,8 +23,6 @@ public class OrganizationService {
 
     private AWSOrganizations orgClient;
 
-    @Getter
-    private List<Account> accounts;
 
     @PostConstruct
     private void initializeOrganizationClient() {
@@ -36,10 +33,10 @@ public class OrganizationService {
                 .build();
     }
 
-    public void fetchAccounts() {
+    //Can be optimized not to fetch accounts every time
+    public List<Account> fetchAccounts() {
         ListAccountsRequest request = new ListAccountsRequest();
         ListAccountsResult result = orgClient.listAccounts(request);
-        List<Account> accountList = result.getAccounts();
-        accounts = accountList;
+        return result.getAccounts();
     }
 }
