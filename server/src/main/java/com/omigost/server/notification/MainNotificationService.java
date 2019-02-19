@@ -1,36 +1,42 @@
 package com.omigost.server.notification;
 
 import com.amazonaws.services.budgets.model.Budget;
-import com.omigost.server.aws.UserService;
+import com.omigost.server.model.BudgetDecorator;
+import com.omigost.server.model.Communication;
 import com.omigost.server.model.User;
-import com.omigost.server.model.UserConnection;
+import com.omigost.server.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 public class MainNotificationService {
     @Autowired
-    UserService users;
+    private AccountRepository accountRepository;
 
     public void alertBudgetOverran(Budget budget) {
-        NotificationMessage message = budgetOverranMessage(/* TODO some data */);
+        NotificationMessage message = budgetOverranMessage(budget);
         sendBudgetAlert(budget, message);
     }
 
     private void sendBudgetAlert(Budget budget, NotificationMessage message) {
-        for (User user : users.getUsersResponsibleFor(budget)) {
-            sendAlertToUser(user, message);
+        for (Communication communication : getBudgetOwnersCommunications(budget)) {
+            communication.service().sendAlertToUser(communication, message);
         }
     }
 
-    private void sendAlertToUser(User user, NotificationMessage message) {
-        for (UserConnection userConnection : user.userConnections) {
-            // TODO consider user preferences here
-            userConnection.connection.service.sendAlertToUser(userConnection, message);
+    private Set<Communication> getBudgetOwnersCommunications(Budget budget) {
+        Set<Communication> result = new HashSet<>();
+
+        for (String linkedAccount : budget.getCostFilters().get(BudgetDecorator.LINKED_ACCOUNT_FILTER)) {
+            result.addAll(accountRepository.getAccountByName(linkedAccount).communications);
         }
+
+        return result;
     }
 
-    private NotificationMessage budgetOverranMessage(/* TODO some data */) {
+    private NotificationMessage budgetOverranMessage(Budget budget) {
         return NotificationMessage.builder()
                 .mainText("TODO this message should have sth meaningful")
                 .build();
