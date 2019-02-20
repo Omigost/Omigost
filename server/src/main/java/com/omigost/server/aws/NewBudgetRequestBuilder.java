@@ -1,6 +1,7 @@
 package com.omigost.server.aws;
 
 import com.amazonaws.services.budgets.model.*;
+import com.omigost.server.model.BudgetDecorator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -10,8 +11,9 @@ import java.util.*;
 
 public class NewBudgetRequestBuilder {
     private static String CURRENCY = "USD";
-    private static String LINKED_ACCOUNT_FILTER = "LinkedAccount";
-    private static String TAG_FILTER = "TagKeyValue";
+
+    @Autowired
+    private BudgetService budgets;
 
     private String name;
     private int limit;
@@ -57,27 +59,21 @@ public class NewBudgetRequestBuilder {
     }
 
     private void applyFilters(Budget budget) {
-        budget.addCostFiltersEntry(LINKED_ACCOUNT_FILTER, linkedAccountsFilter);
-
-        ArrayList<String> tagsFilterList = new ArrayList<>();
-        tagsFilter.entrySet().forEach(entry -> {
-            for (String tagValue : entry.getValue()) {
-                tagsFilterList.add(entry.getKey() + "$" + tagValue);
-            }
-        });
-        budget.addCostFiltersEntry(TAG_FILTER, tagsFilterList);
+        new BudgetDecorator(budget)
+                .setLinkedAccountsFilter(linkedAccountsFilter)
+                .setTagsFilter(tagsFilter);
     }
 
     private Collection<NotificationWithSubscribers> getNotificationsWithSubscribers() {
         // Not sure if "withAdress" takes name or arn of the SNS topic
         List<NotificationWithSubscribers> result = new ArrayList<>();
-        Subscriber snsTopic = new Subscriber()
+        Subscriber snsSubscriber = new Subscriber()
                 .withSubscriptionType(SubscriptionType.SNS)
                 .withAddress(name);
 
         // Notification for surpassing limit
         result.add(new NotificationWithSubscribers()
-                .withSubscribers(snsTopic)
+                .withSubscribers(snsSubscriber)
                 .withNotification(new Notification()
                         .withNotificationType(NotificationType.ACTUAL)
                         .withThresholdType(ThresholdType.PERCENTAGE)
@@ -85,7 +81,7 @@ public class NewBudgetRequestBuilder {
                         .withThreshold(100.0)));
         // Notification for forecasted surpassing limit
         result.add(new NotificationWithSubscribers()
-                .withSubscribers(snsTopic)
+                .withSubscribers(snsSubscriber)
                 .withNotification(new Notification()
                         .withNotificationType(NotificationType.FORECASTED)
                         .withThresholdType(ThresholdType.PERCENTAGE)

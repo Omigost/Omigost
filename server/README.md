@@ -2,7 +2,7 @@
 
 Build with:
 ```bash
-./gradlew
+./gradlew bootJar
 ```
 
 To develop in IntelliJ:
@@ -10,3 +10,15 @@ To develop in IntelliJ:
 ./gradlew idea
 ```
 and open existing project *'server.ipr'*.
+
+## Setup
+
+Configuration is available in `src/main/resources/application.properties` file.
+
+## Running
+
+```bash
+docker-compose up -d
+docker build -t omigost .
+docker run --network="host" omigost
+```

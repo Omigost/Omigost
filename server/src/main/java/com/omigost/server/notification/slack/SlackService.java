@@ -3,8 +3,10 @@ package com.omigost.server.notification.slack;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.omigost.server.exception.SlackUserNotFoundException;
+import com.omigost.server.model.Communication;
 import com.omigost.server.notification.NotificationMessage;
 import com.omigost.server.notification.NotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,9 @@ public class SlackService implements NotificationService {
 
     @Value("${slack.oauth.bot.token}")
     private String authToken;
-    private RestTemplate restTemplate;
 
-    public SlackService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+    @Autowired
+    private RestTemplate restTemplate;
 
     private ArrayNode getUsers() {
         ResponseEntity<JsonNode> response = restTemplate.postForEntity(
@@ -63,12 +63,16 @@ public class SlackService implements NotificationService {
         return response.getBody().get("channel").get("id").asText();
     }
 
-    public void sendAlertToUser(String username, String message) {
-        sendAlertToUser(username, SlackMessage.builder().mainText(message).build());
-    }
-
     private String pullCallbackId() {
         return "42"; // TODO mock - not sure what the callback_id should be
+    }
+
+    public void sendAlertToUser(Communication communication, NotificationMessage message) {
+        sendAlertToUser(communication.value, new SlackMessage(message, pullCallbackId()));
+    }
+
+    public void sendAlertToUser(String username, String message) {
+        sendAlertToUser(username, SlackMessage.builder().mainText(message).build());
     }
 
     public void sendAlertToUser(String username, NotificationMessage message) {
