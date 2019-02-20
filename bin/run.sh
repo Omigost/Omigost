@@ -17,4 +17,8 @@ npm run build
 popd
 
 echo "=== Building docker image ==="
-docker-compose up
+docker build -t omigost .
+
+echo "=== Running application ==="
+docker-compose up -d
+docker run --network="host" omigost
