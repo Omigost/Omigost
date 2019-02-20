@@ -48,19 +48,19 @@ public class MachineListingService {
     }
 
     public List<String> getRunningEC2Instances(String userId) {
+        return getReservations(userId).stream()
+                .map(Reservation::getInstances)
+                .flatMap(List::stream)
+                .filter(this::isInstanceRunning)
+                .map(Instance::getInstanceId)
+                .collect(Collectors.toList());
+    }
+
+    private List<Reservation> getReservations(String userId) {
         Filter ownerIdFilter = new Filter(ownerFilterKey, Collections.singletonList(userId));
         DescribeInstancesRequest request = new DescribeInstancesRequest().withFilters(ownerIdFilter);
         DescribeInstancesResult instancesResult = amazonEC2.describeInstances(request);
-        List<Reservation> reservations = instancesResult.getReservations();
-        return reservations.stream()
-                //get all instance ids
-                .map(Reservation::getInstances)
-                .flatMap(List::stream)
-                //filter only running instances
-                .filter(this::isInstanceRunning)
-                //extract image ids
-                .map(Instance::getInstanceId)
-                .collect(Collectors.toList());
+        return instancesResult.getReservations();
     }
 
 }
