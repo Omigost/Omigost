@@ -2,7 +2,7 @@ package com.omigost.server.rest;
 
 import com.amazonaws.services.budgets.model.Budget;
 import com.omigost.server.aws.BudgetService;
-import com.omigost.server.exception.BudgetNotFound;
+import com.omigost.server.exception.NotFoundException;
 import com.omigost.server.notification.MainNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +23,7 @@ public class SnsHandlerController {
     @PostMapping("/trigger")
     public void handleAlertTrigger(@RequestParam String budgetName) {
         Budget budget = budgets.getBudgetByName(budgetName);
-        if (budget == null) throw new BudgetNotFound();
+        if (budget == null) throw new NotFoundException("Budget by this name could not be found");
         notifications.alertBudgetOverran(budget);
     }
 }

@@ -2,7 +2,7 @@ package com.omigost.server.notification.slack;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.omigost.server.exception.SlackUserNotFoundException;
+import com.omigost.server.exception.NotFoundException;
 import com.omigost.server.model.Communication;
 import com.omigost.server.notification.NotificationMessage;
 import com.omigost.server.notification.NotificationService;
@@ -43,7 +43,7 @@ public class SlackService implements NotificationService {
             }
         }
 
-        throw new SlackUserNotFoundException("Couldn't find user with such name");
+        throw new NotFoundException("Couldn't find user with such name");
     }
 
     private MultiValueMap<String, String> getArgsMapWithAuth() {
