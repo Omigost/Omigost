@@ -25,4 +25,8 @@ public class User {
             joinColumns = @JoinColumn(name = "aws_user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "communication_id", referencedColumnName = "id"))
     public Set<Communication> communications = new HashSet<>();
+
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "users")
+    public Set<Account> accounts = new HashSet<>();
 }
