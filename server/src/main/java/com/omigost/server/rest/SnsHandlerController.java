@@ -1,6 +1,7 @@
 package com.omigost.server.rest;
 
 import com.amazonaws.services.budgets.model.Budget;
+import com.omigost.server.alerts.AlertService;
 import com.omigost.server.aws.BudgetService;
 import com.omigost.server.notification.MainNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,12 @@ public class SnsHandlerController {
     private BudgetService budgets;
 
     @Autowired
-    private MainNotificationService notifications; // TODO should notifications be user-based? budget-based? where to store config and where to consider it in code
+    private AlertService alerts;
 
     @PostMapping("/alerts/trigger")
     public void handleAlertTrigger(@RequestParam String budgetName) {
         Budget budget = budgets.getBudgetByName(budgetName);
         if (budget == null) throw new BudgetNotFound();
-        notifications.alertBudgetOverran(budget);
+        alerts.alertBudgetTriggered(budget);
     }
 }

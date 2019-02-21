@@ -3,7 +3,6 @@ package com.omigost.server.notification;
 import com.amazonaws.services.budgets.model.Budget;
 import com.omigost.server.model.BudgetDecorator;
 import com.omigost.server.model.Communication;
-import com.omigost.server.aws.UserService;
 import com.omigost.server.model.User;
 import com.omigost.server.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
