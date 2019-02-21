@@ -18,6 +18,8 @@ public class Account {
     public String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable
-    public Set<User> owners = new HashSet<>();
+    @JoinTable(name = "account_user",
+            joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "aws_user_id", referencedColumnName = "id"))
+    public Set<User> users = new HashSet<>();
 }

@@ -1,14 +1,10 @@
 version: '3'
 services:
-  web:
-    build: .
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgresql
   postgresql:
     image: postgres:11-alpine
     restart: always
+    ports:
+      - 5432:5432
     environment:
         POSTGRES_USER: admin
         POSTGRES_PASSWORD: admin1

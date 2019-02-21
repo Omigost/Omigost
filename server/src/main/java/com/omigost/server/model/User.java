@@ -9,8 +9,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Entity
-@EqualsAndHashCode(exclude = "communications")
+@Entity(name = "aws_user")
+@EqualsAndHashCode
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,10 @@ public class User {
     @NotNull
     public String name;
 
+    @EqualsAndHashCode.Exclude
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable
+    @JoinTable(name = "user_communication",
+            joinColumns = @JoinColumn(name = "aws_user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "communication_id", referencedColumnName = "id"))
     public Set<Communication> communications = new HashSet<>();
 }

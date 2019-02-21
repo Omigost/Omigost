@@ -2,7 +2,7 @@
 
 Build with:
 ```bash
-./gradlew
+./gradlew bootJar
 ```
 
 To develop in IntelliJ:
@@ -13,4 +13,12 @@ and open existing project *'server.ipr'*.
 
 ## Setup
 
-Token configuration is available in `src/main/resources/application.properties` file.
+Configuration is available in `src/main/resources/application.properties` file.
+
+## Running
+
+```bash
+docker-compose up -d
+docker build -t omigost .
+docker run --network="host" omigost
+```
