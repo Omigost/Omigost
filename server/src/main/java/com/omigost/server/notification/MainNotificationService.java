@@ -30,7 +30,9 @@ public class MainNotificationService {
         Set<Communication> result = new HashSet<>();
 
         for (String linkedAccount : budget.getCostFilters().get(BudgetDecorator.LINKED_ACCOUNT_FILTER)) {
-            result.addAll(accountRepository.getAccountByName(linkedAccount).communications);
+            for (User user : accountRepository.getAccountByName(linkedAccount).getUsers()) {
+                result.addAll(user.getCommunications());
+            }
         }
 
         return result;
