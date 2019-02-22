@@ -15,8 +15,11 @@ import java.util.Random;
 @Component
 @EqualsAndHashCode
 public class AlertResponseToken {
+    static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
+    static final String NUMBERS = "0123456789";
+
     static final Integer TOKEN_LENGTH = 12;
-    static final char[] TOKEN_CHARACTERS = ("abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789").toCharArray();
+    static final char[] ALLOWED_TOKEN_CHARACTERS = (ALPHABET.toLowerCase() + ALPHABET.toUpperCase() + NUMBERS).toCharArray();
 
     static final String ACTIVE_STATUS = "active";
 
@@ -49,7 +52,7 @@ public class AlertResponseToken {
     private String getRandomString() {
         StringBuilder randomString = new StringBuilder();
         for (int i = 0; i < TOKEN_LENGTH; ++i) {
-            randomString.append(TOKEN_CHARACTERS[random.nextInt(TOKEN_CHARACTERS.length)]);
+            randomString.append(ALLOWED_TOKEN_CHARACTERS[random.nextInt(ALLOWED_TOKEN_CHARACTERS.length)]);
         }
         return randomString.toString();
     }
