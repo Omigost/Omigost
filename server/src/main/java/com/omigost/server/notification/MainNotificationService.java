@@ -15,18 +15,7 @@ public class MainNotificationService {
     @Autowired
     private AccountRepository accountRepository;
 
-    public void alertBudgetTriggered(Budget budget) {
-        NotificationMessage message = budgetTriggeredMessage(budget);
-        sendBudgetAlert(budget, message);
-    }
-
-    private void sendBudgetAlert(Budget budget, NotificationMessage message) {
-        for (Communication communication : getBudgetOwnersCommunications(budget)) {
-            communication.service().sendAlertToUser(communication, message);
-        }
-    }
-
-    private Set<Communication> getBudgetOwnersCommunications(Budget budget) {
+    public Set<Communication> getBudgetOwnersCommunications(Budget budget) {
         Set<User> users = new HashSet<>();
         Set<Communication> result = new HashSet<>();
         List<String> linkedAccounts = budget.getCostFilters().get(BudgetDecorator.LINKED_ACCOUNT_FILTER);
@@ -42,7 +31,7 @@ public class MainNotificationService {
         return result;
     }
 
-    private NotificationMessage budgetTriggeredMessage(Budget budget) {
+    public NotificationMessage budgetTriggeredMessage(Budget budget) {
         if (new BudgetDecorator(budget).isOverrun())
             return budgetOverrunMessage(budget);
         return forecastedBudgetOverrunMessage(budget);

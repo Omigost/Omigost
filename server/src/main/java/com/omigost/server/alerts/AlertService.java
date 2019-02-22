@@ -3,7 +3,9 @@ package com.omigost.server.alerts;
 import com.amazonaws.services.budgets.model.Budget;
 import com.omigost.server.model.Alert;
 import com.omigost.server.model.AlertResponseToken;
+import com.omigost.server.model.Communication;
 import com.omigost.server.notification.MainNotificationService;
+import com.omigost.server.notification.NotificationMessage;
 import com.omigost.server.repository.AlertRepository;
 import com.omigost.server.repository.AlertResponseTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +22,27 @@ public class AlertService {
     @Autowired
     private AlertRepository alertRepo;
 
-    public void alertBudgetTriggered(Budget budget) {
-        AlertResponseToken token = new AlertResponseToken();
-        Alert alert = new Alert();
+    public void handleBudgetTriggered(Budget budget) {
+        NotificationMessage budgetTriggeredMessage = notifications.budgetTriggeredMessage(budget);
 
-        alert.token = tokenRepo.save(token);
+        for (Communication communication : notifications.getBudgetOwnersCommunications(budget)) {
+            triggerBudgetAlert(communication, budgetTriggeredMessage);
+        }
+    }
+
+    private void triggerBudgetAlert(Communication communication, NotificationMessage message) {
+        AlertResponseToken token = new AlertResponseToken();
+
+        Alert alert = Alert
+                .builder()
+                .communication(communication)
+                .token(tokenRepo.save(token))
+                .build();
+
         alertRepo.save(alert);
 
-        notifications.alertBudgetTriggered(budget);
+        communication.service().sendAlertToUser(communication, message);
+    }
+
     }
 }
