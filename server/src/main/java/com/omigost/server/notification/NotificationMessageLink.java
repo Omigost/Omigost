@@ -4,9 +4,15 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class NotificationMessageLink {
-    private String text, url, style;
+    protected String text, url, style;
 
-    NotificationMessageLink(String text, String url) {
+    public NotificationMessageLink(String text, String url) {
         this(text, url, "primary");
+    }
+
+    public NotificationMessageLink(NotificationMessageLink link) {
+        this.text = link.text;
+        this.url = link.url;
+        this.style = link.style;
     }
 }
