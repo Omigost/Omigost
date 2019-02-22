@@ -8,8 +8,11 @@ import com.omigost.server.notification.MainNotificationService;
 import com.omigost.server.notification.NotificationMessage;
 import com.omigost.server.repository.AlertRepository;
 import com.omigost.server.repository.AlertResponseTokenRepository;
+import com.omigost.server.rest.exception.ResponseTokenInvalid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AlertService {
@@ -44,5 +47,11 @@ public class AlertService {
         communication.service().sendAlertToUser(communication, message);
     }
 
+    public void invalidateResponseToken(String tokenString) throws ResponseTokenInvalid {
+        Optional<AlertResponseToken> maybeToken = tokenRepo.findAlertResponseTokenBy(tokenString);
+        if (!maybeToken.isPresent()) throw new ResponseTokenInvalid();
+        AlertResponseToken token = maybeToken.get();
+        token.invalidate();
+        tokenRepo.save(token);
     }
 }

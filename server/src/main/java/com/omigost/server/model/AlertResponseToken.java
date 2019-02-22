@@ -22,6 +22,7 @@ public class AlertResponseToken {
     static final char[] ALLOWED_TOKEN_CHARACTERS = (ALPHABET.toLowerCase() + ALPHABET.toUpperCase() + NUMBERS).toCharArray();
 
     static final String ACTIVE_STATUS = "active";
+    static final String USED_STATUS = "used";
 
     static Random random = new Random();
 
@@ -47,6 +48,10 @@ public class AlertResponseToken {
         do {
             token = getRandomString();
         } while (tokens.findAlertResponseTokenBy(token).isPresent());
+    }
+
+    public void invalidate() {
+        status = USED_STATUS;
     }
 
     private String getRandomString() {

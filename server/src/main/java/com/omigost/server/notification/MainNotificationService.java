@@ -62,5 +62,9 @@ public class MainNotificationService {
                 budget.getBudgetLimit().getAmount()
         ));
     }
+
+    public void requestLimitIncrease(String requestBody) { // TODO there should be more parameters there to show a nicer message
+        // TODO notify admin with a nice message
+    }
 }
 

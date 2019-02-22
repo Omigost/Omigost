@@ -20,6 +20,15 @@ public class AlertsController {
     @Autowired
     private AlertService alerts;
 
+    @Autowired
+    private MainNotificationService notifications;
+
+    @PostMapping("/requestLimitIncrease")
+    public void handleLimitIncreaseRequest(@RequestParam String requestBody, @RequestParam String tokenString) {
+        alerts.invalidateResponseToken(tokenString);
+        notifications.requestLimitIncrease(requestBody);
+    }
+
     @PostMapping("/trigger")
     public void handleAlertTrigger(@RequestParam String budgetName) throws BudgetNotFound {
         Budget budget = budgets.getBudgetByName(budgetName);
