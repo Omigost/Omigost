@@ -31,36 +31,38 @@ public class MainNotificationService {
         return result;
     }
 
-    public NotificationMessage budgetTriggeredMessage(Budget budget) {
+    public NotificationMessage budgetTriggeredMessage(Budget budget, String tokenString) {
+        String respondLinkUrl = "/alerts/trigger?token=" + tokenString; // TODO add host domain
+
         if (new BudgetDecorator(budget).isOverrun())
-            return budgetOverrunMessage(budget);
-        return forecastedBudgetOverrunMessage(budget);
+            return budgetOverrunMessage(budget, respondLinkUrl);
+        return forecastedBudgetOverrunMessage(budget, respondLinkUrl);
     }
 
     class RequestLimitIncreaseMessage extends NotificationMessage {
-        RequestLimitIncreaseMessage(String mainText) {
+        RequestLimitIncreaseMessage(String mainText, String respondLinkUrl) {
             super(NotificationMessage.builder()
                     .mainText(mainText)
-                    // TODO add request text field
+                    .link(new NotificationMessageLink("Request limit increase", respondLinkUrl))
                     .build()
             );
         }
     }
 
-    private NotificationMessage forecastedBudgetOverrunMessage(Budget budget) {
+    private NotificationMessage forecastedBudgetOverrunMessage(Budget budget, String respondLinkUrl) {
         return new RequestLimitIncreaseMessage(String.format(
                 "Budget %s is forecasted to exceed its %s limit.",
                 budget.getBudgetName(),
                 budget.getBudgetLimit().getAmount()
-        ));
+        ), respondLinkUrl);
     }
 
-    private NotificationMessage budgetOverrunMessage(Budget budget) {
+    private NotificationMessage budgetOverrunMessage(Budget budget, String respondLinkUrl) {
         return new RequestLimitIncreaseMessage(String.format(
                 "Budget %s has exceeded its %s limit.",
                 budget.getBudgetName(),
                 budget.getBudgetLimit().getAmount()
-        ));
+        ), respondLinkUrl);
     }
 
     public void requestLimitIncrease(String requestBody) { // TODO there should be more parameters there to show a nicer message

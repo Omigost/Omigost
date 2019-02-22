@@ -26,14 +26,12 @@ public class AlertService {
     private AlertRepository alertRepo;
 
     public void handleBudgetTriggered(Budget budget) {
-        NotificationMessage budgetTriggeredMessage = notifications.budgetTriggeredMessage(budget);
-
         for (Communication communication : notifications.getBudgetOwnersCommunications(budget)) {
-            triggerBudgetAlert(communication, budgetTriggeredMessage);
+            triggerBudgetTriggeredAlert(communication, budget);
         }
     }
 
-    private void triggerBudgetAlert(Communication communication, NotificationMessage message) {
+    private void triggerBudgetTriggeredAlert(Communication communication, Budget budget) {
         AlertResponseToken token = new AlertResponseToken();
 
         Alert alert = Alert
@@ -44,7 +42,9 @@ public class AlertService {
 
         alertRepo.save(alert);
 
-        communication.service().sendAlertToUser(communication, message);
+        NotificationMessage budgetTriggeredMessage = notifications.budgetTriggeredMessage(budget, token.token);
+
+        communication.service().sendAlertToUser(communication, budgetTriggeredMessage);
     }
 
     public void invalidateResponseToken(String tokenString) throws ResponseTokenInvalid {
