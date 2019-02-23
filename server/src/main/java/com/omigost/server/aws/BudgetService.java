@@ -3,10 +3,7 @@ package com.omigost.server.aws;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.budgets.AWSBudgets;
 import com.amazonaws.services.budgets.AWSBudgetsClientBuilder;
-import com.amazonaws.services.budgets.model.Budget;
-import com.amazonaws.services.budgets.model.CreateBudgetRequest;
-import com.amazonaws.services.budgets.model.DeleteBudgetRequest;
-import com.amazonaws.services.budgets.model.DescribeBudgetsRequest;
+import com.amazonaws.services.budgets.model.*;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sns.model.CreateTopicRequest;
@@ -105,6 +102,12 @@ public class BudgetService {
         return budgets;
     }
 
+    public Budget getBudgetByName(String name) {
+        return budgetsClient
+                .describeBudget(new DescribeBudgetRequest().withBudgetName(name))
+                .getBudget();
+    }
+
     private int getStartingNextBudgetNumber() {
         int currentMax = -1;
 
@@ -122,7 +125,8 @@ public class BudgetService {
 
     private void createSNSTopic(String name, boolean isHttps) {
         CreateTopicResult result = snsClient.createTopic(new CreateTopicRequest(name));
-        snsClient.subscribe(new SubscribeRequest(result.getTopicArn(), isHttps ? "https" : "http", notificationsEndpoint));
+        snsClient.subscribe(new SubscribeRequest(result.getTopicArn(), isHttps ? "https" : "http",
+                notificationsEndpoint + "?budgetName=" + name));
     }
 
     private String getTopicArn(String topicName) {

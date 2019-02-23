@@ -36,7 +36,7 @@ public class AWSTestController {
 
     @GetMapping("/organizations")
     public List<Account> accounts() {
-        return organization.getAccounts();
+        return organization.fetchAccounts();
     }
 
     @GetMapping("/budgets")
