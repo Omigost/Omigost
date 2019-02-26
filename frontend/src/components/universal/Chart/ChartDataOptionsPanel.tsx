@@ -1,12 +1,14 @@
 import * as React from 'react';
 import styled, { withTheme } from 'styled-components';
 
-import { ChartInstance } from './index';
+import { ChartInstance, ChartOrientation } from './index';
 import TinyButtons from 'components/TinyButtons';
 
 import {
     faRulerHorizontal, faRulerVertical
 } from '@fortawesome/free-solid-svg-icons';
+
+import { IconLookup } from '@fortawesome/fontawesome-common-types';
 
 const Wrapper = styled.div`
   padding: 0;
@@ -22,27 +24,40 @@ export interface ChartDataOptionsPanelProps {
 class ChartDataOptionsPanel extends React.Component<ChartDataOptionsPanelProps, any> {
 
     render() {
+        
+        const generateButton = (spec: {
+            icon: IconLookup;
+            text: string;
+            orientation: ChartOrientation;
+        }) => {
+            if(this.props.chart.getChartOrientation() === spec.orientation) {
+                return null;
+            }
+            
+            return {
+                icon: spec.icon.iconName,
+                text: spec.text,
+                onClick: () => {this.props.chart.setChartOrientation(spec.orientation);}
+            };
+        };
+        
         return (
             <Wrapper>
                 <TinyButtons>
-                    {(
-                        (this.props.chart.getChartOrientation() == 'horizontal')?(
+                    {
+                        [
                             {
-                                icon: faRulerHorizontal.iconName,
-                                onClick: () => {this.props.chart.setChartOrientation('vertical');},
+                                icon: faRulerHorizontal,
+                                orientation: ChartOrientation.Horizontal,
                                 text: 'Horizontal'
+                            },
+                            {
+                                icon: faRulerVertical,
+                                orientation: ChartOrientation.Vertical,
+                                text: 'Vertical'
                             }
-                        ):(null)
-                    )}
-                    {(
-                            (this.props.chart.getChartOrientation() == 'vertical')?(
-                                {
-                                    icon: faRulerVertical.iconName,
-                                    onClick: () => {this.props.chart.setChartOrientation('horizontal');},
-                                    text: 'Vertical'
-                                }
-                            ):(null)
-                    )}
+                        ].map(generateButton)
+                    }
                 </TinyButtons>
             </Wrapper>
                
