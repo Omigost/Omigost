@@ -17,6 +17,7 @@ import Breadcrumbs from './Breadcrumbs';
 import SearchableList from './SearchableList';
 import Card from './Card';
 import Tooltip from './Tooltip';
+import Meter from './Meter';
 import DataProvider from './DataProvider';
 import TinyButtons from './TinyButtons';
 import DataGrid from './DataGrid';
@@ -42,6 +43,7 @@ export default {
     SearchableList,
     Card,
     Tooltip,
+    Meter,
     DataProvider,
     TinyButtons,
     DataGrid,
