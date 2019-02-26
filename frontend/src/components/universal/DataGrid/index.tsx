@@ -77,34 +77,37 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
         
         this.handleRowHovered = this.handleRowHovered.bind(this);
         this.handleRowUnhovered = this.handleRowUnhovered.bind(this);
+        this.getDataWithRowsHoveredMarker = this.getDataWithRowsHoveredMarker.bind(this);
+    }
+    
+    getDataWithRowsHoveredMarker(mapper: (row: RowSpecs, index: number, isHovered: boolean) => boolean) {
+        return Object.assign({}, this.props.data, {
+            rows: this.props.data.rows.map((row: RowSpecs, index: number) => {
+                return Object.assign({}, row, {
+                    hovered: mapper(row, index, row.hovered)
+                });
+            })
+        });
     }
     
     handleRowUnhovered(api: GridApi, rowIndex: number, row: RowNode) {
         if (this.props.onDataChanged) {
             this.props.onDataChanged(
-                Object.assign({}, this.props.data, {
-                    rows: this.props.data.rows.map((row: RowSpecs, index: number) => {
-                        if (index != rowIndex) return row;
-                        return Object.assign({}, row, {
-                            hovered: false
-                        });
-                    })
+                this.getDataWithRowsHoveredMarker((row, index, isHovered) => {
+                    if (index != rowIndex) {
+                        return isHovered;
+                    }
+                    
+                    return false;
                 })
             );
         }
     }
     
     handleRowHovered(api: GridApi, rowIndex: number, row: RowNode) {
-        console.log("@handleRowHovered "+rowIndex);
         if (this.props.onDataChanged) {
             this.props.onDataChanged(
-                Object.assign({}, this.props.data, {
-                    rows: this.props.data.rows.map((row: RowSpecs, index: number) => {
-                        return Object.assign({}, row, {
-                            hovered: (index == rowIndex)
-                        });
-                    })
-                })
+                this.getDataWithRowsHoveredMarker((row, index, isHovered) => (index == rowIndex))
             );
         }
     }

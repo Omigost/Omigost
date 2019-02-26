@@ -28,7 +28,7 @@ export default class FilterRenderer extends React.Component<FilterRendererProps,
     }
 
     isFilterActive() {
-        return this.state.text !== null && this.state.text !== undefined && this.state.text !== '';
+        return this.state.text !== '';
     }
 
     doesFilterPass(params) {

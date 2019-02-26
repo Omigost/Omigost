@@ -52,6 +52,28 @@ export interface ChartModuleProps {
     chart: ChartInstance;
 };
 
+type DataFormatOptions = ChartProps & {
+    graphType: string;
+    rotate90: boolean;
+};
+
+type SeriesStylizer = (column: number, index: number) => {};
+
+type ChartComponentType = AreaChart | LineChart | BarChart;
+
+type ChartSeriesComponentType = Area | Bar | Line;
+
+export enum ChartType {
+    Line = 'line',
+    Bar = 'bar',
+    Area = 'area'
+};
+
+export enum ChartOrientation {
+    Vertical = 'vertical',
+    Horizontal = 'horizontal'
+};
+
 export interface ChartProps {
     theme?: any;
     graphType: string;
@@ -71,10 +93,10 @@ export interface ChartProps {
 };
 
 export interface ChartInstance {
-    setChartType(type: string);
-    getChartType(): string;
-    setChartOrientation(type: string);
-    getChartOrientation(): string;
+    setChartType(type: ChartType);
+    getChartType(): ChartType;
+    setChartOrientation(type: ChartOrientation);
+    getChartOrientation(): ChartOrientation;
 };
 
 interface ReferenceLinePrototype {
@@ -83,36 +105,42 @@ interface ReferenceLinePrototype {
     stroke: string;
 };
 
-class Chart extends React.Component<ChartProps, any> implements ChartInstance {
+interface ChartState {
+    lastGraphType: ChartType;
+    graphType: ChartType;
+    lastGraphOrientation: ChartOrientation;
+    graphOrientation: ChartOrientation;
+};
+
+class Chart extends React.Component<ChartProps, ChartState> implements ChartInstance {
     
-    state: any = null;
+    state: ChartState = null;
     
     constructor(props) {
         super(props);
         
         this.state = {
-            hovered: {},
-            lastGraphType: 'line',
-            graphType: 'line',
-            lastGraphOrientation: 'vertical',
-            graphOrientation: 'vertical'
+            lastGraphType: ChartType.Line,
+            graphType: ChartType.Line,
+            lastGraphOrientation: ChartOrientation.Vertical,
+            graphOrientation: ChartOrientation.Vertical
         };
     }
     
-    setChartType(type: string) {
+    setChartType(type: ChartType) {
         this.setState({
             graphType: type
         });
     }
     
-    getChartType() {
+    getChartType(): ChartType {
         return this.state.graphType;
     }
     
-    setChartOrientation(type: string) {
+    setChartOrientation(type: ChartOrientation) {
         if (this.state.graphType == 'area') {
             this.setState({
-                graphType: 'line',
+                graphType: ChartType.Line,
                 graphOrientation: type
             });
         } else {
@@ -122,7 +150,7 @@ class Chart extends React.Component<ChartProps, any> implements ChartInstance {
         }
     }
     
-    getChartOrientation() {
+    getChartOrientation(): ChartOrientation {
         return this.state.graphOrientation;
     }
     
@@ -133,116 +161,194 @@ class Chart extends React.Component<ChartProps, any> implements ChartInstance {
         ) {
             return {
                 lastGraphType: props.graphType,
-                graphType: props.graphType || 'line',
+                graphType: props.graphType || ChartType.Line,
                 lastGraphOrientation: props.graphOrientation,
-                graphOrientation: props.graphOrientation || 'vertical'
+                graphOrientation: props.graphOrientation || ChartOrientation.Vertical
             };
         }
         return null;
+    }
+    
+    renderAxesComponents(dataFormatOptions: DataFormatOptions) {
+        
+        if (this.props.tiny && !this.props.showAxes) {
+            return null;
+        }
+        
+        const inputColumn = getInputColumn(this.props.data, dataFormatOptions);
+        const outputColumns = getOutputColumns(this.props.data, dataFormatOptions);
+        
+        const createFormatter = (type: string) => {
+            return (value) => (formatData(type, { value }, this.props.data, dataFormatOptions).value);
+        };
+        
+        if (dataFormatOptions.rotate90) {
+            return [
+                <XAxis
+                  type='number'
+                  tickFormatter={createFormatter('output:axis')}
+                />,
+                <YAxis
+                    type='category'
+                    dataKey={inputColumn}
+                    tickFormatter={createFormatter('input:axis')}
+                />
+            ];
+        }
+        
+        return [
+            <XAxis
+              dataKey={inputColumn}
+              tickFormatter={createFormatter('input:axis')}
+            />,
+            <YAxis
+                tickFormatter={createFormatter('output:axis')}
+            />
+        ];
+    }
+    
+    renderReferenceLines(dataFormatOptions: DataFormatOptions) {
+        if(this.props.tiny && !this.props.showReferenceLines) {
+            return null;
+        }
+        
+        let referenceLines: Array<ReferenceLinePrototype> = [];
+        let cursorValue = this.getCursorValue();
+        
+        const inputColumn = getInputColumn(this.props.data, dataFormatOptions);
+        const outputColumns = getOutputColumns(this.props.data, dataFormatOptions);
+        
+        if (!cursorValue) {
+            return [];
+        }
+        
+        return [
+            <ReferenceLine
+                x={cursorValue[inputColumn]}
+                stroke={'#000000'}
+            />
+        ].concat(
+            Object.keys(cursorValue).filter((key) => outputColumns.indexOf(key) > -1).map((key, index) => (
+                <ReferenceLine
+                   y={cursorValue[key]}
+                   stroke={'#000000'}
+                />
+            ))
+        );
+    }
+    
+    getCursorValue() {
+        let cursorValue = null;
+        const data = applyDataFormaters(this.props.data, this.props);
+        
+        this.props.data.rows.forEach((row, index) => {
+            if (row.hovered) {
+                cursorValue = data.rows[index];
+            }
+        });
+        
+        return cursorValue;
+    }
+    
+    renderLegend() {
+        return (this.props.tiny && !this.props.showLegend)?(null):(<Legend />);
+    }
+    
+    renderTooltip(dataFormatOptions: DataFormatOptions) {
+        if (this.props.tiny && !this.props.showTooltip) {
+            return null;
+        }
+        
+        return (
+            <Tooltip
+                formatter={(value, name, props) => formatData('output:cursor', { value }, this.props.data, dataFormatOptions).value}
+                labelFormatter={(value) => formatData('input:cursor', { value }, this.props.data, dataFormatOptions).value}
+            />
+        );
+    }
+    
+    renderGrid() {
+        return (this.props.tiny && !this.props.showGrid)?(null):(<CartesianGrid strokeDasharray="3 3"/>);
+    }
+    
+    renderOutputColumns(getSeriesStyle: SeriesStylizer, dataFormatOptions: DataFormatOptions, SeriesComponent) {
+        return getOutputColumns(this.props.data, dataFormatOptions).map((column, index) => {
+            return (
+                <SeriesComponent {...getSeriesStyle(column, index)} type="monotone" dataKey={column} />
+            );
+        });
+    }
+    
+    getChartComponent(dataFormatOptions: DataFormatOptions): ChartComponentType {
+        switch(dataFormatOptions.graphType) {
+            case ChartType.Area:
+                return AreaChart;
+            case ChartType.Bar:
+                return BarChart;
+            case ChartType.Line:
+                return LineChart;
+        }
+        
+        return LineChart;
+    }
+    
+    getSeriesComponent(dataFormatOptions: DataFormatOptions): ChartSeriesComponentType {
+        switch(dataFormatOptions.graphType) {
+            case ChartType.Area:
+                return Area;
+            case ChartType.Bar:
+                return Bar;
+            case ChartType.Line:
+                return Line;
+        }
+        
+        return Line;
+    }
+    
+    getSeriesStylizer(dataFormatOptions: DataFormatOptions): SeriesStylizer {
+        const defaultStylizer: SeriesStylizer = (column, index) => ({
+            activeDot: {r: 8},
+            stroke: getGraphColor(index)
+        });
+        
+        const getGraphColor = (index: number): string => {
+            return [this.props.theme.colors.primary, this.props.theme.colors.secondary][index % 2];
+        };
+        
+        switch(dataFormatOptions.graphType) {
+            case ChartType.Area:
+                return (column, index) => ({
+                    stackId: '1',
+                    activeDot: {r: 8},
+                    stroke: getGraphColor(index),
+                    fill: getGraphColor(index)
+                });
+            case ChartType.Bar:
+                return (column, index) => ({
+                    fill: getGraphColor(index),
+                    barSize: 20
+                });
+            case ChartType.Line:
+                return (column, index) => ({
+                    activeDot: {r: 8},
+                    stroke: getGraphColor(index)
+                });
+        }
+        
+        return defaultStylizer;
     }
     
     render() {
         
         const data = applyDataFormaters(this.props.data, this.props);
         
-        let isTiny = this.props.tiny;
-        
-        let ChartComponent = LineChart;
-        let SeriesComponent = Line;
-        let AxesComponents = [];
-        let referenceLines: Array<ReferenceLinePrototype> = [];
-        let getSeriesStyle = (column, index) => {};
-        let chartAdditionalProps = {};
-        
-        const dataFormatOptions = Object.assign({}, this.props, {
+        const dataFormatOptions: DataFormatOptions = Object.assign({}, this.props, {
             graphType: this.state.graphType,
-            rotate90: (this.state.graphOrientation == 'horizontal')
+            rotate90: (this.state.graphOrientation == ChartOrientation.Horizontal)
         });
         
-        const inputColumn = getInputColumn(this.props.data, dataFormatOptions);
-        const outputColumns = getOutputColumns(this.props.data, dataFormatOptions);
-        
-        const getGraphColor = (index: number): string => {
-            return [this.props.theme.colors.primary, this.props.theme.colors.secondary][index % 2];
-        };
-        
-        if (dataFormatOptions.graphType === 'area') {
-            ChartComponent = AreaChart;
-            SeriesComponent = Area;
-            getSeriesStyle = (column, index) => ({
-                stackId: '1',
-                activeDot: {r: 8},
-                stroke: getGraphColor(index),
-                fill: getGraphColor(index)
-            });
-        } else if (dataFormatOptions.graphType === 'bar') {
-            ChartComponent = BarChart;
-            SeriesComponent = Bar;
-            getSeriesStyle = (column, index) => ({
-                fill: getGraphColor(index),
-                barSize: 20
-            });
-        } else {
-            getSeriesStyle = (column, index) => ({
-                activeDot: {r: 8},
-                stroke: getGraphColor(index)
-            });
-        }
-        
-        AxesComponents = [
-            <XAxis
-              dataKey={inputColumn}
-              tickFormatter={(value) => formatData('input:axis', { value }, this.props.data, dataFormatOptions).value}
-            />,
-            <YAxis
-                tickFormatter={(value) => formatData('output:axis', { value }, this.props.data, dataFormatOptions).value}
-            />
-        ];
-        
-        if (dataFormatOptions.rotate90) {
-            AxesComponents = [
-                <XAxis
-                  type='number'
-                  tickFormatter={(value) => formatData('output:axis', { value }, this.props.data, dataFormatOptions).value}
-                />,
-                <YAxis
-                    type='category'
-                    dataKey={inputColumn}
-                    tickFormatter={(value) => formatData('input:axis', { value }, this.props.data, dataFormatOptions).value}
-                />
-            ];
-            chartAdditionalProps = {
-                layout: 'vertical'
-            };
-        }
-        
-        let cursorValue = null;
-        let cursorRawValue = null;
-        
-        this.props.data.rows.forEach((row, index) => {
-            if (row.hovered) {
-                cursorValue = data.rows[index];
-                cursorRawValue = row;
-            }
-        });
-        
-        if (cursorValue) {
-            referenceLines = [
-                {
-                    x: cursorValue[inputColumn],
-                    y: undefined,
-                    stroke: '#000000'
-                }
-            ].concat(
-                Object.keys(cursorValue).filter((key) => outputColumns.indexOf(key) > -1).map((key, index) => (
-                    {
-                       x: undefined,
-                       y: cursorValue[key],
-                       stroke: '#000000'
-                    }
-                ))
-            );
-        }
+        const ChartComponent: ChartComponentType = this.getChartComponent(dataFormatOptions);
+        const SeriesComponent: ChartSeriesComponentType = this.getSeriesComponent(dataFormatOptions);
         
         return (
             <Wrapper>
@@ -257,35 +363,18 @@ class Chart extends React.Component<ChartProps, any> implements ChartInstance {
                     <ChartComponent
                         data={data.rows}
                         margin={{top: 5, right: 30, left: 20, bottom: 5}}
-                        {...chartAdditionalProps}
+                        {
+                            ...(dataFormatOptions.rotate90?{
+                                layout: 'vertical'
+                            }:{})
+                        }
                     >
-                        {(isTiny && !this.props.showAxes)?(null):(AxesComponents)}
-                        {(isTiny && !this.props.showGrid)?(null):(<CartesianGrid strokeDasharray="3 3"/>)}
-                        {
-                            (!isTiny || this.props.showTooltip)?(
-                                <Tooltip
-                                    formatter={(value, name, props) => formatData('output:cursor', { value }, this.props.data, dataFormatOptions).value}
-                                    labelFormatter={(value) => formatData('input:cursor', { value }, this.props.data, dataFormatOptions).value}
-                                />
-                            ):(null)
-                        }
-                        {(isTiny && !this.props.showLegend)?(null):(<Legend />)}
-                        {
-                            (!isTiny || this.props.showReferenceLines)?(
-                                referenceLines.map((refLine) => {
-                                    return (
-                                        <ReferenceLine {...refLine}/>
-                                    );
-                                })
-                            ):(null)
-                        }
-                        {
-                            outputColumns.map((column, index) => {
-                                return (
-                                    <SeriesComponent {...getSeriesStyle(column, index)} type="monotone" dataKey={column} />
-                                );
-                            })
-                        }
+                        {this.renderAxesComponents(dataFormatOptions)}
+                        {this.renderGrid()}
+                        {this.renderTooltip(dataFormatOptions)}
+                        {this.renderLegend()}
+                        {this.renderReferenceLines(dataFormatOptions)}
+                        {this.renderOutputColumns(this.getSeriesStylizer(dataFormatOptions), dataFormatOptions, SeriesComponent)}
                     </ChartComponent>
                 </ResponsiveContainer>
             </Wrapper>
