@@ -96,6 +96,74 @@
             "check-operator",
             "check-separator",
             "check-type"
+        ],
+        "no-console": [
+            true,
+            "log",
+            "error"
+        ],
+        "whitespace": [
+            true,
+            "check-branch",
+            "check-operator",
+            "check-typecast"
+        ],
+        "triple-equals": true,
+        "no-unused-variable": true,
+        "member-access": [
+            true,
+            "no-public",
+            "check-accessor",
+            "check-constructor"
+        ],
+        "member-ordering": [
+            true,
+            {
+                "order": "fields-first"
+            }
+        ],
+        "only-arrow-functions": [
+            true,
+            "allow-declarations",
+            "allow-named-functions"
+        ],
+        "curly": [
+            true,
+            "ignore-same-line"
+        ],
+        "no-string-literal": true,
+        "prefer-object-spread": true,
+        "no-duplicate-imports": true,
+        "prefer-const": true,
+        "array-type": [
+            true,
+            "generic"
+        ],
+        "arrow-return-shorthand": true,
+        "ordered-imports": [
+            true,
+            {
+                "import-sources-order": "lowercase-last",
+                "named-imports-order": "lowercase-first"
+            }
+        ],
+        "unnecessary-bind": true,
+        "align": [
+            true,
+            "parameters",
+            "statements"
+        ],
+        "no-trailing-whitespace": true,
+        "semicolon": [
+            true,
+            "always"
+        ],
+        "trailing-comma": [
+            true,
+            {
+                "multiline": "always",
+                "singleline": "never"
+            }
         ]
     }
 }
