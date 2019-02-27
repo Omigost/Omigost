@@ -21,6 +21,23 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.ts$/,
+        enforce: 'pre',
+        use: [
+           {
+              loader: 'tslint-loader',
+              options: {
+                  configFile: 'tslint.json',
+                  typeCheck: true,
+                  tsConfigFile: 'tsconfig.json',
+                  emitErrors: true,
+                  failOnHint: true,
+                  fix: true
+              }
+           }
+        ]
+      },
+      {
         test: /\.js$/,
         use: ['babel-loader', 'source-map-loader'],
         exclude: /node_modules/,
