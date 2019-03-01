@@ -22,6 +22,7 @@ import DataProvider from './DataProvider';
 import TinyButtons from './TinyButtons';
 import DataGrid from './DataGrid';
 import Chart, { ChartDataOptionsPanel, ChartTypeSwitchPanel } from './Chart';
+import Form from './Form';
 
 export default {
     Button,
@@ -49,5 +50,6 @@ export default {
     DataGrid,
     Chart,
     ChartDataOptionsPanel,
-    ChartTypeSwitchPanel
+    ChartTypeSwitchPanel,
+    Form
 };
