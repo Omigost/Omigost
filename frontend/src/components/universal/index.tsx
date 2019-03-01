@@ -22,6 +22,7 @@ import TextBox from "./TextBox";
 import TextInput from "./TextInput";
 import TinyButtons from "./TinyButtons";
 import Tooltip from "./Tooltip";
+import Form from './Form';
 
 export default {
     Button,
@@ -50,4 +51,5 @@ export default {
     Chart,
     ChartDataOptionsPanel,
     ChartTypeSwitchPanel,
+    Form,
 };
