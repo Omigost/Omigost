@@ -91,6 +91,7 @@ export default class SideMenu extends React.Component<SideMenuProps, SideMenuSta
                     this.props.options.map((menuOption: MenuOption, index: number) => {
                         return (
                             <MenuButton
+                                key={`side-menu-button-${index}`}
                                 fontSize={this.props.fontSize}
                                 selected={index === this.state.selectedIndex}
                                 onClick={() => {

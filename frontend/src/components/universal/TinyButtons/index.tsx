@@ -67,7 +67,7 @@ class TinyButtons extends React.Component<TinyButtonsProps, any> {
         return (
             <Wrapper>
                 {
-                    buttons.map((button: ButtonSpecs) => {
+                    buttons.map((button: ButtonSpecs, index: number) => {
                         let contentNode = (
                             <span>
                                 <FontAwesomeIcon icon={button.icon} />
@@ -94,6 +94,7 @@ class TinyButtons extends React.Component<TinyButtonsProps, any> {
         
                         return (
                             <PanelButton
+                                key={`panel-button-${index}`}
                                 onClick={button.onClick}
                                 active={button.active}
                             >

@@ -61,9 +61,12 @@ export default class InteractiveGrid<ItemType> extends React.Component<Interacti
             <div>
                 <Wrapper ref={gridElement => this.gridElement = gridElement}>
                     {
-                        this.props.items.map((item: ItemType) => {
+                        this.props.items.map((item: ItemType, index: number) => {
                             return (
-                                <div className="item box1">
+                                <div
+                                    key={`grid-item-${index}`}
+                                    className="item box1"
+                                >
                                     <div className="item-content">
                                       {this.props.renderItem({
                                           item

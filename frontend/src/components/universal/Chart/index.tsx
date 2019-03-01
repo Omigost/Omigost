@@ -185,10 +185,12 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
         if (dataFormatOptions.rotate90) {
             return [
                 <XAxis
+                  key='chart-x-axis'
                   type='number'
                   tickFormatter={createFormatter('output:axis')}
                 />,
                 <YAxis
+                    key='chart-y-axis'
                     type='category'
                     dataKey={inputColumn}
                     tickFormatter={createFormatter('input:axis')}
@@ -198,11 +200,13 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
         
         return [
             <XAxis
+              key='chart-x-axis'
               dataKey={inputColumn}
               tickFormatter={createFormatter('input:axis')}
             />,
             <YAxis
-                tickFormatter={createFormatter('output:axis')}
+              key='chart-y-axis'
+              tickFormatter={createFormatter('output:axis')}
             />
         ];
     }
@@ -224,12 +228,14 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
         
         return [
             <ReferenceLine
+                key='chart-main-reference-line'
                 x={cursorValue[inputColumn]}
                 stroke={'#000000'}
             />
         ].concat(
             Object.keys(cursorValue).filter((key) => outputColumns.indexOf(key) > -1).map((key, index) => (
                 <ReferenceLine
+                   key={`chart-reference-line-${index}`}
                    y={cursorValue[key]}
                    stroke={'#000000'}
                 />
@@ -261,6 +267,7 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
         
         return (
             <Tooltip
+                key='chart-tooltip'
                 formatter={(value, name, props) => formatData('output:cursor', { value }, this.props.data, dataFormatOptions).value}
                 labelFormatter={(value) => formatData('input:cursor', { value }, this.props.data, dataFormatOptions).value}
             />
@@ -274,7 +281,12 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
     renderOutputColumns(getSeriesStyle: SeriesStylizer, dataFormatOptions: DataFormatOptions, SeriesComponent) {
         return getOutputColumns(this.props.data, dataFormatOptions).map((column, index) => {
             return (
-                <SeriesComponent {...getSeriesStyle(column, index)} type="monotone" dataKey={column} />
+                <SeriesComponent
+                  {...getSeriesStyle(column, index)}
+                  type="monotone"
+                  dataKey={column}
+                  key={`chart-series-${index}`}
+                />
             );
         });
     }
