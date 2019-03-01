@@ -1,7 +1,7 @@
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from "react";
+import styled from "styled-components";
 
-const logoAnimated = require('img/omigost_single_animated.svg');
+const logoAnimated = require("img/omigost_single_animated.svg");
 
 const Wrapper = styled.div`
   border: none;
@@ -24,4 +24,4 @@ export default class Loading extends React.Component<LoadingProps, undefined> {
             </Wrapper>
         );
     }
-};
+}

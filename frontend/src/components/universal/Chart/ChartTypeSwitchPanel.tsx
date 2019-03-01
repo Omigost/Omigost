@@ -1,14 +1,14 @@
-import * as React from 'react';
-import styled, { withTheme } from 'styled-components';
+import * as React from "react";
+import styled from "styled-components";
 
-import { ChartInstance, ChartOrientation, ChartType } from './index';
-import TinyButtons, { ButtonSpecs } from 'components/TinyButtons';
+import TinyButtons from "components/TinyButtons";
+import { ChartInstance, ChartOrientation, ChartType } from "./index";
 
 import {
-    faChartLine, faChartBar, faChartArea
-} from '@fortawesome/free-solid-svg-icons';
+    faChartArea, faChartBar, faChartLine,
+} from "@fortawesome/free-solid-svg-icons";
 
-import { IconLookup } from '@fortawesome/fontawesome-common-types';
+import { IconLookup } from "@fortawesome/fontawesome-common-types";
 
 const Wrapper = styled.div`
   padding: 0;
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 
 export interface ChartTypeSwitchPanelProps {
     chart: ChartInstance;
-};
+}
 
 class ChartTypeSwitchPanel extends React.Component<ChartTypeSwitchPanelProps, any> {
 
@@ -25,19 +25,19 @@ class ChartTypeSwitchPanel extends React.Component<ChartTypeSwitchPanelProps, an
         const generateButton = (spec: {
             icon: IconLookup;
             type: ChartType;
-            shouldEnable?: () => boolean; 
+            shouldEnable?: () => boolean;
         }) => {
-            if(spec.shouldEnable && !spec.shouldEnable()) {
+            if (spec.shouldEnable && !spec.shouldEnable()) {
                 return null;
             }
-            
+
             return {
                 icon: spec.icon.iconName,
                 active: this.props.chart.getChartType() === spec.type,
-                onClick: () => {this.props.chart.setChartType(spec.type);}
+                onClick: () => {this.props.chart.setChartType(spec.type);},
             };
         };
-        
+
         return (
             <Wrapper>
                 <TinyButtons>
@@ -45,22 +45,22 @@ class ChartTypeSwitchPanel extends React.Component<ChartTypeSwitchPanelProps, an
                         [
                             {
                                 icon: faChartLine,
-                                type: ChartType.Line
+                                type: ChartType.Line,
                             },
                             {
                                 icon: faChartBar,
-                                type: ChartType.Bar
+                                type: ChartType.Bar,
                             },
                             {
                                 icon: faChartArea,
                                 type: ChartType.Area,
-                                shouldEnable: () => (this.props.chart.getChartOrientation() != ChartOrientation.Horizontal)
-                            }
+                                shouldEnable: () => (this.props.chart.getChartOrientation() !== ChartOrientation.Horizontal),
+                            },
                         ].map(generateButton)
                     }
                 </TinyButtons>
             </Wrapper>
-               
+
         );
     }
 }

@@ -1,8 +1,7 @@
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from "react";
+import styled from "styled-components";
 
-import { RowNode, ColDef, ColumnApi, Column, GridApi } from 'ag-grid-community';
-import { DataGridContext, CellRenderProps } from './index';
+import { CellRenderProps } from "./index";
 
 interface CellWrapperProps {
   fontSize?: string;
@@ -10,14 +9,14 @@ interface CellWrapperProps {
   hovered: boolean;
   onMouseOut?: () => void;
   onMouseOver?: () => void;
-};
+}
 
 const CellWrapper = styled.div<CellWrapperProps>`
   background: ${(props: CellWrapperProps) => props.theme.colors.background};
   width: 100%;
   height: 100%;
   padding-left: 1vw;
-  font-weight: ${(props: CellWrapperProps) => ((props.hovered)?('bold'):('normal'))};
+  font-weight: ${(props: CellWrapperProps) => ((props.hovered) ? ("bold") :("normal"))};
   color: ${(props: CellWrapperProps) => props.theme.colors.accent};
   font-family: ${(props: CellWrapperProps) => props.theme.primaryFont};
 `;
@@ -25,26 +24,26 @@ const CellWrapper = styled.div<CellWrapperProps>`
 export type CellRendererProps = CellRenderProps;
 
 class CellRenderer extends React.Component<CellRendererProps, undefined> {
-    
+
     constructor(props) {
         super(props);
-        
+
         this.handleMouseEnter = this.handleMouseEnter.bind(this);
         this.handleMouseLeave = this.handleMouseLeave.bind(this);
     }
-    
+
     handleMouseEnter() {
         if (this.props.context.enableHoverMode) {
             this.props.context.onRowHovered(this.props.api, this.props.rowIndex, this.props.node);
         }
     }
-    
+
     handleMouseLeave() {
         if (this.props.context.enableHoverMode) {
             this.props.context.onRowUnhovered(this.props.api, this.props.rowIndex, this.props.node);
         }
     }
-    
+
     render() {
         return (
             <CellWrapper
@@ -54,11 +53,11 @@ class CellRenderer extends React.Component<CellRendererProps, undefined> {
                 theme={this.props.context.theme}
             >
                 {
-                    (this.props.context.renderCell)?(this.props.context.renderCell(this.props)):(this.props.value)
+                    (this.props.context.renderCell) ? (this.props.context.renderCell(this.props)) :(this.props.value)
                 }
             </CellWrapper>
         );
     }
-};
+}
 
 export default CellRenderer;

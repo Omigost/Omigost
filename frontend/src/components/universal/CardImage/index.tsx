@@ -1,7 +1,7 @@
-import * as React from 'react';
-import styled  from 'styled-components';
+import * as React from "react";
+import styled  from "styled-components";
 
-import Logo, { LogoType } from 'components/Logo';
+import Logo, { LogoType } from "components/Logo";
 
 const Wrapper = styled.div`
   width: 3vw;
@@ -10,10 +10,10 @@ const Wrapper = styled.div`
 
 export interface CardImageProps {
     src: LogoType | string;
-};
+}
 
 export default class CardImage extends React.Component<CardImageProps, undefined> {
-    
+
     render() {
         return (
             <Wrapper>

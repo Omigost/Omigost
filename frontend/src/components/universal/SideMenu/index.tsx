@@ -1,8 +1,8 @@
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from "react";
+import styled from "styled-components";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconName } from '@fortawesome/fontawesome-svg-core';
+import { IconName } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Wrapper = styled.aside`
   width: 8vw;
@@ -15,16 +15,16 @@ export interface MenuButtonProps {
   fontSize?: string;
   theme?: any;
   selected?: boolean;
-};
+}
 
 const MenuButton = styled.div<MenuButtonProps>`
   width: 5.8vw;
   height: 6vw;
   font-family: ${(props: MenuButtonProps) => props.theme.primaryFont};
-  font-size: ${(props: MenuButtonProps) => props.theme.fontSize[props.fontSize || 'XXL']};
+  font-size: ${(props: MenuButtonProps) => props.theme.fontSize[props.fontSize || "XXL"]};
   color: ${(props: MenuButtonProps) => props.theme.colors.lightAccent};
   background: ${(props: MenuButtonProps) => {
-      if(props.selected) {
+      if (props.selected) {
           return props.theme.colors.primaryGradient;
       }
       return props.theme.colors.accent;
@@ -32,7 +32,7 @@ const MenuButton = styled.div<MenuButtonProps>`
   padding-top: 2.0vw;
   padding-left: 2.1vw;
   cursor: pointer;
-  
+
   &:hover {
     background: ${(props: MenuButtonProps) => props.theme.colors.lightAccent};
     color: ${(props: MenuButtonProps) => props.theme.colors.accent};
@@ -42,48 +42,48 @@ const MenuButton = styled.div<MenuButtonProps>`
 
 export interface MenuOption {
     name: string;
-    icon: IconName;   
-};
+    icon: IconName;
+}
 
 export interface SideMenuProps {
     onSectionChanged?: (option: MenuOption, index: number) => void;
     fontSize?: string;
     options: Array<MenuOption>;
     selectedOption?: number | null;
-};
+}
 
 export interface SideMenuState {
     selectedIndex?: number | null;
     selectedIndexProp?: number | null;
-};
+}
 
 export default class SideMenu extends React.Component<SideMenuProps, SideMenuState> {
-    
+
     state: SideMenuState = {
         selectedIndex: null,
-        selectedIndexProp: null
+        selectedIndexProp: null,
     };
-    
-    handleButtonClicked(menuOption: MenuOption, index: number) {
-        this.setState({
-            selectedIndex: index
-        }, () => {
-            if(this.props.onSectionChanged) {
-                this.props.onSectionChanged(menuOption, index);
-            }
-        });
-    }
-    
+
     static getDerivedStateFromProps(props, state) {
-        if(props.selectedOption !== state.selectedIndexProp) {
+        if (props.selectedOption !== state.selectedIndexProp) {
           return {
             selectedIndexProp: props.selectedOption,
-            selectedIndex: props.selectedOption
+            selectedIndex: props.selectedOption,
           };
         }
         return null;
     }
-    
+
+    handleButtonClicked(menuOption: MenuOption, index: number) {
+        this.setState({
+            selectedIndex: index,
+        }, () => {
+            if (this.props.onSectionChanged) {
+                this.props.onSectionChanged(menuOption, index);
+            }
+        });
+    }
+
     render() {
         return (
             <Wrapper>
@@ -105,4 +105,4 @@ export default class SideMenu extends React.Component<SideMenuProps, SideMenuSta
             </Wrapper>
         );
     }
-};
+}
