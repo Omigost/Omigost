@@ -1,8 +1,10 @@
 package com.omigost.server.notification;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Singular;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Getter

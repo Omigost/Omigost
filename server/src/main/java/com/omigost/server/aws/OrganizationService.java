@@ -19,14 +19,11 @@ public class OrganizationService {
 
     @Value("${aws.region}")
     private String region;
-    private final AWSCredentialsProvider credentialsProvider;
+    @Autowired
+    private AWSCredentialsProvider credentialsProvider;
 
     private AWSOrganizations orgClient;
 
-    @Autowired
-    public OrganizationService(AWSCredentialsProvider credentialsProvider) {
-        this.credentialsProvider = credentialsProvider;
-    }
 
     @PostConstruct
     private void initializeOrganizationClient() {
@@ -35,13 +32,12 @@ public class OrganizationService {
                 .withCredentials(credentialsProvider)
                 .withRegion(region)
                 .build();
-
     }
 
+    //Can be optimized not to fetch accounts every time
     public List<Account> fetchAccounts() {
         ListAccountsRequest request = new ListAccountsRequest();
         ListAccountsResult result = orgClient.listAccounts(request);
-        List<Account> accountList = result.getAccounts();
-        return accountList;
+        return result.getAccounts();
     }
 }
