@@ -1,10 +1,10 @@
-import * as React from 'react';
+import * as React from "react";
 
 import {
     NodeStringSchema,
     SchemaParserConfig,
-    TreeUITransformer
-} from '../schemaTypes';
+    TreeUITransformer,
+} from "../schemaTypes";
 
 export default {
     render: (node: NodeStringSchema, transformer: TreeUITransformer, config: SchemaParserConfig) => {
@@ -14,5 +14,5 @@ export default {
                 {node.description}
             </div>
         );
-    }
+    },
 };

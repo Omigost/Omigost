@@ -1,15 +1,15 @@
-import { SchemaParserConfig } from './schemaTypes';
+import { SchemaParserConfig } from "./schemaTypes";
 
-import StringDefault from './renderers/StringDefault';
-import ObjectDefault from './renderers/ObjectDefault';
+import ObjectDefault from "./renderers/ObjectDefault";
+import StringDefault from "./renderers/StringDefault";
 
 export const defaultParserConfig: SchemaParserConfig = {
     renderers: {
         STRING: {
-            default: StringDefault
+            default: StringDefault,
         },
         OBJECT: {
-            default: ObjectDefault
-        }
-    }
+            default: ObjectDefault,
+        },
+    },
 };

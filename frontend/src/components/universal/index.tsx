@@ -7,6 +7,7 @@ import Chart, { ChartDataOptionsPanel, ChartTypeSwitchPanel } from "./Chart";
 import DataGrid from "./DataGrid";
 import DataProvider from "./DataProvider";
 import Description from "./Description";
+import Form from "./Form";
 import InteractiveGrid from "./InteractiveGrid";
 import InteractiveNestedGrid from "./InteractiveNestedGrid";
 import Loading from "./Loading";
@@ -22,7 +23,6 @@ import TextBox from "./TextBox";
 import TextInput from "./TextInput";
 import TinyButtons from "./TinyButtons";
 import Tooltip from "./Tooltip";
-import Form from './Form';
 
 export default {
     Button,

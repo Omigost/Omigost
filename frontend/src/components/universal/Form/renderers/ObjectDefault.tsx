@@ -1,15 +1,15 @@
-import * as React from 'react';
+import * as React from "react";
 
 import {
     NodeObjectSchema,
     SchemaParserConfig,
-    TreeUITransformer
-} from '../schemaTypes';
+    TreeUITransformer,
+} from "../schemaTypes";
 
 export default {
     render: (node: NodeObjectSchema, transformer: TreeUITransformer, config: SchemaParserConfig) => {
         const propertiesKeys: Array<string> = Object.keys(node.properties);
-        
+
         return (
             <div>
                 {
@@ -25,5 +25,5 @@ export default {
                 }
             </div>
         );
-    }
+    },
 };
