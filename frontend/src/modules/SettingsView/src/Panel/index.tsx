@@ -1,111 +1,93 @@
-import * as React from 'react';
-import styled  from 'styled-components';
-
-const CategoryWrapper = styled.div`
-  background: transparent;
-`;
-
-const CatogryTitle = styled.div`
-  display: block;
-  padding: 0.1vw;
-  color: ${(props) => props.theme.colors.accent};
-  font-family: ${(props) => props.theme.primaryFont};
-  font-size: ${(props) => props.theme.fontSize.M};
-`;
-
-const CategoryContent = styled.div`
-  padding: 1vw;
-  position: relative;
-`;
+import * as React from "react";
 
 const SETTINGS_OPTIONS = [
     {
-        name: 'Dump configs',
+        name: "Dump configs",
         options: [
             {
-                name: 'Export settings',
-                icon: 'download'
+                name: "Export settings",
+                icon: "download",
             },
             {
-                name: 'Import settings',
-                icon: 'upload'
-            }
-        ]
+                name: "Import settings",
+                icon: "upload",
+            },
+        ],
     },
     {
-        name: 'Customize',
+        name: "Customize",
         options: [
             {
-                name: 'Security',
-                icon: 'shield-alt'
+                name: "Security",
+                icon: "shield-alt",
             },
             {
-                name: 'Notification settings',
-                icon: 'comment-alt'
+                name: "Notification settings",
+                icon: "comment-alt",
             },
             {
-                name: 'Instance settings',
-                icon: 'flag'
-            }
-        ]
+                name: "Instance settings",
+                icon: "flag",
+            },
+        ],
     },
     {
-        name: 'Extend',
+        name: "Extend",
         options: [
             {
-                name: 'Integrations and Extensions',
-                icon: 'plus'
-            }
-        ]
-    }
+                name: "Integrations and Extensions",
+                icon: "plus",
+            },
+        ],
+    },
 ];
 
 export default class Panel extends React.Component<any, any> {
-    
+
     state: any = null;
-    
+
     constructor(props) {
         super(props);
-        
+
         this.state = {
-            openedPaneName: null
+            openedPaneName: null,
         };
         this.handlePanelClick = this.handlePanelClick.bind(this);
     }
-    
+
     handlePanelClick(item) {
         this.setState({
-            openedPaneName: item.name
+            openedPaneName: item.name,
         });
     }
-    
+
     render() {
-        
-        if(this.state.openedPaneName) {
+
+        if (this.state.openedPaneName) {
             return (
                 <div>
                     <this.props.app.UI.Breadcrumbs>
                         {[
                             {
-                                name: 'Settings',
-                                onClick: () => this.setState({ openedPaneName: null })
+                                name: "Settings",
+                                onClick: () => this.setState({ openedPaneName: null }),
                             },
                             {
-                                name: this.state.openedPaneName
-                            }
+                                name: this.state.openedPaneName,
+                            },
                         ]}
                     </this.props.app.UI.Breadcrumbs>
                 </div>
             );
         }
-        
+
         return (
             <this.props.app.UI.InteractiveNestedGrid
                 options={SETTINGS_OPTIONS}
                 renderItem={(props) => {
                     return (
                         <div>
-                            <span className='nestedGridHandler'>Drag</span>
+                            <span className="nestedGridHandler">Drag</span>
                             <this.props.app.UI.ButtonPanel
                                 icon={props.item.icon}
                                 onClick={() => this.handlePanelClick(props.item)}
@@ -118,4 +100,4 @@ export default class Panel extends React.Component<any, any> {
             />
         );
     }
-};
+}
