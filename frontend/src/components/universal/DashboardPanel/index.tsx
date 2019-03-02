@@ -9,8 +9,12 @@ const Wrapper = styled.aside`
 `;
 
 const PanelContentWrapper = styled.div`
-  margin-left: 8vw;
-  position: fixed;
+  padding-left: 8vw;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 90vw;
+  max-width: 90vw;
 `;
 
 export interface DashboardPanelProps {

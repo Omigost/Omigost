@@ -10,7 +10,6 @@ const Wrapper = styled.div`
   background: ${props => props.theme.colors.background};
   margin: 0;
   padding: 0;
-  width: 100vw;
 `;
 
 const LogoWrapper = styled.div`

@@ -5,7 +5,6 @@ const Wrapper = styled.div`
   margin-left: 0;
   margin-top: 0;
   padding: 0;
-  width: 100vw;
 `;
 
 export interface FillPageProps {
