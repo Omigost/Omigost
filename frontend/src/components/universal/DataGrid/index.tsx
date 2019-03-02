@@ -8,6 +8,7 @@ import { resolveData, withData, DataFormat, FormatedDataPoint, RowSpecs } from "
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
+import "./index.scss";
 
 import CellRenderer from "./CellRenderer";
 import FilterRenderer from "./FilterRenderer";

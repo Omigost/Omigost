@@ -1,8 +1,15 @@
 import * as moment from "moment";
+import * as React from "react";
 import { addPrePostfixFormatAxis, addPrePostfixFormatCursor, PresetsMap } from "./index";
 
+import BarLine from "components/BarLine";
+
+function extractFloat(input: any): number {
+    return parseInt((parseFloat(input) * 100) + "") / 100;
+}
+
 const numberParseData = (point, options) => {
-    return parseInt(point.value) || null;
+    return extractFloat(point.value) || null;
 };
 
 const numberFormatAxis = (typeOptions) => ((point, options) => {
@@ -42,7 +49,9 @@ const PRESETS: PresetsMap = {
     "number": (typeOptions, type, point, options) => defaultNumberParsers(typeOptions),
     "ui-line": (typeOptions, type, point, options) => {
         const formatOutputCell = (point, options) => {
-            return `TEZT!`;
+            return (
+                <BarLine value={extractFloat(point.value)} />
+            );
         };
 
         return {
@@ -52,11 +61,11 @@ const PRESETS: PresetsMap = {
     },
     "currency": (typeOptions, type, point, options) => {
         const parseData = (point, options) => {
-            return parseInt((point.value + "").replace(/\$/, "")) || null;
+            return extractFloat((point.value + "").replace(/\$/, "")) || null;
         };
 
         const formatData = (point, options) => {
-            return `\$${point.value}`;
+            return `\$${extractFloat(point.value)}`;
         };
 
         return {
