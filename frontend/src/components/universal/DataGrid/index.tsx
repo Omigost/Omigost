@@ -1,30 +1,31 @@
-import * as React from 'react';
-import styled, { withTheme } from 'styled-components';
+import * as React from "react";
+import styled, { withTheme } from "styled-components";
 
-import { AgGridReact } from 'ag-grid-react';
-import { RowNode, ColDef, ColumnApi, Column, GridApi } from 'ag-grid-community';
+import { Column, ColumnApi, ColDef, GridApi, RowNode } from "ag-grid-community";
+import { AgGridReact } from "ag-grid-react";
 
-import { RowSpecs, DataFormat, withData } from 'components/DataProvider';
+import { resolveData, withData, DataFormat, FormatedDataPoint, RowSpecs } from "components/DataProvider";
 
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-balham.css";
+import "./index.scss";
 
-import FilterRenderer from './FilterRenderer';
-import CellRenderer from './CellRenderer';
+import CellRenderer from "./CellRenderer";
+import FilterRenderer from "./FilterRenderer";
 
 const Wrapper = styled.div`
   padding: 1.2vw;
   width: 100%;
   height: 100%;
-  
+
   &.ag-theme-balham {
     background-color: transparent;
   }
-  
+
   & div.ag-theme-balham.ag-row {
     background-color: transparent;
   }
-  
+
   & div.ag-cell {
     padding: 0;
     border: none;
@@ -48,70 +49,77 @@ export interface CellRenderProps {
     columnApi: ColumnApi; // grid column API
     context: DataGridContext; // the grid's context
     refreshCell: () => void; // convenience function to refresh the cell
-};
+}
 
 export interface DataGridProps {
     theme: any;
     data: DataFormat;
     onDataChanged?: (data: DataFormat) => void;
     renderCell?: (props: CellRenderProps) => React.ReactElement<any>;
-};
+}
 
 export interface DataGridContext {
     theme: any;
+    data: DataFormat;
     enableHoverMode: boolean;
     onRowHovered: (api: GridApi, rowIndex: number, row: RowNode) => void;
     onRowUnhovered: (api: GridApi, rowIndex: number, row: RowNode) => void;
-    renderCell?: (props: CellRenderProps) => React.ReactElement<any>;
-};
+    renderCell?: (props: CellRenderProps, formattedValue: FormatedDataPoint) => React.ReactElement<any>;
+}
 
 export interface AgGridDataFormat {
     columnDefs: any;
     rowData: any;
-};
+}
 
 class DataGrid extends React.Component<DataGridProps, undefined> {
-    
+
+    api: any;
+
     constructor(props) {
         super(props);
-        
+
         this.handleRowHovered = this.handleRowHovered.bind(this);
         this.handleRowUnhovered = this.handleRowUnhovered.bind(this);
         this.getDataWithRowsHoveredMarker = this.getDataWithRowsHoveredMarker.bind(this);
     }
-    
+
     getDataWithRowsHoveredMarker(mapper: (row: RowSpecs, index: number, isHovered: boolean) => boolean) {
-        return Object.assign({}, this.props.data, {
+        return {
+            ...this.props.data,
             rows: this.props.data.rows.map((row: RowSpecs, index: number) => {
-                return Object.assign({}, row, {
-                    hovered: mapper(row, index, row.hovered)
-                });
-            })
-        });
+                return {
+                    ...row,
+                    hovered: mapper(row, index, row.hovered),
+                };
+            }),
+        };
     }
-    
-    handleRowUnhovered(api: GridApi, rowIndex: number, row: RowNode) {
+
+    handleRowUnhovered(api: GridApi, visualRowIndex: number, row: RowNode) {
+        const rowIndex = parseInt(row.id);
         if (this.props.onDataChanged) {
             this.props.onDataChanged(
                 this.getDataWithRowsHoveredMarker((row, index, isHovered) => {
-                    if (index != rowIndex) {
+                    if (index !== rowIndex) {
                         return isHovered;
                     }
-                    
+
                     return false;
-                })
+                }),
             );
         }
     }
-    
-    handleRowHovered(api: GridApi, rowIndex: number, row: RowNode) {
+
+    handleRowHovered(api: GridApi, visualRowIndex: number, row: RowNode) {
+        const rowIndex = parseInt(row.id);
         if (this.props.onDataChanged) {
             this.props.onDataChanged(
-                this.getDataWithRowsHoveredMarker((row, index, isHovered) => (index == rowIndex))
+                this.getDataWithRowsHoveredMarker((row, index, isHovered) => (index === rowIndex)),
             );
         }
     }
-    
+
     extractAgGridDataFormat(data: DataFormat): AgGridDataFormat {
         return {
             columnDefs: data.columns.map((column) => {
@@ -119,36 +127,43 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
                     headerName: column.name,
                     field: column.field || column.name,
                     filterFramework: FilterRenderer,
-                    cellRendererFramework: CellRenderer
+                    cellRendererFramework: CellRenderer,
                 };
             }),
             rowData: data.rows.map((row: RowSpecs, index: number): any => {
                 // TODO: Remove or change this id-mapping
                 return row;
-            })
+            }),
         };
     }
-    
+
+    onGridReady(params) {
+        this.api = params.api;
+    }
+
     render() {
         const gridContext: DataGridContext = {
             theme: this.props.theme,
             enableHoverMode: true,
             onRowHovered: this.handleRowHovered,
             onRowUnhovered: this.handleRowUnhovered,
-            renderCell: this.props.renderCell
+            renderCell: this.props.renderCell,
+            data: this.props.data,
         };
-        
-        const { columnDefs, rowData } = this.extractAgGridDataFormat(this.props.data);
-        
+
+        const { columnDefs, rowData } = this.extractAgGridDataFormat(resolveData(this.props.data));
+
         return (
             <Wrapper
-                className='ag-theme-balham'
+                className="ag-theme-balham"
             >
                 <AgGridReact
                     columnDefs={columnDefs}
                     rowData={rowData}
                     enableFilter
+                    enableSorting
                     context={gridContext}
+                    onGridReady={this.onGridReady}
                 />
             </Wrapper>
         );

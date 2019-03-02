@@ -9,7 +9,7 @@ render(
     <AppContainer>
         <App/>
     </AppContainer>,
-    rootEl
+    rootEl,
 );
 
 // Hot Module Replacement API
@@ -23,7 +23,7 @@ if (module.hot) {
             <AppContainer>
                 <NewApp/>
             </AppContainer>,
-            rootEl
+            rootEl,
         );
     });
 }

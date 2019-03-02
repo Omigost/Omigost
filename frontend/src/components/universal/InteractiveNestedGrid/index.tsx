@@ -1,10 +1,10 @@
-import * as React from 'react';
-import styled  from 'styled-components';
+import * as React from "react";
+import styled  from "styled-components";
 
 
-import { IconName } from '@fortawesome/fontawesome-svg-core';
-import InteractiveGrid, { RenderItemArgs } from 'components/InteractiveGrid';
-import ButtonPanel from 'components/ButtonPanel';
+import { IconName } from "@fortawesome/fontawesome-svg-core";
+import ButtonPanel from "components/ButtonPanel";
+import InteractiveGrid, { RenderItemArgs } from "components/InteractiveGrid";
 
 const Wrapper = styled.div`
   margin: 0;
@@ -33,12 +33,12 @@ export interface OptionNode {
     name?: string;
     icon?: IconName;
     data?: any;
-};
+}
 
 export interface InteractiveNestedGridProps {
     options?: Array<OptionNode>;
     renderItem?: (option: RenderItemArgs<OptionNode>) => React.ReactNode;
-};
+}
 
 const DEFAULT_ITEM_RENDERER = (props: RenderItemArgs<OptionNode>) => {
     return (
@@ -59,14 +59,14 @@ export default class InteractiveNestedGrid extends React.Component<InteractiveNe
                         dragStartPredicate: {
                             distance: 0,
                             delay: 0,
-                            handle: '.topGridWrapper'
-                        }
+                            handle: ".topGridWrapper",
+                        },
                     }}
                     items={this.props.options || []}
                     renderItem={(props: RenderItemArgs<OptionNode>) => {
                         return (
                             <CategoryWrapper>
-                                <CatogryTitle className='topGridWrapper'>
+                                <CatogryTitle className="topGridWrapper">
                                      {props.item.name}
                                 </CatogryTitle>
                                 <CategoryContent>
@@ -75,8 +75,8 @@ export default class InteractiveNestedGrid extends React.Component<InteractiveNe
                                             dragStartPredicate: {
                                                 distance: 0,
                                                 delay: 0,
-                                                handle: '.nestedGridHandler'
-                                            }
+                                                handle: ".nestedGridHandler",
+                                            },
                                         }}
                                         items={props.item.options}
                                         renderItem={(props) => {
