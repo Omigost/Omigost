@@ -4,36 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled, { ThemeProvider } from "styled-components";
 import defaultTheme from "themes/default";
 
+import { Flex, Box } from '@rebass/grid';
+
 const CursorIcon = styled.div`
   margin-right: 0.3vw;
   display: inline-block;
 `;
 
-const Wrapper = styled.div`
-  padding-left: 5vw;
-`;
-
-const TitleWrapper = styled.div`
-  margin-top: 1vw;
-`;
-
-const ChartWrapper = styled.div`
-  margin-top: 3vw;
-  width: 80vw;
-  height: 25vw;
-`;
-
-const Table = styled.table`
-  width: 90%;
-`;
-
-const GridWrapper = styled.td`
-  padding-top: 2vw;
-  height: 70vw;
-`;
-
-const MeterWrapper = styled.div`
-  display: inline-block;
+const GridWrapper = styled.div`
+  height: 50vh;
+  width: 100%;
 `;
 
 const TooltipContent = styled.div`
@@ -91,49 +71,20 @@ export default class Panel extends React.Component<any, any> {
             <this.props.app.UI.DataProvider
                 data={DATA}
             >
-                <Wrapper>
-                    <TitleWrapper>
-                        Hello!
-                    </TitleWrapper>
-                    <Table>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <MeterWrapper>
-                                        <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
-                                        <this.props.app.UI.Meter
-                                            value={30}
-                                            label="test"
-                                            format={(value) => `\$ ${value}`}
-                                            tooltipContent={<div>hello!</div>}
-                                        />
-                                    </MeterWrapper>
-                                    <MeterWrapper>
-                                        <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
-                                        <this.props.app.UI.Meter
-                                            value={30}
-                                            label="test"
-                                            format={(value) => `\$ ${value}`}
-                                            tooltipContent={<div>hello!</div>}
-                                        />
-                                    </MeterWrapper>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <ChartWrapper>
-                                       <this.props.app.UI.Chart
-                                            graphType={"line"}
-                                            input={"x"}
-                                            output={["z", "y"]}
-                                       >
-                                           <this.props.app.UI.ChartTypeSwitchPanel />
-                                           <this.props.app.UI.ChartDataOptionsPanel />
-                                       </this.props.app.UI.Chart>
-                                    </ChartWrapper>
-                                </td>
-                            </tr>
-                            <tr>
+                <Flex>
+                    <Box p={2} width={4/5}>
+                        <Flex flexDirection='column'>
+                            <Box px={2} width={1}>
+                               <this.props.app.UI.Chart
+                                    graphType={"line"}
+                                    input={"x"}
+                                    output={["z", "y"]}
+                               >
+                                   <this.props.app.UI.ChartTypeSwitchPanel />
+                                   <this.props.app.UI.ChartDataOptionsPanel />
+                               </this.props.app.UI.Chart>
+                            </Box>
+                            <Box px={2} width={1}>
                                 <GridWrapper>
                                     <this.props.app.UI.DataGrid
                                         renderCell={(props) => {
@@ -173,10 +124,32 @@ export default class Panel extends React.Component<any, any> {
                                         }}
                                     />
                                 </GridWrapper>
-                            </tr>
-                        </tbody>
-                    </Table>
-                </Wrapper>
+                            </Box>
+                        </Flex>
+                    </Box>
+                    <Box p={2} width={1/5}>
+                         <Flex flexDirection='column'>
+                             <Box px={2} width={1}>
+                                 <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
+                                 <this.props.app.UI.Meter
+                                     value={30}
+                                     label="test"
+                                     format={(value) => `\$ ${value}`}
+                                     tooltipContent={<div>hello!</div>}
+                                 />
+                             </Box>
+                             <Box px={2} width={1}>
+                                 <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
+                                 <this.props.app.UI.Meter
+                                     value={30}
+                                     label="test"
+                                     format={(value) => `\$ ${value}`}
+                                     tooltipContent={<div>hello!</div>}
+                                 />
+                             </Box>
+                         </Flex>
+                    </Box>
+                </Flex>
             </this.props.app.UI.DataProvider>
         );
     }
