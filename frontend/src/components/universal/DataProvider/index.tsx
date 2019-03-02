@@ -149,11 +149,17 @@ export function getFormatDefaults(type: DataTarget, point: DataPoint, data: Data
 
     if (options.input && options.input.type && isDataTargetInput(type)) {
         const preset = DATA_TYPE_PRESETS[options.input.type];
+        if (!preset) {
+            throw `DataProvider: Could not find preset for type "${options.input.type}"`;
+        }
         presetOverrideOptions = {...presetOverrideOptions, ...preset(options.input, type, point, options)};
     }
 
     if (options.output && options.output.type && !isDataTargetInput(type)) {
         const preset = DATA_TYPE_PRESETS[options.output.type];
+        if (!preset) {
+            throw `DataProvider: Could not find preset for type "${options.output.type}"`;
+        }
         presetOverrideOptions = {...presetOverrideOptions, ...preset(options.output, type, point, options)};
     }
 
