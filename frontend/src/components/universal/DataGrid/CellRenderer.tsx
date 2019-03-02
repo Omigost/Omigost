@@ -60,7 +60,7 @@ class CellRenderer extends React.Component<CellRendererProps, undefined> {
                 theme={this.props.context.theme}
             >
                 {
-                    (this.props.context.renderCell) ? (this.props.context.renderCell(this.props, formatedData)) :(formatedData)
+                    (this.props.context.renderCell) ? (this.props.context.renderCell(this.props, formatedData)) :(formatedData.value)
                 }
             </CellWrapper>
         );
