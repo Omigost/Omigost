@@ -20,8 +20,6 @@ library.add(
 
 const AppWrapper = styled.div`
   background: ${props => props.theme.colors.background};
-  min-width: 100vw;
-  min-height: 100vh;
   margin: 0;
   padding: 0;
   border: none;
