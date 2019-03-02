@@ -13,9 +13,10 @@ export interface DataProviderProps {
     children?: Array<React.ReactElement<any>> | React.ReactElement<any>;
 }
 
-export interface ColumnSpecs {
+export interface ColumnSpecs extends FormattersMappingWithPresets {
     name: string;
     field?: string;
+    type?: string;
 }
 
 export enum DataTargetInput {
@@ -77,6 +78,8 @@ export type Formatter = (point: DataPoint, options: DataFormatOptions) => any;
 
 export type ChainableFormatter = (formattedValue: any, point: DataPoint, options: DataFormatOptions) => any;
 
+export type ChainableFormatterWithPreset = ChainableFormatter | string;
+
 export interface FormattersMapping {
     parseInputData?: Formatter;
     parseOutputData?: Formatter;
@@ -86,6 +89,17 @@ export interface FormattersMapping {
     formatOutputCursor?: Formatter;
     formatInputCell?: Formatter;
     formatOutputCell?: Formatter;
+}
+
+export interface FormattersMappingWithPresets {
+    parseInputData?: Formatter | string;
+    parseOutputData?: Formatter | string;
+    formatInputAxis?:  Formatter | string;
+    formatOutputAxis?: Formatter | string;
+    formatInputCursor?: Formatter | string;
+    formatOutputCursor?: Formatter | string;
+    formatInputCell?: Formatter | string;
+    formatOutputCell?: Formatter | string;
 }
 
 export interface DataFormatOptions extends FormattersMapping {
@@ -130,25 +144,39 @@ export const addPrePostfixFormatCursor = (typeOptions, data: DataFormat, options
     );
 };
 
-function typePresetCompositionHelper(preset: Preset, formatterName: string, chain: ChainableFormatter): Preset {
+function typePresetCompositionHelper(columnSpecs: ColumnSpecs, preset: Preset, formatterName: string, chain: ChainableFormatterWithPreset): Preset {
     return (typeOptions, type, point, options) => {
         const fmts: FormattersMapping = preset(typeOptions, type, point, options);
         const formatter = fmts[formatterName];
+
+        let chainFn = (formattedValue, point, options) => formattedValue;
+
+        if (chain && typeof chain === "string") {
+            // Preset name was specified as a chain function
+            const chainPreset: Preset = getTypePreset(chain as string, {
+                ...columnSpecs,
+                [formatterName]: undefined
+            });
+            chainFn = (formattedValue, point, options) => chainPreset(typeOptions, type, point, options)[formatterName](point, options);
+        } else if (chain) {
+            chainFn = chain as ChainableFormatter;
+        }
+
         return {
             ...fmts,
-            [formatterName]: (point: DataPoint, options: DataFormatOptions) => chain(formatter(point, options), point, options),
+            [formatterName]: (point: DataPoint, options: DataFormatOptions) => chainFn(formatter(point, options), point, options),
         };
     };
 }
 
-function typePresetOptionsCompositionHelper(preset: Preset, formatterName: string, options: any = {}): Preset {
+function typePresetOptionsCompositionHelper(preset: Preset, formatterName: string, options: ColumnSpecs): Preset {
     if (options[formatterName]) {
-        return typePresetCompositionHelper(preset, formatterName, options[formatterName]);
+        return typePresetCompositionHelper(options, preset, formatterName, options[formatterName]);
     }
     return preset;
 }
 
-export function getTypePreset(typeName: string, options: any = {}) {
+export function getTypePreset(typeName: string, options: ColumnSpecs): Preset {
     let preset = DATA_TYPE_PRESETS[typeName];
     if (!preset) {
         throw `DataProvider: Could not find preset for type "${typeName}"`;
