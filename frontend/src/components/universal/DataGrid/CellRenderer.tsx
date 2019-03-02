@@ -1,6 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
+import { formatData, DataTargetOutput, FormatedDataPoint } from "components/DataProvider";
 import { CellRenderProps } from "./index";
 
 interface CellWrapperProps {
@@ -45,6 +46,12 @@ class CellRenderer extends React.Component<CellRendererProps, undefined> {
     }
 
     render() {
+        const dataCol = this.props.context.data.columns.filter(col => col.name === this.props.colDef.field)[0];
+
+        const formatedData: FormatedDataPoint = formatData(DataTargetOutput.Cell, { value: this.props.value }, this.props.context.data, {
+            output: dataCol.name,
+        });
+
         return (
             <CellWrapper
                 onMouseOver={this.handleMouseEnter}
@@ -53,7 +60,7 @@ class CellRenderer extends React.Component<CellRendererProps, undefined> {
                 theme={this.props.context.theme}
             >
                 {
-                    (this.props.context.renderCell) ? (this.props.context.renderCell(this.props)) :(this.props.value)
+                    (this.props.context.renderCell) ? (this.props.context.renderCell(this.props, formatedData)) :(formatedData)
                 }
             </CellWrapper>
         );
