@@ -4,7 +4,7 @@ import styled, { withTheme } from "styled-components";
 import { Column, ColumnApi, ColDef, GridApi, RowNode } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
-import { withData, DataFormat, FormatedDataPoint, RowSpecs } from "components/DataProvider";
+import { resolveData, withData, DataFormat, FormatedDataPoint, RowSpecs } from "components/DataProvider";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
@@ -142,7 +142,7 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
             data: this.props.data,
         };
 
-        const { columnDefs, rowData } = this.extractAgGridDataFormat(this.props.data);
+        const { columnDefs, rowData } = this.extractAgGridDataFormat(resolveData(this.props.data));
 
         return (
             <Wrapper

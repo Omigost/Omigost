@@ -13,10 +13,13 @@ export interface DataProviderProps {
     children?: Array<React.ReactElement<any>> | React.ReactElement<any>;
 }
 
+export type RowGenerator = (column: ColumnSpecs, row: RowSpecs) => any;
+
 export interface ColumnSpecs extends FormattersMappingWithPresets {
     name: string;
     field?: string;
     type?: string;
+    generator?: RowGenerator;
 }
 
 export enum DataTargetInput {
@@ -155,7 +158,7 @@ function typePresetCompositionHelper(columnSpecs: ColumnSpecs, preset: Preset, f
             // Preset name was specified as a chain function
             const chainPreset: Preset = getTypePreset(chain as string, {
                 ...columnSpecs,
-                [formatterName]: undefined
+                [formatterName]: undefined,
             });
             chainFn = (formattedValue, point, options) => chainPreset(typeOptions, type, point, options)[formatterName](point, options);
         } else if (chain) {
@@ -295,7 +298,22 @@ export function formatData(type: DataTarget, point: DataPoint, data: DataFormat,
    };
 }
 
+export function resolveData(data: DataFormat): DataFormat {
+    data.columns.forEach(column => {
+        if (column.generator) {
+           data.rows = data.rows.map(row => ({
+               ...row,
+               [column.field || column.name]: column.generator(column, row),
+           }));
+        }
+    });
+    return data;
+}
+
 export function applyDataFormaters(data: DataFormat, options: DataFormatOptions = {}): DataFormat {
+
+   data = resolveData(data);
+
    let filteredColumns = null;
    if (typeof options.output === "string") {
        filteredColumns = [ options.output ];

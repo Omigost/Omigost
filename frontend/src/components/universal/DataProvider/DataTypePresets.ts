@@ -40,6 +40,16 @@ const PRESETS: PresetsMap = {
         };
     },
     "number": (typeOptions, type, point, options) => defaultNumberParsers(typeOptions),
+    "ui-line": (typeOptions, type, point, options) => {
+        const formatOutputCell = (point, options) => {
+            return `TEZT!`;
+        };
+
+        return {
+            ...(defaultNumberParsers(typeOptions)),
+            formatOutputCell,
+        };
+    },
     "currency": (typeOptions, type, point, options) => {
         const parseData = (point, options) => {
             return parseInt((point.value + "").replace(/\$/, "")) || null;
