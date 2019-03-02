@@ -2,16 +2,53 @@ import * as React from "react";
 
 import DATA_TYPE_PRESETS from "./DataTypePresets";
 
+export type Preset = (typeOptions: any | string | Array<string>, type: DataTarget, point: DataPoint, options: DataFormatOptions) => FormattersMapping;
+
+export interface PresetsMap {
+    [key: string]: Preset;
+}
 
 export interface DataProviderProps {
     data: any;
     children?: Array<React.ReactElement<any>> | React.ReactElement<any>;
 }
 
-export interface ColumnSpecs {
+export type RowGenerator = (column: ColumnSpecs, row: RowSpecs) => any;
+
+export interface ColumnSpecs extends FormattersMappingWithPresets {
     name: string;
     field?: string;
+    type?: string;
+    generator?: RowGenerator;
 }
+
+export enum DataTargetInput {
+    Parse = "input:parse",
+    Axis = "input:axis",
+    Cursor = "input:cursor",
+    Cell = "input:cell",
+}
+
+export enum DataTargetOutput {
+    Parse = "output:parse",
+    Axis = "output:axis",
+    Cursor = "output:cursor",
+    Cell = "output:cell",
+}
+
+export function isDataTargetInput(target: DataTarget): boolean {
+    switch (target) {
+        case DataTargetInput.Parse:
+        case DataTargetInput.Cursor:
+        case DataTargetInput.Axis:
+        case DataTargetInput.Cell:
+            return true;
+    }
+
+    return false;
+}
+
+export type DataTarget = DataTargetInput | DataTargetOutput;
 
 export type RowSpecs = any;
 
@@ -40,15 +77,37 @@ export interface DataPoint {
     value: any;
 }
 
-export interface DataFormatOptions {
+export type Formatter = (point: DataPoint, options: DataFormatOptions) => any;
+
+export type ChainableFormatter = (formattedValue: any, point: DataPoint, options: DataFormatOptions) => any;
+
+export type ChainableFormatterWithPreset = ChainableFormatter | string;
+
+export interface FormattersMapping {
+    parseInputData?: Formatter;
+    parseOutputData?: Formatter;
+    formatInputAxis?:  Formatter;
+    formatOutputAxis?: Formatter;
+    formatInputCursor?: Formatter;
+    formatOutputCursor?: Formatter;
+    formatInputCell?: Formatter;
+    formatOutputCell?: Formatter;
+}
+
+export interface FormattersMappingWithPresets {
+    parseInputData?: Formatter | string;
+    parseOutputData?: Formatter | string;
+    formatInputAxis?:  Formatter | string;
+    formatOutputAxis?: Formatter | string;
+    formatInputCursor?: Formatter | string;
+    formatOutputCursor?: Formatter | string;
+    formatInputCell?: Formatter | string;
+    formatOutputCell?: Formatter | string;
+}
+
+export interface DataFormatOptions extends FormattersMapping {
     input?: any | string | Array<string>;
     output?: any | string | Array<string>;
-    parseInputData?: (point: DataPoint, options: DataFormatOptions) => any;
-    parseOutputData?: (point: DataPoint, options: DataFormatOptions) => any;
-    formatInputAxis?:  (point: DataPoint, options: DataFormatOptions) => any;
-    formatOutputAxis?: (point: DataPoint, options: DataFormatOptions) => any;
-    formatInputCursor?: (point: DataPoint, options: DataFormatOptions) => any;
-    formatOutputCursor?: (point: DataPoint, options: DataFormatOptions) => any;
 }
 
 export function getInputColumn(data: DataFormat, options: DataFormatOptions = {}) {
@@ -88,7 +147,61 @@ export const addPrePostfixFormatCursor = (typeOptions, data: DataFormat, options
     );
 };
 
-export function getFormatDefaults(type: string, point: DataPoint, data: DataFormat, options: DataFormatOptions = {}): DataFormatOptions {
+function typePresetCompositionHelper(columnSpecs: ColumnSpecs, preset: Preset, formatterName: string, chain: ChainableFormatterWithPreset): Preset {
+    return (typeOptions, type, point, options) => {
+        const fmts: FormattersMapping = preset(typeOptions, type, point, options);
+        const formatter = fmts[formatterName];
+
+        let chainFn = (formattedValue, point, options) => formattedValue;
+
+        if (chain && typeof chain === "string") {
+            // Preset name was specified as a chain function
+            const chainPreset: Preset = getTypePreset(chain as string, {
+                ...columnSpecs,
+                [formatterName]: undefined,
+            });
+            chainFn = (formattedValue, point, options) => chainPreset(typeOptions, type, point, options)[formatterName](point, options);
+        } else if (chain) {
+            chainFn = chain as ChainableFormatter;
+        }
+
+        return {
+            ...fmts,
+            [formatterName]: (point: DataPoint, options: DataFormatOptions) => chainFn(formatter(point, options), point, options),
+        };
+    };
+}
+
+function typePresetOptionsCompositionHelper(preset: Preset, formatterName: string, options: ColumnSpecs): Preset {
+    if (options[formatterName]) {
+        return typePresetCompositionHelper(options, preset, formatterName, options[formatterName]);
+    }
+    return preset;
+}
+
+export function getTypePreset(typeName: string, options: ColumnSpecs): Preset {
+    let preset = DATA_TYPE_PRESETS[typeName];
+    if (!preset) {
+        throw `DataProvider: Could not find preset for type "${typeName}"`;
+    }
+
+    [
+        "parseInputData",
+        "parseOutputData",
+        "formatInputAxis",
+        "formatOutputAxis",
+        "formatInputCursor",
+        "formatOutputCursor",
+        "formatInputCell",
+        "formatOutputCell",
+    ].forEach(key => {
+        preset = typePresetOptionsCompositionHelper(preset, key, options);
+    });
+
+    return preset;
+}
+
+export function getFormatDefaults(type: DataTarget, point: DataPoint, data: DataFormat, options: DataFormatOptions = {}): DataFormatOptions {
 
     let presetOverrideOptions = {};
     options = {...options};
@@ -117,13 +230,13 @@ export function getFormatDefaults(type: string, point: DataPoint, data: DataForm
         };
     }
 
-    if (options.input && options.input.type && type.indexOf("input:") === 0) {
-        const preset = DATA_TYPE_PRESETS[options.input.type];
+    if (options.input && options.input.type && isDataTargetInput(type)) {
+        const preset = getTypePreset(options.input.type, options.input);
         presetOverrideOptions = {...presetOverrideOptions, ...preset(options.input, type, point, options)};
     }
 
-    if (options.output && options.output.type && type.indexOf("output:") === 0) {
-        const preset = DATA_TYPE_PRESETS[options.output.type];
+    if (options.output && options.output.type && !isDataTargetInput(type)) {
+        const preset = getTypePreset(options.output.type, options.output);
         presetOverrideOptions = {...presetOverrideOptions, ...preset(options.output, type, point, options)};
     }
 
@@ -134,39 +247,49 @@ export function getFormatDefaults(type: string, point: DataPoint, data: DataForm
            formatOutputAxis: (point, options) => ("" + point.value),
            formatInputCursor: (point, options) => ("" + point.value),
            formatOutputCursor: (point, options) => ("" + point.value),
+           formatInputCell: (point, options) => ("" + point.value),
+           formatOutputCell: (point, options) => ("" + point.value),
         ...presetOverrideOptions,
         ...options,
      };
 }
 
-export function formatData(type: string, point: DataPoint, data: DataFormat, options: DataFormatOptions = {}): FormatedDataPoint {
+export function formatData(type: DataTarget, point: DataPoint, data: DataFormat, options: DataFormatOptions = {}): FormatedDataPoint {
 
     options = getFormatDefaults(type, point, data, options);
 
     switch (type) {
-        case "input:parse":
+        case DataTargetInput.Parse:
             return {
                 value: options.parseInputData(point, options),
             };
-        case "output:parse":
+        case DataTargetOutput.Parse:
             return {
                 value: options.parseOutputData(point, options),
             };
-        case "input:axis":
+        case DataTargetInput.Axis:
             return {
                 value: options.formatInputAxis(point, options),
             };
-        case "output:axis":
+        case DataTargetOutput.Axis:
             return {
                 value: options.formatOutputAxis(point, options),
             };
-        case "input:cursor":
+        case DataTargetInput.Cursor:
             return {
                 value: options.formatInputCursor(point, options),
             };
-        case "output:cursor":
+        case DataTargetOutput.Cursor:
             return {
                 value: options.formatOutputCursor(point, options),
+            };
+        case DataTargetInput.Cell:
+            return {
+                value: options.formatInputCell(point, options),
+            };
+        case DataTargetOutput.Cell:
+            return {
+                value: options.formatOutputCell(point, options),
             };
     }
 
@@ -175,7 +298,22 @@ export function formatData(type: string, point: DataPoint, data: DataFormat, opt
    };
 }
 
-export function applyDataFormaters(data: DataFormat, options: DataFormatOptions = {}, type: string = "parse"): DataFormat {
+export function resolveData(data: DataFormat): DataFormat {
+    data.columns.forEach(column => {
+        if (column.generator) {
+           data.rows = data.rows.map(row => ({
+               ...row,
+               [column.field || column.name]: column.generator(column, row),
+           }));
+        }
+    });
+    return data;
+}
+
+export function applyDataFormaters(data: DataFormat, options: DataFormatOptions = {}): DataFormat {
+
+   data = resolveData(data);
+
    let filteredColumns = null;
    if (typeof options.output === "string") {
        filteredColumns = [ options.output ];
@@ -194,12 +332,12 @@ export function applyDataFormaters(data: DataFormat, options: DataFormatOptions 
         rows: data.rows.map((row) => {
             const formattedRow = {};
 
-            formattedRow[inputColumn] = formatData("input:" + type, {
+            formattedRow[inputColumn] = formatData(DataTargetInput.Parse, {
                 value: row[inputColumn],
             }, data, options).value;
 
             filteredColumns.forEach((column) => {
-                formattedRow[column] = formatData("output:" + type, {
+                formattedRow[column] = formatData(DataTargetOutput.Parse, {
                     value: row[column],
                 }, data, options).value;
             });
