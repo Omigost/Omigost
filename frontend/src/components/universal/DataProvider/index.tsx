@@ -14,25 +14,28 @@ export interface ColumnSpecs {
 }
 
 export enum DataTargetInput {
-    Parse = 'input:parse',
-    Axis = 'input:axis',
-    Cursor = 'input:cursor',
+    Parse = "input:parse",
+    Axis = "input:axis",
+    Cursor = "input:cursor",
+    Cell = "input:cell",
 }
 
 export enum DataTargetOutput {
-    Parse = 'output:parse',
-    Axis = 'output:axis',
-    Cursor = 'output:cursor',
+    Parse = "output:parse",
+    Axis = "output:axis",
+    Cursor = "output:cursor",
+    Cell = "output:cell",
 }
 
 export function isDataTargetInput(target: DataTarget): boolean {
-    switch(target) {
+    switch (target) {
         case DataTargetInput.Parse:
         case DataTargetInput.Cursor:
         case DataTargetInput.Axis:
+        case DataTargetInput.Cell:
             return true;
     }
-    
+
     return false;
 }
 
@@ -74,6 +77,8 @@ export interface DataFormatOptions {
     formatOutputAxis?: (point: DataPoint, options: DataFormatOptions) => any;
     formatInputCursor?: (point: DataPoint, options: DataFormatOptions) => any;
     formatOutputCursor?: (point: DataPoint, options: DataFormatOptions) => any;
+    formatInputCell?: (point: DataPoint, options: DataFormatOptions) => any;
+    formatOutputCell?: (point: DataPoint, options: DataFormatOptions) => any;
 }
 
 export function getInputColumn(data: DataFormat, options: DataFormatOptions = {}) {
@@ -159,6 +164,8 @@ export function getFormatDefaults(type: DataTarget, point: DataPoint, data: Data
            formatOutputAxis: (point, options) => ("" + point.value),
            formatInputCursor: (point, options) => ("" + point.value),
            formatOutputCursor: (point, options) => ("" + point.value),
+           formatInputCell: (point, options) => ("" + point.value),
+           formatOutputCell: (point, options) => ("" + point.value),
         ...presetOverrideOptions,
         ...options,
      };
@@ -192,6 +199,14 @@ export function formatData(type: DataTarget, point: DataPoint, data: DataFormat,
         case DataTargetOutput.Cursor:
             return {
                 value: options.formatOutputCursor(point, options),
+            };
+        case DataTargetInput.Cell:
+            return {
+                value: options.formatInputCell(point, options),
+            };
+        case DataTargetOutput.Cell:
+            return {
+                value: options.formatOutputCell(point, options),
             };
     }
 
