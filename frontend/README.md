@@ -1,4 +1,4 @@
-# Omigost
+ # Omigost
 
 ![Omigost logo](https://raw.githubusercontent.com/Omigost/Omigost/master/frontend/src/assets/img/omigost_logo.svg)
 
