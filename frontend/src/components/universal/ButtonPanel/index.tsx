@@ -1,8 +1,8 @@
-import * as React from 'react';
-import styled  from 'styled-components';
+import * as React from "react";
+import styled  from "styled-components";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconName } from '@fortawesome/fontawesome-svg-core';
+import { IconName } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Wrapper = styled.div`
   padding: 0;
@@ -13,13 +13,13 @@ interface ButtonComponentProps {
   fontSize?: string;
   theme?: any;
   showIcon?: boolean;
-};
+}
 
 const ButtonComponent = styled.button<ButtonComponentProps>`
   background: transparent;
   border: 0.2vw solid ${(props: ButtonComponentProps) => props.theme.colors.accent};
   font-family: ${(props: ButtonComponentProps) => props.theme.primaryFont};
-  font-size: ${(props: ButtonComponentProps) => props.theme.fontSize[props.fontSize || 'default']};
+  font-size: ${(props: ButtonComponentProps) => props.theme.fontSize[props.fontSize || "default"]};
   color: ${(props: ButtonComponentProps) => props.theme.colors.accent};
   padding-left: 3.5vw;
   padding-right: 3.5vw;
@@ -29,10 +29,10 @@ const ButtonComponent = styled.button<ButtonComponentProps>`
 `;
 
 const IconWrapper = styled.div<ButtonComponentProps>`
-  font-size: ${(props: ButtonComponentProps) => props.theme.fontSize[props.fontSize || 'XXL']};
+  font-size: ${(props: ButtonComponentProps) => props.theme.fontSize[props.fontSize || "XXL"]};
   padding: ${(props: ButtonComponentProps) => {
-      if(props.showIcon) {
-          return '1vw';
+      if (props.showIcon) {
+          return "1vw";
       }
       return 0;
   }};
@@ -40,8 +40,8 @@ const IconWrapper = styled.div<ButtonComponentProps>`
 
 const LabelWrapper = styled.div<ButtonComponentProps>`
   margin-top: ${(props: ButtonComponentProps) => {
-      if(props.showIcon) {
-          return '1vw';
+      if (props.showIcon) {
+          return "1vw";
       }
       return 0;
   }};
@@ -63,7 +63,7 @@ export default class ButtonPanel extends React.Component<ButtonPanelProps, undef
                     onClick={this.props.onClick}
                 >
                     {
-                        (!this.props.icon)?(null):(
+                        (!this.props.icon) ? (null) :(
                             <IconWrapper showIcon>
                                 <FontAwesomeIcon icon={this.props.icon} />
                             </IconWrapper>

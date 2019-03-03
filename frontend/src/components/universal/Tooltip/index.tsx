@@ -1,9 +1,9 @@
-import * as React from 'react';
-import styled, { withTheme }  from 'styled-components';
-import 'rc-tooltip/assets/bootstrap.css';
-import './index.css';
+import "rc-tooltip/assets/bootstrap.css";
+import * as React from "react";
+import styled, { withTheme }  from "styled-components";
+import "./index.css";
 
-import TooltipComponent from 'rc-tooltip';
+import TooltipComponent from "rc-tooltip";
 
 const Wrapper = styled.div`
   padding: 0;
@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 
 const TooltipContent = styled.div`
   font-family: ${(props) => props.theme.primaryFont};
-  font-size: ${(props) => props.theme.fontSize['default']};
+  font-size: ${(props) => props.theme.fontSize.default};
   color: ${(props) => props.theme.colors.lightAccent};
 `;
 
@@ -21,28 +21,28 @@ export interface TooltipProps {
     content?: React.ReactNode;
     clickTrigger?: boolean;
     show?: boolean;
-}; 
+}
 
 class Tooltip extends React.Component<TooltipProps, undefined> {
     render() {
-        if(!this.props.content) {
+        if (!this.props.content) {
             return this.props.children;
         }
-        
+
         return (
             <Wrapper>
                 <TooltipComponent
                     destroyTooltipOnHide
-                    placement='right'
-                    trigger={(this.props.clickTrigger)?(['click']):(['hover'])}
+                    placement="right"
+                    trigger={(this.props.clickTrigger) ? (["click"]) :(["hover"])}
                     overlay={
                         <TooltipContent theme={this.props.theme}>
                             {this.props.content}
                         </TooltipContent>
                     }
                     {
-                        ...((this.props.show === null || typeof this.props.show === 'undefined')?({}):({
-                            visible: this.props.show
+                        ...((this.props.show === null || typeof this.props.show === "undefined") ? ({}) :({
+                            visible: this.props.show,
                         }))
                     }
                 >
@@ -51,6 +51,6 @@ class Tooltip extends React.Component<TooltipProps, undefined> {
             </Wrapper>
         );
     }
-};
+}
 
 export default withTheme(Tooltip);

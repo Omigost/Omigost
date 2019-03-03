@@ -1,10 +1,6 @@
 {
     "jsRules": {
         "class-name": true,
-        "comment-format": [
-            true,
-            "check-space"
-        ],
         "indent": [
             true,
             "spaces"
@@ -45,10 +41,6 @@
     },
     "rules": {
         "class-name": true,
-        "comment-format": [
-            true,
-            "check-space"
-        ],
         "indent": [
             true,
             "spaces"
@@ -154,10 +146,6 @@
             "statements"
         ],
         "no-trailing-whitespace": true,
-        "semicolon": [
-            true,
-            "always"
-        ],
         "trailing-comma": [
             true,
             {

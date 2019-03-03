@@ -1,9 +1,9 @@
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from "react";
+import styled from "styled-components";
 
-import SinglePage from './SinglePage';
-import FillPage from './FillPage';
-import Logo from 'components/Logo';
+import Logo from "components/Logo";
+import FillPage from "./FillPage";
+import SinglePage from "./SinglePage";
 
 
 const Wrapper = styled.div`
@@ -26,21 +26,21 @@ const ContentWrapper = styled.div`
 `;
 
 export interface PageProps {
-    type?: string
+    type?: string;
 }
 
 export default class Page extends React.Component<PageProps, undefined> {
     render() {
         let PageComponent = SinglePage;
-        
-        if(this.props.type === 'fill') {
+
+        if (this.props.type === "fill") {
             PageComponent = FillPage;
         }
-        
+
         return (
             <Wrapper>
                 {
-                    (this.props.type === 'fill')?(null):(
+                    (this.props.type === "fill") ? (null) :(
                         <LogoWrapper>
                             <Logo />
                         </LogoWrapper>
