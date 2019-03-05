@@ -19,7 +19,7 @@ public class NotificationMessage {
     @Singular
     protected List<NotificationMessageAction> actions;
 
-    protected NotificationMessage (NotificationMessage message) {
+    protected NotificationMessage(NotificationMessage message) {
         this(message.mainText, message.attachmentText, message.actions);
     }
 }

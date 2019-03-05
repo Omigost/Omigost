@@ -21,7 +21,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.ts|\.tsx$/,
         enforce: 'pre',
         use: [
            {
