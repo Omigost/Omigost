@@ -3,6 +3,7 @@ package com.omigost.server.rest;
 import com.amazonaws.services.budgets.model.Budget;
 import com.omigost.server.alerts.AlertService;
 import com.omigost.server.aws.BudgetService;
+import com.omigost.server.model.AlertResponseToken;
 import com.omigost.server.notification.MainNotificationService;
 import com.omigost.server.rest.exception.BudgetNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ public class AlertsController {
 
     @PostMapping("/requestLimitIncrease")
     public void handleLimitIncreaseRequest(@RequestParam String requestBody, @RequestParam String tokenString) {
-        alerts.invalidateResponseToken(tokenString);
-        notifications.requestLimitIncrease(requestBody);
+        AlertResponseToken token = alerts.invalidateResponseToken(tokenString);
+        notifications.requestLimitIncrease(requestBody, token);
     }
 
     @PostMapping("/trigger")

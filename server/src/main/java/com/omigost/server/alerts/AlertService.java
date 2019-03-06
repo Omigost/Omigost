@@ -47,11 +47,11 @@ public class AlertService {
         communication.service().sendAlertToUser(communication, budgetTriggeredMessage);
     }
 
-    public void invalidateResponseToken(String tokenString) throws AccessForbiddenException {
+    public AlertResponseToken invalidateResponseToken(String tokenString) throws AccessForbiddenException {
         Optional<AlertResponseToken> maybeToken = tokenRepo.findAlertResponseTokenBy(tokenString);
         if (!maybeToken.isPresent()) throw new AccessForbiddenException("Alert Response Token is not valid");
         AlertResponseToken token = maybeToken.get();
         token.invalidate();
-        tokenRepo.save(token);
+        return tokenRepo.save(token);
     }
 }

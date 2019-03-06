@@ -70,7 +70,8 @@ public class MainNotificationService {
         ), respondLinkUrl);
     }
 
-    public void requestLimitIncrease(String requestBody) { // TODO there should be more parameters there to show a nicer message
+    public void requestLimitIncrease(String requestBody, AlertResponseToken token) {
+        // TODO find admin of the resource by token
         // TODO notify admin with a nice message
     }
 }
