@@ -33,7 +33,7 @@ public class MainNotificationService {
     }
 
     public NotificationMessage budgetTriggeredMessage(Budget budget, AlertResponseToken responseToken) {
-        budgetTriggeredMessage(budget, responseToken.token);
+        return budgetTriggeredMessage(budget, responseToken.token);
     }
 
     public NotificationMessage budgetTriggeredMessage(Budget budget, String tokenString) {
