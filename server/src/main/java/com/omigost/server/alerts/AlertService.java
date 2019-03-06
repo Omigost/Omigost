@@ -8,7 +8,7 @@ import com.omigost.server.notification.MainNotificationService;
 import com.omigost.server.notification.NotificationMessage;
 import com.omigost.server.repository.AlertRepository;
 import com.omigost.server.repository.AlertResponseTokenRepository;
-import com.omigost.server.rest.exception.ResponseTokenInvalid;
+import com.omigost.server.exception.AccessForbiddenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,9 +47,9 @@ public class AlertService {
         communication.service().sendAlertToUser(communication, budgetTriggeredMessage);
     }
 
-    public void invalidateResponseToken(String tokenString) throws ResponseTokenInvalid {
+    public void invalidateResponseToken(String tokenString) throws AccessForbiddenException {
         Optional<AlertResponseToken> maybeToken = tokenRepo.findAlertResponseTokenBy(tokenString);
-        if (!maybeToken.isPresent()) throw new ResponseTokenInvalid();
+        if (!maybeToken.isPresent()) throw new AccessForbiddenException("Alert Response Token is not valid");
         AlertResponseToken token = maybeToken.get();
         token.invalidate();
         tokenRepo.save(token);
