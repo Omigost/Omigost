@@ -1,6 +1,7 @@
 package com.omigost.server.notification;
 
 import com.amazonaws.services.budgets.model.Budget;
+import com.omigost.server.model.AlertResponseToken;
 import com.omigost.server.model.BudgetDecorator;
 import com.omigost.server.model.Communication;
 import com.omigost.server.model.User;
@@ -29,6 +30,10 @@ public class MainNotificationService {
         }
 
         return result;
+    }
+
+    public NotificationMessage budgetTriggeredMessage(Budget budget, AlertResponseToken responseToken) {
+        budgetTriggeredMessage(budget, responseToken.token);
     }
 
     public NotificationMessage budgetTriggeredMessage(Budget budget, String tokenString) {

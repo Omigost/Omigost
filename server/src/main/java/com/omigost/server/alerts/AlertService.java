@@ -42,7 +42,7 @@ public class AlertService {
 
         alertRepo.save(alert);
 
-        NotificationMessage budgetTriggeredMessage = notifications.budgetTriggeredMessage(budget, token.token);
+        NotificationMessage budgetTriggeredMessage = notifications.budgetTriggeredMessage(budget, token);
 
         communication.service().sendAlertToUser(communication, budgetTriggeredMessage);
     }
