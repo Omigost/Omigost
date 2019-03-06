@@ -23,9 +23,6 @@ public class AWSTestController {
     private OrganizationService organization;
 
     @Autowired
-    private BudgetService budgets;
-
-    @Autowired
     private EC2TerminationService ec2TerminationService;
 
     @Autowired
@@ -37,11 +34,6 @@ public class AWSTestController {
     @GetMapping("/organizations")
     public List<Account> accounts() {
         return organization.fetchAccounts();
-    }
-
-    @GetMapping("/budgets")
-    public List<Budget> budgets() {
-        return budgets.getBudgets();
     }
 
     @PostMapping("/ec2/hibernate")
