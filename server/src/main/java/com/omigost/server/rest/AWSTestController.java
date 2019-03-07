@@ -3,10 +3,14 @@ package com.omigost.server.rest;
 import com.amazonaws.services.budgets.model.Budget;
 import com.amazonaws.services.organizations.model.Account;
 import com.omigost.server.aws.BudgetService;
+import com.omigost.server.aws.CostService;
 import com.omigost.server.aws.OrganizationService;
 import com.omigost.server.aws.termination.EBSTerminationService;
 import com.omigost.server.aws.termination.EC2TerminationService;
 import com.omigost.server.aws.termination.RDSTerminationService;
+import com.omigost.server.rest.dto.AWSDailySpendingDTO;
+import com.omigost.server.rest.dto.AccountSpendingDTO;
+import com.omigost.server.rest.dto.TagSpendingDTO;
 import com.omigost.server.rest.dto.TerminationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
 @RestController
 public class AWSTestController {
 
@@ -24,6 +29,8 @@ public class AWSTestController {
 
     @Autowired
     private BudgetService budgets;
+    @Autowired
+    private CostService costService;
 
     @Autowired
     private EC2TerminationService ec2TerminationService;
@@ -44,6 +51,16 @@ public class AWSTestController {
         return budgets.getBudgets();
     }
 
+
+    @PostMapping("/spending/account")
+    public List<AWSDailySpendingDTO> spending(@RequestBody AccountSpendingDTO request) {
+        return costService.getSpendingForAccount(request.getDateInterval(), request.getUserId());
+    }
+
+    @PostMapping("/spending/tag")
+    public List<AWSDailySpendingDTO> tagSpending(@RequestBody TagSpendingDTO request) {
+        return costService.getSpendingForTags(request.getDateInterval(), request.getTags());
+    }
     @PostMapping("/ec2/hibernate")
     public void hibernateEC2(@RequestBody TerminationRequest request) {
         ec2TerminationService.hibernate(request.getMachineIds());

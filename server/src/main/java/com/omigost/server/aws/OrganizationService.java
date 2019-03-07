@@ -6,6 +6,7 @@ import com.amazonaws.services.organizations.AWSOrganizationsClientBuilder;
 import com.amazonaws.services.organizations.model.Account;
 import com.amazonaws.services.organizations.model.ListAccountsRequest;
 import com.amazonaws.services.organizations.model.ListAccountsResult;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
