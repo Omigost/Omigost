@@ -1,25 +1,24 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import * as React from "react";
 
 interface FilterRendererState {
      text: string;
-};
+}
 
 export interface FilterRendererProps {
      valueGetter: (data: any) => any;
      filterChangedCallback: () => void;
-};
+}
 
 export default class FilterRenderer extends React.Component<FilterRendererProps, FilterRendererState> {
     state: FilterRendererState;
     valueGetter: (data: any) => any;
     filterChangedCallback: () => void;
-    
+
     constructor(props) {
         super(props);
 
         this.state = {
-            text: ''
+            text: "",
         };
 
         this.valueGetter = this.props.valueGetter;
@@ -28,7 +27,7 @@ export default class FilterRenderer extends React.Component<FilterRendererProps,
     }
 
     isFilterActive() {
-        return this.state.text !== '';
+        return this.state.text !== "";
     }
 
     doesFilterPass(params) {
@@ -44,14 +43,14 @@ export default class FilterRenderer extends React.Component<FilterRendererProps,
     }
 
     setModel(model) {
-        this.state.text = model ? model.value : '';
+        this.state.text = model ? model.value : "";
     }
 
     onChange(event) {
-        let newValue = event.target.value;
+        const newValue = event.target.value;
         if (this.state.text !== newValue) {
             this.setState({
-                text: newValue
+                text: newValue,
             }, () => {
                 this.props.filterChangedCallback();
             });
@@ -60,12 +59,12 @@ export default class FilterRenderer extends React.Component<FilterRendererProps,
     }
 
     render() {
-        let style = {
+        const style = {
             border: "2px solid #22ff22",
             borderRadius: "5px",
             backgroundColor: "#bbffbb",
             width: "200px",
-            height: "50px"
+            height: "50px",
         };
 
         return (
@@ -81,4 +80,4 @@ export default class FilterRenderer extends React.Component<FilterRendererProps,
             </div>
         );
     }
-};
+}

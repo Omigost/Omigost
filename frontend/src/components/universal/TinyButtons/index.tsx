@@ -1,10 +1,10 @@
-import * as React from 'react';
-import styled, { withTheme }  from 'styled-components';
+import * as React from "react";
+import styled  from "styled-components";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconName } from '@fortawesome/fontawesome-svg-core';
+import { IconName } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import Tooltip from 'components/Tooltip';
+import Tooltip from "components/Tooltip";
 
 const Wrapper = styled.div`
   padding: 0;
@@ -14,17 +14,17 @@ interface PanelButtonProps {
   theme?: any;
   onClick?: () => void;
   active?: boolean;
-};
+}
 
 const PanelButton = styled.div<PanelButtonProps>`
   padding: 0.3vw;
   display: inline-block;
   margin-left: 0.1vw;
   margin-right: 0.1vw;
-  color: ${(props: PanelButtonProps) => (props.active)?(props.theme.colors.lightAccent):(props.theme.colors.primary)};
-  background: ${(props: PanelButtonProps) => (props.active)?(props.theme.colors.primary):('transparent')};
+  color: ${(props: PanelButtonProps) => (props.active) ? (props.theme.colors.lightAccent) :(props.theme.colors.primary)};
+  background: ${(props: PanelButtonProps) => (props.active) ? (props.theme.colors.primary) :("transparent")};
   cursor: pointer;
-  
+
   &:hover {
     color: ${(props: PanelButtonProps) => props.theme.colors.lightAccent};
     background: ${(props: PanelButtonProps) => props.theme.colors.primary};
@@ -41,29 +41,29 @@ export interface ButtonSpecs {
     onClick?: () => void;
     text?: string;
     tooltip?: React.ReactElement<any>;
-};
+}
 
 export interface TinyButtonsProps {
     children: Array<ButtonSpecs | null>;
     info?: string | React.ReactElement<any>;
-};
+}
 
 class TinyButtons extends React.Component<TinyButtonsProps, any> {
 
     render() {
-        let buttons = (this.props.children || []).filter(button => !!button);
-        
-        if(this.props.info) {
+        const buttons = (this.props.children || []).filter(button => !!button);
+
+        if (this.props.info) {
             buttons.push({
-                icon: 'question-circle',
+                icon: "question-circle",
                 tooltip: (
                     <div>
                         {this.props.info}
                     </div>
-                )
+                ),
             });
         }
-        
+
         return (
             <Wrapper>
                 {
@@ -72,16 +72,16 @@ class TinyButtons extends React.Component<TinyButtonsProps, any> {
                             <span>
                                 <FontAwesomeIcon icon={button.icon} />
                                 {
-                                    (button.text)?(
+                                    (button.text) ? (
                                         <IconLabel>
                                             {button.text}
                                         </IconLabel>
-                                    ):(null)
+                                    ) :(null)
                                 }
                             </span>
                         );
-        
-                        if(button.tooltip) {
+
+                        if (button.tooltip) {
                             contentNode = (
                                 <Tooltip
                                     content={button.tooltip}
@@ -91,7 +91,7 @@ class TinyButtons extends React.Component<TinyButtonsProps, any> {
                                 </Tooltip>
                             );
                         }
-        
+
                         return (
                             <PanelButton
                                 onClick={button.onClick}
@@ -103,7 +103,7 @@ class TinyButtons extends React.Component<TinyButtonsProps, any> {
                     })
                 }
             </Wrapper>
-               
+
         );
     }
 }

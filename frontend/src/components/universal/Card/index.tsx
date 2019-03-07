@@ -1,9 +1,9 @@
-import * as React from 'react';
-import styled  from 'styled-components';
+import * as React from "react";
+import styled  from "styled-components";
 
-import CardImage from 'components/CardImage';
-import CardTitle from 'components/CardTitle';
-import CardDescription from 'components/CardDescription';
+import CardDescription from "components/CardDescription";
+import CardImage from "components/CardImage";
+import CardTitle from "components/CardTitle";
 
 const Wrapper = styled.div`
   padding: 1.2vw;
@@ -34,13 +34,13 @@ export interface CardProps {
 }
 
 export default class Card extends React.Component<CardProps, undefined> {
-    
+
     render() {
         return (
             <Wrapper>
                 <ContentRow>
                     {
-                        (!this.props.image)?(null):(
+                        (!this.props.image) ? (null) :(
                             <CardImageWrapper>
                                 <CardImage src={this.props.image} />
                             </CardImageWrapper>
@@ -54,7 +54,7 @@ export default class Card extends React.Component<CardProps, undefined> {
                 </ContentRow>
                 <ContentRow>
                     {
-                        (!this.props.description)?(null):(
+                        (!this.props.description) ? (null) :(
                             <div>
                                 <CardDescription>
                                     {this.props.description}

@@ -1,8 +1,8 @@
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from "react";
+import styled from "styled-components";
 
-import { withModules, ModulesLoader } from 'modules/ModulesProvider';
-import SideMenu, { MenuOption } from 'components/SideMenu';
+import SideMenu, { MenuOption } from "components/SideMenu";
+import { withModules, ModulesLoader } from "modules/ModulesProvider";
 
 const Wrapper = styled.aside`
   width: 100%;
@@ -19,36 +19,33 @@ export interface DashboardPanelProps {
 
 interface DashboardPanelState {
     selectedOptionIndex: number | null;
-};
+}
 
 class DashboardPanel extends React.Component<DashboardPanelProps, DashboardPanelState> {
-    
+
+    state: DashboardPanelState = {
+        selectedOptionIndex: null,
+    };
+
     constructor(props) {
         super(props);
-        
+
         this.handleSideMenuSelection = this.handleSideMenuSelection.bind(this);
     }
-    
-    state: DashboardPanelState = {
-        selectedOptionIndex: null
-    };
-    
+
     handleSideMenuSelection(menuOption: MenuOption, index: number) {
         this.setState({
-            selectedOptionIndex: index
+            selectedOptionIndex: index,
         });
     }
-    
+
     render() {
-        if(!this.props.modulesLoader) {
+        if (!this.props.modulesLoader) {
             return null;
         }
-        
-        console.warn("HELLO 69");
-        console.log(this.props.modulesLoader);
-        
+
         const modules = this.props.modulesLoader.getActiveModules();
-        
+
         return (
             <Wrapper>
                 <SideMenu
@@ -57,16 +54,16 @@ class DashboardPanel extends React.Component<DashboardPanelProps, DashboardPanel
                     options={
                         modules.map(module => {
                             return {
-                                name: module.getName() || 'Anonymous module',
-                                icon: module.getIcon() || 'chart-bar'
+                                name: module.getName() || "Anonymous module",
+                                icon: module.getIcon() || "chart-bar",
                             };
                         })
                     }
                 />
                 <PanelContentWrapper>
                     {
-                        (this.state.selectedOptionIndex === null)?(null):(
-                            modules[this.state.selectedOptionIndex].renderDashboardView(null)
+                        (this.state.selectedOptionIndex === null) ? (null) :(
+                             modules[this.state.selectedOptionIndex].renderDashboardView(null)
                         )
                     }
                 </PanelContentWrapper>
