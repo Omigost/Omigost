@@ -13,7 +13,7 @@ interface CellWrapperProps {
 }
 
 const CellWrapper = styled.div<CellWrapperProps>`
-  background: ${(props: CellWrapperProps) => props.theme.colors.background};
+  background: transparent;
   width: 100%;
   height: 100%;
   padding-left: 1vw;
