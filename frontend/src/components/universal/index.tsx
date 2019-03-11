@@ -24,6 +24,7 @@ import TextBox from "./TextBox";
 import TextInput from "./TextInput";
 import TinyButtons from "./TinyButtons";
 import Tooltip from "./Tooltip";
+import Popover from "./Popover";
 
 export default {
     Button,
@@ -52,6 +53,7 @@ export default {
     Chart,
     ChartDataOptionsPanel,
     ChartTypeSwitchPanel,
+    Popover,
     ExportXLSX,
     ExportXLSXButtons,
 };
