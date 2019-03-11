@@ -7,6 +7,8 @@ import Chart, { ChartDataOptionsPanel, ChartTypeSwitchPanel } from "./Chart";
 import DataGrid from "./DataGrid";
 import DataProvider from "./DataProvider";
 import Description from "./Description";
+import ExportXLSX from "./ExportXLSX";
+import ExportXLSXButtons from "./ExportXLSXButtons";
 import InteractiveGrid from "./InteractiveGrid";
 import InteractiveNestedGrid from "./InteractiveNestedGrid";
 import Loading from "./Loading";
@@ -50,4 +52,6 @@ export default {
     Chart,
     ChartDataOptionsPanel,
     ChartTypeSwitchPanel,
+    ExportXLSX,
+    ExportXLSXButtons,
 };
