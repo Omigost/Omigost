@@ -164,7 +164,7 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
                         this.columnApi = columnApi;
                         
                         const allColumnIds = [];
-                        this.columnApi.getAllColumns().forEach(function(column) {
+                        this.columnApi.getAllColumns().forEach(column => {
                              allColumnIds.push(column.colId);
                         });
                         this.columnApi.autoSizeColumns(allColumnIds);
