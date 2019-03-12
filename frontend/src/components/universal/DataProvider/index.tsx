@@ -1,4 +1,5 @@
 import * as React from "react";
+import deepCopy from 'deep-copy';
 
 import DATA_TYPE_PRESETS from "./DataTypePresets";
 
@@ -52,9 +53,16 @@ export type DataTarget = DataTargetInput | DataTargetOutput;
 
 export type RowSpecs = any;
 
+export type FilterSpecs = (data: DataFormat) => DataFormat;
+
+export interface DataFiltersMap {
+    [key: string]: FilterSpecs;
+}
+
 export interface DataFormat {
     rows: Array<RowSpecs>;
     columns: Array<ColumnSpecs>;
+    filters?: DataFiltersMap;
 }
 
 interface DataProviderState {
@@ -298,7 +306,9 @@ export function formatData(type: DataTarget, point: DataPoint, data: DataFormat,
    };
 }
 
-export function resolveData(data: DataFormat): DataFormat {
+export function resolveData(dataToResolve: DataFormat): DataFormat {
+    let data = deepCopy(dataToResolve);
+    
     data.columns.forEach(column => {
         if (column.generator) {
            data.rows = data.rows.map(row => ({
@@ -307,6 +317,14 @@ export function resolveData(data: DataFormat): DataFormat {
            }));
         }
     });
+    
+    if(data.filters) {
+        Object.keys(data.filters).forEach(key => {
+            const filterFn = data.filters[key];
+            data = filterFn(data);
+        });
+    }
+    
     return data;
 }
 
