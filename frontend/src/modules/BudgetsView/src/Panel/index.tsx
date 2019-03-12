@@ -1,17 +1,11 @@
 import * as React from "react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled, { ThemeProvider } from "styled-components";
 import defaultTheme from "themes/default";
 
-import * as Fuse from 'fuse-js-latest';
+import * as Fuse from "fuse-js-latest";
 
-import { Flex, Box } from '@rebass/grid';
-
-const CursorIcon = styled.div`
-  margin-right: 0.3vw;
-  display: inline-block;
-`;
+import { Box, Flex } from "@rebass/grid";
 
 const GridWrapper = styled.div`
   height: 50vh;
@@ -60,57 +54,43 @@ const DATA = {
     ],
     rows: [
         {
-            name: 'Project Nemo Cost Budget',
+            name: "Project Nemo Cost Budget",
             current: 44,
             budgeted: 50,
             forecasted: 70,
         },
         {
-            name: 'Eastern US Regional Budget',
+            name: "Eastern US Regional Budget",
             current: 17050,
             budgeted: 19412,
             forecasted: 23110,
         },
         {
-            name: 'Total Monthly Managing Budget',
+            name: "Total Monthly Managing Budget",
             current: 4210,
             budgeted: 5210,
             forecasted: 6810,
         },
         {
-            name: 'CEO lamborgini Weekly Budget',
+            name: "CEO lamborgini Weekly Budget",
             current: 29123,
             budgeted: 50123,
             forecasted: 32150,
         },
         {
-            name: 'S3 Usage Budget',
+            name: "S3 Usage Budget",
             current: 2102,
             budgeted: 8312,
             forecasted: 5012,
         },
         {
-            name: 'DevOps Team Budget',
+            name: "DevOps Team Budget",
             current: 6123,
             budgeted: 12302,
             forecasted: 7012,
-        }
+        },
     ],
 };
-
-/*
-<this.props.app.UI.Chart
-    data={{...DATA,
-        rows: DATA.rows.filter(row => row.x === props.data.x)}}
-    graphType={"bar"}
-    input={"x"}
-    output={["z", "y"]}
-    tiny
-    showLegend
-    height={150}
->
-</this.props.app.UI.Chart>
-*/
 
 export default class Panel extends React.Component<any, any> {
 
@@ -121,21 +101,21 @@ export default class Panel extends React.Component<any, any> {
             >
                 <Flex>
                     <Box p={2} width={1}>
-                        <Flex flexDirection='column'>
+                        <Flex flexDirection="column">
                             <GridWrapper>
-                                <Box p={2} width={1/5}>
+                                <Box p={2} width={1 / 5}>
                                     <Flex>
                                         <this.props.app.UI.DataFilter>
                                             {
                                                 (updateFilter) => {
                                                     return (
                                                         <this.props.app.UI.TextInput
-                                                            label='Search budgets'
+                                                            label="Search budgets"
                                                             onChange={(value) => {
                                                                 updateFilter((data) => {
-                                                                    
-                                                                    if (value.length == 0) return data;
-                                                                    
+
+                                                                    if (value.length === 0) return data;
+
                                                                     const options = {
                                                                       shouldSort: true,
                                                                       threshold: 0.6,
@@ -145,11 +125,11 @@ export default class Panel extends React.Component<any, any> {
                                                                       minMatchCharLength: 1,
                                                                       keys: [
                                                                         "name",
-                                                                      ]
+                                                                      ],
                                                                     };
                                                                     const fuse = new Fuse(data.rows, options); // "list" is the item array
                                                                     const result = fuse.search(value);
-                                                                    
+
                                                                     return {
                                                                         ...data,
                                                                         rows: result,
@@ -170,7 +150,7 @@ export default class Panel extends React.Component<any, any> {
                                         if (props.column.colId !== rightmostColumn.colId) {
                                             return formattedData.value;
                                         }
-                                        
+
                                         return (
                                             <this.props.app.UI.Tooltip
                                                 show={props.node.data.hovered}
@@ -180,7 +160,7 @@ export default class Panel extends React.Component<any, any> {
                                                             <this.props.app.UI.Chart
                                                                 data={{
                                                                     ...DATA,
-                                                                    rows: DATA.rows.filter(row => row.name === props.data.name)
+                                                                    rows: DATA.rows.filter(row => row.name === props.data.name),
                                                                 }}
                                                                 graphType={"bar"}
                                                                 input={"name"}
