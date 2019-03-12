@@ -51,7 +51,7 @@ export default class App extends React.Component<AppProps, undefined> {
         return (
             <I18n locale={locale} messages={messages}>
                 <ThemeProvider theme={defaultTheme}>
-                    <ModulesProvider modules={[ "dashboard-view", "settings-view" ]}>
+                    <ModulesProvider modules={[ "dashboard-view", "budgets-view", "settings-view" ]}>
                         <Router>
                             <AppWrapper>
                                 <RoutesModuleComponent />
