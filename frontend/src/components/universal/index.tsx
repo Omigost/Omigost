@@ -6,6 +6,7 @@ import Card from "./Card";
 import Chart, { ChartDataOptionsPanel, ChartTypeSwitchPanel } from "./Chart";
 import DataGrid from "./DataGrid";
 import DataProvider from "./DataProvider";
+import DataFilter from "./DataFilter";
 import Description from "./Description";
 import ExportXLSX from "./ExportXLSX";
 import ExportXLSXButtons from "./ExportXLSXButtons";
@@ -48,6 +49,7 @@ export default {
     Tooltip,
     Meter,
     DataProvider,
+    DataFilter,
     TinyButtons,
     DataGrid,
     Chart,

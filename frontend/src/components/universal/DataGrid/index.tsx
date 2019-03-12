@@ -74,6 +74,7 @@ export interface AgGridDataFormat {
 class DataGrid extends React.Component<DataGridProps, undefined> {
 
     api: any;
+    columnApi: any;
 
     constructor(props) {
         super(props);
@@ -136,10 +137,6 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
         };
     }
 
-    onGridReady(params) {
-        this.api = params.api;
-    }
-
     render() {
         const gridContext: DataGridContext = {
             theme: this.props.theme,
@@ -151,7 +148,7 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
         };
 
         const { columnDefs, rowData } = this.extractAgGridDataFormat(resolveData(this.props.data));
-
+        
         return (
             <Wrapper
                 className="ag-theme-balham"
@@ -162,7 +159,16 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
                     enableFilter
                     enableSorting
                     context={gridContext}
-                    onGridReady={this.onGridReady}
+                    onGridReady={({ api, columnApi }) => {
+                        this.api = api;
+                        this.columnApi = columnApi;
+                        
+                        const allColumnIds = [];
+                        this.columnApi.getAllColumns().forEach(function(column) {
+                             allColumnIds.push(column.colId);
+                        });
+                        this.columnApi.autoSizeColumns(allColumnIds);
+                    }}
                 />
             </Wrapper>
         );
