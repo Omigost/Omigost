@@ -42,7 +42,7 @@ export interface TextInputProps {
     type?: string;
     label?: any;
     value?: string;
-    onChange?: (string) => void;
+    onChange?: (text: string) => void;
 }
 
 export default class TextInput extends React.Component<TextInputProps, undefined> {
