@@ -3,15 +3,34 @@ import * as React from "react";
 import {
     NodeStringSchema,
     SchemaParserConfig,
-    TreeUITransformer,
+    NodeSchema,
+    NodeState,
+    Node,
 } from "../schemaTypes";
 
 export default {
-    render: (node: NodeStringSchema, transformer: TreeUITransformer, config: SchemaParserConfig) => {
+    resolveInitialState: () => {
+        return {
+            value: '',
+        };
+    },
+    getOutput: (schemaNode: NodeSchema, node: Node) => {
+        return node.state.value;
+    },
+    render: (schemaNode: NodeSchema, node: Node) => {
         return (
             <div>
-                {node.title}
-                {node.description}
+                {schemaNode.title}
+                {schemaNode.description}
+                <input
+                    value={node.state.value}
+                    onChange={(event) => {
+                        node.setState({
+                            ...node.state,
+                            value: event.target.value || '',
+                        });
+                    }}
+                />
             </div>
         );
     },
