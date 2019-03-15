@@ -2,7 +2,7 @@ import * as React from "react";
 import styled  from "styled-components";
 
 import { transformSchemaIntoTree } from "./schemaParser";
-import { NodeType, Schema, NodeState, Node } from "./schemaTypes";
+import { NodeType, Schema, NodeState, Node, NodeAny } from "./schemaTypes";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -14,7 +14,7 @@ export interface FormProps {
 }
 
 interface FormState { 
-    tree: Node;
+    tree: NodeAny;
 }
 
 export default class Form extends React.Component<FormProps, FormState> {
@@ -29,7 +29,7 @@ export default class Form extends React.Component<FormProps, FormState> {
         };
     }
     
-    handleFormStateUpdate(state: NodeState, root: Node) {
+    handleFormStateUpdate(state: NodeState<any>, root: NodeAny) {
         console.error("SET FORM STATE!");
         console.log(root.getOutput());
         this.setState({
@@ -57,7 +57,7 @@ export default class Form extends React.Component<FormProps, FormState> {
         if (!this.state.tree) {
             setTimeout(() => {
                 const tree = transformSchemaIntoTree(schema, null, {
-                    rootSetState: (state: NodeState, root: Node) => this.handleFormStateUpdate(state, root),
+                    rootSetState: (state: NodeState<any>, root: NodeAny) => this.handleFormStateUpdate(state, root),
                     rootState: {},
                 });
                 

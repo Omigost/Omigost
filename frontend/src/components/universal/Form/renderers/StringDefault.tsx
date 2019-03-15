@@ -4,20 +4,29 @@ import {
     NodeStringSchema,
     SchemaParserConfig,
     NodeSchema,
+    NodeHandler,
     NodeState,
     Node,
 } from "../schemaTypes";
 
-export default {
+type NodeS = {
+    value: string;
+};
+
+type NodeO = string;
+
+type NodeSelf = Node<NodeS, NodeO, NodeStringSchema>;
+
+const handler: NodeHandler<NodeS, NodeO, NodeStringSchema> = {
     resolveInitialState: () => {
         return {
             value: '',
         };
     },
-    getOutput: (schemaNode: NodeSchema, node: Node) => {
+    getOutput: (schemaNode: NodeSchema, node: NodeSelf) => {
         return node.state.value;
     },
-    render: (schemaNode: NodeSchema, node: Node) => {
+    render: (schemaNode: NodeSchema, node: NodeSelf) => {
         return (
             <div>
                 {schemaNode.title}
@@ -34,4 +43,6 @@ export default {
             </div>
         );
     },
-};
+}
+
+export default handler;

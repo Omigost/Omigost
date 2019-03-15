@@ -5,35 +5,41 @@ import {
     NodeType,
     NodeState,
     Node,
+    NodeAny,
     Schema,
+    NodeTypeNames,
     SchemaParserConfig,
     SchemaParserConfigOpt,
     NodeHandler,
+    NodeTypeSchemas,
     SchemaNodeHandlersMappingForType,
 } from "./schemaTypes";
 
 import { defaultParserConfig } from "./defaultParserConfig";
 
-export function recTransformSchemaIntoTree(node: NodeSchema, parentNode: Node, config: SchemaParserConfig): Node {
-    let handlersForType:  SchemaNodeHandlersMappingForType;
+function getHandlerForUI<M extends NodeSchema>(node: M, handlers: SchemaNodeHandlersMappingForType<M>): NodeHandler<any, any, M> {
+    if (node.ui) {
+        return handlers[node.ui];
+    }
+    return handlers.default;
+}
 
-    switch (node.type) {
+function getHandlerForType<M extends NodeSchema>(node: M, config: SchemaParserConfig): SchemaNodeHandlersMappingForType<NodeTypeSchemas[M['type']]> {
+    const t: NodeType = node.type; 
+    switch (t) {
         case NodeType.OBJECT:
-            handlersForType = config.handlers.OBJECT;
-            break;
+            return config.handlers.OBJECT;
         case NodeType.STRING:
-            handlersForType = config.handlers.STRING;
-            break;
-        default:
+            return config.handlers.STRING;
+        case NodeType.ROOT:
             return null;
     }
+    const never: never = t;
+    return never;
+}
 
-    let handler: NodeHandler = handlersForType.default;
-    if (node.ui) {
-        handler = handlersForType[node.ui];
-    }
-    
-    const astNode: Node = {
+function createNode<M extends NodeSchema>(node: M, parentNode: NodeAny, config: SchemaParserConfig, handler: NodeHandler<any, any, M>): Node<any, any, M> {
+    const astNode: Node<any, any, M> = {
         state: null,
         schemaNode: node,
         type: node.type,
@@ -48,7 +54,7 @@ export function recTransformSchemaIntoTree(node: NodeSchema, parentNode: Node, c
             return astNode.state;
         },
         render: () => handler.render(node, astNode, parentNode, config),
-        setState: (state: NodeState) => {
+        setState: (state: NodeState<any>) => {
             if (state) {
                 Object.assign(astNode, { state });
             }
@@ -74,7 +80,14 @@ export function recTransformSchemaIntoTree(node: NodeSchema, parentNode: Node, c
     return astNode;
 }
 
-export function transformSchemaIntoTree(node: NodeSchema, rootNode: Node = null, config: SchemaParserConfigOpt = null): Node {
+export function recTransformSchemaIntoTree<M extends NodeSchema>(node: M, parentNode: NodeAny, config: SchemaParserConfig): Node<any, any, M> {
+    return createNode(
+        node, parentNode, config,
+        getHandlerForUI(node, getHandlerForType(node, config))
+    );
+}
+
+export function transformSchemaIntoTree<M extends NodeSchema>(node: M, rootNode: NodeAny = null, config: SchemaParserConfigOpt = null): Node<any, any, M> {
     const conf = {...defaultParserConfig, ...config};
     
     if (!rootNode) {
@@ -97,7 +110,7 @@ export function transformSchemaIntoTree(node: NodeSchema, rootNode: Node = null,
                 console.log('ROOT RENDER!');
                 return rootNode.children.map(child => child.render());
             },
-            setState: (state: NodeState) => {
+            setState: (state: NodeState<any>) => {
                 if (state) {
                     Object.assign(rootNode, { state });
                 }
@@ -115,29 +128,3 @@ export function transformSchemaIntoTree(node: NodeSchema, rootNode: Node = null,
     recTransformSchemaIntoTree(node, rootNode, conf);
     return rootNode;
 }
-
-/*export function recTransformTreeIntoUI(node: NodeSchema, config: SchemaParserConfig): React.ReactNode {
-    let renderersForType: SchemaRenderersMappingForType;
-
-    switch (node.type) {
-        case NodeType.OBJECT:
-            renderersForType = config.renderers.OBJECT;
-            break;
-        case NodeType.STRING:
-            renderersForType = config.renderers.STRING;
-            break;
-        default:
-            return null;
-    }
-
-    let renderer: SchemaRenderer = renderersForType.default;
-    if (node.ui) {
-        renderer = renderersForType[node.ui];
-    }
-
-    return renderer.render(node, recTransformTreeIntoUI, config);
-}
-
-export function transformTreeIntoUI(schema: Schema, config: SchemaParserConfigOpt = null): React.ReactNode {
-    return recTransformTreeIntoUI(schema, {...defaultParserConfig, ...config});
-}*/
