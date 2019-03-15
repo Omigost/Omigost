@@ -38,15 +38,26 @@ export type NodeSchema = ValueOf<NodeTypeSchemas>;
 
 export type Schema = NodeObjectSchema;
 
-export interface NodeHandler<
+export abstract class NodeHandler<
   S, O, M extends NodeSchema,
   CS = any, CO = any, CM extends NodeSchema = any,
   PS = any, PO = any, PM extends NodeSchema = any
 > {
-    render: (schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig) => React.ReactNode;
-    resolveInitialState?: (schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolve: SchemaTreeResolver) => NodeState<S>;
-    resolveChildren?: (schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolve: SchemaTreeResolver) => Array<Node<CS, CO, CM>>;
-    getOutput?: (schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolve: SchemaTreeResolver) => NodeOutputValue<O>;
+    constructor() {}
+
+    abstract render(schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig): React.ReactNode;
+
+    resolveInitialState(schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolve: SchemaTreeResolver): NodeState<S> {
+        return null;
+    }
+
+    resolveChildren(schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolve: SchemaTreeResolver): Array<Node<CS, CO, CM>> {
+        return [];
+    }
+
+    getOutput(schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolve: SchemaTreeResolver): NodeOutputValue<O> {
+        return null;
+    }
 }
 
 export interface SchemaNodeHandlersMappingForType<M extends NodeSchema> {

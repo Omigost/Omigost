@@ -2,7 +2,7 @@ import * as React from "react";
 import styled  from "styled-components";
 
 import { transformSchemaIntoTree } from "./schemaParser";
-import { NodeType, Schema, NodeState, Node, NodeAny } from "./schemaTypes";
+import { NodeAny, NodeState, NodeType, Schema } from "./schemaTypes";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -13,30 +13,28 @@ export interface FormProps {
     theme?: any;
 }
 
-interface FormState { 
+interface FormState {
     tree: NodeAny;
 }
 
 export default class Form extends React.Component<FormProps, FormState> {
-    
+
     state: FormState;
-    
+
     constructor(props) {
         super(props);
-        
+
         this.state = {
             tree: null,
         };
     }
-    
+
     handleFormStateUpdate(state: NodeState<any>, root: NodeAny) {
-        console.error("SET FORM STATE!");
-        console.log(root.getOutput());
         this.setState({
             tree: root,
         });
     }
-    
+
     createTree() {
         const schema: Schema = {
             title: "A registration form",
@@ -53,34 +51,31 @@ export default class Form extends React.Component<FormProps, FormState> {
                 },
             },
         };
-        
+
         if (!this.state.tree) {
             setTimeout(() => {
                 const tree = transformSchemaIntoTree(schema, null, {
                     rootSetState: (state: NodeState<any>, root: NodeAny) => this.handleFormStateUpdate(state, root),
                     rootState: {},
                 });
-                
-                console.error("SET FORM TREE!");
-                console.log(tree);
-                
+
                 this.setState({
-                    tree
+                    tree,
                 });
             }, 0);
         }
     }
-    
+
     componentDidMount() {
         this.createTree();
     }
-    
+
     render() {
         this.createTree();
-        
+
         return (
             <Wrapper>
-                {(this.state.tree)?(this.state.tree.render()):(null)}
+                {(this.state.tree) ? (this.state.tree.render()) :(null)}
             </Wrapper>
         );
     }
