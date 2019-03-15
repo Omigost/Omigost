@@ -2,7 +2,7 @@ import * as React from "react";
 import styled  from "styled-components";
 
 import { transformSchemaIntoTree } from "./schemaParser";
-import { NodeAny, NodeState, NodeType, Schema } from "./schemaTypes";
+import { NodeAny, RootNode, NodeState, NodeType, Schema } from "./schemaTypes";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -14,7 +14,7 @@ export interface FormProps {
 }
 
 interface FormState {
-    tree: NodeAny;
+    tree: RootNode;
 }
 
 export default class Form extends React.Component<FormProps, FormState> {
@@ -29,7 +29,16 @@ export default class Form extends React.Component<FormProps, FormState> {
         };
     }
 
-    handleFormStateUpdate(state: NodeState<any>, root: NodeAny) {
+    componentWillUpdate() {
+        /*setTimeout(() => {
+            if(this.state.tree) this.state.tree.validate();
+        }, 3000);*/
+    }
+    
+    handleFormStateUpdate(state: NodeState<any>, root: RootNode) {
+        console.error("TREE HERE!");
+        console.log(root.getOutput());
+        
         this.setState({
             tree: root,
         });
@@ -44,6 +53,7 @@ export default class Form extends React.Component<FormProps, FormState> {
                 "firstName": {
                     type: NodeType.STRING,
                     title: "Your first name",
+                    minLength: 1,
                 },
                 "lastName": {
                     type: NodeType.STRING,
@@ -55,10 +65,10 @@ export default class Form extends React.Component<FormProps, FormState> {
         if (!this.state.tree) {
             setTimeout(() => {
                 const tree = transformSchemaIntoTree(schema, null, {
-                    rootSetState: (state: NodeState<any>, root: NodeAny) => this.handleFormStateUpdate(state, root),
+                    rootSetState: (state: NodeState<any>, root: RootNode) => this.handleFormStateUpdate(state, root),
                     rootState: {},
                 });
-
+                
                 this.setState({
                     tree,
                 });

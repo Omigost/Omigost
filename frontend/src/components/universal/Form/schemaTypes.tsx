@@ -14,10 +14,11 @@ export interface NodeTypeSchemas {
     ROOT: any;
 }
 
-export interface NodeBaseSchema {
+export type NodeBaseSchema = {
     title?: string;
     description?: string;
     ui?: string;
+    [key: string]: any;
 }
 
 export interface NodeProperties {
@@ -58,6 +59,10 @@ export abstract class NodeHandler<
     getOutput(schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolve: SchemaTreeResolver): NodeOutputValue<O> {
         return null;
     }
+    
+    setErrors(errors: Array<NodeError>, schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolve: SchemaTreeResolver): void {
+        
+    }
 }
 
 export interface SchemaNodeHandlersMappingForType<M extends NodeSchema> {
@@ -73,7 +78,7 @@ export type SchemaNodeHandlersMapping = {
 export interface SchemaParserConfig {
     handlers: SchemaNodeHandlersMapping;
     rootState: NodeState<any>;
-    rootSetState?: (state: NodeState<any>, root: NodeAny) => void;
+    rootSetState?: (state: NodeState<any>, root: RootNode) => void;
 }
 
 export interface SchemaParserConfigOpt {
@@ -85,6 +90,11 @@ export interface SchemaParserConfigOpt {
 export type NodeState<S> = S;
 
 export type NodeOutputValue<O> = O;
+
+export type NodeMetaOutputValue<O> = {
+    __data: NodeOutputValue<O>;
+    __source: NodeAny;
+};
 
 export type NodeAny = Node<any, any, any>;
 
@@ -105,7 +115,20 @@ export interface Node<
     children: Array<Node<CS, CO, CM>>;
     handler: NodeHandler<S, O, M, CS, CO, CM, PS, PO, PM>;
     render: () => React.ReactNode;
-    getOutput: () => NodeOutputValue<O>;
+    getOutput: () => NodeMetaOutputValue<O>;
     setState: (state: NodeState<S>) => void;
+    setErrors: (errors: Array<NodeError>) => void;
     findChild: (tag: string) => Node<CS, CO, CM>;
 }
+
+export interface RootNode extends Node<any, any, NodeSchema> {
+    validate: () => void;
+    getData: () => any;
+}
+
+export interface NodeError {
+    keyword: string;
+    message?: string;
+    params: any;
+    schemaPath: string;
+}    
