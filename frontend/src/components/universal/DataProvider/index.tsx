@@ -13,6 +13,34 @@ export interface ColumnSpecs {
     field?: string;
 }
 
+export enum DataTargetInput {
+    Parse = "input:parse",
+    Axis = "input:axis",
+    Cursor = "input:cursor",
+    Cell = "input:cell",
+}
+
+export enum DataTargetOutput {
+    Parse = "output:parse",
+    Axis = "output:axis",
+    Cursor = "output:cursor",
+    Cell = "output:cell",
+}
+
+export function isDataTargetInput(target: DataTarget): boolean {
+    switch (target) {
+        case DataTargetInput.Parse:
+        case DataTargetInput.Cursor:
+        case DataTargetInput.Axis:
+        case DataTargetInput.Cell:
+            return true;
+    }
+
+    return false;
+}
+
+export type DataTarget = DataTargetInput | DataTargetOutput;
+
 export type RowSpecs = any;
 
 export interface DataFormat {
@@ -49,6 +77,8 @@ export interface DataFormatOptions {
     formatOutputAxis?: (point: DataPoint, options: DataFormatOptions) => any;
     formatInputCursor?: (point: DataPoint, options: DataFormatOptions) => any;
     formatOutputCursor?: (point: DataPoint, options: DataFormatOptions) => any;
+    formatInputCell?: (point: DataPoint, options: DataFormatOptions) => any;
+    formatOutputCell?: (point: DataPoint, options: DataFormatOptions) => any;
 }
 
 export function getInputColumn(data: DataFormat, options: DataFormatOptions = {}) {
@@ -88,7 +118,7 @@ export const addPrePostfixFormatCursor = (typeOptions, data: DataFormat, options
     );
 };
 
-export function getFormatDefaults(type: string, point: DataPoint, data: DataFormat, options: DataFormatOptions = {}): DataFormatOptions {
+export function getFormatDefaults(type: DataTarget, point: DataPoint, data: DataFormat, options: DataFormatOptions = {}): DataFormatOptions {
 
     let presetOverrideOptions = {};
     options = {...options};
@@ -117,13 +147,19 @@ export function getFormatDefaults(type: string, point: DataPoint, data: DataForm
         };
     }
 
-    if (options.input && options.input.type && type.indexOf("input:") === 0) {
+    if (options.input && options.input.type && isDataTargetInput(type)) {
         const preset = DATA_TYPE_PRESETS[options.input.type];
+        if (!preset) {
+            throw `DataProvider: Could not find preset for type "${options.input.type}"`;
+        }
         presetOverrideOptions = {...presetOverrideOptions, ...preset(options.input, type, point, options)};
     }
 
-    if (options.output && options.output.type && type.indexOf("output:") === 0) {
+    if (options.output && options.output.type && !isDataTargetInput(type)) {
         const preset = DATA_TYPE_PRESETS[options.output.type];
+        if (!preset) {
+            throw `DataProvider: Could not find preset for type "${options.output.type}"`;
+        }
         presetOverrideOptions = {...presetOverrideOptions, ...preset(options.output, type, point, options)};
     }
 
@@ -134,39 +170,49 @@ export function getFormatDefaults(type: string, point: DataPoint, data: DataForm
            formatOutputAxis: (point, options) => ("" + point.value),
            formatInputCursor: (point, options) => ("" + point.value),
            formatOutputCursor: (point, options) => ("" + point.value),
+           formatInputCell: (point, options) => ("" + point.value),
+           formatOutputCell: (point, options) => ("" + point.value),
         ...presetOverrideOptions,
         ...options,
      };
 }
 
-export function formatData(type: string, point: DataPoint, data: DataFormat, options: DataFormatOptions = {}): FormatedDataPoint {
+export function formatData(type: DataTarget, point: DataPoint, data: DataFormat, options: DataFormatOptions = {}): FormatedDataPoint {
 
     options = getFormatDefaults(type, point, data, options);
 
     switch (type) {
-        case "input:parse":
+        case DataTargetInput.Parse:
             return {
                 value: options.parseInputData(point, options),
             };
-        case "output:parse":
+        case DataTargetOutput.Parse:
             return {
                 value: options.parseOutputData(point, options),
             };
-        case "input:axis":
+        case DataTargetInput.Axis:
             return {
                 value: options.formatInputAxis(point, options),
             };
-        case "output:axis":
+        case DataTargetOutput.Axis:
             return {
                 value: options.formatOutputAxis(point, options),
             };
-        case "input:cursor":
+        case DataTargetInput.Cursor:
             return {
                 value: options.formatInputCursor(point, options),
             };
-        case "output:cursor":
+        case DataTargetOutput.Cursor:
             return {
                 value: options.formatOutputCursor(point, options),
+            };
+        case DataTargetInput.Cell:
+            return {
+                value: options.formatInputCell(point, options),
+            };
+        case DataTargetOutput.Cell:
+            return {
+                value: options.formatOutputCell(point, options),
             };
     }
 
@@ -175,7 +221,7 @@ export function formatData(type: string, point: DataPoint, data: DataFormat, opt
    };
 }
 
-export function applyDataFormaters(data: DataFormat, options: DataFormatOptions = {}, type: string = "parse"): DataFormat {
+export function applyDataFormaters(data: DataFormat, options: DataFormatOptions = {}): DataFormat {
    let filteredColumns = null;
    if (typeof options.output === "string") {
        filteredColumns = [ options.output ];
@@ -194,12 +240,12 @@ export function applyDataFormaters(data: DataFormat, options: DataFormatOptions 
         rows: data.rows.map((row) => {
             const formattedRow = {};
 
-            formattedRow[inputColumn] = formatData("input:" + type, {
+            formattedRow[inputColumn] = formatData(DataTargetInput.Parse, {
                 value: row[inputColumn],
             }, data, options).value;
 
             filteredColumns.forEach((column) => {
-                formattedRow[column] = formatData("output:" + type, {
+                formattedRow[column] = formatData(DataTargetOutput.Parse, {
                     value: row[column],
                 }, data, options).value;
             });
