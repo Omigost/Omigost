@@ -1,14 +1,12 @@
 import * as React from "react";
 
 import {
+    FormContext,
     Node,
     NodeAny,
-    NodeHandler,
     NodeOutputValue,
     NodeSchema,
     NodeState,
-    SchemaParserConfig,
-    SchemaTreeResolver,
 } from "./schemaTypes";
 
 export type NodeS = {
@@ -23,58 +21,55 @@ export type ChildrenMap<T> = {
     [key: string]: T;
 };
 
-export abstract class CompositeNodeHandler<O, M extends NodeSchema> extends NodeHandler<NodeS, O, M> {
+export abstract class CompositeNode<O, M extends NodeSchema> extends Node<NodeS, O, M> {
 
-    abstract getChildrenMapFromSchema(schemaNode: M): ChildrenMap<NodeSchema>;
+    abstract getChildrenMapFromSchema(): ChildrenMap<NodeSchema>;
 
-    abstract getCompositeOutput(output: NodeO, schemaNode: M, node: Node<NodeS, O, M>): NodeOutputValue<O>;
+    abstract getCompositeOutput(output: NodeO): NodeOutputValue<O>;
 
-    renderComposite(children: ChildrenMap<React.ReactNode>, schemaNode: M, node: Node<NodeS, O, M>, parentNode: NodeAny, config: SchemaParserConfig) {
+    renderComposite(context: FormContext, children: ChildrenMap<React.ReactNode>): React.ReactNode {
         return Object.values(children);
     }
 
-    resolveInitialState(schemaNode: M) {
+    resolveInitialState() {
         const initialState = {};
-        Object.keys(this.getChildrenMapFromSchema(schemaNode)).forEach(key => {
+        Object.keys(this.getChildrenMapFromSchema()).forEach(key => {
             initialState[key] = null;
         });
         return initialState;
     }
 
-    getOutput(schemaNode: M, node: Node<NodeS, O, M>) {
+    getRawOutput() {
         const output = {};
-        Object.keys(this.getChildrenMapFromSchema(schemaNode)).forEach(key => {
-            output[key] = node.findChild(key).getOutput();
+        Object.keys(this.getChildrenMapFromSchema()).forEach(key => {
+            output[key] = this.findChild(key).getOutput();
         });
-        return this.getCompositeOutput(output, schemaNode, node);
+        return this.getCompositeOutput(output);
     }
 
-    resolveChildren(schemaNode: M, node: Node<NodeS, O, M>, parentNode: NodeAny, config: SchemaParserConfig, resolve: SchemaTreeResolver) {
-        const childrenMap: ChildrenMap<NodeSchema> = this.getChildrenMapFromSchema(schemaNode);
+    onChildStateChanged(state: NodeState<any>, source: NodeAny, originalSource?: NodeAny) {
+        this.setState({
+            [source.getTag()]: state,
+        });
+    }
+
+    resolveChildren() {
+        const childrenMap: ChildrenMap<NodeSchema> = this.getChildrenMapFromSchema();
 
         return Object.keys(childrenMap).map(key => {
-            return {
-                ...resolve(childrenMap[key], {
-                    ...node,
-                    setState: (state: NodeState<any>) => {
-                        node.setState({
-                            ...node.state,
-                            [key]: state,
-                        });
-                    },
-                }, config),
-                tag: key,
-            };
+            const child = this.resolveNode(childrenMap[key], this, this.getConfig());
+            child.setTag(key);
+            return child;
         });
     }
 
-    render(schemaNode: M, node: Node<NodeS, O, M>, parentNode: NodeAny, config: SchemaParserConfig) {
+    render(context: FormContext): React.ReactNode {
         const childrenMap: ChildrenMap<React.ReactNode> = {};
 
-        Object.keys(this.getChildrenMapFromSchema(schemaNode)).forEach((key: string, index: number) => {
-            childrenMap[key] = node.findChild(key).render();
+        Object.keys(this.getChildrenMapFromSchema()).forEach((key: string, index: number) => {
+            childrenMap[key] = this.findChild(key).render(context);
         });
 
-        return this.renderComposite(childrenMap, schemaNode, node, parentNode, config);
+        return this.renderComposite(context, childrenMap);
     }
 }

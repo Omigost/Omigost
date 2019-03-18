@@ -1,4 +1,4 @@
-import { NodeAny, NodeState, SchemaParserConfig } from "./schemaTypes";
+import { SchemaParserConfig } from "./schemaTypes";
 
 import ObjectDefault from "./renderers/ObjectDefault";
 import StringDefault from "./renderers/StringDefault";
@@ -9,12 +9,22 @@ export const defaultParserConfig: SchemaParserConfig = {
             default: null,
         },
         STRING: {
-            default: new StringDefault(),
+            default: StringDefault,
         },
         OBJECT: {
-            default: new ObjectDefault(),
+            default: ObjectDefault,
         },
     },
     rootState: null,
-    rootSetState: (state: NodeState<any>, root: NodeAny) => {},
+    rootSetState: () => {},
+    rootSetContext: () => {},
+    rootModifyContext: () => {},
+    uidGenerator: null,
+    uidGeneratorFactory: () => {
+        let uid = 0;
+        return () => {
+            ++uid;
+            return uid;
+        };
+    },
 };

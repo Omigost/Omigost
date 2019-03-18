@@ -19,7 +19,7 @@ export type NodeBaseSchema = {
     description?: string;
     ui?: string;
     [key: string]: any;
-}
+};
 
 export interface NodeProperties {
     [key: string]: NodeSchema;
@@ -39,31 +39,243 @@ export type NodeSchema = ValueOf<NodeTypeSchemas>;
 
 export type Schema = NodeObjectSchema;
 
-export abstract class NodeHandler<
+export abstract class Node<
   S, O, M extends NodeSchema,
   CS = any, CO = any, CM extends NodeSchema = any,
   PS = any, PO = any, PM extends NodeSchema = any
 > {
-    constructor() {}
+    private uid: number;
+    private schemaNode: M;
+    private parentNode: Node<PS, PO, PM>;
+    private config: SchemaParserConfig;
+    private type: NodeType;
+    private resolver: SchemaTreeResolver;
+    private state: NodeState<S> = null;
+    private tag: string = null;
+    private children: Array<Node<CS, CO, CM>>;
+    private handler: NodeHandler<S, O, M, CS, CO, CM, PS, PO, PM>;
 
-    abstract render(schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig): React.ReactNode;
+    constructor(handler: NodeHandler<S, O, M, CS, CO, CM, PS, PO, PM>, type: NodeType, schemaNode: M, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolver: SchemaTreeResolver) {
+        this.schemaNode = schemaNode;
+        this.config = config;
+        this.resolver = resolver;
+        this.children = [];
+        this.type = type;
+        this.parentNode = parentNode;
+        this.uid = config.uidGenerator();
+    }
 
-    resolveInitialState(schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolve: SchemaTreeResolver): NodeState<S> {
+    getHandler(): NodeHandler<S, O, M, CS, CO, CM, PS, PO, PM> {
+        return this.handler;
+    }
+
+    validateCustom(): Array<NodeError> {
+        if (this.children.length === 0) {
+            return [];
+        } else {
+            let result = [];
+            this.children.forEach(child => {
+                result = result.concat(child.validateCustom());
+            });
+            return result;
+        }
+    }
+
+    getDebugRepresentation(): string {
+        let output = "";
+        const indent = 4;
+        const indentStr = " ";
+
+        output += (this.type.toString());
+        if (this.tag) {
+            output += `[${this.tag}]`;
+        }
+        if (this.children.length > 0) {
+            output += " {\n";
+            this.children.map(child => {
+                const childText = child.getDebugRepresentation();
+                output += "  > ";
+                output += childText.split("\n").map((line, index) => {
+                    if (index === 0) {
+                        return line;
+                    }
+                    return indentStr.repeat(indent) + line;
+                }).join("\n");
+                output += "\n";
+            });
+            output += "}";
+        }
+
+        return output;
+    }
+
+    getUID() {
+        return this.uid;
+    }
+
+    onResolveFinished() {
+        // No nothing
+    }
+
+    modifyContext(fn: (context: FormContext) => FormContext) {
+        this.config.rootModifyContext(fn, this);
+    }
+
+    setContext(context: FormContext) {
+        this.config.rootSetContext(context, this);
+    }
+
+    resolve() {
+        this.state = this.resolveInitialState() || null;
+        this.children = this.resolveChildren() || [];
+        this.onResolveFinished();
+    }
+
+    addChild(child: Node<CS, CO, CM>) {
+        this.children.push(child);
+    }
+
+    getChildren() {
+        return this.children;
+    }
+
+    resolveNode(node: any, parentNode: NodeAny, config: SchemaParserConfig): NodeAny {
+        return this.resolver(node, parentNode, config);
+    }
+
+    getConfig(): SchemaParserConfig {
+        return this.config;
+    }
+
+    getSchema(): M {
+        return this.schemaNode;
+    }
+
+    getState(): NodeState<S> {
+        return this.state;
+    }
+
+    getTag(): string {
+        return this.tag;
+    }
+
+    setTag(tag: string) {
+        this.tag = tag;
+    }
+
+    setParent(parentNode: Node<PS, PO, PM>) {
+        this.parentNode = parentNode;
+    }
+
+    abstract render(context: FormContext): React.ReactNode;
+
+    getRawOutput(): NodeOutputValue<O> {
         return null;
     }
 
-    resolveChildren(schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolve: SchemaTreeResolver): Array<Node<CS, CO, CM>> {
+    onChildStateChanged(state: NodeState<CS>, source: NodeAny, originalSource?: NodeAny) {
+        // Do nothing
+    }
+
+    setStateSilently(state: NodeState<S>, source?: NodeAny, originalSource?: NodeAny): void {
+        if (state) {
+            Object.assign(this.state, { ...this.state, ...state });
+        }
+    }
+
+    setState(state: NodeState<S>, source?: NodeAny, originalSource?: NodeAny): void {
+        this.setStateSilently(state, source, originalSource);
+        this.parentNode.onChildStateChanged(this.state, this, originalSource);
+    }
+
+    findChild(tag: string): Node<CS, CO, CM> {
+        return this.children.filter(child => child.tag === tag)[0];
+    }
+
+    resolveInitialState(): NodeState<S> {
+        return null;
+    }
+
+    resolveChildren(): Array<Node<CS, CO, CM>> {
         return [];
     }
 
-    getOutput(schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolve: SchemaTreeResolver): NodeOutputValue<O> {
-        return null;
-    }
-    
-    setErrors(errors: Array<NodeError>, schemaNode: M, node: Node<S, O, M>, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolve: SchemaTreeResolver): void {
-        
+    getOutput(): NodeMetaOutputValue<O> {
+        return {
+            __data: this.getRawOutput(),
+            __source: this,
+        };
     }
 }
+
+export class RootNode extends Node<any, any, NodeSchema> {
+
+    private dataTransformer: (output: any) => any;
+    private validator: (root: RootNode) => any;
+
+    constructor(schemaNode: NodeSchema, config: SchemaParserConfig, resolve: SchemaTreeResolver, dataTransformer: (output: any) => any, validator: (root: RootNode) => any) {
+        super(null, NodeType.ROOT, schemaNode, null, config, resolve);
+        this.dataTransformer = dataTransformer;
+        this.validator = validator;
+    }
+
+    resolveInitialState() {
+        return {};
+    }
+
+    validate() {
+        this.validator(this);
+    }
+
+    getOutput() {
+        if (this.getChildren().length === 0) {
+            return {
+                __data: null,
+                __source: this,
+            };
+        } else if (this.getChildren().length === 1) {
+            return {
+                __data: this.getChildren()[0].getOutput(),
+                __source: this,
+            };
+        } else {
+            return {
+                __data: this.getChildren().map(child => child.getOutput()),
+                __source: this,
+            };
+        }
+    }
+
+    getData() {
+        return this.dataTransformer(this.getOutput());
+    }
+
+    render(context: FormContext) {
+        return this.getChildren().map(child => child.render(context));
+    }
+
+    getTag(): string {
+        return "root";
+    }
+
+    // FIXME: ROOT
+    onChildStateChanged(state: NodeState<any>, source: NodeAny, originalSource?: NodeAny) {
+        this.setState(state);
+    }
+
+    setState(state: NodeState<any>, source?: NodeAny, originalSource?: NodeAny): void {
+        this.setStateSilently(state, source, originalSource);
+        this.getConfig().rootSetState(this.getState(), this, originalSource);
+    }
+}
+
+export type NodeHandler<
+  S, O, M extends NodeSchema,
+  CS = any, CO = any, CM extends NodeSchema = any,
+  PS = any, PO = any, PM extends NodeSchema = any
+> = {
+   new(handler: NodeHandler<S, O, M, CS, CO, CM, PS, PO, PM>, type: NodeType, schemaNode: M, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig, resolver: SchemaTreeResolver): Node<S, O, M, CS, CO, CM, PS, PO, PM>;
+};
 
 export interface SchemaNodeHandlersMappingForType<M extends NodeSchema> {
     [key: string]: NodeHandler<any, any, M>;
@@ -75,16 +287,31 @@ export type SchemaNodeHandlersMapping = {
     [key in NodeTypeNames]: SchemaNodeHandlersMappingForType<NodeTypeSchemas[key]>;
 };
 
+export interface FormContext {
+    errors?: Array<NodeError>;
+    getErrorsForNode?: (node: NodeAny) => Array<NodeError>;
+}
+
 export interface SchemaParserConfig {
     handlers: SchemaNodeHandlersMapping;
     rootState: NodeState<any>;
-    rootSetState?: (state: NodeState<any>, root: RootNode) => void;
+    rootSetState: (state: NodeState<any>, root: RootNode, originalSource?: NodeAny) => void;
+    rootSetContext: (context: FormContext, source: NodeAny) => void;
+    rootModifyContext: (fn: (context: FormContext) => FormContext, source: NodeAny) => void;
+    uidGenerator: () => number;
+    uidGeneratorFactory: () => () => number;
+    ajvOptions?: any;
 }
 
 export interface SchemaParserConfigOpt {
     handlers?: SchemaNodeHandlersMapping;
     rootState?: NodeState<any>;
-    rootSetState?: (state: NodeState<any>, root: NodeAny) => void;
+    rootSetState?: (state: NodeState<any>, root: NodeAny, originalSource?: NodeAny) => void;
+    rootSetContext?: (context: FormContext, source: NodeAny) => void;
+    rootModifyContext?: (fn: (context: FormContext) => FormContext, source: NodeAny) => void;
+    uidGenerator?: () => number;
+    uidGeneratorFactory?: () => () => number;
+    ajvOptions?: any;
 }
 
 export type NodeState<S> = S;
@@ -103,32 +330,21 @@ export type SchemaTreeResolver<
   PS = any, PO = any, PM extends NodeSchema = any
 > = (node: M, parentNode: Node<PS, PO, PM>, config: SchemaParserConfig) => Node<any, any, M>;
 
-export interface Node<
- S, O, M extends NodeSchema,
- CS = any, CO = any, CM extends NodeSchema = any,
- PS = any, PO = any, PM extends NodeSchema = any
-> {
-    state: NodeState<S>;
-    tag?: string;
-    type: NodeType;
-    schemaNode: M;
-    children: Array<Node<CS, CO, CM>>;
-    handler: NodeHandler<S, O, M, CS, CO, CM, PS, PO, PM>;
-    render: () => React.ReactNode;
-    getOutput: () => NodeMetaOutputValue<O>;
-    setState: (state: NodeState<S>) => void;
-    setErrors: (errors: Array<NodeError>) => void;
-    findChild: (tag: string) => Node<CS, CO, CM>;
+export function isNodeErrorPure(error: NodeError): error is NodeErrorPure {
+    return (error as NodeErrorPure).source !== undefined;
 }
 
-export interface RootNode extends Node<any, any, NodeSchema> {
-    validate: () => void;
-    getData: () => any;
-}
-
-export interface NodeError {
+interface NodeErrorAjv {
     keyword: string;
     message?: string;
     params: any;
     schemaPath: string;
-}    
+    dataPath: string;
+}
+
+interface NodeErrorPure {
+    message: string;
+    source: NodeAny;
+}
+
+export type NodeError = NodeErrorAjv | NodeErrorPure;

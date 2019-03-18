@@ -1,35 +1,35 @@
 import * as React from "react";
 
-import { SimpleNodeHandler } from "../simpleNodes";
+import { SimpleNode } from "../simpleNodes";
 
 import {
-    NodeAny,
-    NodeSchema,
+    FormContext,
     NodeStringSchema,
 } from "../schemaTypes";
 
-export default class StringDefault extends SimpleNodeHandler<string, NodeStringSchema> {
+export default class StringDefault extends SimpleNode<string, NodeStringSchema> {
     getInitialValue() {
         return "";
     }
-    
-    renderSimple(schemaNode: NodeSchema, value: string, node: NodeAny) {
+
+    renderSimple(value: string, context: FormContext) {
         return (
             <div>
-                {schemaNode.title}
-                {schemaNode.description}
-                {node.state.errors.map(error => {
-                    return (
-                        <div>
-                            Error:
-                            {error.message}
-                        </div>
-                    );
-                })}
+                <span>
+                    {context.getErrorsForNode(this).map(err => {
+                        return (
+                            <div>
+                                -> {err.message}
+                            </div>
+                        );
+                    })}
+                </span>
+                {this.getSchema().title}
+                {this.getSchema().description}
                 <input
                     value={value}
                     onChange={(event) => {
-                        node.setState({
+                        this.setState({
                             value: event.target.value || "",
                         });
                     }}
