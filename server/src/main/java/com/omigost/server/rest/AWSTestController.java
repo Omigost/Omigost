@@ -23,7 +23,6 @@ import java.util.List;
 
 @RestController
 public class AWSTestController {
-
     @Autowired
     private OrganizationService organization;
 
