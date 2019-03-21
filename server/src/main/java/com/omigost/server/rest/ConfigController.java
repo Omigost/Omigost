@@ -113,7 +113,6 @@ public class ConfigController {
 
     @GetMapping("/accounts")
     public List<com.amazonaws.services.organizations.model.Account> getAccounts() {
-        organizationService.fetchAccounts();
         return organizationService.fetchAccounts();
     }
 }
