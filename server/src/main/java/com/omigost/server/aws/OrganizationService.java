@@ -20,7 +20,6 @@ public class OrganizationService {
     private String region;
     @Autowired
     private AWSCredentialsProvider credentialsProvider;
-
     private AWSOrganizations orgClient;
 
 
