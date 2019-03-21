@@ -6,7 +6,6 @@ import com.amazonaws.services.organizations.AWSOrganizationsClientBuilder;
 import com.amazonaws.services.organizations.model.Account;
 import com.amazonaws.services.organizations.model.ListAccountsRequest;
 import com.amazonaws.services.organizations.model.ListAccountsResult;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -39,5 +38,15 @@ public class OrganizationService {
         ListAccountsRequest request = new ListAccountsRequest();
         ListAccountsResult result = orgClient.listAccounts(request);
         return result.getAccounts();
+    }
+
+    public boolean doesAccountExist(String accountName) {
+        for (com.amazonaws.services.organizations.model.Account acc : fetchAccounts()) {
+            if (acc.getName().equals(accountName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

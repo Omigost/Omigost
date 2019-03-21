@@ -9,7 +9,9 @@ import com.omigost.server.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class MainNotificationService {
@@ -22,11 +24,11 @@ public class MainNotificationService {
         List<String> linkedAccounts = budget.getCostFilters().get(BudgetDecorator.LINKED_ACCOUNT_FILTER);
 
         for (String linkedAccount : linkedAccounts) {
-            users.addAll(accountRepository.getAccountByName(linkedAccount).users);
+            users.addAll(accountRepository.getAccountByName(linkedAccount).getUsers());
         }
 
         for (User user : users) {
-            result.addAll(user.communications);
+            result.addAll(user.getCommunications());
         }
 
         return result;

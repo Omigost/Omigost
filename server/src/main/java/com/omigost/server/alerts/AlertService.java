@@ -1,6 +1,7 @@
 package com.omigost.server.alerts;
 
 import com.amazonaws.services.budgets.model.Budget;
+import com.omigost.server.exception.AccessForbiddenException;
 import com.omigost.server.model.Alert;
 import com.omigost.server.model.AlertResponseToken;
 import com.omigost.server.model.Communication;
@@ -8,7 +9,6 @@ import com.omigost.server.notification.MainNotificationService;
 import com.omigost.server.notification.NotificationMessage;
 import com.omigost.server.repository.AlertRepository;
 import com.omigost.server.repository.AlertResponseTokenRepository;
-import com.omigost.server.exception.AccessForbiddenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +48,7 @@ public class AlertService {
     }
 
     public AlertResponseToken invalidateResponseToken(String tokenString) throws AccessForbiddenException {
-        Optional<AlertResponseToken> maybeToken = tokenRepo.findAlertResponseTokenBy(tokenString);
+        Optional<AlertResponseToken> maybeToken = tokenRepo.findAlertResponseTokenByToken(tokenString);
         if (!maybeToken.isPresent()) throw new AccessForbiddenException("Alert Response Token is not valid");
         AlertResponseToken token = maybeToken.get();
         token.invalidate();

@@ -4,29 +4,20 @@ import com.omigost.server.repository.AlertResponseTokenRepository;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Random;
+import java.util.UUID;
 
 @Data
 @Entity
-@Component
 @EqualsAndHashCode
 public class AlertResponseToken {
-    static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
-    static final String NUMBERS = "0123456789";
-
-    static final Integer TOKEN_LENGTH = 12;
-    static final char[] ALLOWED_TOKEN_CHARACTERS = (ALPHABET.toLowerCase() + ALPHABET.toUpperCase() + NUMBERS).toCharArray();
-
     static final String ACTIVE_STATUS = "active";
     static final String USED_STATUS = "used";
 
-    static Random random = new Random();
-
     @Autowired
+    @Transient
     AlertResponseTokenRepository tokens;
 
     @Id
@@ -45,20 +36,15 @@ public class AlertResponseToken {
     }
 
     public AlertResponseToken() {
-        do {
-            token = getRandomString();
-        } while (tokens.findAlertResponseTokenBy(token).isPresent());
+        this.token = UUID.randomUUID().toString();
+    }
+
+    public AlertResponseToken(String token, String status) {
+        this.token = token;
+        this.status = status;
     }
 
     public void invalidate() {
         status = USED_STATUS;
-    }
-
-    private String getRandomString() {
-        StringBuilder randomString = new StringBuilder();
-        for (int i = 0; i < TOKEN_LENGTH; ++i) {
-            randomString.append(ALLOWED_TOKEN_CHARACTERS[random.nextInt(ALLOWED_TOKEN_CHARACTERS.length)]);
-        }
-        return randomString.toString();
     }
 }
