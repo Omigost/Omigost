@@ -41,15 +41,12 @@ public class OrganizationService {
     }
 
     public boolean doesAccountExist(String accountName) {
-        fetchAccounts();
-
-        boolean accountExists = false;
         for (com.amazonaws.services.organizations.model.Account acc : fetchAccounts()) {
             if (acc.getName().equals(accountName)) {
-                accountExists = true;
+                return true;
             }
         }
 
-        return accountExists;
+        return false;
     }
 }

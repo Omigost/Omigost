@@ -1,6 +1,5 @@
 package com.omigost.server.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,7 +20,7 @@ public class User {
     String name;
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<Communication> communications = new HashSet<>();
 
     @EqualsAndHashCode.Exclude

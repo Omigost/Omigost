@@ -3,8 +3,6 @@ package com.omigost.server.rest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omigost.server.notification.NotificationMessage;
-import com.omigost.server.notification.NotificationMessageAction;
-import com.omigost.server.notification.slack.SlackMessage;
 import com.omigost.server.notification.slack.SlackMessageAction;
 import com.omigost.server.notification.slack.SlackService;
 import org.springframework.beans.factory.annotation.Autowired;

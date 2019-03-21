@@ -28,12 +28,12 @@ public class ConfigController {
         this.organizationService = os;
     }
 
-    @PutMapping("/user")
+    @PostMapping("/user")
     public void addUser(@RequestParam String name) {
         userRepository.save(new User(name));
     }
 
-    @PostMapping("addCommunicationToUser")
+    @PostMapping("/addCommunicationToUser")
     @Transactional
     public void addCommunicationToUser(@RequestParam String userName, @RequestParam String communicationName,
                                        @RequestParam String communicationValue) {
@@ -89,6 +89,7 @@ public class ConfigController {
         user.getAccounts().remove(account);
         account.getUsers().remove(user);
         userRepository.save(user);
+        accountRepository.save(account);
     }
 
     @DeleteMapping("/deleteUserCommunication")
