@@ -4,6 +4,7 @@ import com.amazonaws.services.budgets.model.Budget;
 import lombok.experimental.Delegate;
 import org.springframework.util.MultiValueMap;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,12 @@ public class BudgetDecorator extends Budget {
 
     public List<String> getTagsFilter() {
         return getCostFilters().get(TAG_FILTER);
+    }
+
+    public Boolean isOverrun() {
+        BigDecimal actualSpend = getCalculatedSpend().getActualSpend().getAmount();
+        BigDecimal budgetLimit = getBudgetLimit().getAmount();
+        return budgetLimit.compareTo(actualSpend) < 0;
     }
 
     public BudgetDecorator setTagsFilter(MultiValueMap<String, String> tagsFilter) {

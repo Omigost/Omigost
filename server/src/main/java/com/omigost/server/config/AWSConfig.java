@@ -30,6 +30,7 @@ public class AWSConfig {
         }
 
         @Override
-        public void refresh() {}
+        public void refresh() {
+        }
     }
 }
