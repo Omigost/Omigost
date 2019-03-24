@@ -308,7 +308,7 @@ export function formatData(type: DataTarget, point: DataPoint, data: DataFormat,
 
 export function resolveData(dataToResolve: DataFormat): DataFormat {
     let data = deepCopy(dataToResolve);
-    
+
     data.columns.forEach(column => {
         if (column.generator) {
            data.rows = data.rows.map(row => ({
@@ -317,14 +317,14 @@ export function resolveData(dataToResolve: DataFormat): DataFormat {
            }));
         }
     });
-    
-    if(data.filters) {
+
+    if (data.filters) {
         Object.keys(data.filters).forEach(key => {
             const filterFn = data.filters[key];
             data = filterFn(data);
         });
     }
-    
+
     return data;
 }
 

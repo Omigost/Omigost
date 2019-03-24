@@ -13,30 +13,30 @@ export interface DataFilterProps {
 }
 
 class DataFilter extends React.Component<DataFilterProps, undefined> {
-    
+
     updateFilter(filter?: FilterSpecs) {
-        if (filter || this.props.filter) {
-            if (this.props.onDataChanged) {
-                this.props.onDataChanged({
-                    ...this.props.data,
-                    filters: {
-                        ...this.props.data.filters,
-                        'my-filter': filter || this.props.filter,
-                    },
-                });
-            }
+        let currentFilter = filter || this.props.filter;
+        
+        if (this.props.onDataChanged) {
+            this.props.onDataChanged({
+                ...this.props.data,
+                filters: {
+                    ...this.props.data.filters,
+                    'my-filter': currentFilter,
+                },
+            });
         }
     }
-    
+
     componentDidMount() {
         this.updateFilter();
     }
-    
+
     render() {
         if (this.props.children) {
             return this.props.children((filter) => this.updateFilter(filter), this.props.data);
         }
-        
+
         return null;
     }
 }
