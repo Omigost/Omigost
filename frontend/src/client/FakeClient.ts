@@ -20,15 +20,12 @@ export class OmigostFakeClient implements OmigostClientInterface {
     }
     
     getBudgets(): ResponsePromise {
-        console.log("Fake budgets");
         return new Promise<ResponseData>((resolve, reject) => {
             const budgets = [];
             const count = Math.random()*20+1;
             for(let i=0;i<count;++i) {
                 budgets.push(fakeBudget());
             }
-            console.log("RESOLVED ");
-            console.log(budgets);
             resolve(budgets);
         });
     }
