@@ -54,12 +54,16 @@ export default (client: OmigostClientInterface): ClientAbstractComponent => {
             });
             
             dataPromise.then((data) => {
+                console.log("GOT DATA");
+                console.log(data);
                 this.setState({
                     data,
                     error: null,
                     loading: false,
                 });
             }).catch((error) => {
+                console.log("ERRORR 69 HEHE");
+                console.log(error);
                 this.setState({
                     data: null,
                     error,
