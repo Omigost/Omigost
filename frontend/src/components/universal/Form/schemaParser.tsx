@@ -88,8 +88,7 @@ function recGetMetaOutputSourceNodeByPath(metaOutput: any, path: Array<string> |
 
 export function getMetaOutputSourceNodeByPath(metaOutput: any, path: string): any {
     const objPath = [];
-    for (let match,matcher=/^([^\.\[]+)|\.([^\.\[]+)|\["([^"]+)"\]|\[(\d+)\]/g;
-        match = matcher.exec(path);) {
+    for (let match,matcher=/^([^\.\[]+)|\.([^\.\[]+)|\["([^"]+)"\]|\[(\d+)\]/g; match = matcher.exec(path);) {
       objPath.push(Array.from(match).slice(1).filter(x => x !== undefined)[0]);
     }
     return recGetMetaOutputSourceNodeByPath(metaOutput, objPath);
