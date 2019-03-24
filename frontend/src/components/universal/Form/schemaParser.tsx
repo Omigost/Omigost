@@ -27,10 +27,7 @@ export interface AjvError {
 }
 
 function getHandlerForUI<M extends NodeSchema>(node: M, handlers: SchemaNodeHandlersMappingForType<M>): NodeHandler<any, any, M> {
-    if (node.ui) {
-        return handlers[node.ui];
-    }
-    return handlers.default;
+    return node.ui ? handlers[node.ui] : handlers.default;
 }
 
 function getHandlerForType<M extends NodeSchema>(node: M, config: SchemaParserConfig): SchemaNodeHandlersMappingForType<NodeTypeSchemas[M["type"]]> {

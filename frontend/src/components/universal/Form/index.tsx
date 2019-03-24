@@ -94,7 +94,7 @@ export default class Form extends React.Component<FormProps, FormState> {
                         this.state.tree.validate();
                     }
                 });
-            }, 0);
+            });
         }
     }
 
@@ -107,7 +107,7 @@ export default class Form extends React.Component<FormProps, FormState> {
 
         return (
             <Wrapper>
-                {(this.state.tree) ? (this.state.tree.render(this.state.formContext)) :(null)}
+                {(this.state.tree) ? (this.state.tree.render(this.state.formContext)) : (null)}
             </Wrapper>
         );
     }
