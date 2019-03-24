@@ -2,15 +2,21 @@ import * as React from "react";
 
 import DATA_TYPE_PRESETS from "./DataTypePresets";
 
+export type Preset = (typeOptions: any | string | Array<string>, type: DataTarget, point: DataPoint, options: DataFormatOptions) => FormattersMapping;
+
+export interface PresetsMap {
+    [key: string]: Preset;
+}
 
 export interface DataProviderProps {
     data: any;
     children?: Array<React.ReactElement<any>> | React.ReactElement<any>;
 }
 
-export interface ColumnSpecs {
+export interface ColumnSpecs extends FormattersMappingWithPresets {
     name: string;
     field?: string;
+    type?: string;
 }
 
 export enum DataTargetInput {
@@ -68,17 +74,39 @@ export interface DataPoint {
     value: any;
 }
 
-export interface DataFormatOptions {
+export type Formatter = (point: DataPoint, options: DataFormatOptions) => any;
+
+export type FormatterWithPreset = Formatter | string;
+
+export type ChainableFormatter = (formattedValue: any, point: DataPoint, options: DataFormatOptions) => any;
+
+export type ChainableFormatterWithPreset = ChainableFormatter | string;
+
+export interface FormattersMapping {
+    parseInputData?: Formatter;
+    parseOutputData?: Formatter;
+    formatInputAxis?:  Formatter;
+    formatOutputAxis?: Formatter;
+    formatInputCursor?: Formatter;
+    formatOutputCursor?: Formatter;
+    formatInputCell?: Formatter;
+    formatOutputCell?: Formatter;
+}
+
+export interface FormattersMappingWithPresets {
+    parseInputData?: FormatterWithPreset;
+    parseOutputData?: FormatterWithPreset;
+    formatInputAxis?:  FormatterWithPreset;
+    formatOutputAxis?: FormatterWithPreset;
+    formatInputCursor?: FormatterWithPreset;
+    formatOutputCursor?: FormatterWithPreset;
+    formatInputCell?: FormatterWithPreset;
+    formatOutputCell?: FormatterWithPreset;
+}
+
+export interface DataFormatOptions extends FormattersMapping {
     input?: any | string | Array<string>;
     output?: any | string | Array<string>;
-    parseInputData?: (point: DataPoint, options: DataFormatOptions) => any;
-    parseOutputData?: (point: DataPoint, options: DataFormatOptions) => any;
-    formatInputAxis?:  (point: DataPoint, options: DataFormatOptions) => any;
-    formatOutputAxis?: (point: DataPoint, options: DataFormatOptions) => any;
-    formatInputCursor?: (point: DataPoint, options: DataFormatOptions) => any;
-    formatOutputCursor?: (point: DataPoint, options: DataFormatOptions) => any;
-    formatInputCell?: (point: DataPoint, options: DataFormatOptions) => any;
-    formatOutputCell?: (point: DataPoint, options: DataFormatOptions) => any;
 }
 
 export function getInputColumn(data: DataFormat, options: DataFormatOptions = {}) {
@@ -118,6 +146,62 @@ export const addPrePostfixFormatCursor = (typeOptions, data: DataFormat, options
     );
 };
 
+function typePresetCompositionHelper(columnSpecs: ColumnSpecs, preset: Preset, formatterName: string, chain: ChainableFormatterWithPreset): Preset {
+    return (typeOptions, type, point, options) => {
+        const fmts: FormattersMapping = preset(typeOptions, type, point, options);
+        const formatter = fmts[formatterName];
+
+        let chainFn: ChainableFormatter = (formattedValue, point, options) => formattedValue;
+
+        if (chain && typeof chain === "string") {
+            // Preset name was specified as a chain function
+            const chainPreset: Preset = getTypePreset(chain as string, {
+                ...columnSpecs,
+                [formatterName]: undefined,
+            });
+            chainFn = (formattedValue, point, options) => chainPreset(typeOptions, type, point, options)[formatterName](point, options);
+        } else if (chain) {
+            chainFn = chain as ChainableFormatter;
+        } else {
+            return fail("The chain type check is not exhaustive!");
+        }
+
+        return {
+            ...fmts,
+            [formatterName]: (point: DataPoint, options: DataFormatOptions) => chainFn(formatter(point, options), point, options),
+        };
+    };
+}
+
+function typePresetOptionsCompositionHelper(preset: Preset, formatterName: string, options: ColumnSpecs): Preset {
+    if (options[formatterName]) {
+        return typePresetCompositionHelper(options, preset, formatterName, options[formatterName]);
+    }
+    return preset;
+}
+
+export function getTypePreset(typeName: string, options: ColumnSpecs): Preset {
+    let preset = DATA_TYPE_PRESETS[typeName];
+    if (!preset) {
+        throw `DataProvider: Could not find preset for type "${typeName}"`;
+    }
+
+    [
+        "parseInputData",
+        "parseOutputData",
+        "formatInputAxis",
+        "formatOutputAxis",
+        "formatInputCursor",
+        "formatOutputCursor",
+        "formatInputCell",
+        "formatOutputCell",
+    ].forEach(key => {
+        preset = typePresetOptionsCompositionHelper(preset, key, options);
+    });
+
+    return preset;
+}
+
 export function getFormatDefaults(type: DataTarget, point: DataPoint, data: DataFormat, options: DataFormatOptions = {}): DataFormatOptions {
 
     let presetOverrideOptions = {};
@@ -148,18 +232,12 @@ export function getFormatDefaults(type: DataTarget, point: DataPoint, data: Data
     }
 
     if (options.input && options.input.type && isDataTargetInput(type)) {
-        const preset = DATA_TYPE_PRESETS[options.input.type];
-        if (!preset) {
-            throw `DataProvider: Could not find preset for type "${options.input.type}"`;
-        }
+        const preset = getTypePreset(options.input.type, options.input);
         presetOverrideOptions = {...presetOverrideOptions, ...preset(options.input, type, point, options)};
     }
 
     if (options.output && options.output.type && !isDataTargetInput(type)) {
-        const preset = DATA_TYPE_PRESETS[options.output.type];
-        if (!preset) {
-            throw `DataProvider: Could not find preset for type "${options.output.type}"`;
-        }
+        const preset = getTypePreset(options.output.type, options.output);
         presetOverrideOptions = {...presetOverrideOptions, ...preset(options.output, type, point, options)};
     }
 

@@ -4,7 +4,7 @@ import styled, { withTheme } from "styled-components";
 import { Column, ColumnApi, ColDef, GridApi, RowNode } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
-import { withData, DataFormat, RowSpecs } from "components/DataProvider";
+import { withData, DataFormat, FormatedDataPoint, RowSpecs } from "components/DataProvider";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
@@ -59,10 +59,11 @@ export interface DataGridProps {
 
 export interface DataGridContext {
     theme: any;
+    data: DataFormat;
     enableHoverMode: boolean;
     onRowHovered: (api: GridApi, rowIndex: number, row: RowNode) => void;
     onRowUnhovered: (api: GridApi, rowIndex: number, row: RowNode) => void;
-    renderCell?: (props: CellRenderProps) => React.ReactElement<any>;
+    renderCell?: (props: CellRenderProps, formattedValue: FormatedDataPoint) => React.ReactElement<any>;
 }
 
 export interface AgGridDataFormat {
@@ -138,6 +139,7 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
             onRowHovered: this.handleRowHovered,
             onRowUnhovered: this.handleRowUnhovered,
             renderCell: this.props.renderCell,
+            data: this.props.data,
         };
 
         const { columnDefs, rowData } = this.extractAgGridDataFormat(this.props.data);
