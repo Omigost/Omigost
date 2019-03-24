@@ -68,12 +68,12 @@ module.exports = {
                       "getTheme($keys)": (keys) => {
                           keys = keys.getValue().split(".");
                           let result = sassVars;
-                          let i;
-                          for (i = 0; i < keys.length; i++) {
-                            result = result[keys[i]];
-                          }
-                          result = sassUtils.castToSass(result);
-                          return result;
+
+                          keys.forEach(key => {
+                              result = result[key];
+                          });
+
+                          return sassUtils.castToSass(result);
                       },
                   },
               },
