@@ -62,7 +62,7 @@ export default class Form extends React.Component<FormProps, FormState> {
                 this.setState({
                     tree,
                 });
-            }, 0);
+            });
         }
     }
 
@@ -75,7 +75,7 @@ export default class Form extends React.Component<FormProps, FormState> {
 
         return (
             <Wrapper>
-                {(this.state.tree) ? (this.state.tree.render()) :(null)}
+                {(this.state.tree) ? (this.state.tree.render()) : (null)}
             </Wrapper>
         );
     }
