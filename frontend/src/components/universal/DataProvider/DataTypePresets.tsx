@@ -46,7 +46,7 @@ const PRESETS: PresetsMap = {
     "ui-line": (typeOptions, type, point, options) => {
         const formatOutputCell = (point, options) => {
             return (
-                <BarLine value={parseFloat(point.value).toFixed(2)} />
+                <BarLine value={parseFloat(point.value)} />
             );
         };
 
