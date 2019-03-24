@@ -1,27 +1,32 @@
-import Button from './Button';
-import Description from './Description';
-import Loading from './Loading';
-import LoadingPanel from './LoadingPanel';
-import LoginPanel from './LoginPanel';
-import Logo from './Logo';
-//import ModulesSideMenu from './ModulesSideMenu';
-import ButtonPanel from './ButtonPanel';
-import Page from './Page';
-import SideMenu from './SideMenu';
-import Text from './Text';
-import TextBox from './TextBox';
-import TextInput from './TextInput';
-import InteractiveGrid from './InteractiveGrid';
-import InteractiveNestedGrid from './InteractiveNestedGrid';
-import Breadcrumbs from './Breadcrumbs';
-import SearchableList from './SearchableList';
-import Card from './Card';
-import Tooltip from './Tooltip';
-import Meter from './Meter';
-import DataProvider from './DataProvider';
-import TinyButtons from './TinyButtons';
-import DataGrid from './DataGrid';
-import Chart, { ChartDataOptionsPanel, ChartTypeSwitchPanel } from './Chart';
+import Breadcrumbs from "./Breadcrumbs";
+import Button from "./Button";
+// import ModulesSideMenu from './ModulesSideMenu';
+import ButtonPanel from "./ButtonPanel";
+import Card from "./Card";
+import Chart, { ChartDataOptionsPanel, ChartTypeSwitchPanel } from "./Chart";
+import DataGrid from "./DataGrid";
+import DataProvider from "./DataProvider";
+import DataFilter from "./DataFilter";
+import Description from "./Description";
+import Form from "./Form";
+import ExportXLSX from "./ExportXLSX";
+import ExportXLSXButtons from "./ExportXLSXButtons";
+import InteractiveGrid from "./InteractiveGrid";
+import InteractiveNestedGrid from "./InteractiveNestedGrid";
+import Loading from "./Loading";
+import LoadingPanel from "./LoadingPanel";
+import LoginPanel from "./LoginPanel";
+import Logo from "./Logo";
+import Meter from "./Meter";
+import Page from "./Page";
+import SearchableList from "./SearchableList";
+import SideMenu from "./SideMenu";
+import Text from "./Text";
+import TextBox from "./TextBox";
+import TextInput from "./TextInput";
+import TinyButtons from "./TinyButtons";
+import Tooltip from "./Tooltip";
+import Popover from "./Popover";
 
 export default {
     Button,
@@ -30,7 +35,7 @@ export default {
     LoadingPanel,
     LoginPanel,
     Logo,
-    //ModulesSideMenu,
+    // ModulesSideMenu,
     ButtonPanel,
     Page,
     SideMenu,
@@ -45,9 +50,14 @@ export default {
     Tooltip,
     Meter,
     DataProvider,
+    DataFilter,
     TinyButtons,
     DataGrid,
     Chart,
     ChartDataOptionsPanel,
-    ChartTypeSwitchPanel
+    ChartTypeSwitchPanel,
+    Form,
+    Popover,
+    ExportXLSX,
+    ExportXLSXButtons,
 };

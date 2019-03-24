@@ -22,4 +22,7 @@ module.exports = merge(commonConfig, {
     new webpack.HotModuleReplacementPlugin(), // enable HMR globally
     new webpack.NamedModulesPlugin(), // prints more readable module names in the browser console on HMR updates
   ],
+  output: {
+    chunkFilename: '[name].bundle.js',
+  },
 });

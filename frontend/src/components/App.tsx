@@ -1,29 +1,27 @@
-import * as React from 'react';
-import styled from 'styled-components';
-import { ThemeProvider } from 'styled-components';
-import { I18n } from 'react-polyglot';
-import { BrowserRouter as Router } from 'react-router-dom';
+import * as React from "react";
+import { I18n } from "react-polyglot";
+import { BrowserRouter as Router } from "react-router-dom";
+import styled, { ThemeProvider } from "styled-components";
 
-import ModulesProvider, { withModules, WithLoaderProps } from 'modules/ModulesProvider';
+import ModulesProvider, { withModules, WithLoaderProps } from "modules/ModulesProvider";
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { library } from "@fortawesome/fontawesome-svg-core";
 import {
     faUserCircle, faTachometerAlt, faSearchDollar,
     faTools, faChartBar, faDownload, faUpload, faShieldAlt,
-    faCommentAlt, faFlag, faPlus
+    faCommentAlt, faFlag, faPlus, faDollarSign,
+    faRulerHorizontal, faRulerVertical, faChartArea, faClock, faChartLine
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
      faUserCircle, faTachometerAlt, faSearchDollar,
      faTools, faChartBar, faDownload, faUpload, faShieldAlt,
-     faCommentAlt, faFlag, faPlus
+     faCommentAlt, faFlag, faPlus, faDollarSign,
+     faRulerHorizontal, faRulerVertical, faChartArea, faClock, faChartLine
 );
 
 const AppWrapper = styled.div`
   background: ${props => props.theme.colors.background};
-  min-width: 100vw;
-  min-height: 100vh;
   margin: 0;
   padding: 0;
   border: none;
@@ -32,10 +30,10 @@ const AppWrapper = styled.div`
   top: 0;
 `;
 
-const locale = 'en';
-import messages from 'langs/en';
-import defaultTheme from 'themes/default';
-import routes from 'routes/index';
+const locale = "en";
+import messages from "langs/en";
+import routes from "routes/index";
+import defaultTheme from "themes/default";
 
 export interface AppProps {
 }
@@ -49,11 +47,11 @@ export default class App extends React.Component<AppProps, undefined> {
                 </div>
             );
         });
-        
+
         return (
             <I18n locale={locale} messages={messages}>
                 <ThemeProvider theme={defaultTheme}>
-                    <ModulesProvider modules={[ 'dashboard-view', 'settings-view' ]}>
+                    <ModulesProvider modules={[ "dashboard-view", "budgets-view", "settings-view" ]}>
                         <Router>
                             <AppWrapper>
                                 <RoutesModuleComponent />

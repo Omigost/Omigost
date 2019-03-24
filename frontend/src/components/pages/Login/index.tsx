@@ -1,8 +1,7 @@
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from "react";
 
-import Page from 'components/Page';
-import LoginPanel from 'components/LoginPanel';
+import LoginPanel from "components/LoginPanel";
+import Page from "components/Page";
 
 export interface LoginPageProps {
 }
@@ -15,4 +14,4 @@ export default class LoginPage extends React.Component<LoginPageProps, undefined
             </Page>
         );
     }
-};
+}

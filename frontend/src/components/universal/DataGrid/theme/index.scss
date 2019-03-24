@@ -1,0 +1,9 @@
+@import "./ag-theme.scss";
+
+.ag-cell.ag-cell-with-height.ag-cell-value {
+    height: 100%;
+}
+
+.ag-cell.ag-cell-with-height.ag-cell-value > .ag-react-container {
+    height: 100%;
+}

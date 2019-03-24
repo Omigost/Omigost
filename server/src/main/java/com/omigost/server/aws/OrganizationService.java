@@ -20,7 +20,6 @@ public class OrganizationService {
     private String region;
     @Autowired
     private AWSCredentialsProvider credentialsProvider;
-
     private AWSOrganizations orgClient;
 
 
@@ -38,5 +37,15 @@ public class OrganizationService {
         ListAccountsRequest request = new ListAccountsRequest();
         ListAccountsResult result = orgClient.listAccounts(request);
         return result.getAccounts();
+    }
+
+    public boolean doesAccountExist(String accountName) {
+        for (com.amazonaws.services.organizations.model.Account acc : fetchAccounts()) {
+            if (acc.getName().equals(accountName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

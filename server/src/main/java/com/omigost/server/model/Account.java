@@ -1,5 +1,6 @@
 package com.omigost.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,14 +13,15 @@ import java.util.Set;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer Id;
+    Integer id;
 
     @NotNull
-    public String name;
+    String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
+    @JsonIgnore
     @JoinTable(name = "account_user",
             joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "aws_user_id", referencedColumnName = "id"))
-    public Set<User> users = new HashSet<>();
+            inverseJoinColumns = @JoinColumn(name = "company_user_id", referencedColumnName = "id"))
+    Set<User> users = new HashSet<>();
 }
