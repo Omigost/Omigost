@@ -94,7 +94,8 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
         };
     }
 
-    handleRowUnhovered(api: GridApi, rowIndex: number, row: RowNode) {
+    handleRowUnhovered(api: GridApi, visualRowIndex: number, row: RowNode) {
+        const rowIndex = parseInt(row.id);
         if (this.props.onDataChanged) {
             this.props.onDataChanged(
                 this.getDataWithRowsHoveredMarker((row, index, isHovered) => {
@@ -108,7 +109,8 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
         }
     }
 
-    handleRowHovered(api: GridApi, rowIndex: number, row: RowNode) {
+    handleRowHovered(api: GridApi, visualRowIndex: number, row: RowNode) {
+        const rowIndex = parseInt(row.id);
         if (this.props.onDataChanged) {
             this.props.onDataChanged(
                 this.getDataWithRowsHoveredMarker((row, index, isHovered) => (index === rowIndex)),
@@ -153,6 +155,7 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
                     columnDefs={columnDefs}
                     rowData={rowData}
                     enableFilter
+                    enableSorting
                     context={gridContext}
                 />
             </Wrapper>
