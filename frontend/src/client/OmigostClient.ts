@@ -82,5 +82,5 @@ export class OmigostClient implements OmigostClientInterface {
 /*
  * Uncomment this to use fake client
  */
-//export default new OmigostCachedClient(OmigostFakeClient);
-export default new OmigostClient();
+export default new OmigostCachedClient(OmigostFakeClient);
+//export default new OmigostClient();
