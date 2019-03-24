@@ -9,6 +9,7 @@ const Wrapper = styled.aside`
   min-height: 100vh;
   background: ${(props: MenuButtonProps) => props.theme.colors.accent};
   position: fixed;
+  z-index: 99999;
 `;
 
 export interface MenuButtonProps {
