@@ -1,13 +1,13 @@
-import { CompositeNodeHandler, NodeO } from "../compositeNodes";
+import { CompositeNode, NodeO } from "../compositeNodes";
 
 import {
     NodeObjectSchema,
 } from "../schemaTypes";
 
-export default class ObjectDefault extends CompositeNodeHandler<NodeO, NodeObjectSchema> {
+export default class ObjectDefault extends CompositeNode<NodeO, NodeObjectSchema> {
 
-    getChildrenMapFromSchema(schemaNode: NodeObjectSchema) {
-        return schemaNode.properties;
+    getChildrenMapFromSchema() {
+        return this.getSchema().properties;
     }
 
     getCompositeOutput(output: NodeO) {
