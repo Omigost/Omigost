@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.omigost.server.notification.NotificationMessage;
+import com.omigost.server.notification.NotificationMessageLink;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -32,6 +33,10 @@ public class SlackMessage extends NotificationMessage {
         ArrayNode actionsArrayJson = attachment.putArray("actions");
         for (SlackMessageAction action : actions) {
             actionsArrayJson.add(action.toJsonNode());
+        }
+
+        for (NotificationMessageLink link : links) {
+            actionsArrayJson.add(new SlackMessageLink(link).toJsonNode());
         }
 
         return mapper.createArrayNode().add(attachment).toString();

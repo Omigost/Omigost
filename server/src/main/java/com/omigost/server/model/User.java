@@ -9,20 +9,27 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Entity(name = "aws_user")
+@Entity(name = "company_user")
 @EqualsAndHashCode
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer id;
+    Integer id;
 
     @NotNull
-    public String name;
+    String name;
 
     @EqualsAndHashCode.Exclude
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_communication",
-            joinColumns = @JoinColumn(name = "aws_user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "communication_id", referencedColumnName = "id"))
-    public Set<Communication> communications = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<Communication> communications = new HashSet<>();
+
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "users")
+    Set<Account> accounts = new HashSet<>();
+
+    public User() {}
+
+    public User(String name) {
+        this.name = name;
+    }
 }
