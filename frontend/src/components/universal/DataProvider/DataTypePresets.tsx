@@ -4,12 +4,8 @@ import { addPrePostfixFormatAxis, addPrePostfixFormatCursor, PresetsMap } from "
 
 import BarLine from "components/BarLine";
 
-function extractFloat(input: any): number {
-    return parseInt((parseFloat(input) * 100) + "") / 100;
-}
-
 const numberParseData = (point, options) => {
-    return extractFloat(point.value) || null;
+    return parseFloat(point.value);
 };
 
 const numberFormatAxis = (typeOptions) => ((point, options) => {
@@ -50,7 +46,7 @@ const PRESETS: PresetsMap = {
     "ui-line": (typeOptions, type, point, options) => {
         const formatOutputCell = (point, options) => {
             return (
-                <BarLine value={extractFloat(point.value)} />
+                <BarLine value={parseFloat(point.value).toFixed(2)} />
             );
         };
 
@@ -61,11 +57,11 @@ const PRESETS: PresetsMap = {
     },
     "currency": (typeOptions, type, point, options) => {
         const parseData = (point, options) => {
-            return extractFloat((point.value + "").replace(/\$/, "")) || null;
+            return parseFloat(point.value.toString().replace(/\$/, ""));
         };
 
         const formatData = (point, options) => {
-            return `\$${extractFloat(point.value)}`;
+            return `\$${parseFloat(point.value).toFixed(2)}`;
         };
 
         return {
