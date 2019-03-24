@@ -11,8 +11,12 @@ module.exports = {
             src = tsc.transpileModule(
                 src,
                 {
-                    compilerOptions: tsConfig.compilerOptions,
-                    fileName:        path
+                    compilerOptions: {
+                        ...tsConfig.compilerOptions,
+                        module: 'commonjs',
+                        target: 'es3',
+                    },
+                    fileName: path,
                 }
             ).outputText;
 

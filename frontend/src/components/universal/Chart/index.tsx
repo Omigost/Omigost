@@ -8,6 +8,9 @@ import {
     getOutputColumns,
     withData,
     DataFormat,
+    DataTarget,
+    DataTargetInput,
+    DataTargetOutput,
 } from "components/DataProvider";
 
 import {
@@ -155,20 +158,20 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
 
         const inputColumn = getInputColumn(this.props.data, dataFormatOptions);
 
-        const createFormatter = (type: string) => {
-            return (value) => (formatData(type, { value }, this.props.data, dataFormatOptions).value);
+        const createFormatter = (dataTarget: DataTarget) => {
+            return (value) => (formatData(dataTarget, { value }, this.props.data, dataFormatOptions).value);
         };
 
         if (dataFormatOptions.rotate90) {
             return [
                 <XAxis
                   type="number"
-                  tickFormatter={createFormatter("output:axis")}
+                  tickFormatter={createFormatter(DataTargetOutput.Axis)}
                 />,
                 <YAxis
                     type="category"
                     dataKey={inputColumn}
-                    tickFormatter={createFormatter("input:axis")}
+                    tickFormatter={createFormatter(DataTargetInput.Axis)}
                 />,
             ];
         }
@@ -176,10 +179,10 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
         return [
             <XAxis
               dataKey={inputColumn}
-              tickFormatter={createFormatter("input:axis")}
+              tickFormatter={createFormatter(DataTargetInput.Axis)}
             />,
             <YAxis
-                tickFormatter={createFormatter("output:axis")}
+                tickFormatter={createFormatter(DataTargetOutput.Axis)}
             />,
         ];
     }
@@ -237,8 +240,8 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
 
         return (
             <Tooltip
-                formatter={(value, name, props) => formatData("output:cursor", { value }, this.props.data, dataFormatOptions).value}
-                labelFormatter={(value) => formatData("input:cursor", { value }, this.props.data, dataFormatOptions).value}
+                formatter={(value, name, props) => formatData(DataTargetOutput.Cursor, { value }, this.props.data, dataFormatOptions).value}
+                labelFormatter={(value) => formatData(DataTargetInput.Cursor, { value }, this.props.data, dataFormatOptions).value}
             />
         );
     }

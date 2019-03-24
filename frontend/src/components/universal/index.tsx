@@ -8,6 +8,8 @@ import DataGrid from "./DataGrid";
 import DataProvider from "./DataProvider";
 import Description from "./Description";
 import Form from "./Form";
+import ExportXLSX from "./ExportXLSX";
+import ExportXLSXButtons from "./ExportXLSXButtons";
 import InteractiveGrid from "./InteractiveGrid";
 import InteractiveNestedGrid from "./InteractiveNestedGrid";
 import Loading from "./Loading";
@@ -23,6 +25,7 @@ import TextBox from "./TextBox";
 import TextInput from "./TextInput";
 import TinyButtons from "./TinyButtons";
 import Tooltip from "./Tooltip";
+import Popover from "./Popover";
 
 export default {
     Button,
@@ -52,4 +55,7 @@ export default {
     ChartDataOptionsPanel,
     ChartTypeSwitchPanel,
     Form,
+    Popover,
+    ExportXLSX,
+    ExportXLSXButtons,
 };

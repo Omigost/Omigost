@@ -4,6 +4,7 @@ import styled  from "styled-components";
 import { IconName } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import Popover from "components/Popover";
 import Tooltip from "components/Tooltip";
 
 const Wrapper = styled.div`
@@ -41,6 +42,7 @@ export interface ButtonSpecs {
     onClick?: () => void;
     text?: string;
     tooltip?: React.ReactElement<any>;
+    popover?: React.ReactElement<any>;
 }
 
 export interface TinyButtonsProps {
@@ -81,6 +83,16 @@ class TinyButtons extends React.Component<TinyButtonsProps, any> {
                             </span>
                         );
 
+                        if(button.popover) {
+                            contentNode = (
+                                <Popover
+                                    content={button.popover}
+                                >
+                                    {contentNode}
+                                </Popover>
+                            );
+                        }
+                        
                         if (button.tooltip) {
                             contentNode = (
                                 <Tooltip
