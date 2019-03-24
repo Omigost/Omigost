@@ -42,7 +42,7 @@ const PRESETS: PresetsMap = {
     "number": (typeOptions, type, point, options) => defaultNumberParsers(typeOptions),
     "currency": (typeOptions, type, point, options) => {
         const parseData = (point, options) => {
-            return parseInt((point.value + "").replace(/\$/, "")) || null;
+            return parseInt(point.value.toString().replace(/\$/, "")) || null;
         };
 
         const formatData = (point, options) => {

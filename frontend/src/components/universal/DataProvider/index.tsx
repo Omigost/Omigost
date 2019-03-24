@@ -76,6 +76,8 @@ export interface DataPoint {
 
 export type Formatter = (point: DataPoint, options: DataFormatOptions) => any;
 
+export type FormatterWithPreset = Formatter | string;
+
 export type ChainableFormatter = (formattedValue: any, point: DataPoint, options: DataFormatOptions) => any;
 
 export type ChainableFormatterWithPreset = ChainableFormatter | string;
@@ -92,14 +94,14 @@ export interface FormattersMapping {
 }
 
 export interface FormattersMappingWithPresets {
-    parseInputData?: Formatter | string;
-    parseOutputData?: Formatter | string;
-    formatInputAxis?:  Formatter | string;
-    formatOutputAxis?: Formatter | string;
-    formatInputCursor?: Formatter | string;
-    formatOutputCursor?: Formatter | string;
-    formatInputCell?: Formatter | string;
-    formatOutputCell?: Formatter | string;
+    parseInputData?: FormatterWithPreset;
+    parseOutputData?: FormatterWithPreset;
+    formatInputAxis?:  FormatterWithPreset;
+    formatOutputAxis?: FormatterWithPreset;
+    formatInputCursor?: FormatterWithPreset;
+    formatOutputCursor?: FormatterWithPreset;
+    formatInputCell?: FormatterWithPreset;
+    formatOutputCell?: FormatterWithPreset;
 }
 
 export interface DataFormatOptions extends FormattersMapping {
@@ -149,17 +151,19 @@ function typePresetCompositionHelper(columnSpecs: ColumnSpecs, preset: Preset, f
         const fmts: FormattersMapping = preset(typeOptions, type, point, options);
         const formatter = fmts[formatterName];
 
-        let chainFn = (formattedValue, point, options) => formattedValue;
+        let chainFn: ChainableFormatter = (formattedValue, point, options) => formattedValue;
 
         if (chain && typeof chain === "string") {
             // Preset name was specified as a chain function
             const chainPreset: Preset = getTypePreset(chain as string, {
                 ...columnSpecs,
-                [formatterName]: undefined
+                [formatterName]: undefined,
             });
             chainFn = (formattedValue, point, options) => chainPreset(typeOptions, type, point, options)[formatterName](point, options);
         } else if (chain) {
             chainFn = chain as ChainableFormatter;
+        } else {
+            return fail("The chain type check is not exhaustive!");
         }
 
         return {
