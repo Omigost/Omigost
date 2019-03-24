@@ -325,7 +325,9 @@ export function resolveData(dataToResolve: DataFormat): DataFormat {
     if (data.filters) {
         Object.keys(data.filters).forEach(key => {
             const filterFn = data.filters[key];
-            data = filterFn(data);
+            if (filterFn) {
+                data = filterFn(data);
+            }
         });
     }
 
