@@ -1,18 +1,32 @@
 import * as React from "react";
 
+import { SimpleNodeHandler } from "../simpleNodes";
+
 import {
+    NodeAny,
+    NodeSchema,
     NodeStringSchema,
-    SchemaParserConfig,
-    TreeUITransformer,
 } from "../schemaTypes";
 
-export default {
-    render: (node: NodeStringSchema, transformer: TreeUITransformer, config: SchemaParserConfig) => {
+export default class StringDefault extends SimpleNodeHandler<string, NodeStringSchema> {
+    getInitialValue() {
+        return "";
+    }
+
+    renderSimple(schemaNode: NodeSchema, value: string, node: NodeAny) {
         return (
             <div>
-                {node.title}
-                {node.description}
+                {schemaNode.title}
+                {schemaNode.description}
+                <input
+                    value={value}
+                    onChange={(event) => {
+                        node.setState({
+                            value: event.target.value || "",
+                        });
+                    }}
+                />
             </div>
         );
-    },
-};
+    }
+}

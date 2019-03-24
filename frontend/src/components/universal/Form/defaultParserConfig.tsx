@@ -1,15 +1,20 @@
-import { SchemaParserConfig } from "./schemaTypes";
+import { NodeAny, NodeState, SchemaParserConfig } from "./schemaTypes";
 
 import ObjectDefault from "./renderers/ObjectDefault";
 import StringDefault from "./renderers/StringDefault";
 
 export const defaultParserConfig: SchemaParserConfig = {
-    renderers: {
+    handlers: {
+        ROOT: {
+            default: null,
+        },
         STRING: {
-            default: StringDefault,
+            default: new StringDefault(),
         },
         OBJECT: {
-            default: ObjectDefault,
+            default: new ObjectDefault(),
         },
     },
+    rootState: null,
+    rootSetState: (state: NodeState<any>, root: NodeAny) => {},
 };

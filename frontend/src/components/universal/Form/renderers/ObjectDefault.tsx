@@ -1,29 +1,17 @@
-import * as React from "react";
+import { CompositeNodeHandler, NodeO } from "../compositeNodes";
 
 import {
     NodeObjectSchema,
-    SchemaParserConfig,
-    TreeUITransformer,
 } from "../schemaTypes";
 
-export default {
-    render: (node: NodeObjectSchema, transformer: TreeUITransformer, config: SchemaParserConfig) => {
-        const propertiesKeys: Array<string> = Object.keys(node.properties);
+export default class ObjectDefault extends CompositeNodeHandler<NodeO, NodeObjectSchema> {
 
-        return (
-            <div>
-                {
-                    propertiesKeys.map((key: string, index: number) => {
-                        return (
-                            <div key={`form-ui-${index}`} >
-                                {
-                                    transformer(node.properties[key], config)
-                                }
-                            </div>
-                        );
-                    })
-                }
-            </div>
-        );
-    },
-};
+    getChildrenMapFromSchema(schemaNode: NodeObjectSchema) {
+        return schemaNode.properties;
+    }
+
+    getCompositeOutput(output: NodeO) {
+        return output;
+    }
+
+}
