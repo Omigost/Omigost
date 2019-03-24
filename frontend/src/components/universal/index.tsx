@@ -8,6 +8,7 @@ import DataGrid from "./DataGrid";
 import DataProvider from "./DataProvider";
 import DataFilter from "./DataFilter";
 import Description from "./Description";
+import Form from "./Form";
 import ExportXLSX from "./ExportXLSX";
 import ExportXLSXButtons from "./ExportXLSXButtons";
 import InteractiveGrid from "./InteractiveGrid";
@@ -55,6 +56,7 @@ export default {
     Chart,
     ChartDataOptionsPanel,
     ChartTypeSwitchPanel,
+    Form,
     Popover,
     ExportXLSX,
     ExportXLSXButtons,
