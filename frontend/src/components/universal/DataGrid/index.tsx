@@ -74,8 +74,6 @@ export interface AgGridDataFormat {
 
 class DataGrid extends React.Component<DataGridProps, undefined> {
 
-    api: any;
-
     constructor(props) {
         super(props);
 
@@ -137,10 +135,6 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
         };
     }
 
-    onGridReady(params) {
-        this.api = params.api;
-    }
-
     render() {
         const gridContext: DataGridContext = {
             theme: this.props.theme,
@@ -163,7 +157,6 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
                     enableFilter
                     enableSorting
                     context={gridContext}
-                    onGridReady={this.onGridReady}
                 />
             </Wrapper>
         );

@@ -10,10 +10,10 @@ public class SlackMessageAction extends NotificationMessageAction {
     private String type = "button";
 
     public SlackMessageAction(String name, String text, String value) {
-        super (name, text, value);
+        super(name, text, value);
     }
 
-    public SlackMessageAction (NotificationMessageAction action) {
+    public SlackMessageAction(NotificationMessageAction action) {
         super(action);
     }
 
