@@ -41,6 +41,8 @@ export interface TextInputProps {
     size?: string;
     type?: string;
     label?: any;
+    value?: string;
+    onChange?: (text: string) => void;
 }
 
 export default class TextInput extends React.Component<TextInputProps, undefined> {
@@ -57,6 +59,12 @@ export default class TextInput extends React.Component<TextInputProps, undefined
                 <Input
                   fontSize={this.props.size}
                   type={this.props.type}
+                  value={this.props.value || undefined}
+                  onChange={(event) => {
+                      if (this.props.onChange) {
+                          this.props.onChange(event.target.value);
+                      }
+                  }}
                 />
             </Wrapper>
         );
