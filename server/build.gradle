@@ -29,6 +29,22 @@ bootJar {
     version = '0.1.0'
 }
 
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
@@ -41,4 +57,18 @@ dependencies {
     implementation('com.amazonaws:aws-java-sdk-budgets:1.11.475')
     //all of amazon aws sdk
     implementation('com.amazonaws:aws-java-sdk:1.11.475')
+    
+    integrationTestCompile 'junit:junit:4.11'
+    integrationTestCompile 'org.assertj:assertj-core:3.0.0'
+    integrationTestCompile 'org.testcontainers:junit-jupiter:1.11.0'
+    integrationTestCompile 'org.testcontainers:localstack:1.8.3'
+    integrationTestCompile 'com.amazonaws:aws-java-sdk-sqs:1.11.524'
+    integrationTestCompile 'com.amazonaws:aws-java-sdk-s3:1.11.524'
+    integrationTestCompile 'org.testcontainers:postgresql:1.11.1'
 }
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
