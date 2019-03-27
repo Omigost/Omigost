@@ -21,7 +21,10 @@ public class BudgetDecorator extends Budget {
     }
 
     public BudgetDecorator setLinkedAccountsFilter(List<String> linkedAccountsFilter) {
-        addCostFiltersEntry(LINKED_ACCOUNT_FILTER, linkedAccountsFilter);
+        if (linkedAccountsFilter.size() > 0) {
+            addCostFiltersEntry(LINKED_ACCOUNT_FILTER, linkedAccountsFilter);
+        }
+
         return this;
     }
 
@@ -46,7 +49,11 @@ public class BudgetDecorator extends Budget {
                 tagsFilterList.add(entry.getKey() + "$" + tagValue);
             }
         });
-        addCostFiltersEntry(TAG_FILTER, tagsFilterList);
+
+        if (tagsFilterList.size() > 0) {
+            addCostFiltersEntry(TAG_FILTER, tagsFilterList);
+        }
+
         return this;
     }
 
