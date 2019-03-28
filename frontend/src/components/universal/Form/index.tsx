@@ -13,6 +13,7 @@ export interface FormProps {
     theme?: any;
     validateOnChange?: boolean;
     validateOnInit?: boolean;
+    children: Schema;
 }
 
 interface FormState {
@@ -60,23 +61,7 @@ export default class Form extends React.Component<FormProps, FormState> {
     }
 
     createTree() {
-        const schema: Schema = {
-            title: "A registration form",
-            description: "The description",
-            type: NodeType.OBJECT,
-            properties: {
-                "firstName": {
-                    type: NodeType.STRING,
-                    title: "Your first name",
-                    minLength: 1,
-                },
-                "lastName": {
-                    type: NodeType.STRING,
-                    title: "Your last name",
-                    minLength: 4,
-                },
-            },
-        };
+        const schema = this.props.children;
 
         if (!this.state.tree) {
             setTimeout(() => {

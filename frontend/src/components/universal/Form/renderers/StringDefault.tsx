@@ -1,11 +1,18 @@
 import * as React from "react";
+import styled from "styled-components";
 
+import TextInput from "../../TextInput";
 import { SimpleNode } from "../simpleNodes";
 
 import {
     FormContext,
     NodeStringSchema,
 } from "../schemaTypes";
+
+const InputWrapper = styled.div`
+  width: 10vw;
+  margin-right: 3vw;
+`;
 
 export default class StringDefault extends SimpleNode<string, NodeStringSchema> {
     getInitialValue() {
@@ -15,25 +22,17 @@ export default class StringDefault extends SimpleNode<string, NodeStringSchema> 
     renderSimple(value: string, context: FormContext) {
         return (
             <div>
-                <span>
-                    {context.getErrorsForNode(this).map(err => {
-                        return (
-                            <div>
-                                -> {err.message}
-                            </div>
-                        );
-                    })}
-                </span>
                 {this.getSchema().title}
                 {this.getSchema().description}
-                <input
-                    value={value}
-                    onChange={(event) => {
-                        this.setState({
-                            value: event.target.value || "",
-                        });
-                    }}
-                />
+                <InputWrapper>
+                    <TextInput
+                        value={value}
+                        onChange={(text) => {
+                            console.log("HERE WE GOT: old="+value+" and new="+text);
+                            this.setState({ value: text })
+                        }}
+                    />
+                </InputWrapper>
             </div>
         );
     }
