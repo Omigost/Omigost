@@ -27,6 +27,7 @@ import TextInput from "./TextInput";
 import TinyButtons from "./TinyButtons";
 import Tooltip from "./Tooltip";
 import Popover from "./Popover";
+import FloatingWindow from "./FloatingWindow";
 
 export default {
     Button,
@@ -60,4 +61,5 @@ export default {
     Popover,
     ExportXLSX,
     ExportXLSXButtons,
+    FloatingWindow,
 };

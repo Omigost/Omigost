@@ -4,6 +4,9 @@ export default {
     background: "#F7F7F7",
     primary: "#EB3349",
     secondary: "#F45C43",
+    palette: [
+        "#47A0ED",
+    ],
     primaryText: "#1B0000",
     accent: "#474747",
     primaryGradient: "linear-gradient(to right, #EB3349, #F45C43)",

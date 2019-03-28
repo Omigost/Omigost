@@ -4,6 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled, { ThemeProvider } from "styled-components";
 import defaultTheme from "themes/default";
 
+import {
+    faPlus, faDownload,
+} from "@fortawesome/free-solid-svg-icons";
+
 import * as Fuse from 'fuse-js-latest';
 
 import { Flex, Box } from '@rebass/grid';
@@ -14,7 +18,7 @@ const CursorIcon = styled.div`
 `;
 
 const GridWrapper = styled.div`
-  height: 50vh;
+  height: 90vh;
   width: 100%;
 `;
 
@@ -70,7 +74,6 @@ export default class Panel extends React.Component<any, any> {
             >
                 {({data, error, loading}, refresh) => {
                     if (loading || !data) return null;
-                    console.log(data);
                     
                     return (
                         <this.props.app.UI.DataProvider
@@ -89,6 +92,52 @@ export default class Panel extends React.Component<any, any> {
                             <Flex>
                                 <Box p={2} width={1}>
                                     <Flex flexDirection='column'>
+                                        <this.props.app.UI.ExportXLSX>
+                                            {
+                                                (doExport) => {
+                                                    return (
+                                                         <this.props.app.UI.TinyButtons>
+                                                            {
+                                                                [
+                                                                    {
+                                                                        icon: faPlus.iconName,
+                                                                        text: "Add budget",
+                                                                        onClick: () => {
+                                                                            
+                                                                        },
+                                                                    },
+                                                                    {
+                                                                        icon: faDownload.iconName,
+                                                                        text: "Export CSV",
+                                                                        onClick: () => doExport({
+                                                                            format: 'csv'
+                                                                        }),
+                                                                    },
+                                                                ]
+                                                            }
+                                                        </this.props.app.UI.TinyButtons>
+                                                    );
+                                                }
+                                            }
+                                        </this.props.app.UI.ExportXLSX>
+                                        <this.props.app.UI.FloatingWindow>
+                                            <div style={{ padding: '2vw' }}>
+                                                <this.props.app.UI.Form>
+                                                    {{
+                                                        title: "A registration form",
+                                                        description: "The description",
+                                                        type: "object",
+                                                        properties: {
+                                                            "limit": {
+                                                                type: "string",
+                                                                title: "The budget limit",
+                                                                minLength: 1,
+                                                            },
+                                                        },
+                                                    }}
+                                                </this.props.app.UI.Form>
+                                            </div>
+                                        </this.props.app.UI.FloatingWindow>
                                         <GridWrapper>
                                             <Box p={2} width={1/5}>
                                                 <Flex>
@@ -147,7 +196,7 @@ export default class Panel extends React.Component<any, any> {
                                                                         <this.props.app.UI.Chart
                                                                             data={{
                                                                                 ...DATA,
-                                                                                rows: DATA.rows.filter(row => row.name === props.data.name)
+                                                                                rows: [props.data]
                                                                             }}
                                                                             graphType={"bar"}
                                                                             input={"name"}

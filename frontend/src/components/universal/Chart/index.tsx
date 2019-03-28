@@ -303,7 +303,7 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
         });
 
         const getGraphColor = (index: number): string => {
-            return [this.props.theme.colors.primary, this.props.theme.colors.secondary][index % 2];
+            return [this.props.theme.colors.primary, this.props.theme.colors.secondary, ...this.props.theme.colors.palette][index % (2 + this.props.theme.colors.palette.length)];
         };
 
         switch (dataFormatOptions.graphType) {
