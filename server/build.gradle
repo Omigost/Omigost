@@ -27,6 +27,10 @@ repositories {
 bootJar {
     baseName = 'omigost-server'
     version = '0.1.0'
+    
+    from('../frontend/dist') {
+        into 'static'
+    }
 }
 
 configurations {
@@ -45,6 +49,25 @@ sourceSets {
     }
 }
 
+task classpathJar(type: Jar) {
+  inputs.files sourceSets.test.runtimeClasspath
+
+  archiveName = "omigost-server.jar"
+  doFirst {
+    // If run in configuration phase, some artifacts may not exist yet (after clean)
+    // and File.toURI canâ€™t figure out what is directory to add the critical trailing slash.
+    manifest {
+      def classpath = sourceSets.test.runtimeClasspath.files
+      attributes "Class-Path": classpath.collect {f -> f.toURI().toString()}.join(" ")
+    }
+  }
+}
+
+bootRun {
+  classpath = classpathJar.outputs.files
+  main = 'com.omigost.server.ServerApplication'
+}
+
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
@@ -57,14 +80,24 @@ dependencies {
     implementation('com.amazonaws:aws-java-sdk-budgets:1.11.475')
     //all of amazon aws sdk
     implementation('com.amazonaws:aws-java-sdk:1.11.475')
-    
-    integrationTestCompile 'junit:junit:4.11'
+
+    compile 'org.testcontainers:postgresql:1.11.1'
+    compile 'org.testcontainers:junit-jupiter:1.11.0'
+    compile 'org.testcontainers:localstack:1.8.3'
+
+    integrationTestCompile 'org.postgresql:postgresql:42.2.1'
+    integrationTestCompile 'org.springframework.boot:spring-boot-starter-web'
+    integrationTestCompile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    integrationTestCompile 'org.springframework.boot:spring-boot-starter-test'
+    integrationTestCompile 'org.projectlombok:lombok:1.18.4'
+    integrationTestCompile 'junit:junit:4.12'
     integrationTestCompile 'org.assertj:assertj-core:3.0.0'
-    integrationTestCompile 'org.testcontainers:junit-jupiter:1.11.0'
-    integrationTestCompile 'org.testcontainers:localstack:1.8.3'
     integrationTestCompile 'com.amazonaws:aws-java-sdk-sqs:1.11.524'
     integrationTestCompile 'com.amazonaws:aws-java-sdk-s3:1.11.524'
-    integrationTestCompile 'org.testcontainers:postgresql:1.11.1'
+    integrationTestCompile 'com.amazonaws:aws-java-sdk-iam:1.11.457'
+    integrationTestCompile 'com.amazonaws:aws-java-sdk-organizations:1.11.457'
+    integrationTestCompile 'com.amazonaws:aws-java-sdk-budgets:1.11.475'
+    integrationTestCompile 'com.amazonaws:aws-java-sdk:1.11.475'
 }
 
 task integrationTest(type: Test) {
@@ -72,3 +105,6 @@ task integrationTest(type: Test) {
     classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
+//gradle.projectsEvaluated {
+//    compileJava.dependsOn ':frontend:build'
+//}

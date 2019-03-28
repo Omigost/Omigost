@@ -25,6 +25,7 @@ public class MachineListingService {
     @Autowired
     private AWSCredentialsProvider credentialsProvider;
 
+    @Autowired
     private AmazonEC2 amazonEC2;
 
     @Getter
@@ -32,16 +33,6 @@ public class MachineListingService {
 
     // https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html
     private final String ownerFilterKey = "owner-id";
-
-
-    @PostConstruct
-    private void initialize() {
-        amazonEC2 = AmazonEC2ClientBuilder
-                .standard()
-                .withCredentials(credentialsProvider)
-                .withRegion(region)
-                .build();
-    }
 
     private boolean isInstanceRunning(Instance instance) {
         return instance.getState().getName().equals(InstanceStateName.Running.toString());

@@ -1,64 +1,32 @@
 package com.omigost.server.notification;
 
-import org.junit.Rule;
+import com.omigost.server.config.AWSLocalstackConfig;
+import com.omigost.server.aws.BudgetService;
+import com.omigost.server.config.AWSLocalstackConfig;
+import com.omigost.server.config.AppConfig;
+import com.omigost.server.rest.BudgetController;
 import org.junit.Test;
 
-import com.amazonaws.services.s3.*;
-import org.testcontainers.containers.localstack.LocalStackContainer;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@ActiveProfiles("dev")
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@ContextConfiguration(initializers = {AWSLocalstackConfig.Initializer.class})
 public class NotificationMessageTest {
 
-    @Rule
-    public LocalStackContainer localstack = new LocalStackContainer()
-            .withServices(S3);
+    @Autowired
+    private BudgetService budgetService;
 
     @Test
     public void someTestMethod() {
-        AmazonS3 s3 = AmazonS3ClientBuilder
-                .standard()
-                .withEndpointConfiguration(localstack.getEndpointConfiguration(S3))
-                .withCredentials(localstack.getDefaultCredentialsProvider())
-                .build();
-
-        s3.createBucket("foo");
-        s3.putObject("foo", "bar", "baz");
+        System.out.println(budgetService.getBudgets());
     }
 }
-
-/*
-package com.omigost.server.notification;
-
-import org.junit.Test;
-
-import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.AmazonSQSClient;
-import org.testcontainers.containers.localstack.LocalStackContainer;
-import org.junit.ClassRule;
-import org.junit.Before;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SQS;
-
-class NotificationMessageTest {
-
-    @ClassRule
-    private LocalStackContainer localstack;
-
-    @ClassRule
-    private AmazonSQS sqs;
-
-    @Before
-    public void setup() throws Exception {
-        localstack = new LocalStackContainer().withServices(SQS);
-        
-        sqs = AmazonSQSClient.builder()
-            .withEndpointConfiguration(localstack.getEndpointConfiguration(SQS))
-            .build();
-    }
-            
-    @Test
-    public void lolXD() {
-        sqs.listQueues();
-    }
-
-}
-*/
