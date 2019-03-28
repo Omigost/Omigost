@@ -10,14 +10,16 @@ import {
     faUserCircle, faTachometerAlt, faSearchDollar,
     faTools, faChartBar, faDownload, faUpload, faShieldAlt,
     faCommentAlt, faFlag, faPlus, faDollarSign,
-    faRulerHorizontal, faRulerVertical, faChartArea, faClock, faChartLine
+    faRulerHorizontal, faRulerVertical, faChartArea, faClock, faChartLine,
+    faWindowMinimize, faWindowMaximize, faWindowClose,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
      faUserCircle, faTachometerAlt, faSearchDollar,
      faTools, faChartBar, faDownload, faUpload, faShieldAlt,
      faCommentAlt, faFlag, faPlus, faDollarSign,
-     faRulerHorizontal, faRulerVertical, faChartArea, faClock, faChartLine
+     faRulerHorizontal, faRulerVertical, faChartArea, faClock, faChartLine,
+     faWindowMinimize, faWindowMaximize, faWindowClose
 );
 
 const AppWrapper = styled.div`
