@@ -40,8 +40,15 @@ class ExportXLSX extends React.Component<ExportXLSXProps, undefined> {
             
             const workBook = xlsx.utils.book_new();
             const sheetData = xlsx.utils.json_to_sheet(data.rows.map(item => {
-                delete item.hovered;
-                return item;
+                let filteredObject = {};
+                data.columns.forEach(column => {
+                    if (column.name) {
+                        filteredObject[column.name] = item[column.field || column.name];
+                    } else if (column.field) {
+                        filteredObject[column.field] = item[column.field];
+                    }
+                });
+                return filteredObject;
             }), {
                 header: data.columns.map(item => item.name).filter(name => name !== 'hovered'),
             });
