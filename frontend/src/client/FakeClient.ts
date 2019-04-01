@@ -11,12 +11,20 @@ import ClientComponentFactory, { ClientAbstractComponent } from "./ClientCompone
 
 import fakeBudget from "./fakes/budget";
 
+import { OmigostClient } from "./OmigostClient";
 export class OmigostFakeClient implements OmigostClientInterface {
     
     component: ClientAbstractComponent;
 
     constructor(apiBase?: string) {
         this.component = ClientComponentFactory(this);
+    }
+    
+    createBudget(data: any): ResponsePromise {
+        return new Promise<ResponseData>((resolve, reject) => {
+            resolve(null);
+        });
+        //return (new OmigostClient()).createBudget(data);
     }
     
     getBudgets(): ResponsePromise {

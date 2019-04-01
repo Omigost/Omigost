@@ -67,6 +67,16 @@ const DATA = {
 
 export default class Panel extends React.Component<any, any> {
 
+    state: any;
+
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            showBudgetNewDialog: false,
+        };
+    }
+
     render() {
         return (
             <this.props.app.client.component
@@ -103,7 +113,7 @@ export default class Panel extends React.Component<any, any> {
                                                                         icon: faPlus.iconName,
                                                                         text: "Add budget",
                                                                         onClick: () => {
-                                                                            
+                                                                            this.setState({ showBudgetNewDialog: true });
                                                                         },
                                                                     },
                                                                     {
@@ -120,9 +130,13 @@ export default class Panel extends React.Component<any, any> {
                                                 }
                                             }
                                         </this.props.app.UI.ExportXLSX>
-                                        <this.props.app.UI.FloatingWindow>
+                                        <this.props.app.UI.FloatingWindow open={this.state.showBudgetNewDialog}>
                                             <div style={{ padding: '2vw' }}>
-                                                <this.props.app.UI.Form>
+                                                <this.props.app.UI.Form
+                                                    onSubmit={(data) => {
+                                                        console.log(data);
+                                                    }}
+                                                >
                                                     {{
                                                         title: "A registration form",
                                                         description: "The description",

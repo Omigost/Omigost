@@ -62,6 +62,7 @@ const Button = styled.div<ComponentProps>`
 
 export interface FloatingWindowProps {
     theme?: any;
+    open: boolean;
 }
 
 export interface FloatingWindowState {
@@ -88,6 +89,11 @@ class FloatingWindow extends React.Component<FloatingWindowProps, FloatingWindow
     }
     
     render() {
+        
+        if (!this.props.open) {
+            return null;
+        }
+        
         let node = (
             <Rnd
                 style={{

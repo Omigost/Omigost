@@ -23,6 +23,7 @@ export interface RequestOptions {
 export interface OmigostClientInterface {
     callEndpoint(endpoint?: string, options?: RequestOptions): Promise<ResponseData>;
     getBudgets(): ResponsePromise;
+    createBudget(data: any): ResponsePromise;
 }
 
 export class OmigostClient implements OmigostClientInterface {
@@ -33,6 +34,10 @@ export class OmigostClient implements OmigostClientInterface {
     constructor(apiBase?: string) {
         this.apiBase = apiBase || CLIENT_URLS.apiBase;
         this.component = ClientComponentFactory(this);
+    }
+    
+    createBudget(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.createBudget, data });
     }
     
     getBudgets(): ResponsePromise {
@@ -65,6 +70,7 @@ export class OmigostClient implements OmigostClientInterface {
                 url,
                 withCredentials: true,
                 params,
+                data: options.data,
             }).then((response) => {
                 const data: ResponseData = response.data || {};
                 if (data.error) {
@@ -82,5 +88,6 @@ export class OmigostClient implements OmigostClientInterface {
 /*
  * Uncomment this to use fake client
  */
-export default new OmigostCachedClient(OmigostFakeClient);
+ export default OmigostFakeClient;
+//export default new OmigostCachedClient(OmigostFakeClient);
 //export default new OmigostClient();

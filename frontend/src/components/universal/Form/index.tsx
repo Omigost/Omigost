@@ -3,6 +3,7 @@ import styled  from "styled-components";
 
 import { transformSchemaIntoTree } from "./schemaParser";
 import { FormContext, NodeAny, NodeState, NodeType, RootNode, Schema } from "./schemaTypes";
+import Button from "../Button";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -14,6 +15,7 @@ export interface FormProps {
     validateOnChange?: boolean;
     validateOnInit?: boolean;
     children: Schema;
+    onSubmit: (data: any) => void;
 }
 
 interface FormState {
@@ -93,6 +95,25 @@ export default class Form extends React.Component<FormProps, FormState> {
         return (
             <Wrapper>
                 {(this.state.tree) ? (this.state.tree.render(this.state.formContext)) : (null)}
+                {
+                    (this.state.tree && this.props.onSubmit)?(
+                        <div
+                            style={{
+                                marginLeft: '-2vw',
+                            }}
+                        >
+                            <Button
+                                onClick={() => {
+                                    if (this.state.tree && this.props.onSubmit) {
+                                        this.props.onSubmit(this.state.tree.getData());
+                                    }
+                                }}
+                            >
+                                Save
+                            </Button>
+                        </div>
+                    ):(null)
+                }
             </Wrapper>
         );
     }

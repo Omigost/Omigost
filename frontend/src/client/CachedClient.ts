@@ -65,6 +65,10 @@ export class OmigostCachedClient implements OmigostClientInterface {
         this.cache = new PromisesCache();
     }
     
+    createBudget(data): ResponsePromise {
+        return this.client.createBudget(data);
+    }
+    
     getBudgets(): ResponsePromise {
         return this.cache.transform("getBudgets", this.client.getBudgets)();
     }
