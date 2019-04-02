@@ -105,6 +105,6 @@ task integrationTest(type: Test) {
     classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
-//gradle.projectsEvaluated {
-//    compileJava.dependsOn ':frontend:build'
-//}
+gradle.projectsEvaluated {
+    compileJava.dependsOn ':frontend:build'
+}
