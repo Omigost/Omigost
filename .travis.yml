@@ -1,16 +1,12 @@
 sudo: required
 
-cache: npm
+cache: yarn
 
 notifications:
   - email: false
 
 services:
   - docker
-
-stages:
-  - name: deploy
-    if: branch = master
 
 install:
   - cd frontend
@@ -27,8 +23,3 @@ script:
   - cd server
   - ./gradlew test
   - cd ..
-
-# Frontend tests
-#  - cd frontend
-#  - npm run test
-#  - cd ..

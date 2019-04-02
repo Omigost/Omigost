@@ -76,8 +76,14 @@ export default class SearchableList<ItemT> extends React.Component<SearchableLis
                 />
                 <FlipMove>
                     {
-                        filteredItems.map((item: ItemT) => {
-                          return this.props.renderItem(item);
+                        filteredItems.map((item: ItemT, index: number) => {
+                            return (
+                                <div
+                                    key={`list-item-${index}`}
+                                >
+                                    {this.props.renderItem(item)}
+                                </div>
+                            );
                         })
                     }
                 </FlipMove>

@@ -60,11 +60,12 @@ public class BudgetService {
 
     public void createBudget(int limit, List<String> linkedAccounts, MultiValueMap<String, String> tags) {
         String budgetName = BUDGET_NAME_PREFIX + nextBudgetNumber.getAndIncrement();
-        createSNSTopic(budgetName, false);
+        createSNSTopic(budgetName, true); // TODO
 
-        CreateBudgetRequest createBudgetRequest = new NewBudgetRequestBuilder()
+        CreateBudgetRequest createBudgetRequest = new NewBudgetRequestBuilder(masterUserProvider.getMasterUserId())
                 .withLimit(limit)
                 .withName(budgetName)
+                .withSnsAddress(getTopicArn(budgetName))
                 .withLinkedAccountsFilter(linkedAccounts)
                 .withTagsFilter(tags)
                 .build();

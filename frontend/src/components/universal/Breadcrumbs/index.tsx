@@ -58,17 +58,20 @@ export default class Breadcrumbs extends React.Component<BreadcrumbsProps, undef
         return (
             <Wrapper>
                 {
-                    options.map((item) => {
+                    options.map((item: BreadcrumbItem, index: number) => {
                         if (item === null) {
                             // Separator
                             return (
-                                <SingleCrumbSeparator>
+                                <SingleCrumbSeparator
+                                    key={`breadcrumb-item-${index}`}
+                                >
                                     &gt;
                                 </SingleCrumbSeparator>
                             );
                         }
                         return (
                             <SingleCrumb
+                                key={`breadcrumb-item-${index}`}
                                 onClick={item.onClick}
                                 clickable={!!item.onClick}
                             >
