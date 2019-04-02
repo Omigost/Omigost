@@ -27,7 +27,7 @@
     "clean-dist": "rm -f -r -d dist",
     "lint": "tslint './src/**/*.ts*' --format stylish --force",
     "start": "yarn run start-dev",
-    "start-dev": "webpack-dev-server --config=configs/webpack/dev.js",
+    "start-dev": "node ./node_modules/nodemon/bin/nodemon.js ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config=configs/webpack/dev.js",
     "start-prod": "yarn run build && node express.js"
   },
   "resolutions": {
@@ -53,6 +53,7 @@
     "jest": "^23.6.0",
     "jest-html-reporter": "^2.4.2",
     "node-sass": "^4.10.0",
+    "nodemon": "^1.18.10",
     "react": "^16.6.3",
     "react-addons-test-utils": "^15.6.2",
     "react-dom": "^16.6.3",

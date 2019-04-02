@@ -12,4 +12,4 @@ install:
   - ./gradlew bootJar
 
 script:
-  - ./gradlew integrationTest --debug
+  - ./gradlew integrationTest

@@ -14,4 +14,19 @@ task build(type: NpmTask) {
   args = ['run', 'build']
 }
 
+task dev(type: NpmTask) {
+  args = ['run', 'start-dev']
+}
+
 build.dependsOn(npm_install)
+dev.dependsOn(npm_install)
+
+task devServer {
+  doFirst {
+    println("Start server deamon")
+    ext.process = new ProcessBuilder()
+      .directory(projectDir)
+      .command("../gradlew", "dev")
+      .start()
+  }
+}

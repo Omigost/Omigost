@@ -4,9 +4,13 @@ buildscript {
     }
     repositories {
         mavenCentral()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'com.adarshr:gradle-test-logger-plugin:1.6.0'
     }
 }
 
@@ -15,6 +19,7 @@ apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.adarshr.test-logger'
 
 group = 'com.omigost'
 version = '0.0.1-SNAPSHOT'
@@ -36,6 +41,7 @@ bootJar {
 configurations {
     integrationTestCompile.extendsFrom testCompile
     integrationTestRuntime.extendsFrom testRuntime
+    dev
 }
 
 sourceSets {
@@ -64,8 +70,9 @@ task classpathJar(type: Jar) {
 }
 
 bootRun {
-  classpath = classpathJar.outputs.files
+  classpath = classpathJar.outputs.files + configurations.dev
   main = 'com.omigost.server.ServerApplication'
+  args = ['--spring.profiles.active=dev', '--server.port=8100']
 }
 
 dependencies {
@@ -84,6 +91,8 @@ dependencies {
     compile 'org.testcontainers:postgresql:1.11.1'
     compile 'org.testcontainers:junit-jupiter:1.11.0'
     compile 'org.testcontainers:localstack:1.8.3'
+
+    dev "org.springframework.boot:spring-boot-devtools"
 
     integrationTestCompile 'org.postgresql:postgresql:42.2.1'
     integrationTestCompile 'org.springframework.boot:spring-boot-starter-web'
@@ -105,6 +114,22 @@ task integrationTest(type: Test) {
     classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
+task bootJarDeamon {
+    doFirst {
+        println("Start gradle continous build mode")
+        ext.process = new ProcessBuilder()
+            .directory(projectDir)
+            .command("./gradlew", "bootJar")
+            .start()
+    }
+}
+
+task dev(type: Exec) {
+    commandLine './gradlew', 'build', '--continuous'
+}
+
 gradle.projectsEvaluated {
     compileJava.dependsOn ':frontend:build'
+    bootRun.dependsOn ':frontend:devServer'
+    dev.dependsOn 'bootJarDeamon'
 }
