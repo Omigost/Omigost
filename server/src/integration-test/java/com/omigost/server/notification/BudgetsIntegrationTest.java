@@ -30,7 +30,7 @@ public class BudgetsIntegrationTest {
     private BudgetService budgetService;
 
     @Test
-    public void someTestMethod() {
+    public void testBudgetsService() {
         budgetService.createBudget(100, new ArrayList<String>(){{
             add("abc");
         }});

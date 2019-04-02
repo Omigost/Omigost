@@ -1,10 +1,21 @@
 package com.omigost.server.notification;
 
+import com.omigost.server.config.AWSLocalstackConfig;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Objects;
 
+@ActiveProfiles("dev")
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@ContextConfiguration(initializers = {AWSLocalstackConfig.Initializer.class})
 public class NotificationMessageTest {
+
     @Test
     public void exampleNotificationMessageBuilds() {
         String testMainText = "testMainText";
