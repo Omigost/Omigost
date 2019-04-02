@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.amazonaws.client.builder.AwsClientBuilder;
-import com.omigost.server.localstack.AWSContainer;
+import com.omigost.server.localstack.BudgetsContainer;
+import org.testcontainers.containers.localstack.LocalStackContainer;
 
 import com.omigost.server.localstack.MotoContainer;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -44,22 +45,37 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @Profile("dev")
 public class AWSLocalstackConfig {
 
-    private static AWSContainer awsContainer = new AWSContainer()
+    private static LocalStackContainer awsContainer = new LocalStackContainer()
             .withServices(
-                    AWSContainer.Service.API_GATEWAY,
-                    AWSContainer.Service.SNS
+                    LocalStackContainer.Service.SNS,
+                    LocalStackContainer.Service.API_GATEWAY
             );
 
-    private static MotoContainer motoContainer = new MotoContainer();
+    private static MotoContainer motoIAM = new MotoContainer(MotoContainer.Service.IAM);
+
+    private static MotoContainer motoOrganizations = new MotoContainer(MotoContainer.Service.ORGANIZATIONS);
+
+    private static MotoContainer motoEC2 = new MotoContainer(MotoContainer.Service.EC2);
+
+    private static BudgetsContainer budgetsContainer = new BudgetsContainer();
 
     private static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:10.4");
 
     private static void ensureLocalstackIsRunning() {
-        if(!motoContainer.isRunning()) {
-            motoContainer.start();
+        if(!budgetsContainer.isRunning()) {
+            budgetsContainer.start();
+        }
+        if(!motoEC2.isRunning()) {
+            motoEC2.start();
+        }
+        if(!motoIAM.isRunning()) {
+            motoIAM.start();
         }
         if (!awsContainer.isRunning()) {
             awsContainer.start();
+        }
+        if(!motoOrganizations.isRunning()) {
+            motoOrganizations.start();
         }
     }
 
@@ -87,8 +103,6 @@ public class AWSLocalstackConfig {
             ConfigurableEnvironment env = configurableApplicationContext.getEnvironment();
             env.getPropertySources().addFirst(new MapPropertySource(this.getClass().getCanonicalName(), overrideConfig));
             configurableApplicationContext.setEnvironment(env);
-
-            //throw new RuntimeException("Hello! |"+configurableApplicationContext.getEnvironment().getProperty("spring.datasource.url")+"|"+configurableApplicationContext.getEnvironment().getProperty("spring.datasource.username")+"|"+configurableApplicationContext.getEnvironment().getProperty("spring.datasource.password"));
         }
     }
 
@@ -96,7 +110,7 @@ public class AWSLocalstackConfig {
     public AmazonIdentityManagement amazonIdentityManagement() {
         return AmazonIdentityManagementClientBuilder
                 .standard()
-                .withEndpointConfiguration(motoContainer.getEndpointConfiguration())
+                .withEndpointConfiguration(motoIAM.getEndpointConfiguration())
                 .withCredentials(credentials())
                 .build();
     }
@@ -105,7 +119,7 @@ public class AWSLocalstackConfig {
     public AmazonEC2 amazonEc2() {
         return AmazonEC2ClientBuilder
                 .standard()
-                .withEndpointConfiguration(awsContainer.getEndpointConfiguration(AWSContainer.Service.API_GATEWAY))
+                .withEndpointConfiguration(motoEC2.getEndpointConfiguration())
                 .withCredentials(credentials())
                 .build();
     }
@@ -114,7 +128,7 @@ public class AWSLocalstackConfig {
     public AWSCostExplorer awsCostExplorer() {
         return AWSCostExplorerClientBuilder
                 .standard()
-                .withEndpointConfiguration(awsContainer.getEndpointConfiguration(AWSContainer.Service.API_GATEWAY))
+                .withEndpointConfiguration(awsContainer.getEndpointConfiguration(LocalStackContainer.Service.API_GATEWAY))
                 .withCredentials(credentials())
                 .build();
     }
@@ -123,7 +137,7 @@ public class AWSLocalstackConfig {
     public AWSOrganizations awsOrganizations() {
         return AWSOrganizationsClientBuilder
                 .standard()
-                .withEndpointConfiguration(awsContainer.getEndpointConfiguration(AWSContainer.Service.API_GATEWAY))
+                .withEndpointConfiguration(motoOrganizations.getEndpointConfiguration())
                 .withCredentials(credentials())
                 .build();
     }
@@ -132,8 +146,7 @@ public class AWSLocalstackConfig {
     public AWSBudgets awsBudgets() {
         return AWSBudgetsClientBuilder
                 .standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(
-                        "http://students.mimuw.edu.pl:8099", "us-east-1"))
+                .withEndpointConfiguration(budgetsContainer.getEndpointConfiguration())
                 .withCredentials(credentials())
                 .build();
     }
@@ -142,7 +155,7 @@ public class AWSLocalstackConfig {
     public AmazonSNS amazonSns() {
         return AmazonSNSClientBuilder
                 .standard()
-                .withEndpointConfiguration(awsContainer.getEndpointConfiguration(AWSContainer.Service.SNS))
+                .withEndpointConfiguration(awsContainer.getEndpointConfiguration(LocalStackContainer.Service.SNS))
                 .withCredentials(credentials())
                 .build();
     }

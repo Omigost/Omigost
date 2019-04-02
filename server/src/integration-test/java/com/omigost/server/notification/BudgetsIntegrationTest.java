@@ -1,5 +1,7 @@
 package com.omigost.server.notification;
 
+import com.amazonaws.services.budgets.AWSBudgets;
+import com.amazonaws.services.budgets.model.CreateBudgetRequest;
 import com.omigost.server.config.AWSLocalstackConfig;
 import com.omigost.server.aws.BudgetService;
 import com.omigost.server.config.AWSLocalstackConfig;
@@ -16,17 +18,24 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+
 @ActiveProfiles("dev")
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(initializers = {AWSLocalstackConfig.Initializer.class})
-public class NotificationMessageTest {
+public class BudgetsIntegrationTest {
 
     @Autowired
     private BudgetService budgetService;
 
     @Test
     public void someTestMethod() {
+        budgetService.createBudget(100, new ArrayList<String>(){{
+            add("abc");
+        }});
+
+        System.out.println("RESULT ---> ");
         System.out.println(budgetService.getBudgets());
     }
 }
