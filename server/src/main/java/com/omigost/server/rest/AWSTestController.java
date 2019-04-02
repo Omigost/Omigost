@@ -36,21 +36,6 @@ public class AWSTestController {
         return organization.fetchAccounts();
     }
 
-    @PostMapping("/ec2/hibernate")
-    public void hibernateEC2(@RequestBody TerminationRequest request) {
-        ec2TerminationService.hibernate(request.getMachineIds());
-    }
-
-    @PostMapping("/ec2/stop")
-    public void stopEC2(@RequestBody TerminationRequest request) {
-        ec2TerminationService.stop(request.getMachineIds());
-    }
-
-    @PostMapping("/ec2/terminate")
-    public void terminateEC2(@RequestBody TerminationRequest request) {
-        ec2TerminationService.terminate(request.getMachineIds());
-    }
-
     @PostMapping("/rds/stop")
     public void stopRDS(@RequestBody TerminationRequest request) {
         rdsTerminationService.stop(request.getMachineIds());

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,10 +22,9 @@ public class MachineListingService {
     private OrganizationService organizationService;
 
     @Autowired
-    private AWSCredentialsProvider credentialsProvider;
-
-    private AmazonEC2 amazonEC2;
-
+    AWSRoleBasedCredentialProvider roleBasedCredentialProvider;
+    @Autowired
+    AWSCredentialsProvider credentialsProvider;
     @Getter
     private List<Account> accounts;
 
@@ -34,11 +32,11 @@ public class MachineListingService {
     private final String ownerFilterKey = "owner-id";
 
 
-    @PostConstruct
-    private void initialize() {
-        amazonEC2 = AmazonEC2ClientBuilder
+    private AmazonEC2 getAmazonEC2ForClient(String userId) {
+        AWSCredentialsProvider userRoleProvider = roleBasedCredentialProvider.getCredentialsForUser(userId);
+        return AmazonEC2ClientBuilder
                 .standard()
-                .withCredentials(credentialsProvider)
+                .withCredentials(userRoleProvider)
                 .withRegion(region)
                 .build();
     }
@@ -57,6 +55,7 @@ public class MachineListingService {
     }
 
     private List<Reservation> getReservations(String userId) {
+        AmazonEC2 amazonEC2 = getAmazonEC2ForClient(userId);
         Filter ownerIdFilter = new Filter(ownerFilterKey, Collections.singletonList(userId));
         DescribeInstancesRequest request = new DescribeInstancesRequest().withFilters(ownerIdFilter);
         DescribeInstancesResult instancesResult = amazonEC2.describeInstances(request);

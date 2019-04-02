@@ -34,11 +34,13 @@ public class RDSTerminationService {
     }
 
     public void stop(String rdsName) {
+
         StopDBInstanceRequest request = stoppingRequest(rdsName);
         amazonRDS.stopDBInstance(request);
     }
 
     public void stop(List<String> rdsNames) {
+        if (rdsNames.isEmpty()) return;
         rdsNames.forEach(this::stop);
     }
 

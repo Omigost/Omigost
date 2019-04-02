@@ -41,6 +41,7 @@ public class EBSTerminationService {
     }
 
     public void stop(List<String> envIds) {
+        if (envIds.isEmpty()) return;
         envIds.forEach(this::stop);
     }
 

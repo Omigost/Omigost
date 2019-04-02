@@ -5,11 +5,11 @@ import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
 import com.amazonaws.services.ec2.model.StopInstancesRequest;
 import com.amazonaws.services.ec2.model.TerminateInstancesRequest;
+import com.omigost.server.aws.AWSRoleBasedCredentialProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 
@@ -17,37 +17,38 @@ import java.util.List;
 public class EC2TerminationService {
     @Value("${aws.region}")
     private String region;
-
-    private AmazonEC2 amazonEC2;
-
     @Autowired
-    private AWSCredentialsProvider awsCredentials;
-
-    @PostConstruct
-    private void init() {
-        amazonEC2 = AmazonEC2ClientBuilder.standard()
-                .withRegion(region)
-                .withCredentials(awsCredentials)
-                .build();
-    }
+    AWSRoleBasedCredentialProvider awsRoleBasedCredentialProvider;
 
     private StopInstancesRequest stoppingRequest(List<String> machineIds) {
         return new StopInstancesRequest().withForce(false).withInstanceIds(machineIds);
     }
 
-    public void stop(List<String> machineIds) {
+    private AmazonEC2 getAmazonEC2ClientForUser(String userId) {
+        AWSCredentialsProvider userRoleProvider = awsRoleBasedCredentialProvider.getCredentialsForUser(userId);
+        return AmazonEC2ClientBuilder
+                .standard()
+                .withCredentials(userRoleProvider)
+                .withRegion(region)
+                .build();
+    }
+
+    public void stop(List<String> machineIds, String userId) {
+        if (machineIds.isEmpty()) return;
         StopInstancesRequest request = stoppingRequest(machineIds).withHibernate(false);
-        amazonEC2.stopInstances(request);
+        getAmazonEC2ClientForUser(userId).stopInstances(request);
     }
 
-    public void terminate(List<String> machineIds) {
+    public void terminate(List<String> machineIds, String userId) {
+        if (machineIds.isEmpty()) return;
         TerminateInstancesRequest request = new TerminateInstancesRequest().withInstanceIds(machineIds);
-        amazonEC2.terminateInstances(request);
+        getAmazonEC2ClientForUser(userId).terminateInstances(request);
     }
 
-    public void hibernate(List<String> machineIds) {
+    public void hibernate(List<String> machineIds, String userId) {
+        if (machineIds.isEmpty()) return;
         StopInstancesRequest request = stoppingRequest(machineIds).withHibernate(true);
-        amazonEC2.stopInstances(request);
+        getAmazonEC2ClientForUser(userId).stopInstances(request);
     }
 
 }
