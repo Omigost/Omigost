@@ -13,7 +13,7 @@ import java.util.List;
  * Terminates machines when running out of business hours
  */
 @Service
-public class ScheduledTerminationService {
+public class ScheduledNotificationService {
     @Autowired
     EC2TerminationService ec2TerminationService;
 
@@ -23,7 +23,7 @@ public class ScheduledTerminationService {
     @Autowired
     OrganizationService organizationService;
 
-    //    @Scheduled(cron = "30 18-23/1,0-8/1 * * *")
+//        @Scheduled(cron = "30 18-23/1,0-8/1 * * *")
     @Scheduled(cron = "1/1 * * * * ?")
     void terminateEC2OutOfBusinessHours() {
         List<Account> accountList = organizationService.fetchAccounts();

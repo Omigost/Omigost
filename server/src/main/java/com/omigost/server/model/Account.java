@@ -15,6 +15,9 @@ public class Account {
     public Integer Id;
 
     @NotNull
+    public String awsId;
+
+    @NotNull
     public String name;
 
     @ManyToMany(cascade = CascadeType.ALL)

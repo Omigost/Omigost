@@ -13,24 +13,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+
 @Service
 public class AWSRoleBasedCredentialProvider {
     @Value("${aws.region}")
     private String region;
-    final String roleARN = "arn:aws:iam::537952477028:role/AccessToAll";
-    final String roleSessionName = "53a56s89765";
+    @Value("${aws.generalAccessRole}")
+    private String roleName;
+    //TODO random or fixed
+    final String roleSessionName = "53a56s89065";
+
+    /**
+     * The idea is that every developer will create a role called AccessToAll role
+     * The role's trusted entity will be only the root user
+     * The application impersonate that role and carry out the maintenance
+     */
+    private String getRoleARN(String userId) {
+        return "arn:aws:iam::" + userId + ":role/" + roleName;
+    }
+
 
     @Autowired
     private AWSCredentialsConfig config;
+    private AWSSecurityTokenService stsClient;
 
-    //TODO should be fetched from db
-    public AWSCredentialsProvider getCredentialsForUser(String userId) {
+    @PostConstruct
+    void init() {
         AWSCredentialsProvider nonRootCredentials = config.getNonRootCredentials();
-
-        AWSSecurityTokenService stsClient = AWSSecurityTokenServiceClientBuilder.standard()
+        stsClient = AWSSecurityTokenServiceClientBuilder.standard()
                 .withCredentials(nonRootCredentials)
                 .withRegion(region)
                 .build();
+    }
+
+    public AWSCredentialsProvider getCredentialsForUser(String userId) {
+        String roleARN = getRoleARN(userId);
 
         AssumeRoleRequest roleRequest = new AssumeRoleRequest()
                 .withRoleArn(roleARN)

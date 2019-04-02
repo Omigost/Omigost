@@ -17,6 +17,7 @@ import java.util.List;
 public class EC2TerminationService {
     @Value("${aws.region}")
     private String region;
+
     @Autowired
     AWSRoleBasedCredentialProvider awsRoleBasedCredentialProvider;
 

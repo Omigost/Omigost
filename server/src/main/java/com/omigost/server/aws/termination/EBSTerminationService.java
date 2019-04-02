@@ -2,32 +2,21 @@ package com.omigost.server.aws.termination;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.elasticbeanstalk.AWSElasticBeanstalk;
-import com.amazonaws.services.elasticbeanstalk.AWSElasticBeanstalkClientBuilder;
+import com.amazonaws.services.elasticbeanstalk.AWSElasticBeanstalkAsyncClientBuilder;
 import com.amazonaws.services.elasticbeanstalk.model.TerminateEnvironmentRequest;
+import com.omigost.server.aws.AWSRoleBasedCredentialProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
 public class EBSTerminationService {
     @Value("${aws.region}")
     private String region;
-
-    private AWSElasticBeanstalk awsElasticBeanstalk;
-
     @Autowired
-    private AWSCredentialsProvider awsCredentials;
-
-    @PostConstruct
-    private void init() {
-        awsElasticBeanstalk = AWSElasticBeanstalkClientBuilder.standard()
-                .withRegion(region)
-                .withCredentials(awsCredentials)
-                .build();
-    }
+    AWSRoleBasedCredentialProvider roleBasedCredentialProvider;
 
     private TerminateEnvironmentRequest ebsTerminationRequest(String envId) {
         return new TerminateEnvironmentRequest()
@@ -36,13 +25,22 @@ public class EBSTerminationService {
                 .withTerminateResources(true);
     }
 
-    public void stop(String envId) {
-        awsElasticBeanstalk.terminateEnvironment(ebsTerminationRequest(envId));
+    private AWSElasticBeanstalk getAWSBeanStalKClient(String userId) {
+        AWSCredentialsProvider userRoleProvider = roleBasedCredentialProvider.getCredentialsForUser(userId);
+        return AWSElasticBeanstalkAsyncClientBuilder
+                .standard()
+                .withCredentials(userRoleProvider)
+                .withRegion(region)
+                .build();
     }
 
-    public void stop(List<String> envIds) {
+    public void stop(String envId, String userId) {
+        getAWSBeanStalKClient(userId).terminateEnvironment(ebsTerminationRequest(envId));
+    }
+
+    public void stop(List<String> envIds, String userId) {
         if (envIds.isEmpty()) return;
-        envIds.forEach(this::stop);
+        envIds.forEach(envId -> stop(envId, userId));
     }
 
 
