@@ -11,12 +11,11 @@ public class FrontendConfig implements WebMvcConfigurer {
             "classpath:/META-INF/resources/", "classpath:/resources/",
             "classpath:/static/", "classpath:/public/"
     };
-            
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
                 .addResourceHandler("/**")
-                .addResourceLocations("file://../frontend/dist/")
                 .addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
     }
 
