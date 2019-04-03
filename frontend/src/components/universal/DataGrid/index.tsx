@@ -148,7 +148,7 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
         };
 
         const { columnDefs, rowData } = this.extractAgGridDataFormat(resolveData(this.props.data));
-        
+
         return (
             <Wrapper
                 className="ag-theme-balham"
@@ -162,7 +162,7 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
                     onGridReady={({ api, columnApi }) => {
                         this.api = api;
                         this.columnApi = columnApi;
-                        
+
                         const allColumnIds = [];
                         this.columnApi.getAllColumns().forEach(column => {
                              allColumnIds.push(column.colId);

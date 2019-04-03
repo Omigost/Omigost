@@ -27,7 +27,7 @@ module.exports = {
   context: path.resolve(__dirname, '../../src'),
   module: {
     rules: [
-      /*{
+      {
         test: /\.ts|\.tsx$/,
         enforce: 'pre',
         use: [
@@ -42,7 +42,7 @@ module.exports = {
               },
            },
         ],
-      },*/
+      },
       {
         test: /\.js$/,
         use: ['babel-loader', 'source-map-loader'],

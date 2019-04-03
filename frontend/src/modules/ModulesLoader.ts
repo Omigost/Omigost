@@ -3,8 +3,8 @@ import { IconName } from "@fortawesome/fontawesome-svg-core";
 
 import OmigostUI from "../components/universal/index";
 
-import DashboardViewModule from "./DashboardView";
 import BudgetsViewModule from "./BudgetsView";
+import DashboardViewModule from "./DashboardView";
 import SettingsViewModule from "./SettingsView";
 
 const BUILTIN_MODULES: Array<OmigostModule> = [

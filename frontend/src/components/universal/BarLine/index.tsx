@@ -18,7 +18,7 @@ export default class BarLine extends React.Component<BarLineProps, undefined> {
     render() {
         return (
             <Wrapper>
-                <Progress status='active' percent={this.props.value} style={{ height: "1vw" }} />
+                <Progress status="active" percent={this.props.value} style={{ height: "1vw" }} />
             </Wrapper>
         );
     }

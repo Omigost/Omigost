@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled, { ThemeProvider } from "styled-components";
 import defaultTheme from "themes/default";
 
-import { Flex, Box } from '@rebass/grid';
+import { Box, Flex } from "@rebass/grid";
 
 const CursorIcon = styled.div`
   margin-right: 0.3vw;
@@ -40,7 +40,7 @@ const DATA = {
             name: "z",
             type: "number",
             prefix: "z = ",
-            generator: (column, row) => (5-row.p)*(8-row.p)*0.3 + 0.8*row.y,
+            generator: (column, row) => (5 - row.p) * (8 - row.p) * 0.3 + 0.8 * row.y,
         },
         {
             name: "p",
@@ -72,8 +72,8 @@ export default class Panel extends React.Component<any, any> {
                 data={DATA}
             >
                 <Flex>
-                    <Box p={2} width={4/5}>
-                        <Flex flexDirection='column'>
+                    <Box p={2} width={4 / 5}>
+                        <Flex flexDirection="column">
                             <Box px={2} width={1}>
                                <this.props.app.UI.Chart
                                     graphType={"line"}
@@ -127,8 +127,8 @@ export default class Panel extends React.Component<any, any> {
                             </Box>
                         </Flex>
                     </Box>
-                    <Box p={2} width={1/5}>
-                         <Flex flexDirection='column'>
+                    <Box p={2} width={1 / 5}>
+                         <Flex flexDirection="column">
                              <Box px={2} width={1}>
                                  <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
                                  <this.props.app.UI.Meter
