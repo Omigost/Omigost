@@ -115,10 +115,10 @@ task integrationTest(type: Test) {
 }
 
 task startBackend {
-    
+
 }
 
 gradle.projectsEvaluated {
-    //compileJava.dependsOn ':frontend:build'
+    compileJava.dependsOn ':frontend:build'
     startBackend.dependsOn bootRun
 }
