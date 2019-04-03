@@ -1,5 +1,5 @@
+import deepCopy from "deep-copy";
 import * as React from "react";
-import deepCopy from 'deep-copy';
 
 import DATA_TYPE_PRESETS from "./DataTypePresets";
 

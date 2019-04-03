@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import * as ReactPopover from 'react-awesome-popover';
+import * as ReactPopover from "react-awesome-popover";
 import "react-awesome-popover/dest/react-awesome-popover.css";
 import "./index.scss";
 
@@ -18,14 +18,14 @@ const PopoverContent = styled.div`
 
 export interface PopoverProps {
     content?: React.ReactNode;
-};
+}
 
 export default class Popover extends React.Component<PopoverProps, undefined> {
     render() {
-        if(!this.props.content) {
+        if (!this.props.content) {
             return this.props.children || null;
         }
-        
+
         return (
             <ReactPopover>
                 <PopoverTrigger>

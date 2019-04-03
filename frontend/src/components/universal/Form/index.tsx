@@ -1,9 +1,9 @@
 import * as React from "react";
 import styled  from "styled-components";
 
-import { transformSchemaIntoTree } from "./schemaParser";
-import { FormContext, NodeAny, NodeState, NodeType, RootNode, Schema } from "./schemaTypes";
 import Button from "../Button";
+import { transformSchemaIntoTree } from "./schemaParser";
+import { FormContext, NodeAny, NodeState, RootNode, Schema } from "./schemaTypes";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -96,10 +96,10 @@ export default class Form extends React.Component<FormProps, FormState> {
             <Wrapper>
                 {(this.state.tree) ? (this.state.tree.render(this.state.formContext)) : (null)}
                 {
-                    (this.state.tree && this.props.onSubmit)?(
+                    (this.state.tree && this.props.onSubmit) ? (
                         <div
                             style={{
-                                marginLeft: '-2vw',
+                                marginLeft: "-2vw",
                             }}
                         >
                             <Button
@@ -112,7 +112,7 @@ export default class Form extends React.Component<FormProps, FormState> {
                                 Save
                             </Button>
                         </div>
-                    ):(null)
+                    ) :(null)
                 }
             </Wrapper>
         );

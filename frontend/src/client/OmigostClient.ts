@@ -1,9 +1,8 @@
 import axios from "axios";
 
-import CLIENT_URLS from "./clientUrls";
 import ClientComponentFactory, { ClientAbstractComponent } from "./ClientComponentFactory";
 import OmigostFakeClient from "./FakeClient";
-import { OmigostCachedClient } from "./CachedClient";
+import CLIENT_URLS from "./clientUrls";
 
 export enum RequestMethod {
     GET = "get",
@@ -27,7 +26,7 @@ export interface OmigostClientInterface {
 }
 
 export class OmigostClient implements OmigostClientInterface {
-    
+
     apiBase: string;
     component: ClientAbstractComponent;
 
@@ -35,15 +34,15 @@ export class OmigostClient implements OmigostClientInterface {
         this.apiBase = apiBase || CLIENT_URLS.apiBase;
         this.component = ClientComponentFactory(this);
     }
-    
+
     createBudget(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.createBudget, data });
     }
-    
+
     getBudgets(): ResponsePromise {
         return this.callEndpoint(null, CLIENT_URLS.getBudgets);
     }
-    
+
     callEndpoint(endpoint, options): ResponsePromise {
         return new Promise<ResponseData>((resolve, reject) => {
             let method = "get";
@@ -62,7 +61,7 @@ export class OmigostClient implements OmigostClientInterface {
             } else if (options && options.endpoint) {
                 url = options.endpoint;
             }
-            
+
             url = `${this.apiBase}${url}`;
 
             axios({
@@ -88,6 +87,6 @@ export class OmigostClient implements OmigostClientInterface {
 /*
  * Uncomment this to use fake client
  */
- export default OmigostFakeClient;
+export default OmigostFakeClient;
 //export default new OmigostCachedClient(OmigostFakeClient);
 //export default new OmigostClient();

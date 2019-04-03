@@ -22,7 +22,7 @@ export default class BarLine extends React.Component<BarLineProps, undefined> {
         return (
             <Wrapper>
                 <Progress
-                    status='active'
+                    status="active"
                     percent={parseFloat(this.props.value.toFixed(this.props.precision || DEFAULT_PRECISION))}
                     style={{ height: "1vw" }}
                 />

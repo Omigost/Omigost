@@ -28,8 +28,7 @@ export default class StringDefault extends SimpleNode<string, NodeStringSchema> 
                     <TextInput
                         value={value}
                         onChange={(text) => {
-                            console.log("HERE WE GOT: old="+value+" and new="+text);
-                            this.setState({ value: text })
+                            this.setState({ value: text });
                         }}
                     />
                 </InputWrapper>

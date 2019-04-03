@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { OmigostClientInterface, ResponsePromise, ResponseData } from "./OmigostClient";
+import { OmigostClientInterface, ResponseData, ResponsePromise } from "./OmigostClient";
 
 export type RefreshCallback = (() => void) | ((promise: ResponsePromise) => void);
 
@@ -9,7 +9,7 @@ export interface ClientComponentChildrenArg {
     error: any;
     loading: boolean;
     client: OmigostClientInterface;
-};
+}
 
 export interface ClientComponentProps {
     children: (result: ClientComponentChildrenArg, refresh: RefreshCallback) => React.ReactNode;
@@ -33,29 +33,29 @@ export interface ClientAbstractComponent {
 
 export default (client: OmigostClientInterface): ClientAbstractComponent => {
     return class extends ClientAbstractComponentNode {
-        
+
         state: ClientComponentState;
-        
+
         constructor(props) {
             super(props);
-            
+
             this.state = {
                 data: null,
                 error: null,
                 loading: false,
             };
         }
-        
+
         makeRequest(forceRequest: boolean = false, promiseOverride: ResponsePromise = null) {
-            
+
             if (this.state.loading) return;
             if (!forceRequest && (this.state.data || this.state.error)) return;
-            
-            const dataPromise = (promiseOverride)?(promiseOverride):(this.props.request(client));
+
+            const dataPromise = (promiseOverride) ? (promiseOverride) :(this.props.request(client));
             this.setState({
                 loading: true,
             });
-            
+
             dataPromise.then((data) => {
                 this.setState({
                     data,
@@ -70,20 +70,20 @@ export default (client: OmigostClientInterface): ClientAbstractComponent => {
                 });
             });
         }
-        
+
         componentDidMount() {
             if (!this.props.mutation) {
                 this.makeRequest();
             }
         }
-        
+
         render() {
-            
+
             let refreshFn: RefreshCallback = () => this.makeRequest(true);
             if (this.props.mutation) {
                 refreshFn = (promise: ResponsePromise) => this.makeRequest(true, promise);
             }
-            
+
             return this.props.children({
                 data: this.state.data,
                 error: this.state.error,

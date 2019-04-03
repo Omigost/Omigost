@@ -207,7 +207,7 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
 
         return [
             <ReferenceLine
-                key='chart-main-reference-line'
+                key="chart-main-reference-line"
                 x={cursorValue[inputColumn]}
                 stroke={"#000000"}
             />,

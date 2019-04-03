@@ -83,7 +83,7 @@ class TinyButtons extends React.Component<TinyButtonsProps, any> {
                             </span>
                         );
 
-                        if(button.popover) {
+                        if (button.popover) {
                             contentNode = (
                                 <Popover
                                     content={button.popover}
@@ -92,7 +92,7 @@ class TinyButtons extends React.Component<TinyButtonsProps, any> {
                                 </Popover>
                             );
                         }
-                        
+
                         if (button.tooltip) {
                             contentNode = (
                                 <Tooltip

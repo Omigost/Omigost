@@ -7,19 +7,19 @@ import ModulesProvider, { withModules, WithLoaderProps } from "modules/ModulesPr
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-    faUserCircle, faTachometerAlt, faSearchDollar,
-    faTools, faChartBar, faDownload, faUpload, faShieldAlt,
-    faCommentAlt, faFlag, faPlus, faDollarSign,
-    faRulerHorizontal, faRulerVertical, faChartArea, faClock, faChartLine,
-    faWindowMinimize, faWindowMaximize, faWindowClose,
-} from '@fortawesome/free-solid-svg-icons';
+    faChartArea, faChartBar, faChartLine,
+    faClock, faCommentAlt, faDollarSign, faDownload, faFlag,
+    faPlus, faRulerHorizontal, faRulerVertical, faSearchDollar,
+    faShieldAlt, faTachometerAlt, faTools, faUpload, faUserCircle,
+    faWindowClose, faWindowMaximize, faWindowMinimize,
+} from "@fortawesome/free-solid-svg-icons";
 
 library.add(
      faUserCircle, faTachometerAlt, faSearchDollar,
      faTools, faChartBar, faDownload, faUpload, faShieldAlt,
      faCommentAlt, faFlag, faPlus, faDollarSign,
      faRulerHorizontal, faRulerVertical, faChartArea, faClock, faChartLine,
-     faWindowMinimize, faWindowMaximize, faWindowClose
+     faWindowMinimize, faWindowMaximize, faWindowClose,
 );
 
 const AppWrapper = styled.div`

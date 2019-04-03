@@ -3,10 +3,10 @@ import * as ReactDOM from "react-dom";
 import styled, { withTheme } from "styled-components";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Popout } from 'react-popout-component';
+import { Popout } from "react-popout-component";
 
 import {
-    faWindowMinimize, faWindowMaximize, faWindowClose,
+    faWindowClose, faWindowMaximize, faWindowMinimize,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Rnd } from "react-rnd";
@@ -53,7 +53,7 @@ const Button = styled.div<ComponentProps>`
   margin-left: 0.1vw;
   cursor: pointer;
   display: inline-block;
-  
+
   &:hover {
       background: ${(props: ComponentProps) => props.theme.colors.primaryGradient};
       color: ${(props: ComponentProps) => props.theme.colors.accent};
@@ -75,10 +75,10 @@ export interface FloatingWindowState {
 
 class FloatingWindow extends React.Component<FloatingWindowProps, FloatingWindowState> {
     state: FloatingWindowState;
-    
+
     constructor(props) {
         super(props);
-        
+
         this.state = {
             width: null,
             height: null,
@@ -87,13 +87,13 @@ class FloatingWindow extends React.Component<FloatingWindowProps, FloatingWindow
             showAsPopout: false,
         };
     }
-    
+
     render() {
-        
+
         if (!this.props.open) {
             return null;
         }
-        
+
         let node = (
             <Rnd
                 style={{
@@ -105,7 +105,7 @@ class FloatingWindow extends React.Component<FloatingWindowProps, FloatingWindow
                     overflow: "hidden",
                     border: `0.3vw solid ${this.props.theme.colors.accent}`,
                 }}
-                onDragStop={(e, d) => { this.setState({ x: d.x, y: d.y }) }}
+                onDragStop={(e, d) => { this.setState({ x: d.x, y: d.y }); }}
                 onResize={(e, direction, ref, delta, position) => {
                     this.setState({
                         width: ref.style.width,
@@ -135,7 +135,7 @@ class FloatingWindow extends React.Component<FloatingWindowProps, FloatingWindow
                 </Wrapper>
             </Rnd>
         );
-        
+
         if (this.state.showAsPopout) {
             const originalNode = node;
             node = (
@@ -144,10 +144,10 @@ class FloatingWindow extends React.Component<FloatingWindowProps, FloatingWindow
                 </Popout>
             );
         }
-        
+
         return ReactDOM.createPortal(
             node,
-            document.body
+            document.body,
         );
     }
 }
