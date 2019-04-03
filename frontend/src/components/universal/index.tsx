@@ -1,6 +1,5 @@
 import Breadcrumbs from "./Breadcrumbs";
 import Button from "./Button";
-// import ModulesSideMenu from './ModulesSideMenu';
 import ButtonPanel from "./ButtonPanel";
 import Card from "./Card";
 import Chart, { ChartDataOptionsPanel, ChartTypeSwitchPanel } from "./Chart";
@@ -36,7 +35,6 @@ export default {
     LoadingPanel,
     LoginPanel,
     Logo,
-    // ModulesSideMenu,
     ButtonPanel,
     Page,
     SideMenu,
