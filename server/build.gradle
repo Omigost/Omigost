@@ -114,22 +114,11 @@ task integrationTest(type: Test) {
     classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
-task bootJarDeamon {
-    doFirst {
-        println("Start gradle continous build mode")
-        ext.process = new ProcessBuilder()
-            .directory(projectDir)
-            .command("./gradlew", "bootJar")
-            .start()
-    }
-}
-
-task dev(type: Exec) {
-    commandLine './gradlew', 'build', '--continuous'
+task startBackend {
+    
 }
 
 gradle.projectsEvaluated {
-    compileJava.dependsOn ':frontend:build'
-    bootRun.dependsOn ':frontend:devServer'
-    dev.dependsOn 'bootJarDeamon'
+    //compileJava.dependsOn ':frontend:build'
+    startBackend.dependsOn bootRun
 }

@@ -1,3 +1,11 @@
 repositories {
     mavenCentral()
 }
+
+task startDev {
+    doFirst {
+        exec {
+            commandLine 'bash', '-c', "./gradlew bootRun wait"
+        }
+    }
+}
