@@ -41,4 +41,7 @@ dependencies {
     implementation('com.amazonaws:aws-java-sdk-budgets:1.11.475')
     //all of amazon aws sdk
     implementation('com.amazonaws:aws-java-sdk:1.11.475')
+    
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.1')
+
 }

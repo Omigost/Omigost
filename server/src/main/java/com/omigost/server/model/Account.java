@@ -16,7 +16,7 @@ public class Account {
     Integer id;
 
     @NotNull
-    public String awsId;
+    String awsId;
 
     @NotNull
     String name;
