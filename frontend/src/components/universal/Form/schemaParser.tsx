@@ -39,6 +39,9 @@ function getHandlerForType<M extends NodeSchema>(node: M, config: SchemaParserCo
             return config.handlers.STRING;
         case NodeType.ROOT:
             return null;
+        default:
+            console.error(node);
+            throw `Unknown node type ${node.type}`;
     }
     const never: never = t;
     return never;
