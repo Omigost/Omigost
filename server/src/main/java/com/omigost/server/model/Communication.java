@@ -3,17 +3,12 @@ package com.omigost.server.model;
 import com.omigost.server.notification.NotificationService;
 import com.omigost.server.notification.slack.SlackService;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
-@EqualsAndHashCode
 public class Communication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +27,7 @@ public class Communication {
             default:
                 throw new RuntimeException("Communication type not supported!");
         }
-    };
+    }
+
+    ;
 }
