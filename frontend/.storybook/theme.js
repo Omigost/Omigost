@@ -7,7 +7,7 @@ export default create({
     base: 'light',
 
     colorPrimary: defaultTheme.colors.primary,
-    colorSecondary: defaultTheme.colors.secondary,
+    colorSecondary: defaultTheme.colors.primary,
 
     // UI
     appBg: defaultTheme.colors.background,
