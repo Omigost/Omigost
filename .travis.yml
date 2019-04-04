@@ -1,5 +1,7 @@
 sudo: required
 
+cache: yarn
+
 notifications:
   - email: false
 
@@ -7,10 +9,6 @@ services:
   - docker
 
 install:
-  - rm -r -f -d $HOME/.cache/yarn
-  - rm -r -f -d node_modules
-  - rm -r -f -d ./frontend/node_modules
-  - yarn cache clean
   - ./gradlew bootJar
 
 script:
