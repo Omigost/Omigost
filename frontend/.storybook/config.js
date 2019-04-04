@@ -1,12 +1,20 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { setAddon, configure, addDecorator } from "@storybook/react";
+import { addParameters, setAddon, configure, addDecorator } from "@storybook/react";
 import { withThemes } from "storybook-styled-components";
 import { jsxDecorator } from "storybook-addon-jsx";
 import { withKnobs } from "@storybook/addon-knobs";
-
 import JSXAddon from "storybook-addon-jsx";
+
+import omigostStorybookTheme from "./theme";
+
+addParameters({
+  options: {
+    theme: omigostStorybookTheme,
+  },
+});
+
 setAddon(JSXAddon);
 
 
@@ -77,3 +85,4 @@ addDecorator(withThemes(themes));
 addDecorator(WrapperDecorator);
 
 configure(loadStories, module);
+
