@@ -23,12 +23,13 @@
   },
   "homepage": "https://github.com/vikpe/react-webpack-typescript-starter",
   "scripts": {
-    "build": "yarn run clean-dist && webpack -p --config=configs/webpack/prod.js && jest --coverage --config=configs/jest.json",
+    "build": "yarn run clean-dist && yarn run lint && webpack -p --config=configs/webpack/prod.js && jest --coverage --config=configs/jest.json",
     "clean-dist": "rm -f -r -d dist",
-    "lint": "tslint './src/**/*.ts*' --format stylish --force",
     "start": "yarn run start-dev",
     "start-dev": "node ./node_modules/nodemon/bin/nodemon.js ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config=configs/webpack/dev.js",
-    "start-prod": "yarn run build && node express.js"
+    "start-prod": "yarn run build && node express.js",
+    "lint": "node ./node_modules/tslint/bin/tslint -p . --type-check -c 'tslint.json'",
+    "lint-fix": "node ./node_modules/tslint/bin/tslint -p . --type-check --fix -c 'tslint.json'"
   },
   "resolutions": {
     "@types/react": "^16.7.13"
@@ -59,9 +60,12 @@
     "react-addons-test-utils": "^15.6.2",
     "react-dom": "^16.6.3",
     "react-hot-loader": "^4.3.12",
+    "react-popout-component": "^1.8.5",
+    "react-rnd": "^9.1.2",
     "react-sweet-progress": "^1.1.2",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
+    "tslib": "^1.9.3",
     "tslint": "^5.13.0",
     "tslint-loader": "^3.5.4",
     "typedoc": "^0.13.0",

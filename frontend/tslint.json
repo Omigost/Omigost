@@ -153,5 +153,10 @@
                 "singleline": "never"
             }
         ]
+    },
+    "linterOptions": {
+        "exclude": [
+            "node_modules"
+        ]
     }
 }

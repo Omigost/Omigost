@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "outDir": "./dist/",
+        "allowSyntheticDefaultImports": true,
         "sourceMap": true,
         "noImplicitAny": false,
         "moduleResolution": "node",
@@ -22,7 +23,10 @@
         }
     },
     "include": [
-        "./src/**/*"
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
     ],
     "awesomeTypescriptLoaderOptions": {
         "reportFiles": [

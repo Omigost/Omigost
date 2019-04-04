@@ -173,8 +173,8 @@ function typePresetCompositionHelper(columnSpecs: ColumnSpecs, preset: Preset, f
             chainFn = (formattedValue, point, options) => chainPreset(typeOptions, type, point, options)[formatterName](point, options);
         } else if (chain) {
             chainFn = chain as ChainableFormatter;
-        } else {
-            return fail("The chain type check is not exhaustive!");
+        } else if (chain === null) {
+            return fmts;
         }
 
         return {

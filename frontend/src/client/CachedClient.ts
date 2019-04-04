@@ -1,22 +1,18 @@
-import axios from "axios";
 
+import ClientComponentFactory, { ClientAbstractComponent } from "./ClientComponentFactory";
 import {
-    RequestMethod,
+    OmigostClientInterface,
     ResponseData,
     ResponsePromise,
-    RequestOptions,
-    OmigostClientInterface,
 } from "./OmigostClient";
-import ClientComponentFactory, { ClientAbstractComponent } from "./ClientComponentFactory";
 
-import fakeBudget from "./fakes/budget";
 
 export type PromiseTransformer = (responsePromise: LazyPromise) => LazyPromise;
 export type LazyPromise = () => ResponsePromise;
 
 function createPromiseCacheTransformer(): PromiseTransformer {
     let lastData = null;
-    
+
     return (responsePromise: LazyPromise) => () => {
         if (lastData) {
             return new Promise<ResponseData>((resolve, reject) => {
@@ -38,11 +34,11 @@ function createPromiseCacheTransformer(): PromiseTransformer {
 
 export class PromisesCache {
     cache: Map<string, PromiseTransformer>;
-    
+
     constructor() {
         this.cache = new Map();
     }
-    
+
     transform(key: string, responsePromise: LazyPromise): LazyPromise {
         if (!this.cache.has(key)) {
             this.cache.set(key, createPromiseCacheTransformer());
@@ -52,27 +48,27 @@ export class PromisesCache {
 }
 
 export class OmigostCachedClient implements OmigostClientInterface {
-    
+
     component: ClientAbstractComponent;
     client: OmigostClientInterface;
 
     cache: PromisesCache;
-    
+
     constructor(client: OmigostClientInterface) {
         this.client = client;
         this.component = ClientComponentFactory(this);
-        
+
         this.cache = new PromisesCache();
     }
-    
+
     createBudget(data): ResponsePromise {
         return this.client.createBudget(data);
     }
-    
+
     getBudgets(): ResponsePromise {
         return this.cache.transform("getBudgets", this.client.getBudgets)();
     }
-    
+
     callEndpoint(endpoint, options): ResponsePromise {
         return this.cache.transform(`callEndpoint(${endpoint}:${JSON.stringify(options)})`, () => this.client.callEndpoint(endpoint, options))();
     }

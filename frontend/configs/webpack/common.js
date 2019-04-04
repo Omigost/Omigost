@@ -28,29 +28,18 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts|\.tsx$/,
-        enforce: 'pre',
-        use: [
-           {
-              loader: 'tslint-loader',
-              options: {
-                  configFile: 'tslint.json',
-                  typeCheck: true,
-                  tsConfigFile: 'tsconfig.json',
-                  emitErrors: true,
-                  failOnHint: true,
-              },
-           },
-        ],
-      },
-      {
         test: /\.js$/,
         use: ['babel-loader', 'source-map-loader'],
         exclude: /node_modules/,
       },
       {
         test: /\.tsx?$/,
-        use: ['babel-loader', 'awesome-typescript-loader'],
+        use: ['babel-loader', {
+          loader: 'awesome-typescript-loader',
+          options:{
+            transpileOnly: true
+          },
+        }],
       },
       {
         test: /\.css$/,
