@@ -9,6 +9,7 @@ const Wrapper = styled.aside`
   min-height: 100vh;
   background: ${(props: MenuButtonProps) => props.theme.colors.accent};
   position: fixed;
+  z-index: 99999;
 `;
 
 export interface MenuButtonProps {
@@ -91,6 +92,7 @@ export default class SideMenu extends React.Component<SideMenuProps, SideMenuSta
                     this.props.options.map((menuOption: MenuOption, index: number) => {
                         return (
                             <MenuButton
+                                key={`side-menu-button-${index}`}
                                 fontSize={this.props.fontSize}
                                 selected={index === this.state.selectedIndex}
                                 onClick={() => {

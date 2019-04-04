@@ -2,7 +2,6 @@ package com.omigost.server.aws;
 
 import com.amazonaws.services.budgets.model.*;
 import com.omigost.server.model.BudgetDecorator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -14,19 +13,25 @@ import java.util.List;
 public class NewBudgetRequestBuilder {
     private static String CURRENCY = "USD";
 
-    @Autowired
-    private BudgetService budgets;
-
     private String name;
+    private String snsAddress;
     private int limit;
     private List<String> linkedAccountsFilter = new ArrayList<>();
     private MultiValueMap<String, String> tagsFilter = new LinkedMultiValueMap<>();
 
-    @Autowired
-    private MasterUserProvider masterUserProvider;
+    private String masterUserId;
+
+    public NewBudgetRequestBuilder(String masterUserId) {
+        this.masterUserId = masterUserId;
+    }
 
     public NewBudgetRequestBuilder withName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public NewBudgetRequestBuilder withSnsAddress(String snsAddress) {
+        this.snsAddress = snsAddress;
         return this;
     }
 
@@ -56,7 +61,7 @@ public class NewBudgetRequestBuilder {
 
         return new CreateBudgetRequest()
                 .withBudget(budget)
-                .withAccountId(masterUserProvider.getMasterUserId())
+                .withAccountId(masterUserId)
                 .withNotificationsWithSubscribers(getNotificationsWithSubscribers());
     }
 
@@ -71,7 +76,7 @@ public class NewBudgetRequestBuilder {
         List<NotificationWithSubscribers> result = new ArrayList<>();
         Subscriber snsSubscriber = new Subscriber()
                 .withSubscriptionType(SubscriptionType.SNS)
-                .withAddress(name);
+                .withAddress(snsAddress);
 
         // Notification for surpassing limit
         result.add(new NotificationWithSubscribers()

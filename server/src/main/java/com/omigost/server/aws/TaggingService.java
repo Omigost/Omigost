@@ -52,18 +52,21 @@ public class TaggingService {
     public List<String> fetchAllCostAllocationTagKeys(DateInterval dateInterval) {
         GetTagsRequest baseRequest = new GetTagsRequest().withTimePeriod(dateInterval);
         ArrayList<String> tagKeys = new ArrayList<>();
+
         String nextPageToken = null;
         do {
             GetTagsResult result = costExplorer.getTags(baseRequest.withNextPageToken(nextPageToken));
             nextPageToken = result.getNextPageToken();
             tagKeys.addAll(result.getTags());
         } while (nextPageToken != null && !nextPageToken.isEmpty());
+
         return tagKeys;
     }
 
     private List<Tag> fetchAllTagsWithKey(DescribeTagsRequest describeTagsRequest, String key) {
         String nextPageToken = null;
         List<Tag> tags = new ArrayList<>();
+
         do {
             DescribeTagsResult result = amazonEC2.describeTags(describeTagsRequest.withNextToken(nextPageToken));
 
@@ -73,16 +76,20 @@ public class TaggingService {
 
             nextPageToken = result.getNextToken();
         } while (nextPageToken != null && !nextPageToken.isEmpty());
+
         return tags;
     }
 
     private List<Tag> getTagValues(List<String> keys) {
         List<Tag> allTags = new ArrayList<>();
+
         for (String key : keys) {
             Filter keyFilter = new Filter().withName("key").withValues(key);
             DescribeTagsRequest request = new DescribeTagsRequest().withFilters(keyFilter);
+
             allTags.addAll(fetchAllTagsWithKey(request, key));
         }
+
         return allTags;
     }
 }

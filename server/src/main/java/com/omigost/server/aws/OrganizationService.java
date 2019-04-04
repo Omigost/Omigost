@@ -38,4 +38,14 @@ public class OrganizationService {
         ListAccountsResult result = orgClient.listAccounts(request);
         return result.getAccounts();
     }
+
+    public boolean doesAccountExist(String accountName) {
+        for (com.amazonaws.services.organizations.model.Account acc : fetchAccounts()) {
+            if (acc.getName().equals(accountName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -1,7 +1,13 @@
+require('typescript-require');
+
 // shared config (dev and prod)
 const path = require('path');
-const {CheckerPlugin} = require('awesome-typescript-loader');
+const { CheckerPlugin } = require('awesome-typescript-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const sass = require("node-sass");
+const sassUtils = require("node-sass-utils")(sass);
+
+const sassVars = require(path.join(__dirname, "../../src/themes/default.ts"));
 
 module.exports = {
   resolve: {
@@ -55,7 +61,23 @@ module.exports = {
         loaders: [
           'style-loader',
           { loader: 'css-loader', options: { importLoaders: 1 } },
-          'sass-loader',
+          {
+              loader: 'sass-loader',
+              options: {
+                  functions: {
+                      "getTheme($keys)": (keys) => {
+                          keys = keys.getValue().split(".");
+                          let result = sassVars;
+
+                          keys.forEach(key => {
+                              result = result[key];
+                          });
+
+                          return sassUtils.castToSass(result);
+                      },
+                  },
+              },
+          },
         ],
       },
       {

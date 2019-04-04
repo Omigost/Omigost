@@ -4,10 +4,10 @@ import styled, { withTheme } from "styled-components";
 import { Column, ColumnApi, ColDef, GridApi, RowNode } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
-import { withData, DataFormat, RowSpecs } from "components/DataProvider";
+import { resolveData, withData, DataFormat, FormatedDataPoint, RowSpecs } from "components/DataProvider";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-balham.css";
+import "./theme/index.scss";
 
 import CellRenderer from "./CellRenderer";
 import FilterRenderer from "./FilterRenderer";
@@ -59,10 +59,11 @@ export interface DataGridProps {
 
 export interface DataGridContext {
     theme: any;
+    data: DataFormat;
     enableHoverMode: boolean;
     onRowHovered: (api: GridApi, rowIndex: number, row: RowNode) => void;
     onRowUnhovered: (api: GridApi, rowIndex: number, row: RowNode) => void;
-    renderCell?: (props: CellRenderProps) => React.ReactElement<any>;
+    renderCell?: (props: CellRenderProps, formattedValue: FormatedDataPoint) => React.ReactElement<any>;
 }
 
 export interface AgGridDataFormat {
@@ -71,6 +72,9 @@ export interface AgGridDataFormat {
 }
 
 class DataGrid extends React.Component<DataGridProps, undefined> {
+
+    api: any;
+    columnApi: any;
 
     constructor(props) {
         super(props);
@@ -92,7 +96,8 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
         };
     }
 
-    handleRowUnhovered(api: GridApi, rowIndex: number, row: RowNode) {
+    handleRowUnhovered(api: GridApi, visualRowIndex: number, row: RowNode) {
+        const rowIndex = parseInt(row.id);
         if (this.props.onDataChanged) {
             this.props.onDataChanged(
                 this.getDataWithRowsHoveredMarker((row, index, isHovered) => {
@@ -106,7 +111,8 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
         }
     }
 
-    handleRowHovered(api: GridApi, rowIndex: number, row: RowNode) {
+    handleRowHovered(api: GridApi, visualRowIndex: number, row: RowNode) {
+        const rowIndex = parseInt(row.id);
         if (this.props.onDataChanged) {
             this.props.onDataChanged(
                 this.getDataWithRowsHoveredMarker((row, index, isHovered) => (index === rowIndex)),
@@ -138,10 +144,11 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
             onRowHovered: this.handleRowHovered,
             onRowUnhovered: this.handleRowUnhovered,
             renderCell: this.props.renderCell,
+            data: this.props.data,
         };
 
-        const { columnDefs, rowData } = this.extractAgGridDataFormat(this.props.data);
-
+        const { columnDefs, rowData } = this.extractAgGridDataFormat(resolveData(this.props.data));
+        
         return (
             <Wrapper
                 className="ag-theme-balham"
@@ -150,7 +157,18 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
                     columnDefs={columnDefs}
                     rowData={rowData}
                     enableFilter
+                    enableSorting
                     context={gridContext}
+                    onGridReady={({ api, columnApi }) => {
+                        this.api = api;
+                        this.columnApi = columnApi;
+                        
+                        const allColumnIds = [];
+                        this.columnApi.getAllColumns().forEach(column => {
+                             allColumnIds.push(column.colId);
+                        });
+                        this.columnApi.autoSizeColumns(allColumnIds);
+                    }}
                 />
             </Wrapper>
         );
