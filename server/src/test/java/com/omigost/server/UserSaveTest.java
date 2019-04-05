@@ -8,6 +8,10 @@ import com.omigost.server.repository.UserRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+
 public class UserSaveTest extends ServerApplicationTestTemplate {
     @Autowired
     CommunicationRepository communicationRepository;
@@ -27,6 +31,9 @@ public class UserSaveTest extends ServerApplicationTestTemplate {
 
         userRepository.save(u);
         communicationRepository.save(c);
+
+        assertThat(userRepository.getUserByName("Ken"), is(u));
+
     }
 
 }
