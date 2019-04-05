@@ -1,18 +1,13 @@
 package com.omigost.server;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@SpringBootTest
+@SpringBootTest(classes = ServerApplication.class)
 @RunWith(SpringRunner.class)
-@TestPropertySource("/src/test/resources/test.properties")
-public class ServerApplicationTest {
+@TestPropertySource("classpath:test.properties")
+public class ServerApplicationTestTemplate {
 
-    @Test
-    public void runAppContextTest() {
-
-    }
 }

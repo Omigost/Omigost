@@ -29,7 +29,8 @@ public class Communication {
     @EqualsAndHashCode.Exclude
     User user;
 
-    public Communication() {}
+    public Communication() {
+    }
 
     public Communication(String name, String value) {
         this.name = name;
@@ -43,5 +44,7 @@ public class Communication {
             default:
                 throw new RuntimeException("Communication type not supported!");
         }
-    };
+    }
+
+    ;
 }
