@@ -3,19 +3,49 @@ package com.omigost.server.localstack;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MotoContainer extends AWSServiceImageContainer {
 
-    private final Service service;
+    private Service service;
 
-    public MotoContainer(final Service service) {
+    @Value("${localstack.motocker.image}")
+    private String imageName;
+
+    @Value("${localstack.motocker.port}")
+    private int imagePort;
+
+    private MotoContainer() {
         super();
+        this.service = null;
+    }
+
+    @Bean
+    public static MotoContainer motoIAM() {
+        return new MotoContainer().setService(MotoContainer.Service.IAM);
+    }
+
+    @Bean
+    public static MotoContainer motoOrganizations() {
+        return new MotoContainer().setService(Service.ORGANIZATIONS);
+    }
+
+    @Bean
+    public static MotoContainer motoEC2() {
+        return new MotoContainer().setService(MotoContainer.Service.EC2);
+    }
+
+    public MotoContainer setService(Service service) {
         this.service = service;
+        return this;
     }
 
     @Override
     public String getServiceImageName() {
-        return "picadoh/motocker";
+        return imageName;
     }
 
     @Override
@@ -25,7 +55,7 @@ public class MotoContainer extends AWSServiceImageContainer {
 
     @Override
     public int getServicePort() {
-        return 5000;
+        return imagePort;
     }
 
     @Override

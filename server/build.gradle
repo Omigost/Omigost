@@ -119,6 +119,6 @@ task startBackend {
 }
 
 gradle.projectsEvaluated {
-    compileJava.dependsOn ':frontend:build'
+    bootJar.dependsOn ':frontend:build'
     startBackend.dependsOn bootRun
 }
