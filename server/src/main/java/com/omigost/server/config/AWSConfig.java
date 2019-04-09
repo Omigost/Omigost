@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Slf4j
-@Profile("default")
 public class AWSConfig {
 
     @Value("${aws.region}")

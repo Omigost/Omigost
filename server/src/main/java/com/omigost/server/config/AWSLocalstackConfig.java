@@ -13,69 +13,70 @@ import com.amazonaws.services.organizations.AWSOrganizations;
 import com.amazonaws.services.organizations.AWSOrganizationsClientBuilder;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
-import com.omigost.server.localstack.BudgetsContainer;
-import com.omigost.server.localstack.MotoContainer;
+import com.omigost.server.localstack.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MapPropertySource;
-import org.springframework.core.env.StandardEnvironment;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.stream.Collectors;
 
 @Configuration
+@Component
 @Slf4j
 @Profile("dev")
 public class AWSLocalstackConfig {
 
-    private static LocalStackContainer awsContainer = new LocalStackContainer()
-            .withServices(
-                    LocalStackContainer.Service.SNS,
-                    LocalStackContainer.Service.API_GATEWAY
-            );
+    private static PostgresContainer postgresContainer;
+    @Autowired
+    private LocalstackContainer awsContainer;
+    @Autowired
+    private MotoContainer motoIAM;
+    @Autowired
+    private MotoContainer motoOrganizations;
+    @Autowired
+    private MotoContainer motoEC2;
+    @Autowired
+    private BudgetsContainer budgetsContainer;
 
-    private static MotoContainer motoIAM = new MotoContainer(MotoContainer.Service.IAM);
+    private void ensureLocalstackIsRunning() {
+        List<ImageContainer> c = new ArrayList<ImageContainer>() {{
+            add(budgetsContainer);
+            add(motoEC2);
+            add(motoIAM);
+            add(awsContainer);
+            add(motoOrganizations);
+        }};
 
-    private static MotoContainer motoOrganizations = new MotoContainer(MotoContainer.Service.ORGANIZATIONS);
-
-    private static MotoContainer motoEC2 = new MotoContainer(MotoContainer.Service.EC2);
-
-    private static BudgetsContainer budgetsContainer = new BudgetsContainer();
-
-    private static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:10.4");
-
-    private static void ensureLocalstackIsRunning() {
-        if (!budgetsContainer.isRunning()) {
-            budgetsContainer.start();
-        }
-        if (!motoEC2.isRunning()) {
-            motoEC2.start();
-        }
-        if (!motoIAM.isRunning()) {
-            motoIAM.start();
-        }
-        if (!awsContainer.isRunning()) {
-            awsContainer.start();
-        }
-        if (!motoOrganizations.isRunning()) {
-            motoOrganizations.start();
+        ForkJoinPool pool = new ForkJoinPool(4);
+        try {
+            pool.submit(
+                    () -> c.parallelStream().map(image -> {
+                        image.launch();
+                        return 1;
+                    }).collect(Collectors.toList())
+            ).get();
+        } catch (InterruptedException | ExecutionException e) {
+            log.error("Could not setup all containers", e);
         }
     }
 
     @Bean
     AWSCredentialsProvider credentials() {
-        return awsContainer.getDefaultCredentialsProvider();
+        return awsContainer.getCredentailsProvider();
     }
 
     @Bean
     public AmazonIdentityManagement amazonIdentityManagement() {
+        ensureLocalstackIsRunning();
         return AmazonIdentityManagementClientBuilder
                 .standard()
                 .withEndpointConfiguration(motoIAM.getEndpointConfiguration())
@@ -85,6 +86,7 @@ public class AWSLocalstackConfig {
 
     @Bean
     public AmazonEC2 amazonEc2() {
+        ensureLocalstackIsRunning();
         return AmazonEC2ClientBuilder
                 .standard()
                 .withEndpointConfiguration(motoEC2.getEndpointConfiguration())
@@ -94,15 +96,17 @@ public class AWSLocalstackConfig {
 
     @Bean
     public AWSCostExplorer awsCostExplorer() {
+        ensureLocalstackIsRunning();
         return AWSCostExplorerClientBuilder
                 .standard()
-                .withEndpointConfiguration(awsContainer.getEndpointConfiguration(LocalStackContainer.Service.API_GATEWAY))
+                .withEndpointConfiguration(awsContainer.getEndpointNothing())
                 .withCredentials(credentials())
                 .build();
     }
 
     @Bean
     public AWSOrganizations awsOrganizations() {
+        ensureLocalstackIsRunning();
         return AWSOrganizationsClientBuilder
                 .standard()
                 .withEndpointConfiguration(motoOrganizations.getEndpointConfiguration())
@@ -112,6 +116,7 @@ public class AWSLocalstackConfig {
 
     @Bean
     public AWSBudgets awsBudgets() {
+        ensureLocalstackIsRunning();
         return AWSBudgetsClientBuilder
                 .standard()
                 .withEndpointConfiguration(budgetsContainer.getEndpointConfiguration())
@@ -121,32 +126,19 @@ public class AWSLocalstackConfig {
 
     @Bean
     public AmazonSNS amazonSns() {
+        ensureLocalstackIsRunning();
         return AmazonSNSClientBuilder
                 .standard()
-                .withEndpointConfiguration(awsContainer.getEndpointConfiguration(LocalStackContainer.Service.SNS))
+                .withEndpointConfiguration(awsContainer.getEndpointSNS())
                 .withCredentials(credentials())
                 .build();
     }
 
-    public static class Initializer
-            implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-
-            ensureLocalstackIsRunning();
-            if (!postgreSQLContainer.isRunning()) {
-                postgreSQLContainer.start();
-            }
-
-            ConfigurableEnvironment environment = new StandardEnvironment();
-            Map<String, Object> overrideConfig = new HashMap<String, Object>() {{
-                put("spring.datasource.url", postgreSQLContainer.getJdbcUrl());
-                put("spring.datasource.username", postgreSQLContainer.getUsername());
-                put("spring.datasource.password", postgreSQLContainer.getPassword());
-            }};
-
-            ConfigurableEnvironment env = configurableApplicationContext.getEnvironment();
-            env.getPropertySources().addFirst(new MapPropertySource(this.getClass().getCanonicalName(), overrideConfig));
-            configurableApplicationContext.setEnvironment(env);
+            final String imageName = configurableApplicationContext.getEnvironment().getProperty("localstack.postgres.image");
+            postgresContainer = new PostgresContainer(imageName);
+            postgresContainer.initialize(configurableApplicationContext);
         }
     }
 }
