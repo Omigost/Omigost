@@ -67,7 +67,7 @@ export class OmigostClient implements OmigostClientInterface {
             axios({
                 method,
                 url,
-                withCredentials: true,
+                withCredentials: false,
                 params,
                 data: options.data,
             }).then((response) => {
@@ -87,6 +87,6 @@ export class OmigostClient implements OmigostClientInterface {
 /*
  * Uncomment this to use fake client
  */
-export default OmigostFakeClient;
+//export default OmigostFakeClient;
 //export default new OmigostCachedClient(OmigostFakeClient);
-//export default new OmigostClient();
+export default new OmigostClient();
