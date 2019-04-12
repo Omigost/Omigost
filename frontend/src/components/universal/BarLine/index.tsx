@@ -10,15 +10,22 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
+const DEFAULT_PRECISION = 0;
+
 export interface BarLineProps {
     value: number;
+    precision?: number;
 }
 
 export default class BarLine extends React.Component<BarLineProps, undefined> {
     render() {
         return (
             <Wrapper>
-                <Progress status='active' percent={this.props.value} style={{ height: "1vw" }} />
+                <Progress
+                    status="active"
+                    percent={parseFloat(this.props.value.toFixed(this.props.precision || DEFAULT_PRECISION))}
+                    style={{ height: "1vw" }}
+                />
             </Wrapper>
         );
     }

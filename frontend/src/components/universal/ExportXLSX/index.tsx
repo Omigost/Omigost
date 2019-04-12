@@ -1,15 +1,15 @@
 import * as React from "react";
 
-import { withData, resolveData, DataFormat } from "components/DataProvider";
+import { resolveData, withData, DataFormat } from "components/DataProvider";
 
 export type ExportCallback = (options?: ExportXLSXProps) => void;
 
-export type WorkbookCreator = (xlsx: any, workBook: any, data: any, rawData: any) => void; 
+export type WorkbookCreator = (xlsx: any, workBook: any, data: any, rawData: any) => void;
 
 export enum ExportFormat {
-    EXCEL_XLSX = 'xlsx',
-    CSV = 'csv',
-    TXT = 'txt',
+    EXCEL_XLSX = "xlsx",
+    CSV = "csv",
+    TXT = "txt",
 }
 
 export interface ExportXLSXProps {
@@ -21,8 +21,8 @@ export interface ExportXLSXProps {
     format?: ExportFormat;
 }
 
-const SHEET_DEFAULT_NAME = 'Data';
-const WORKBOOK_DEFAULT_NAME = 'data';
+const SHEET_DEFAULT_NAME = "Data";
+const WORKBOOK_DEFAULT_NAME = "data";
 const DEFAULT_EXPORT_FORMAT = ExportFormat.EXCEL_XLSX;
 
 class ExportXLSX extends React.Component<ExportXLSXProps, undefined> {
@@ -33,22 +33,29 @@ class ExportXLSX extends React.Component<ExportXLSXProps, undefined> {
                 ...this.props,
                 ...options,
             };
-            
+
             const xlsx = module;
             const data = resolveData(effOptions.data);
             const exportFormat = effOptions.format || DEFAULT_EXPORT_FORMAT;
-            
+
             const workBook = xlsx.utils.book_new();
             const sheetData = xlsx.utils.json_to_sheet(data.rows.map(item => {
-                delete item.hovered;
-                return item;
+                const filteredObject = {};
+                data.columns.forEach(column => {
+                    if (column.name) {
+                        filteredObject[column.name] = item[column.field || column.name];
+                    } else if (column.field) {
+                        filteredObject[column.field] = item[column.field];
+                    }
+                });
+                return filteredObject;
             }), {
-                header: data.columns.map(item => item.name).filter(name => name !== 'hovered'),
+                header: data.columns.map(item => item.name).filter(name => name !== "hovered"),
             });
-            
+
             xlsx.utils.book_append_sheet(workBook, sheetData, effOptions.sheetName || SHEET_DEFAULT_NAME);
-            
-            if(effOptions.workbookCreator) {
+
+            if (effOptions.workbookCreator) {
                 effOptions.workbookCreator(xlsx, workBook, data, effOptions.data);
             } else {
                 xlsx.writeFile(workBook, `${effOptions.workbookName || WORKBOOK_DEFAULT_NAME}.${exportFormat}`);
@@ -57,10 +64,10 @@ class ExportXLSX extends React.Component<ExportXLSXProps, undefined> {
     }
 
     render() {
-        if(!this.props.children) {
+        if (!this.props.children) {
             return null;
         }
-        
+
         return this.props.children((options) => {
             this.handleExportAction(options);
         });

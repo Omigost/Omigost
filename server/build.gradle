@@ -4,9 +4,13 @@ buildscript {
     }
     repositories {
         mavenCentral()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'com.adarshr:gradle-test-logger-plugin:1.6.0'
     }
 }
 
@@ -15,6 +19,7 @@ apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.adarshr.test-logger'
 
 group = 'com.omigost'
 version = '0.0.1-SNAPSHOT'
@@ -27,6 +32,47 @@ repositories {
 bootJar {
     baseName = 'omigost-server'
     version = '0.1.0'
+    
+    from('../frontend/dist') {
+        into 'static'
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+    dev
+}
+
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+
+task classpathJar(type: Jar) {
+  inputs.files sourceSets.test.runtimeClasspath
+
+  archiveName = "omigost-server.jar"
+  doFirst {
+    // If run in configuration phase, some artifacts may not exist yet (after clean)
+    // and File.toURI canâ€™t figure out what is directory to add the critical trailing slash.
+    manifest {
+      def classpath = sourceSets.test.runtimeClasspath.files
+      attributes "Class-Path": classpath.collect {f -> f.toURI().toString()}.join(" ")
+    }
+  }
+}
+
+bootRun {
+  classpath = classpathJar.outputs.files + configurations.dev
+  main = 'com.omigost.server.ServerApplication'
+  args = ['--spring.profiles.active=dev', '--server.port=8100']
 }
 
 dependencies {
@@ -41,4 +87,38 @@ dependencies {
     implementation('com.amazonaws:aws-java-sdk-budgets:1.11.475')
     //all of amazon aws sdk
     implementation('com.amazonaws:aws-java-sdk:1.11.475')
+
+    compile 'org.testcontainers:postgresql:1.11.1'
+    compile 'org.testcontainers:junit-jupiter:1.11.0'
+    compile 'org.testcontainers:localstack:1.8.3'
+
+    dev "org.springframework.boot:spring-boot-devtools"
+
+    integrationTestCompile 'org.postgresql:postgresql:42.2.1'
+    integrationTestCompile 'org.springframework.boot:spring-boot-starter-web'
+    integrationTestCompile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    integrationTestCompile 'org.springframework.boot:spring-boot-starter-test'
+    integrationTestCompile 'org.projectlombok:lombok:1.18.4'
+    integrationTestCompile 'junit:junit:4.12'
+    integrationTestCompile 'org.assertj:assertj-core:3.0.0'
+    integrationTestCompile 'com.amazonaws:aws-java-sdk-sqs:1.11.524'
+    integrationTestCompile 'com.amazonaws:aws-java-sdk-s3:1.11.524'
+    integrationTestCompile 'com.amazonaws:aws-java-sdk-iam:1.11.457'
+    integrationTestCompile 'com.amazonaws:aws-java-sdk-organizations:1.11.457'
+    integrationTestCompile 'com.amazonaws:aws-java-sdk-budgets:1.11.475'
+    integrationTestCompile 'com.amazonaws:aws-java-sdk:1.11.475'
+}
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+task startBackend {
+
+}
+
+gradle.projectsEvaluated {
+    bootJar.dependsOn ':frontend:build'
+    startBackend.dependsOn bootRun
 }

@@ -1,53 +1,92 @@
 import axios from "axios";
 
-interface OmigostClientInterface {
-    callEndpoint(endpoint?: string, options?: any, okCallback?: (data: any) => void, errCallback?: (data: any) => void);
+import ClientComponentFactory, { ClientAbstractComponent } from "./ClientComponentFactory";
+import OmigostFakeClient from "./FakeClient";
+import CLIENT_URLS from "./clientUrls";
+
+export enum RequestMethod {
+    GET = "get",
+    POST = "post",
 }
 
-export default class OmigostClient implements OmigostClientInterface {
-    apiBase: string;
+export type ResponseData = any;
 
-    constructor(apiBase: string) {
-        this.apiBase = apiBase;
+export type ResponsePromise = Promise<ResponseData>;
+
+export interface RequestOptions {
+    endpoint?: string;
+    params?: any;
+    method?: RequestMethod;
+}
+
+export interface OmigostClientInterface {
+    callEndpoint(endpoint?: string, options?: RequestOptions): Promise<ResponseData>;
+    getBudgets(): ResponsePromise;
+    createBudget(data: any): ResponsePromise;
+}
+
+export class OmigostClient implements OmigostClientInterface {
+
+    apiBase: string;
+    component: ClientAbstractComponent;
+
+    constructor(apiBase?: string) {
+        this.apiBase = apiBase || CLIENT_URLS.apiBase;
+        this.component = ClientComponentFactory(this);
     }
 
-    callEndpoint(endpoint, options, okCallback, errCallback) {
-        let method = "get";
-        if (options && options.method) {
-            method = options.method;
-        }
+    createBudget(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.createBudget, data });
+    }
 
-        let params = {};
-        if (options && options.params) {
-            params = options.params;
-        }
+    getBudgets(): ResponsePromise {
+        return this.callEndpoint(null, CLIENT_URLS.getBudgets);
+    }
 
-        let url = "/";
-        if (options && endpoint) {
-            url = endpoint;
-        }
-        url = this.apiBase + url;
-
-        axios({
-            method,
-            url,
-            withCredentials: true,
-            params,
-        }).then((response) => {
-            const data = response.data || {};
-            if (data.error) {
-                if (errCallback) {
-                    errCallback(data.error);
-                }
-            } else {
-                if (okCallback) {
-                    okCallback(data || {});
-                }
+    callEndpoint(endpoint, options): ResponsePromise {
+        return new Promise<ResponseData>((resolve, reject) => {
+            let method = "get";
+            if (options && options.method) {
+                method = options.method;
             }
-        }).catch((error) => {
-            if (errCallback) {
-                errCallback(error);
+
+            let params = {};
+            if (options && options.params) {
+                params = options.params;
             }
+
+            let url = "/";
+            if (endpoint) {
+                url = endpoint;
+            } else if (options && options.endpoint) {
+                url = options.endpoint;
+            }
+
+            url = `${this.apiBase}${url}`;
+
+            axios({
+                method,
+                url,
+                withCredentials: true,
+                params,
+                data: options.data,
+            }).then((response) => {
+                const data: ResponseData = response.data || {};
+                if (data.error) {
+                    reject(data.error);
+                } else {
+                    resolve(data || {});
+                }
+            }).catch((error) => {
+                reject(error);
+            });
         });
     }
 }
+
+/*
+ * Uncomment this to use fake client
+ */
+export default OmigostFakeClient;
+//export default new OmigostCachedClient(OmigostFakeClient);
+//export default new OmigostClient();

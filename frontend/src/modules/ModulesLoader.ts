@@ -1,10 +1,11 @@
 
 import { IconName } from "@fortawesome/fontawesome-svg-core";
 
+import OmigostClient, { OmigostClientInterface } from "../client/OmigostClient";
 import OmigostUI from "../components/universal/index";
 
-import DashboardViewModule from "./DashboardView";
 import BudgetsViewModule from "./BudgetsView";
+import DashboardViewModule from "./DashboardView";
 import SettingsViewModule from "./SettingsView";
 
 const BUILTIN_MODULES: Array<OmigostModule> = [
@@ -16,6 +17,7 @@ const BUILTIN_MODULES: Array<OmigostModule> = [
 export interface OmigostApp {
     UI: any;
     modulesLoader: OmigostModulesLoaderInterface;
+    client: OmigostClientInterface;
 }
 
 export interface OmigostModuleDetails {
@@ -65,6 +67,7 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
         return {
             UI: OmigostUI,
             modulesLoader: this,
+            client: OmigostClient,
         };
     }
 

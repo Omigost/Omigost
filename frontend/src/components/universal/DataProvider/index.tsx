@@ -1,5 +1,5 @@
+import deepCopy from "deep-copy";
 import * as React from "react";
-import deepCopy from 'deep-copy';
 
 import DATA_TYPE_PRESETS from "./DataTypePresets";
 
@@ -173,8 +173,8 @@ function typePresetCompositionHelper(columnSpecs: ColumnSpecs, preset: Preset, f
             chainFn = (formattedValue, point, options) => chainPreset(typeOptions, type, point, options)[formatterName](point, options);
         } else if (chain) {
             chainFn = chain as ChainableFormatter;
-        } else {
-            return fail("The chain type check is not exhaustive!");
+        } else if (chain === null) {
+            return fmts;
         }
 
         return {
@@ -325,7 +325,9 @@ export function resolveData(dataToResolve: DataFormat): DataFormat {
     if (data.filters) {
         Object.keys(data.filters).forEach(key => {
             const filterFn = data.filters[key];
-            data = filterFn(data);
+            if (filterFn) {
+                data = filterFn(data);
+            }
         });
     }
 

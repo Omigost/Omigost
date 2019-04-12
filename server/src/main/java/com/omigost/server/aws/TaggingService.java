@@ -25,24 +25,15 @@ public class TaggingService {
      */
     @Value("${aws.region}")
     private String region;
+
     @Autowired
     private AWSCredentialsProvider credentialsProvider;
 
+    @Autowired
     private AWSCostExplorer costExplorer;
-    private AmazonEC2 amazonEC2;
 
-    @PostConstruct
-    private void initializeOrganizationClient() {
-        costExplorer = AWSCostExplorerClientBuilder
-                .standard()
-                .withCredentials(credentialsProvider)
-                .withRegion(region)
-                .build();
-        amazonEC2 = AmazonEC2ClientBuilder.standard()
-                .withCredentials(credentialsProvider)
-                .withRegion(region)
-                .build();
-    }
+    @Autowired
+    private AmazonEC2 amazonEC2;
 
     public List<Tag> fetchEC2CostAllocationTags(DateInterval dateInterval) {
         List<String> tagKeys = fetchAllCostAllocationTagKeys(dateInterval);

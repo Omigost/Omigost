@@ -16,14 +16,11 @@ public class MasterUserProvider {
     @Autowired
     private AWSCredentialsProvider credentialsProvider;
 
-    public String getMasterUserId() {
-        AmazonIdentityManagement iamClient = AmazonIdentityManagementClientBuilder
-                .standard()
-                .withRegion(region)
-                .withCredentials(credentialsProvider)
-                .build();
+    @Autowired
+    private AmazonIdentityManagement amazonIdentityManagement;
 
+    public String getMasterUserId() {
         // Extracting accountId from arn
-        return iamClient.getUser().getUser().getArn().split(":")[4];
+        return amazonIdentityManagement.getUser().getUser().getArn().split(":")[4];
     }
 }

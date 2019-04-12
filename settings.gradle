@@ -1,0 +1,4 @@
+rootProject.name = 'Omigost'
+
+include 'frontend'
+include 'server'

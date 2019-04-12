@@ -9,17 +9,7 @@ services:
   - docker
 
 install:
-  - cd frontend
-  - npm install
-  - npm run build
-  - cd ../server
   - ./gradlew bootJar
-  - cd ..
 
 script:
-  - docker build .
-
-# Backend tests
-  - cd server
-  - ./gradlew test
-  - cd ..
+  - ./gradlew integrationTest

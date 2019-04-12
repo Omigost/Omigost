@@ -10,6 +10,7 @@ import com.amazonaws.services.sns.model.CreateTopicRequest;
 import com.amazonaws.services.sns.model.CreateTopicResult;
 import com.amazonaws.services.sns.model.DeleteTopicRequest;
 import com.amazonaws.services.sns.model.SubscribeRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -26,10 +27,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BudgetService {
     private static String BUDGET_NAME_PREFIX = "budget-";
 
+    @Autowired
+    private AWSBudgets budgetsClient;
+
+    @Autowired
+    private AmazonSNS snsClient;
+
     private AWSCredentialsProvider awsCredentials;
     private MasterUserProvider masterUserProvider;
-    private AWSBudgets budgetsClient;
-    private AmazonSNS snsClient;
     private String accountId;
 
     @Value("${aws.region}")
@@ -46,16 +51,6 @@ public class BudgetService {
 
     @PostConstruct
     public void init() {
-        budgetsClient = AWSBudgetsClientBuilder.standard()
-                .withRegion(region)
-                .withCredentials(awsCredentials)
-                .build();
-
-        snsClient = AmazonSNSClientBuilder.standard()
-                .withCredentials(awsCredentials)
-                .withRegion(region)
-                .build();
-
         // Only to make smoke tests work without mocking everything
         if (!awsCredentials.getCredentials().getAWSAccessKeyId().equals("token")) {
             accountId = masterUserProvider.getMasterUserId();
