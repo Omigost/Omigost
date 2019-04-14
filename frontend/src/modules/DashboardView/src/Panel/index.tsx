@@ -64,6 +64,35 @@ const DATA = {
     ],
 };
 
+const CardBoxWrapper = styled.div`
+    width: 100%;
+    height: 100%;
+    padding: 1vw;
+    border-radius: 0.5vw;
+    background: #ffffff;
+    box-shadow: 0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1);
+`;
+
+const CardBox = ({children, width}) => {
+    return (
+        <Box px={2} width={width} style={{
+            padding: "1vw",
+        }}>
+            <CardBoxWrapper>
+                {children}
+            </CardBoxWrapper>
+        </Box>
+    );
+};
+
+const PanelHeader = styled.div`
+  font-family: ${(props) => props.theme.primaryFont};
+  font-size: ${(props => props.theme.fontSize[props.fontSize || "XXL"]};
+  color: #727277;
+  margin-left: 2vw;
+  margin-top: 2vw;
+`;
+
 export default class Panel extends React.Component<any, any> {
 
     render() {
@@ -71,10 +100,13 @@ export default class Panel extends React.Component<any, any> {
             <this.props.app.UI.DataProvider
                 data={DATA}
             >
+                <PanelHeader>
+                    Budgets dashboard
+                </PanelHeader>
                 <Flex>
                     <Box p={2} width={4 / 5}>
                         <Flex flexDirection="column">
-                            <Box px={2} width={1}>
+                            <CardBox width={1}>
                                <this.props.app.UI.Chart
                                     graphType={"line"}
                                     input={"x"}
@@ -83,8 +115,8 @@ export default class Panel extends React.Component<any, any> {
                                    <this.props.app.UI.ChartTypeSwitchPanel />
                                    <this.props.app.UI.ChartDataOptionsPanel />
                                </this.props.app.UI.Chart>
-                            </Box>
-                            <Box px={2} width={1}>
+                            </CardBox>
+                            <CardBox width={1}>
                                 <GridWrapper>
                                     <this.props.app.UI.DataGrid
                                         renderCell={(props) => {
@@ -124,12 +156,12 @@ export default class Panel extends React.Component<any, any> {
                                         }}
                                     />
                                 </GridWrapper>
-                            </Box>
+                            </CardBox>
                         </Flex>
                     </Box>
                     <Box p={2} width={1 / 5}>
                          <Flex flexDirection="column">
-                             <Box px={2} width={1}>
+                             <CardBox width={1}>
                                  <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
                                  <this.props.app.UI.Meter
                                      value={30}
@@ -137,8 +169,8 @@ export default class Panel extends React.Component<any, any> {
                                      format={(value) => `\$ ${value}`}
                                      tooltipContent={<div>hello!</div>}
                                  />
-                             </Box>
-                             <Box px={2} width={1}>
+                             </CardBox>
+                             <CardBox width={1}>
                                  <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
                                  <this.props.app.UI.Meter
                                      value={30}
@@ -146,7 +178,7 @@ export default class Panel extends React.Component<any, any> {
                                      format={(value) => `\$ ${value}`}
                                      tooltipContent={<div>hello!</div>}
                                  />
-                             </Box>
+                             </CardBox>
                          </Flex>
                     </Box>
                 </Flex>

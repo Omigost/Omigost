@@ -1,15 +1,47 @@
 import * as React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 import { IconName } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+const menuResizeAnimation = keyframes`
+    from {
+        width: 6vw;
+    }
+    to {
+        width: 15vw;
+    }
+`;
+
+const menuResizeAnimationReversed = keyframes`
+    from {
+        width: 15vw;
+    }
+    to {
+        width: 6vw;
+    }
+`;
+
 const Wrapper = styled.aside`
-  width: 8vw;
+  width: 6vw;
   min-height: 100vh;
-  background: ${(props: MenuButtonProps) => props.theme.colors.accent};
+  padding-top: 2vw;
+  padding-bottom: 1vw;
   position: fixed;
   z-index: 99999;
+  animation: ${menuResizeAnimationReversed} 0.5s normal ease-in-out;
+  background: transparent;
+
+  &:hover {
+    width: 15vw;
+    animation: ${menuResizeAnimation} 0.5s normal ease-in-out;
+    background: ${(props: MenuButtonProps) => props.theme.colors.primaryGradient};
+    box-shadow: 0.3vw 0.2vw 0 0 rgba(0,0,0,0.14);
+  }
+
+  &:hover .side-menu-button {
+    color: white;
+  }
 `;
 
 export interface MenuButtonProps {
@@ -19,24 +51,19 @@ export interface MenuButtonProps {
 }
 
 const MenuButton = styled.div<MenuButtonProps>`
-  width: 5.8vw;
-  height: 6vw;
+  width: 6vw;
+  height: 3.5vw;
   font-family: ${(props: MenuButtonProps) => props.theme.primaryFont};
-  font-size: ${(props: MenuButtonProps) => props.theme.fontSize[props.fontSize || "XXL"]};
-  color: ${(props: MenuButtonProps) => props.theme.colors.lightAccent};
-  background: ${(props: MenuButtonProps) => {
-      if (props.selected) {
-          return props.theme.colors.primaryGradient;
-      }
-      return props.theme.colors.accent;
-  }};
-  padding-top: 2.0vw;
-  padding-left: 2.1vw;
+  font-size: ${(props: MenuButtonProps) => props.theme.fontSize[props.fontSize || "XL"]};
+  color: ${(props: MenuButtonProps) => props.theme.colors.primary};
+  padding-top: 0.1vw;
+  padding-left: 1.9vw;
   cursor: pointer;
+  opacity: 0.6;
 
   &:hover {
-    background: ${(props: MenuButtonProps) => props.theme.colors.lightAccent};
-    color: ${(props: MenuButtonProps) => props.theme.colors.accent};
+    color: ${(props: MenuButtonProps) => props.theme.colors.lightAccent};
+    opacity: 1;
   }
 `;
 
@@ -93,6 +120,7 @@ export default class SideMenu extends React.Component<SideMenuProps, SideMenuSta
                         return (
                             <MenuButton
                                 key={`side-menu-button-${index}`}
+                                className={"side-menu-button"}
                                 fontSize={this.props.fontSize}
                                 selected={index === this.state.selectedIndex}
                                 onClick={() => {

@@ -22,8 +22,9 @@ const PanelButton = styled.div<PanelButtonProps>`
   display: inline-block;
   margin-left: 0.1vw;
   margin-right: 0.1vw;
+  border-radius: 0.5vw;
   color: ${(props: PanelButtonProps) => (props.active) ? (props.theme.colors.lightAccent) :(props.theme.colors.primary)};
-  background: ${(props: PanelButtonProps) => (props.active) ? (props.theme.colors.primary) :("transparent")};
+  background: ${(props: PanelButtonProps) => (props.active) ? (props.theme.colors.primaryGradient) :("transparent")};
   cursor: pointer;
 
   &:hover {
