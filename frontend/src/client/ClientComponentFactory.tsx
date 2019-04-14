@@ -2,7 +2,9 @@ import * as React from "react";
 
 import { OmigostClientInterface, ResponseData, ResponsePromise } from "./OmigostClient";
 
-export type RefreshCallback = (() => void) | ((promise: ResponsePromise) => void);
+export type RequestProducer = (client: OmigostClientInterface) => ResponsePromise;
+
+export type RefreshCallback = (() => ResponsePromise) | ((request: RequestProducer) => ResponsePromise);
 
 export interface ClientComponentChildrenArg {
     data: ResponseData;
@@ -13,7 +15,7 @@ export interface ClientComponentChildrenArg {
 
 export interface ClientComponentProps {
     children: (result: ClientComponentChildrenArg, refresh: RefreshCallback) => React.ReactNode;
-    request: (client: OmigostClientInterface) => ResponsePromise;
+    request?: (client: OmigostClientInterface) => ResponsePromise;
 }
 
 export interface ClientComponentState {
@@ -56,17 +58,23 @@ export default (client: OmigostClientInterface): ClientAbstractComponent => {
                 loading: true,
             });
 
-            dataPromise.then((data) => {
-                this.setState({
-                    data,
-                    error: null,
-                    loading: false,
-                });
-            }).catch((error) => {
-                this.setState({
-                    data: null,
-                    error,
-                    loading: false,
+            return new Promise<ResponseData>((resolve, reject) => {
+                dataPromise.then((data) => {
+                    this.setState({
+                        data,
+                        error: null,
+                        loading: false,
+                    }, () => {
+                        resolve(data);
+                    });
+                }).catch((error) => {
+                    this.setState({
+                        data: null,
+                        error,
+                        loading: false,
+                    }, () => {
+                        reject(error);
+                    });
                 });
             });
         }
@@ -81,7 +89,7 @@ export default (client: OmigostClientInterface): ClientAbstractComponent => {
 
             let refreshFn: RefreshCallback = () => this.makeRequest(true);
             if (this.props.mutation) {
-                refreshFn = (promise: ResponsePromise) => this.makeRequest(true, promise);
+                refreshFn = (request: RequestProducer) => this.makeRequest(true, request(client));
             }
 
             return this.props.children({

@@ -5,12 +5,14 @@ type ValueOf<T> = T[keyof T];
 export enum NodeType {
     STRING = "string",
     OBJECT = "object",
+    NOTICE = "notice",
     ROOT = "root",
 }
 
 export interface NodeTypeSchemas {
     STRING: NodeStringSchema;
     OBJECT: NodeObjectSchema;
+    NOTICE: NodeNoticeSchema;
     ROOT: any;
 }
 
@@ -23,6 +25,11 @@ export type NodeBaseSchema = {
 
 export interface NodeProperties {
     [key: string]: NodeSchema;
+}
+
+export interface NodeNoticeSchema extends NodeBaseSchema {
+    type: NodeType.OBJECT;
+    value: String;
 }
 
 export interface NodeObjectSchema extends NodeBaseSchema {
@@ -67,6 +74,10 @@ export abstract class Node<
 
     getHandler(): NodeHandler<S, O, M, CS, CO, CM, PS, PO, PM> {
         return this.handler;
+    }
+
+    isOutputAvailable(): boolean {
+        return true;
     }
 
     validateCustom(): Array<NodeError> {

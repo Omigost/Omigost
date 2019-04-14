@@ -42,7 +42,9 @@ export abstract class CompositeNode<O, M extends NodeSchema> extends Node<NodeS,
     getRawOutput() {
         const output = {};
         Object.keys(this.getChildrenMapFromSchema()).forEach(key => {
-            output[key] = this.findChild(key).getOutput();
+            if (this.findChild(key).isOutputAvailable()) {
+                output[key] = this.findChild(key).getOutput();
+            }
         });
         return this.getCompositeOutput(output);
     }

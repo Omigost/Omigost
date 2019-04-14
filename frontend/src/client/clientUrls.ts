@@ -7,4 +7,8 @@ export default {
         endpoint: "budgets/create",
         method: "post",
     },
+    deleteBudget: {
+        endpoint: ({data}) => `budgets?name=${data.name}`,
+        method: "delete",
+    },
 };

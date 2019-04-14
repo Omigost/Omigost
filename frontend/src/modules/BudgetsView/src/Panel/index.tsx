@@ -3,8 +3,10 @@ import * as React from "react";
 import styled, { ThemeProvider } from "styled-components";
 import defaultTheme from "themes/default";
 
+import ReactModal from 'react-modal';
+
 import {
-    faDownload, faPlus,
+    faDownload, faPlus, faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 
 import * as Fuse from "fuse-js-latest";
@@ -20,54 +22,117 @@ const TooltipContent = styled.div`
   width: 12vw;
 `;
 
-const DATA = {
-    columns: [
-        {
-            name: "Budget Name",
-            field: "name",
-            type: "string",
-        },
-        {
-            name: "Current",
-            field: "current",
-            type: "number",
-            formatOutputCell: "currency",
-        },
-        {
-            name: "Budgeted",
-            field: "budgeted",
-            type: "number",
-            formatOutputCell: "currency",
-        },
-        {
-            name: "Forecasted",
-            field: "forecasted",
-            type: "number",
-            formatOutputCell: "currency",
-        },
-        {
-            name: "Current vs Budgeted",
-            type: "ui-line",
-            generator: (column, row) => row.current / row.budgeted * 100,
-        },
-        {
-            name: "Current vs Forecasted",
-            type: "ui-line",
-            generator: (column, row) => row.current / row.forecasted * 100,
-        },
-    ],
-    rows: [],
-};
+let DATA = {};
 
 export default class Panel extends React.Component<any, any> {
 
     state: any;
+    refresh: any;
 
     constructor(props) {
         super(props);
 
         this.state = {
             showBudgetNewDialog: false,
+        };
+
+        this.refresh = null;
+    }
+
+    componentDidMount() {
+        DATA = {
+            columns: [
+                {
+                    name: "Budget Name",
+                    field: "name",
+                    type: "string",
+                    formatOutputCell: (p) => (
+                        <ThemeProvider theme={defaultTheme}>
+                            <div>
+                                <div style={{ display: "inline-block" }}>
+                                    <this.props.app.UI.TinyButtons>
+                                        {
+                                            [
+                                                {
+                                                    icon: faTimes.iconName,
+                                                    popover: (
+                                                        <this.props.app.client.component mutation>
+                                                            {({data, error, loading}, post) => {
+                                                                return (
+                                                                    <div style={{padding: "1vw", color: "black"}}>
+                                                                        <this.props.app.UI.Form
+                                                                            submitButton="Remove"
+                                                                            onSubmit={(data) => {
+                                                                                post(client => client.deleteBudget({
+                                                                                    name: p,
+                                                                                })).then(() => {
+                                                                                    if (this.refresh) this.refresh();
+                                                                                    this.forceUpdate();
+                                                                                });
+                                                                            }}
+                                                                        >
+                                                                            {{
+                                                                                title: "A registration form",
+                                                                                description: "The description",
+                                                                                type: "object",
+                                                                                properties: {
+                                                                                    "notice": {
+                                                                                        type: "notice",
+                                                                                        value: `Remove budget ${p}?`,
+                                                                                    },
+                                                                                },
+                                                                            }}
+                                                                        </this.props.app.UI.Form>
+                                                                    </div>
+                                                                );
+                                                            }}
+                                                        </this.props.app.client.component>
+                                                    ),
+                                                },
+                                            ]
+                                        }
+                                    </this.props.app.UI.TinyButtons>
+                                </div>
+                                <div style={{ display: "inline-block" }}>
+                                    {p}
+                                </div>
+                            </div>
+                        </ThemeProvider>
+                    ),
+                },
+                {
+                    name: "Current",
+                    field: "current",
+                    type: "number",
+                    formatOutputCell: "currency",
+                },
+                {
+                    name: "Budgeted",
+                    field: "budgeted",
+                    type: "number",
+                    formatOutputCell: "currency",
+                },
+                {
+                    name: "Forecasted",
+                    field: "forecasted",
+                    type: "number",
+                    formatOutputCell: "currency",
+                },
+                {
+                    name: "Current vs Budgeted",
+                    type: "ui-line",
+                    generator: (column, row) => {
+                        if (row.current === null || row.budgeted === null) return null;
+                        return row.current / row.budgeted * 100;
+                    },
+                },
+                {
+                    name: "Current vs Forecasted",
+                    type: "ui-line",
+                    generator: (column, row) => row.current / row.forecasted * 100,
+                },
+            ],
+            rows: [],
         };
     }
 
@@ -79,6 +144,8 @@ export default class Panel extends React.Component<any, any> {
                 {({data, error, loading}, refresh) => {
                     if (loading || !data) return null;
 
+                    this.refresh = refresh;
+
                     return (
                         <this.props.app.UI.DataProvider
                             data={{
@@ -87,8 +154,8 @@ export default class Panel extends React.Component<any, any> {
                                     return {
                                         name: budget.budgetName,
                                         budgeted: budget.budgetLimit.amount,
-                                        current: budget.calculatedSpend.actualSpend.amount,
-                                        forecasted: budget.calculatedSpend.forecastedSpend.amount,
+                                        current: (budget.calculatedSpend && budget.calculatedSpend.actualSpend) ? (budget.calculatedSpend.actualSpend.amount) : (null),
+                                        forecasted: (budget.calculatedSpend && budget.calculatedSpend.forecastedSpend) ? (budget.calculatedSpend.forecastedSpend.amount) : (null),
                                     };
                                 }),
                             }}
@@ -106,9 +173,47 @@ export default class Panel extends React.Component<any, any> {
                                                                     {
                                                                         icon: faPlus.iconName,
                                                                         text: "Add budget",
-                                                                        onClick: () => {
-                                                                            this.setState({ showBudgetNewDialog: true });
-                                                                        },
+                                                                        popover: (
+                                                                            <div style={{ padding: "2vw", color: "black" }}>
+                                                                                <this.props.app.client.component mutation>
+                                                                                    {({data, error, loading}, post) => {
+                                                                                        if (loading) return null;
+                                                                                        return (
+                                                                                            <this.props.app.UI.Form
+                                                                                                submitButton="Save new budget"
+                                                                                                onSubmit={(data) => {
+                                                                                                    post(client => client.createBudget({
+                                                                                                        limit: parseInt(data.limit),
+                                                                                                        linkedAccounts: [],
+                                                                                                        tags: {},
+                                                                                                    })).then(() => {
+                                                                                                        this.setState({
+                                                                                                            showBudgetNewDialog: false,
+                                                                                                        }, () => {
+                                                                                                            console.log("refresh!");
+                                                                                                            refresh();
+                                                                                                        });
+                                                                                                    });
+                                                                                                }}
+                                                                                            >
+                                                                                                {{
+                                                                                                    title: "A registration form",
+                                                                                                    description: "The description",
+                                                                                                    type: "object",
+                                                                                                    properties: {
+                                                                                                        "limit": {
+                                                                                                            type: "string",
+                                                                                                            title: "The budget limit",
+                                                                                                            minLength: 1,
+                                                                                                        },
+                                                                                                    },
+                                                                                                }}
+                                                                                            </this.props.app.UI.Form>
+                                                                                        );
+                                                                                    }}
+                                                                                </this.props.app.client.component>
+                                                                            </div>
+                                                                        )
                                                                     },
                                                                     {
                                                                         icon: faDownload.iconName,
@@ -124,28 +229,6 @@ export default class Panel extends React.Component<any, any> {
                                                 }
                                             }
                                         </this.props.app.UI.ExportXLSX>
-                                        <this.props.app.UI.FloatingWindow open={this.state.showBudgetNewDialog}>
-                                            <div style={{ padding: "2vw" }}>
-                                                <this.props.app.UI.Form
-                                                    onSubmit={(data) => {
-                                                        //console.log(data);
-                                                    }}
-                                                >
-                                                    {{
-                                                        title: "A registration form",
-                                                        description: "The description",
-                                                        type: "object",
-                                                        properties: {
-                                                            "limit": {
-                                                                type: "string",
-                                                                title: "The budget limit",
-                                                                minLength: 1,
-                                                            },
-                                                        },
-                                                    }}
-                                                </this.props.app.UI.Form>
-                                            </div>
-                                        </this.props.app.UI.FloatingWindow>
                                         <GridWrapper>
                                             <Box p={2} width={1 / 5}>
                                                 <Flex>

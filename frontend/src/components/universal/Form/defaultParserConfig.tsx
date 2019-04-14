@@ -2,6 +2,7 @@ import { SchemaParserConfig } from "./schemaTypes";
 
 import ObjectDefault from "./renderers/ObjectDefault";
 import StringDefault from "./renderers/StringDefault";
+import NoticeDefault from "./renderers/NoticeDefault";
 
 export const defaultParserConfig: SchemaParserConfig = {
     handlers: {
@@ -13,6 +14,9 @@ export const defaultParserConfig: SchemaParserConfig = {
         },
         OBJECT: {
             default: ObjectDefault,
+        },
+        NOTICE: {
+            default: NoticeDefault,
         },
     },
     rootState: null,

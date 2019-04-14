@@ -37,6 +37,8 @@ function getHandlerForType<M extends NodeSchema>(node: M, config: SchemaParserCo
             return config.handlers.OBJECT;
         case NodeType.STRING:
             return config.handlers.STRING;
+        case NodeType.NOTICE:
+            return config.handlers.NOTICE;
         case NodeType.ROOT:
             return null;
         default:

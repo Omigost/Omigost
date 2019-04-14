@@ -43,6 +43,10 @@ export class OmigostClient implements OmigostClientInterface {
         return this.callEndpoint(null, CLIENT_URLS.getBudgets);
     }
 
+    deleteBudget(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.deleteBudget, data });
+    }
+
     callEndpoint(endpoint, options): ResponsePromise {
         return new Promise<ResponseData>((resolve, reject) => {
             let method = "get";
@@ -59,7 +63,11 @@ export class OmigostClient implements OmigostClientInterface {
             if (endpoint) {
                 url = endpoint;
             } else if (options && options.endpoint) {
-                url = options.endpoint;
+                if ({}.toString.call(options.endpoint) === "[object Function]") {
+                    url = options.endpoint(options);
+                } else {
+                    url = options.endpoint;
+                }
             }
 
             url = `${this.apiBase}${url}`;

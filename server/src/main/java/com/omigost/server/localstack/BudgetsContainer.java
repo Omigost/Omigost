@@ -1,7 +1,11 @@
 package com.omigost.server.localstack;
 
+import com.amazonaws.client.builder.AwsClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 @Component
 public class BudgetsContainer extends AWSServiceImageContainer {

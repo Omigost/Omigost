@@ -16,6 +16,7 @@ export interface FormProps {
     validateOnInit?: boolean;
     children: Schema;
     onSubmit: (data: any) => void;
+    submitButton?: any;
 }
 
 interface FormState {
@@ -109,7 +110,7 @@ export default class Form extends React.Component<FormProps, FormState> {
                                     }
                                 }}
                             >
-                                Save
+                                {this.props.submitButton || "Save"}
                             </Button>
                         </div>
                     ) :(null)

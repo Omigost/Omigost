@@ -53,10 +53,19 @@ class CellRenderer extends React.Component<CellRendererProps, undefined> {
             output: dataCol.field || dataCol.name,
         });
 
+        setTimeout(() => {
+            if (this.props && this.props.reactContainer && this.props.reactContainer.parentNode) {
+                this.props.reactContainer.parentNode.parentNode.style.zIndex = 1000 - this.props.node.childIndex;
+            }
+        }, 500);
+
         return (
             <CellWrapper
                 hovered={this.props.node.data.hovered}
                 theme={this.props.context.theme}
+                style={{
+                    zIndex: 1000-this.props.node.childIndex,
+                }}
             >
                 {
                     (this.props.context.renderCell) ? (this.props.context.renderCell(this.props, formatedData)) :(formatedData.value)
