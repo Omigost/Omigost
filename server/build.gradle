@@ -43,5 +43,8 @@ dependencies {
     implementation('com.amazonaws:aws-java-sdk:1.11.475')
     
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.1')
-
+    
+    testRuntimeOnly('com.h2database:h2:1.4.194')
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.3.1')
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.3.1')
 }

@@ -43,7 +43,7 @@ public class SlackService implements NotificationService {
             }
         }
 
-        throw new NotFoundException("Couldn't find user with such name");
+        throw new NotFoundException("Couldn't find user with such type");
     }
 
     private MultiValueMap<String, String> getArgsMapWithAuth() {

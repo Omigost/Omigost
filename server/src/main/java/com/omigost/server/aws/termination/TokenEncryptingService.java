@@ -1,4 +1,4 @@
-package com.omigost.server.aws;
+package com.omigost.server.aws.termination;
 
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.Base64;
@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 
 /**
  * //TODO temporary solution
@@ -34,7 +35,7 @@ public class TokenEncryptingService {
 
     @SneakyThrows
     public String encryptMessage(String message) {
-        byte[] messageInBytes = message.getBytes("UTF8");
+        byte[] messageInBytes = message.getBytes(StandardCharsets.US_ASCII);
         byte[] encryptedMaessage = encrypt(messageInBytes, secretKey);
         return Base64.encodeBase64String(encryptedMaessage);
     }
@@ -43,7 +44,7 @@ public class TokenEncryptingService {
     public String descryptMessage(String encMessage) {
         byte[] received = Base64.decodeBase64(encMessage);
         byte[] decryptedBytes = decrypt(received, secretKey);
-        return new String(decryptedBytes, "UTF8");
+        return new String(decryptedBytes, StandardCharsets.US_ASCII);
     }
 
     @SneakyThrows

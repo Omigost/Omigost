@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.UUID;
 
 @Service
 public class AWSRoleBasedCredentialProvider {
@@ -21,8 +22,6 @@ public class AWSRoleBasedCredentialProvider {
     private String region;
     @Value("${aws.generalAccessRole}")
     private String roleName;
-    //TODO random or fixed
-    final String roleSessionName = "53a56s89065";
 
     /**
      * The idea is that every developer will create a role called AccessToAll role
@@ -33,6 +32,11 @@ public class AWSRoleBasedCredentialProvider {
         return "arn:aws:iam::" + userId + ":role/" + roleName;
     }
 
+    String generateRoleSessionName(String userId) {
+        final String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 4);
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        return userId + "-" + timeStamp + "-" + uuid;
+    }
 
     @Autowired
     private AWSCredentialsConfig config;
@@ -52,7 +56,7 @@ public class AWSRoleBasedCredentialProvider {
 
         AssumeRoleRequest roleRequest = new AssumeRoleRequest()
                 .withRoleArn(roleARN)
-                .withRoleSessionName(roleSessionName);
+                .withRoleSessionName(generateRoleSessionName(userId));
 
         AssumeRoleResult assumeRoleResult = stsClient.assumeRole(roleRequest);
         Credentials sessionCredentials = assumeRoleResult.getCredentials();

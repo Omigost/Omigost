@@ -6,6 +6,7 @@ import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
 import com.amazonaws.services.ec2.model.StopInstancesRequest;
 import com.amazonaws.services.ec2.model.TerminateInstancesRequest;
 import com.omigost.server.aws.AWSRoleBasedCredentialProvider;
+import com.omigost.server.aws.MachineListingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ import java.util.List;
 public class EC2TerminationService {
     @Value("${aws.region}")
     private String region;
+    @Autowired
+    MachineListingService machineListingService;
 
     @Autowired
     AWSRoleBasedCredentialProvider awsRoleBasedCredentialProvider;
@@ -50,6 +53,11 @@ public class EC2TerminationService {
         if (machineIds.isEmpty()) return;
         StopInstancesRequest request = stoppingRequest(machineIds).withHibernate(true);
         getAmazonEC2ClientForUser(userId).stopInstances(request);
+    }
+
+    public void terminateRunningUserInsatnace(String awsUserId) {
+        List<String> runningEC2Instances = machineListingService.getRunningEC2Instances(awsUserId);
+        terminate(runningEC2Instances, awsUserId);
     }
 
 }
