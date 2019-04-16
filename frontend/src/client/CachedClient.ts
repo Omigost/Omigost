@@ -69,6 +69,10 @@ export class OmigostCachedClient implements OmigostClientInterface {
         return this.cache.transform("getBudgets", this.client.getBudgets)();
     }
 
+    postBudgetIncreaseLimit(formContext, data): ResponsePromise {
+        return this.client.postBudgetIncreaseLimit(formContext, data);
+    }
+
     callEndpoint(endpoint, options): ResponsePromise {
         return this.cache.transform(`callEndpoint(${endpoint}:${JSON.stringify(options)})`, () => this.client.callEndpoint(endpoint, options))();
     }
