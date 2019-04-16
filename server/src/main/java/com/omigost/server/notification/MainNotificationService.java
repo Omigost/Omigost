@@ -39,7 +39,7 @@ public class MainNotificationService {
     }
 
     public NotificationMessage budgetTriggeredMessage(Budget budget, String tokenString) {
-        String respondLinkUrl = "/alerts/trigger?token=" + tokenString; // TODO add host domain
+        String respondLinkUrl = "/requestBudgetLimit?token=" + tokenString; // TODO add host domain
 
         if (new BudgetDecorator(budget).isOverrun())
             return budgetOverrunMessage(budget, respondLinkUrl);
