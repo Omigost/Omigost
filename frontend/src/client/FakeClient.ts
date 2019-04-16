@@ -1,11 +1,11 @@
 
 import ClientComponentFactory, { ClientAbstractComponent } from "./ClientComponentFactory";
-import {callFormEndpoint} from "./formHelpers";
 import {
     OmigostClientInterface,
     ResponseData,
     ResponsePromise,
 } from "./OmigostClient";
+import {callFormEndpoint} from "./formHelpers";
 
 import fakeBudget from "./fakes/budget";
 
