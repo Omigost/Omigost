@@ -13,11 +13,11 @@ export default {
     lightAccent: "white",
   },
   fontSize: {
-    S: "0.7vw",
-    default: "1vw",
-    M: "1.2vw",
-    L: "1.5vw",
-    XL: "2vw",
-    XXL: "3vw",
+    S: "9px",
+    default: "12px",
+    M: "14px",
+    L: "18px",
+    XL: "26px",
+    XXL: "34px",
   },
 };
