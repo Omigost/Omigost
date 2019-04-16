@@ -3,6 +3,7 @@ import axios from "axios";
 import ClientComponentFactory, { ClientAbstractComponent } from "./ClientComponentFactory";
 import OmigostFakeClient from "./FakeClient";
 import CLIENT_URLS from "./clientUrls";
+import {callFormEndpoint, FormComponentContext} from "./formHelpers";
 
 export enum RequestMethod {
     GET = "get",
@@ -13,6 +14,8 @@ export type ResponseData = any;
 
 export type ResponsePromise = Promise<ResponseData>;
 
+export type PostBudgetIncreaseLimitPayload = {reason: string, token: string};
+
 export interface RequestOptions {
     endpoint?: string;
     params?: any;
@@ -22,6 +25,7 @@ export interface RequestOptions {
 export interface OmigostClientInterface {
     callEndpoint(endpoint?: string, options?: RequestOptions): Promise<ResponseData>;
     getBudgets(): ResponsePromise;
+    postBudgetIncreaseLimit(formContext: FormComponentContext, data: PostBudgetIncreaseLimitPayload): ResponsePromise;
     createBudget(data: any): ResponsePromise;
 }
 
@@ -40,7 +44,15 @@ export class OmigostClient implements OmigostClientInterface {
     }
 
     getBudgets(): ResponsePromise {
-        return this.callEndpoint(null, CLIENT_URLS.getBudgets);
+        return this.callEndpoint(CLIENT_URLS.getBudgets.endpoint, null);
+    }
+
+    postBudgetIncreaseLimit(formContext, data): ResponsePromise {
+        return this.submitForm(formContext, { ...CLIENT_URLS.postBudgetIncreaseLimit, data });
+    }
+
+    submitForm(formContext, options) {
+        return callFormEndpoint(this.callEndpoint.bind(this), formContext, options);
     }
 
     callEndpoint(endpoint, options): ResponsePromise {

@@ -1,5 +1,6 @@
 
 import ClientComponentFactory, { ClientAbstractComponent } from "./ClientComponentFactory";
+import {callFormEndpoint} from "./formHelpers";
 import {
     OmigostClientInterface,
     ResponseData,
@@ -32,6 +33,20 @@ export class OmigostFakeClient implements OmigostClientInterface {
             }
             resolve(budgets);
         });
+    }
+
+    postBudgetIncreaseLimit(formContext, data): ResponsePromise {
+        const fakeRequest = new Promise<ResponseData>((resolve, reject) => {
+            return setTimeout(() => {
+                if (data.reason === "TEST") return reject(new TypeError("the reason was rejected by backend"));
+                const FAILURE_CHANCE = 0.2;
+
+                const hasFailed = Math.random() < FAILURE_CHANCE;
+                if (hasFailed) return reject("something went amiss, try again");
+                return resolve("success!");
+            }, 600);
+        });
+        return callFormEndpoint(() => fakeRequest, formContext, data);
     }
 
     callEndpoint(endpoint, options): ResponsePromise {
