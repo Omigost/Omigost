@@ -9,7 +9,7 @@ public class Attachment {
     private String callback_id;
     private String fallback;
     private String text;
-    private float id;
+    private String id;
     ArrayList<Action> actions = new ArrayList<>();
 
 }

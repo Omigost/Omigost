@@ -2,6 +2,7 @@ package com.omigost.server.scheduledTermination;
 
 import com.omigost.server.aws.termination.ScheduledNotificationService;
 import com.omigost.server.aws.termination.SlackCommunicationService;
+import com.omigost.server.aws.termination.TokenEncryptingService;
 import com.omigost.server.model.Account;
 import com.omigost.server.model.Communication;
 import com.omigost.server.model.CommunicationType;
@@ -33,6 +34,8 @@ public class ScheduledNotificationIntegrationTest extends TestTemplate {
     SlackCommunicationService slackCommunicationService;
     @Autowired
     ScheduledNotificationService scheduledNotificationService;
+    @Autowired
+    TokenEncryptingService tokenEncryptingService;
 
     private final String testAwsId = "537952477028";
     private final String accountName = "Sumo2";
@@ -79,10 +82,9 @@ public class ScheduledNotificationIntegrationTest extends TestTemplate {
         //just to get the callbackId
         //side effect is that 2 messages are sent
         String callbackId = slackCommunicationService.sendSlackReminder(testAwsId, -1);
-
+        assertThat(testAwsId,is(tokenEncryptingService.descryptMessage(callbackId)));
         SlackResponseDTO slackResponseDTO = new SlackResponseDTO();
         slackResponseDTO.setCallback_id(callbackId);
-
     }
 
     @Test

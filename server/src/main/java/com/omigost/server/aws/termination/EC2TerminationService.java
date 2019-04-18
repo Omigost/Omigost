@@ -55,9 +55,14 @@ public class EC2TerminationService {
         getAmazonEC2ClientForUser(userId).stopInstances(request);
     }
 
-    public void terminateRunningUserInsatnace(String awsUserId) {
+    public void terminateRunningInstances(String awsUserId) {
         List<String> runningEC2Instances = machineListingService.getRunningEC2Instances(awsUserId);
         terminate(runningEC2Instances, awsUserId);
+    }
+
+    public void stopRunningInstances(String awsUserId) {
+        List<String> runningEC2Instances = machineListingService.getRunningEC2Instances(awsUserId);
+        stop(runningEC2Instances, awsUserId);
     }
 
 }

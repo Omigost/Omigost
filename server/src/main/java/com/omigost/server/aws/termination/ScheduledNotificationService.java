@@ -4,6 +4,7 @@ import com.omigost.server.aws.MachineListingService;
 import com.omigost.server.model.Account;
 import com.omigost.server.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -26,7 +27,7 @@ public class ScheduledNotificationService {
     //TODO time by time update list of new organization members
     //TODO programmable scheduler
     //@Scheduled(cron = "30 18-23/1,0-8/1 * * *")
-//    @Scheduled(cron = "1/1 * * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void notifyOutOfBusinessHours() {
         Collection<Account> accounts = accountRepository.getAllByScheduledNotification(true);
         for (Account account : accounts) {

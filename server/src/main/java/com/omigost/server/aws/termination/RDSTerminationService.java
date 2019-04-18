@@ -16,7 +16,6 @@ public class RDSTerminationService {
     @Value("${aws.region}")
     private String region;
 
-
     @Autowired
     public AWSRoleBasedCredentialProvider awsRoleBasedCredentialProvider;
 

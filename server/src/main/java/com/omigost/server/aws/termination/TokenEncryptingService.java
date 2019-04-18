@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
 
 /**
  * //TODO temporary solution
@@ -35,7 +34,7 @@ public class TokenEncryptingService {
 
     @SneakyThrows
     public String encryptMessage(String message) {
-        byte[] messageInBytes = message.getBytes(StandardCharsets.US_ASCII);
+        byte[] messageInBytes = message.getBytes();
         byte[] encryptedMaessage = encrypt(messageInBytes, secretKey);
         return Base64.encodeBase64String(encryptedMaessage);
     }
@@ -44,7 +43,7 @@ public class TokenEncryptingService {
     public String descryptMessage(String encMessage) {
         byte[] received = Base64.decodeBase64(encMessage);
         byte[] decryptedBytes = decrypt(received, secretKey);
-        return new String(decryptedBytes, StandardCharsets.US_ASCII);
+        return new String(decryptedBytes);
     }
 
     @SneakyThrows

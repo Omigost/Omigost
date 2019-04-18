@@ -16,7 +16,7 @@ public class SlackResponseDTO {
     private String message_ts;
     private String attachment_id;
     private String token;
-    private boolean is_app_unfurl;
+    private String is_app_unfurl;
     Original_message original_message;
     private String response_url;
     private String trigger_id;
