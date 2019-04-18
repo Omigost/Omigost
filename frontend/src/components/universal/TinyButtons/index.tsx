@@ -41,7 +41,7 @@ export interface ButtonSpecs {
     icon: IconName;
     active?: boolean;
     onClick?: () => void;
-    text?: string;
+    text?: any;
     tooltip?: React.ReactElement<any>;
     popover?: React.ReactElement<any>;
 }

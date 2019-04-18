@@ -29,4 +29,8 @@ export default class DashBoardViewModule implements OmigostModule {
     getName(): string {
         return "dashboard-view";
     }
+
+    getMenuName(): string {
+        return "Dashboard";
+    }
 }

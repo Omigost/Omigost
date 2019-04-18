@@ -12,8 +12,9 @@ const CursorIcon = styled.div`
 `;
 
 const GridWrapper = styled.div`
-  height: 50vh;
+  height: 100%;
   width: 100%;
+  overflow-y: scroll;
 `;
 
 const TooltipContent = styled.div`
@@ -64,27 +65,6 @@ const DATA = {
     ],
 };
 
-const CardBoxWrapper = styled.div`
-    width: 100%;
-    height: 100%;
-    padding: 1vw;
-    border-radius: 0.5vw;
-    background: #ffffff;
-    box-shadow: 0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1);
-`;
-
-const CardBox = ({children, width}) => {
-    return (
-        <Box px={2} width={width} style={{
-            padding: "1vw",
-        }}>
-            <CardBoxWrapper>
-                {children}
-            </CardBoxWrapper>
-        </Box>
-    );
-};
-
 const PanelHeader = styled.div`
   font-family: ${(props) => props.theme.primaryFont};
   font-size: ${(props => props.theme.fontSize[props.fontSize || "XXL"]};
@@ -103,20 +83,25 @@ export default class Panel extends React.Component<any, any> {
                 <PanelHeader>
                     Budgets dashboard
                 </PanelHeader>
-                <Flex>
-                    <Box p={2} width={4 / 5}>
-                        <Flex flexDirection="column">
-                            <CardBox width={1}>
-                               <this.props.app.UI.Chart
+
+                <this.props.app.UI.InteractiveGrid2
+                    items={[
+                        {
+                            content: (
+                                <this.props.app.UI.Chart
                                     graphType={"line"}
                                     input={"x"}
                                     output={["z", "y"]}
-                               >
-                                   <this.props.app.UI.ChartTypeSwitchPanel />
-                                   <this.props.app.UI.ChartDataOptionsPanel />
-                               </this.props.app.UI.Chart>
-                            </CardBox>
-                            <CardBox width={1}>
+                                >
+                                    <this.props.app.UI.ChartTypeSwitchPanel />
+                                    <this.props.app.UI.ChartDataOptionsPanel />
+                                </this.props.app.UI.Chart>
+                            ),
+                            width: 7,
+                            height: 9,
+                        },
+                        {
+                            content: (
                                 <GridWrapper>
                                     <this.props.app.UI.DataGrid
                                         renderCell={(props) => {
@@ -141,8 +126,8 @@ export default class Panel extends React.Component<any, any> {
                                                                     tiny
                                                                     showLegend
                                                                     height={150}
-                                                               >
-                                                               </this.props.app.UI.Chart>
+                                                                >
+                                                                </this.props.app.UI.Chart>
                                                             </TooltipContent>
                                                         </ThemeProvider>
                                                     }
@@ -156,32 +141,43 @@ export default class Panel extends React.Component<any, any> {
                                         }}
                                     />
                                 </GridWrapper>
-                            </CardBox>
-                        </Flex>
-                    </Box>
-                    <Box p={2} width={1 / 5}>
-                         <Flex flexDirection="column">
-                             <CardBox width={1}>
-                                 <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
-                                 <this.props.app.UI.Meter
-                                     value={30}
-                                     label="test"
-                                     format={(value) => `\$ ${value}`}
-                                     tooltipContent={<div>hello!</div>}
-                                 />
-                             </CardBox>
-                             <CardBox width={1}>
-                                 <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
-                                 <this.props.app.UI.Meter
-                                     value={30}
-                                     label="test"
-                                     format={(value) => `\$ ${value}`}
-                                     tooltipContent={<div>hello!</div>}
-                                 />
-                             </CardBox>
-                         </Flex>
-                    </Box>
-                </Flex>
+                            ),
+                            width: 6,
+                            height: 7,
+                        },
+                        {
+                            content: (
+                                <div>
+                                    <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
+                                    <this.props.app.UI.Meter
+                                        value={30}
+                                        label="test"
+                                        format={(value) => `\$ ${value}`}
+                                        tooltipContent={<div>hello!</div>}
+                                    />
+                                </div>
+                            ),
+                            width: 2,
+                            height: 6,
+                        },
+                        {
+                            content: (
+                                <div>
+                                    <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
+                                    <this.props.app.UI.Meter
+                                        value={30}
+                                        label="test"
+                                        format={(value) => `\$ ${value}`}
+                                        tooltipContent={<div>hello!</div>}
+                                    />
+                                </div>
+                            ),
+                            width: 2,
+                            height: 6,
+                        },
+                    ]}
+                />
+
             </this.props.app.UI.DataProvider>
         );
     }

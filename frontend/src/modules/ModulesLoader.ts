@@ -31,6 +31,7 @@ export interface OmigostModule {
     onLoad(app: OmigostApp, loader: OmigostModulesLoaderInterface);
     getIcon(): IconName | null;
     getName(): string | null;
+    getMenuName?(): string;
     getDetails(): OmigostModuleDetails;
     renderDashboardView?(props: any): React.ReactElement<any> | null;
     getRoutes?(): Array<OmigostModuleRoute>;
@@ -54,6 +55,8 @@ export interface OmigostModulesLoaderInterface {
 export interface OmigostModuleInstance {
     activated: boolean;
     module: OmigostModule;
+    enable: () => void;
+    disable: () => void;
 }
 
 export default class OmigostModulesLoader implements OmigostModulesLoaderInterface {
@@ -91,6 +94,14 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
         return routes;
     }
 
+    enableModule(module: OmigostModule) {
+        this.modules.find(item => item.module === module).activated = true;
+    }
+
+    disableModule(module: OmigostModule) {
+        this.modules.find(item => item.module === module).activated = false;
+    }
+
     loadModule(src: ModuleSource) {
         let modInst: OmigostModule = null;
         if (typeof src === "string") {
@@ -103,16 +114,27 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
         }
 
         if (modInst) {
-            this.modules.push({
+            const inst = {
+                enable: () => this.enableModule(modInst),
+                disable: () => this.disableModule(modInst),
                 activated: true,
                 module: modInst,
-            });
+            };
+            this.modules.push(inst);
             modInst.onLoad(this.getApp(), this);
         }
     }
 
     loadAllModules(srcs: Array<ModuleSource>) {
         srcs.forEach(module => this.loadModule(module));
+    }
+
+    getAllModuleInstances() {
+        return this.modules.map(instance => instance);
+    }
+
+    getModule(name: string): OmigostModule {
+        return this.modules.find(instance => instance.module.getName() === name).module;
     }
 
     getAllModules() {

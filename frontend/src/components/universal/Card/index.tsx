@@ -27,10 +27,18 @@ const CardTitleWrapper = styled.div`
   flex: 50%;
 `;
 
+const ActionWrapper = styled.div`
+  float: right;
+  position: relative;
+  right: 10vw;
+  top: -2vw;
+`;
+
 export interface CardProps {
     title: string;
     description?: string;
     image?: string;
+    action?: React.Node;
 }
 
 export default class Card extends React.Component<CardProps, undefined> {
@@ -63,6 +71,9 @@ export default class Card extends React.Component<CardProps, undefined> {
                         )
                     }
                 </ContentRow>
+                <ActionWrapper>
+                    {this.props.action}
+                </ActionWrapper>
             </Wrapper>
         );
     }

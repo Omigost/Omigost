@@ -22,6 +22,15 @@ const menuResizeAnimationReversed = keyframes`
     }
 `;
 
+const menuItemsTextAnimation = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`;
+
 const Wrapper = styled.aside`
   width: 6vw;
   min-height: 100vh;
@@ -42,6 +51,11 @@ const Wrapper = styled.aside`
   &:hover .side-menu-button {
     color: white;
   }
+
+  &:hover .side-menu-button-name {
+    display: inline-block;
+    animation: ${menuItemsTextAnimation} 0.5s normal ease-in-out;
+  }
 `;
 
 export interface MenuButtonProps {
@@ -50,8 +64,19 @@ export interface MenuButtonProps {
   selected?: boolean;
 }
 
+const MenuButtonText = styled.div<MenuButtonProps>`
+  font-family: ${(props: MenuButtonProps) => props.theme.primaryFont};
+  color: ${(props: MenuButtonProps) => props.theme.colors.lightAccent};
+  font-size: 1vw;
+  display: none;
+  margin-left: 2vw;
+`;
+
+const MenuButtonIcon = styled.div`
+  display: inline-block;
+`;
+
 const MenuButton = styled.div<MenuButtonProps>`
-  width: 6vw;
   height: 3.5vw;
   font-family: ${(props: MenuButtonProps) => props.theme.primaryFont};
   font-size: ${(props: MenuButtonProps) => props.theme.fontSize[props.fontSize || "XL"]};
@@ -65,6 +90,7 @@ const MenuButton = styled.div<MenuButtonProps>`
     color: ${(props: MenuButtonProps) => props.theme.colors.lightAccent};
     opacity: 1;
   }
+
 `;
 
 
@@ -127,7 +153,15 @@ export default class SideMenu extends React.Component<SideMenuProps, SideMenuSta
                                     this.handleButtonClicked(menuOption, index);
                                 }}
                             >
-                                <FontAwesomeIcon icon={menuOption.icon} />
+                                <MenuButtonIcon>
+                                    <FontAwesomeIcon icon={menuOption.icon} />
+                                </MenuButtonIcon>
+                                <MenuButtonText
+                                    className="side-menu-button-name"
+                                    selected={index === this.state.selectedIndex}
+                                >
+                                    {menuOption.name}
+                                </MenuButtonText>
                             </MenuButton>
                         );
                     })

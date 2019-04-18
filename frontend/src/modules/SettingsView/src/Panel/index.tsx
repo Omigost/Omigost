@@ -1,5 +1,11 @@
 import * as React from "react";
 
+import ExtensionsSettingsPanel from "../ExtensionsSettingsPanel";
+
+const PANELS = {
+    "Integrations and Extensions": ExtensionsSettingsPanel,
+};
+
 const SETTINGS_OPTIONS = [
     {
         name: "Dump configs",
@@ -64,19 +70,16 @@ export default class Panel extends React.Component<any, any> {
     render() {
 
         if (this.state.openedPaneName) {
+            const SettingsComponent = PANELS[this.state.openedPaneName] || (() => null);
+
             return (
                 <div>
-                    <this.props.app.UI.Breadcrumbs>
-                        {[
-                            {
-                                name: "Settings",
-                                onClick: () => this.setState({ openedPaneName: null }),
-                            },
-                            {
-                                name: this.state.openedPaneName,
-                            },
-                        ]}
-                    </this.props.app.UI.Breadcrumbs>
+                    {
+                        <SettingsComponent
+                            app={this.props.app}
+                            onGoBack={() => this.setState({ openedPaneName: null })}
+                        />
+                    }
                 </div>
             );
         }

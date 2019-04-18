@@ -12,6 +12,8 @@ import ExportXLSXButtons from "./ExportXLSXButtons";
 import FloatingWindow from "./FloatingWindow";
 import Form from "./Form";
 import InteractiveGrid from "./InteractiveGrid";
+import InteractiveGrid2 from "./InteractiveGrid2";
+import Toggle from "./Toggle";
 import InteractiveNestedGrid from "./InteractiveNestedGrid";
 import Loading from "./Loading";
 import LoadingPanel from "./LoadingPanel";
@@ -42,6 +44,8 @@ export default {
     TextBox,
     TextInput,
     InteractiveGrid,
+    InteractiveGrid2,
+    Toggle,
     InteractiveNestedGrid,
     Breadcrumbs,
     SearchableList,

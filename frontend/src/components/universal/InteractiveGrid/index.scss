@@ -1,7 +1,18 @@
 .item {
   cursor: pointer;
   margin: 0.3vw;
-  position: absolute; /* Required by Muuri */
+  position: absolute;
+  display: block;
+  /* width: 100px; */
+  /* height: 100px; */
+  margin: 5px;
+  z-index: 1;
+  //position: absolute; /* Required by Muuri */
+}
+
+.item-content {
+  position: relative;
+  width: 96%;
 }
 
 .muuri-item-dragging {

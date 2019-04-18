@@ -1,6 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
 
+import { Route } from "react-router";
+import { withRouter } from "react-router-dom";
 import SideMenu, { MenuOption } from "components/SideMenu";
 import { withModules, ModulesLoader } from "modules/ModulesProvider";
 
@@ -38,9 +40,12 @@ class DashboardPanel extends React.Component<DashboardPanelProps, DashboardPanel
     }
 
     handleSideMenuSelection(menuOption: MenuOption, index: number) {
-        this.setState({
+        /*this.setState({
             selectedOptionIndex: index,
-        });
+        });*/
+        const modules = this.props.modulesLoader.getActiveModules();
+
+        this.props.history.push(`${this.props.match.url}/${modules[index].getName()}`);
     }
 
     render() {
@@ -58,7 +63,7 @@ class DashboardPanel extends React.Component<DashboardPanelProps, DashboardPanel
                     options={
                         modules.map(module => {
                             return {
-                                name: module.getName() || "Anonymous module",
+                                name: ((module.getMenuName) ? (module.getMenuName()) : (module.getName() || "Anonymous module")),
                                 icon: module.getIcon() || "chart-bar",
                             };
                         })
@@ -66,9 +71,16 @@ class DashboardPanel extends React.Component<DashboardPanelProps, DashboardPanel
                 />
                 <PanelContentWrapper>
                     {
-                        (this.state.selectedOptionIndex === null) ? (null) :(
-                             modules[this.state.selectedOptionIndex].renderDashboardView(null)
-                        )
+                        modules.map(module => {
+                            return (
+                                <Route
+                                    path={`${this.props.match.url}/${module.getName()}`}
+                                    component={() => {
+                                        return module.renderDashboardView(null);
+                                    }}
+                                />
+                            );
+                        })
                     }
                 </PanelContentWrapper>
             </Wrapper>
@@ -76,4 +88,12 @@ class DashboardPanel extends React.Component<DashboardPanelProps, DashboardPanel
     }
 }
 
-export default withModules(DashboardPanel);
+/*
+{
+    (this.state.selectedOptionIndex === null) ? (null) :(
+         modules[this.state.selectedOptionIndex].renderDashboardView(null)
+    )
+}
+ */
+
+export default withModules(withRouter(DashboardPanel));

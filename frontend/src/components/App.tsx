@@ -12,7 +12,7 @@ import {
     faPlus, faRulerHorizontal, faRulerVertical, faSearchDollar,
     faShieldAlt, faTachometerAlt, faTools, faUpload, faUserCircle,
     faWindowClose, faWindowMaximize, faWindowMinimize,
-    faTimes,
+    faTimes, faExpand, faMoneyBillAlt, faCheckSquare,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -21,7 +21,7 @@ library.add(
      faCommentAlt, faFlag, faPlus, faDollarSign,
      faRulerHorizontal, faRulerVertical, faChartArea, faClock, faChartLine,
      faWindowMinimize, faWindowMaximize, faWindowClose,
-     faTimes,
+     faTimes, faExpand, faMoneyBillAlt, faCheckSquare,
 );
 
 const AppWrapper = styled.div`
