@@ -5,6 +5,10 @@ import { OmigostApp, OmigostModule, OmigostModulesLoaderInterface } from "module
 
 import Panel from "./src/Panel";
 
+import {
+    faAddressCard,
+} from "@fortawesome/free-solid-svg-icons";
+
 export default class BudgetsViewModule implements OmigostModule {
     app: OmigostApp;
 
@@ -23,29 +27,14 @@ export default class BudgetsViewModule implements OmigostModule {
     }
 
     getIcon(): IconName {
-        return "money-bill-alt";
+        return faAddressCard.iconName;
     }
 
     getName(): string {
-        return "budgets-view";
+        return "users-view";
     }
 
     getMenuName(): string {
-        return "Your budgets";
-    }
-    
-    getSettingsForm() {
-        return {
-            title: "A registration form",
-            description: "The description",
-            type: "object",
-            properties: {
-                "limit": {
-                    type: "string",
-                    title: "The budget limit",
-                    minLength: 1,
-                },
-            },
-        };
+        return "User accounts";
     }
 }

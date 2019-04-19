@@ -5,8 +5,15 @@ import {
     faPlus, faRulerHorizontal, faRulerVertical, faSearchDollar,
     faShieldAlt, faTachometerAlt, faTools, faUpload, faUserCircle,
     faWindowClose, faWindowMaximize, faWindowMinimize,
-    faTimes, faExpand, faMoneyBillAlt, faCheckSquare,
+    faTimes, faExpand, faMoneyBillAlt, faCheckSquare, faAddressCard,
+    faUser, faCommentSlash, faCommentDots, faEnvelope,
+    faCompress, faBoxOpen,
 } from "@fortawesome/free-solid-svg-icons";
+
+import {
+    faSlackHash,
+} from "@fortawesome/free-brands-svg-icons"
+
 
 export interface InitState {
     fine: boolean;
@@ -20,7 +27,9 @@ export function init(): Promise<InitState> {
             faCommentAlt, faFlag, faPlus, faDollarSign,
             faRulerHorizontal, faRulerVertical, faChartArea, faClock, faChartLine,
             faWindowMinimize, faWindowMaximize, faWindowClose,
-            faTimes, faExpand, faMoneyBillAlt, faCheckSquare,
+            faTimes, faExpand, faMoneyBillAlt, faCheckSquare, faAddressCard,
+            faUser, faCommentSlash, faCommentDots, faEnvelope,
+            faSlackHash, faCompress, faBoxOpen,
         );
         
         resolve({

@@ -74,7 +74,7 @@ export default class App extends React.Component<AppProps, undefined> {
             <Provider store={store}>
                 <I18n locale={locale} messages={messages}>
                     <ThemeProvider theme={defaultTheme}>
-                        <ModulesProvider modules={[ "dashboard-view", "budgets-view", "settings-view" ]}>
+                        <ModulesProvider modules={[ "dashboard-view", "budgets-view", "users-view", "settings-view" ]}>
                             <ConnectedRouter history={history}>
                                 <AppWrapper>
                                     <RoutesModuleComponent />

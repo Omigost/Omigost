@@ -4,14 +4,18 @@ import { IconName } from "@fortawesome/fontawesome-svg-core";
 import OmigostClient, { OmigostClientInterface } from "../client/OmigostClient";
 import OmigostUI from "../components/universal/index";
 
+import { Schema } from "../components/universal/Form/schemaTypes";
+
 import BudgetsViewModule from "./BudgetsView";
 import DashboardViewModule from "./DashboardView";
 import SettingsViewModule from "./SettingsView";
+import UsersViewModule from "./UsersView";
 
 const BUILTIN_MODULES: Array<OmigostModule> = [
     new DashboardViewModule(),
     new BudgetsViewModule(),
     new SettingsViewModule(),
+    new UsersViewModule(),
 ];
 
 export interface OmigostApp {
@@ -35,6 +39,7 @@ export interface OmigostModule {
     getDetails(): OmigostModuleDetails;
     renderDashboardView?(props: any): React.ReactElement<any> | null;
     getRoutes?(): Array<OmigostModuleRoute>;
+    getSettingsForm?(): Schema;
 }
 
 export type ModuleSource = String | OmigostModule;

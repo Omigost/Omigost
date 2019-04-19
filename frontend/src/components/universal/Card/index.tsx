@@ -8,11 +8,14 @@ import CardTitle from "components/CardTitle";
 const Wrapper = styled.div`
   padding: 1.2vw;
   margin: 1vw;
-  width: 100%;
-  background: 'gray';
+  width: 80%;
+  background: white;
   border-left: solid 2px ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.primaryFont};
   color: ${(props) => props.theme.colors.accent};
+  
+  border-radius: 0.5vw;
+  box-shadow: 0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1);
 `;
 
 const ContentRow = styled.div`
@@ -30,7 +33,7 @@ const CardTitleWrapper = styled.div`
 const ActionWrapper = styled.div`
   float: right;
   position: relative;
-  right: 10vw;
+  right: 1vw;
   top: -2vw;
 `;
 

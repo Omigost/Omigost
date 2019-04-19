@@ -15,7 +15,7 @@ module.exports = merge(commonConfig, {
     hot: true, // enable HMR on the server
     inline: true,
     disableHostCheck: true,
-    historyApiFallback: true
+    historyApiFallback: true,
   },
   devtool: 'cheap-module-eval-source-map',
   plugins: [
@@ -24,5 +24,6 @@ module.exports = merge(commonConfig, {
   ],
   output: {
     chunkFilename: '[name].bundle.js',
+    publicPath: '/',
   },
 });

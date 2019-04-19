@@ -22,7 +22,10 @@ export interface RequestOptions {
 export interface OmigostClientInterface {
     callEndpoint(endpoint?: string, options?: RequestOptions): Promise<ResponseData>;
     getBudgets(): ResponsePromise;
+    getUsers(): ResponsePromise;
     createBudget(data: any): ResponsePromise;
+    createUser(data: any): ResponsePromise;
+    addCommunicationToUser(data: any): ResponsePromise;
 }
 
 export class OmigostClient implements OmigostClientInterface {
@@ -47,6 +50,18 @@ export class OmigostClient implements OmigostClientInterface {
         return this.callEndpoint(null, { ...CLIENT_URLS.deleteBudget, data });
     }
 
+    getUsers(): ResponsePromise {
+        return this.callEndpoint(null, CLIENT_URLS.getUsers);
+    }
+    
+    createUser(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.createUser, data });
+    }
+    
+    addCommunicationToUser(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.addCommunicationToUser, data });
+    }
+    
     callEndpoint(endpoint, options): ResponsePromise {
         return new Promise<ResponseData>((resolve, reject) => {
             let method = "get";
