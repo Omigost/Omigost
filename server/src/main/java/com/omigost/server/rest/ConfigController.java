@@ -40,7 +40,7 @@ public class ConfigController {
         Communication communication = new Communication(communicationName, communicationValue);
         User user = userRepository.getUserByName(userName);
         if (user == null) {
-            throw new NotFoundException("User by this type could not be found");
+            throw new NotFoundException("User by this name could not be found");
         }
 
         communication.setUser(user);
@@ -53,14 +53,14 @@ public class ConfigController {
     @Transactional
     public void addAccountToUser(@RequestParam String userName, @RequestParam String accountName) {
         if (!organizationService.doesAccountExist(accountName)) {
-            throw new NotFoundException("Account by this type could not be found");
+            throw new NotFoundException("Account by this name could not be found");
         }
 
         Account account = accountRepository.getOrCreate(accountName);
 
         User user = userRepository.getUserByName(userName);
         if (user == null) {
-            throw new NotFoundException("User by this type could not be found");
+            throw new NotFoundException("User by this name could not be found");
         }
 
         user.getAccounts().add(account);
@@ -81,9 +81,9 @@ public class ConfigController {
         User user = userRepository.getUserByName(userName);
 
         if (account == null) {
-            throw new NotFoundException("Account by this type could not be found");
+            throw new NotFoundException("Account by this name could not be found");
         } else if (user == null) {
-            throw new NotFoundException("User by this type could not be found");
+            throw new NotFoundException("User by this name could not be found");
         }
 
         user.getAccounts().remove(account);
@@ -100,7 +100,7 @@ public class ConfigController {
         Communication communication =
                 communicationRepository.getCommunicationByTypeAndValueAndUser(communicationName, communicationValue, user);
         if (communication == null) {
-            throw new NotFoundException("Communication by this type, value and username could not be found");
+            throw new NotFoundException("Communication of this type, value and username could not be found");
         }
 
         communicationRepository.delete(communication);
