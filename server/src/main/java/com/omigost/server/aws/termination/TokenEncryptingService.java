@@ -31,10 +31,10 @@ public class TokenEncryptingService {
         secretKey = keyGenerator.generateKey();
         cipher = Cipher.getInstance("DESede");
     }
-
+    //Not sure about charset
     @SneakyThrows
     public String encryptMessage(String message) {
-        byte[] messageInBytes = message.getBytes();
+        byte[] messageInBytes = message.getBytes("UTF8");
         byte[] encryptedMaessage = encrypt(messageInBytes, secretKey);
         return Base64.encodeBase64String(encryptedMaessage);
     }
@@ -43,7 +43,7 @@ public class TokenEncryptingService {
     public String descryptMessage(String encMessage) {
         byte[] received = Base64.decodeBase64(encMessage);
         byte[] decryptedBytes = decrypt(received, secretKey);
-        return new String(decryptedBytes);
+        return new String(decryptedBytes,"UTF8");
     }
 
     @SneakyThrows
