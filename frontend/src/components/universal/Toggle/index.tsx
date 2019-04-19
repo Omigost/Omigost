@@ -160,7 +160,7 @@ const IconWrapper = styled.div`
 `;
 
 export interface ToggleProps {
-    defaultValue: boolean;
+    value: boolean;
     withIcon?: boolean;
     onChange?: (event: any) => void;
 }
@@ -182,7 +182,7 @@ export default class Toggle extends React.Component<ToggleProps, undefined> {
             <Wrapper>
                 <label>
                     <ToggleComponent
-                        defaultChecked={this.props.defaultValue}
+                        checked={this.props.value}
                         icons={{
                             checked: (this.props.withIcon) ? (
                                 <IconWrapper>

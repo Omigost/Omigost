@@ -1,28 +1,19 @@
 import * as React from "react";
 import { I18n } from "react-polyglot";
-import { BrowserRouter as Router } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 
+import { Provider } from "react-redux";
+import { createBrowserHistory } from "history";
+import { applyMiddleware, compose, createStore, combineReducers } from "redux";
+import { routerMiddleware } from "connected-react-router";
+import { connectRouter, ConnectedRouter } from "connected-react-router";
+import thunk from "redux-thunk";
+
+import { executeAppInit } from "../redux/actions";
+import createRootReducer from "../redux/reducers";
+import preloadedState from "../redux/store";
+
 import ModulesProvider, { withModules, WithLoaderProps } from "modules/ModulesProvider";
-
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-    faChartArea, faChartBar, faChartLine,
-    faClock, faCommentAlt, faDollarSign, faDownload, faFlag,
-    faPlus, faRulerHorizontal, faRulerVertical, faSearchDollar,
-    faShieldAlt, faTachometerAlt, faTools, faUpload, faUserCircle,
-    faWindowClose, faWindowMaximize, faWindowMinimize,
-    faTimes, faExpand, faMoneyBillAlt, faCheckSquare,
-} from "@fortawesome/free-solid-svg-icons";
-
-library.add(
-     faUserCircle, faTachometerAlt, faSearchDollar,
-     faTools, faChartBar, faDownload, faUpload, faShieldAlt,
-     faCommentAlt, faFlag, faPlus, faDollarSign,
-     faRulerHorizontal, faRulerVertical, faChartArea, faClock, faChartLine,
-     faWindowMinimize, faWindowMaximize, faWindowClose,
-     faTimes, faExpand, faMoneyBillAlt, faCheckSquare,
-);
 
 const AppWrapper = styled.div`
   background: ${props => props.theme.colors.background};
@@ -42,7 +33,34 @@ import defaultTheme from "themes/default";
 export interface AppProps {
 }
 
+export const history = createBrowserHistory();
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+export function configureStore() {
+    const store = createStore(
+        combineReducers({
+            router: connectRouter(history),
+            ...createRootReducer(history),
+        }),
+        preloadedState,
+        composeEnhancers(
+            applyMiddleware(routerMiddleware(history)),
+            applyMiddleware(thunk),
+        ),
+    );
+
+    return store;
+}
+
+const store = configureStore();
+
 export default class App extends React.Component<AppProps, undefined> {
+    
+    componentDidMount() {
+        store.dispatch(executeAppInit());
+    }
+    
     render() {
         const RoutesModuleComponent = withModules((props: WithLoaderProps) => {
             return (
@@ -53,17 +71,19 @@ export default class App extends React.Component<AppProps, undefined> {
         });
 
         return (
-            <I18n locale={locale} messages={messages}>
-                <ThemeProvider theme={defaultTheme}>
-                    <ModulesProvider modules={[ "dashboard-view", "budgets-view", "settings-view" ]}>
-                        <Router>
-                            <AppWrapper>
-                                <RoutesModuleComponent />
-                            </AppWrapper>
-                        </Router>
-                    </ModulesProvider>
-                </ThemeProvider>
-            </I18n>
+            <Provider store={store}>
+                <I18n locale={locale} messages={messages}>
+                    <ThemeProvider theme={defaultTheme}>
+                        <ModulesProvider modules={[ "dashboard-view", "budgets-view", "settings-view" ]}>
+                            <ConnectedRouter history={history}>
+                                <AppWrapper>
+                                    <RoutesModuleComponent />
+                                </AppWrapper>
+                            </ConnectedRouter>
+                        </ModulesProvider>
+                    </ThemeProvider>
+                </I18n>
+            </Provider>
         );
     }
 }

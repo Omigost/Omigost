@@ -44,12 +44,20 @@ export interface OmigostModuleRoute {
     component: React.ReactNode;
 }
 
+export interface OmigostModulesStore {
+    getAll(): Array<OmigostModuleInstance>;
+    put(instance: OmigostModuleInstance): Array<OmigostModuleInstance>;
+    enable(instance: OmigostModuleInstance): void;
+    disable(instance: OmigostModuleInstance): void;
+}
+
 export interface OmigostModulesLoaderInterface {
     loadModule(src: ModuleSource);
     loadAllModules(srcs: Array<ModuleSource>);
     getActiveModules(): Array<OmigostModule>;
     getAllModules(): Array<OmigostModule>;
     getRegisteredRoutes(): Array<OmigostModuleRoute>;
+    setStore(store: OmigostModulesStore);
 }
 
 export interface OmigostModuleInstance {
@@ -60,10 +68,14 @@ export interface OmigostModuleInstance {
 }
 
 export default class OmigostModulesLoader implements OmigostModulesLoaderInterface {
-    modules: Array<OmigostModuleInstance>;
+    modulesStore: OmigostModulesStore;
 
     constructor() {
-        this.modules = [];
+        this.modulesStore = null;
+    }
+    
+    setStore(store: OmigostModulesStore) {
+        this.modulesStore = store;
     }
 
     getApp(): OmigostApp {
@@ -76,7 +88,7 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
 
     getRegisteredRoutes() {
         let routes: Array<OmigostModuleRoute> = [];
-        this.modules.forEach(instance => {
+        this.modulesStore.getAll().forEach(instance => {
             if (instance.module.getRoutes) {
                 routes = routes.concat(
                     instance.module.getRoutes()
@@ -95,11 +107,13 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
     }
 
     enableModule(module: OmigostModule) {
-        this.modules.find(item => item.module === module).activated = true;
+        this.modulesStore.enable(module);
     }
 
     disableModule(module: OmigostModule) {
-        this.modules.find(item => item.module === module).activated = false;
+        console.error("TRIGGER DISABLE MODULE!");
+        console.log(module);
+        this.modulesStore.disable(module);
     }
 
     loadModule(src: ModuleSource) {
@@ -114,13 +128,19 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
         }
 
         if (modInst) {
+                        
+            if (this.modulesStore.getAll().find(inst => modInst.getName() === inst.module.getName())) {
+                return;
+            }
+            
             const inst = {
                 enable: () => this.enableModule(modInst),
                 disable: () => this.disableModule(modInst),
                 activated: true,
                 module: modInst,
             };
-            this.modules.push(inst);
+            
+            this.modulesStore.put(inst);
             modInst.onLoad(this.getApp(), this);
         }
     }
@@ -130,18 +150,18 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
     }
 
     getAllModuleInstances() {
-        return this.modules.map(instance => instance);
+        return this.modulesStore.getAll().map(instance => instance);
     }
 
     getModule(name: string): OmigostModule {
-        return this.modules.find(instance => instance.module.getName() === name).module;
+        return this.modulesStore.getAll().find(instance => instance.module.getName() === name).module;
     }
 
     getAllModules() {
-        return this.modules.map(instance => instance.module);
+        return this.modulesStore.getAll().map(instance => instance.module);
     }
 
     getActiveModules() {
-        return this.modules.filter(instance => instance.activated).map(instance => instance.module);
+        return this.modulesStore.getAll().filter(instance => instance.activated).map(instance => instance.module);
     }
 }

@@ -1,5 +1,7 @@
-import OmigostModulesLoader, { ModuleSource, OmigostModulesLoaderInterface } from "modules/ModulesLoader";
+import OmigostModulesLoader, { ModuleSource, OmigostModulesLoaderInterface, OmigostModulesStore } from "modules/ModulesLoader";
 import * as React from "react";
+
+import { connectProvider } from "./ModulesRedux";
 
 export interface ModulesProviderProps {
     children?: any;
@@ -11,7 +13,7 @@ const ModulesLoaderContext = React.createContext(null);
 
 export type ModulesLoader = OmigostModulesLoaderInterface;
 
-export default class ModulesProvider extends React.Component<ModulesProviderProps, undefined> {
+export class ModulesProvider extends React.Component<ModulesProviderProps, undefined> {
     render() {
         let loader = null;
         if (this.props.loader) {
@@ -19,6 +21,15 @@ export default class ModulesProvider extends React.Component<ModulesProviderProp
         } else {
             loader = new OmigostModulesLoader();
         }
+        
+        const store: OmigostModulesStore = {
+            getAll: () => this.props.instances,
+            put: (instance) => this.props.putInstance(instance),
+            enable: this.props.enable,
+            disable: this.props.disable,
+        };
+        
+        loader.setStore(store);
 
         if (this.props.modules) {
             loader.loadAllModules(this.props.modules);
@@ -31,6 +42,8 @@ export default class ModulesProvider extends React.Component<ModulesProviderProp
         );
     }
 }
+
+export default connectProvider(ModulesProvider);
 
 export class ModulesConsumer extends React.Component<any & { children: Array<React.ReactElement<any>> }, undefined> {
   // static contextType = ModulesLoaderContext;

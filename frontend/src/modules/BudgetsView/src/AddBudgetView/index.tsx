@@ -14,7 +14,7 @@ const PanelHeader = styled.div`
 `;
 
 
-class AddBudgetView extends React.Component<any, any> {
+class AddBudgetView extends React.Component<any, undefined> {
 
     render() {
         return (
