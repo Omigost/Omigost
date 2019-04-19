@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,13 +19,9 @@ import java.util.stream.Collectors;
 public class MachineListingService {
     @Value("${aws.region}")
     private String region;
-    @Autowired
-    private OrganizationService organizationService;
 
     @Autowired
     AWSRoleBasedCredentialProvider roleBasedCredentialProvider;
-    @Autowired
-    AWSCredentialsProvider credentialsProvider;
     @Getter
     private List<Account> accounts;
 
@@ -44,6 +41,7 @@ public class MachineListingService {
     private boolean isInstanceRunning(Instance instance) {
         return instance.getState().getName().equals(InstanceStateName.Running.toString());
     }
+
     public List<String> getRunningEC2Instances(String userId) {
         return getReservations(userId).stream()
                 .map(Reservation::getInstances)

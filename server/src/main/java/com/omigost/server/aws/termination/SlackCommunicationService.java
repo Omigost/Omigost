@@ -62,17 +62,16 @@ public class SlackCommunicationService {
 
     //slack sends without application/json header, so conversion should be done manually
     @PostMapping
-    public void slackResponseHandler(@RequestParam Map<String, String> body) throws IOException {
+    public String slackResponseHandler(@RequestParam Map<String, String> body) throws IOException {
         SlackResponseDTO responseDTO = objectMapper.readValue(body.get("payload"), SlackResponseDTO.class);
         Action action = responseDTO.getActions().get(0);
 
         String callBackId = responseDTO.getCallback_id();
         String awsUserId = tokenEncryptingService.descryptMessage(callBackId);
-
-        processInstanceAction(action.getValue(), awsUserId);
+        return processInstanceAction(action.getValue(), awsUserId);
     }
 
-    private void processInstanceAction(String action, String awsId) {
+    private String processInstanceAction(String action, String awsId) {
         if (InstanceActions.stop.equals(action)) {
             ec2TerminationService.stopRunningInstances(awsId);
         }
@@ -82,6 +81,7 @@ public class SlackCommunicationService {
         if (InstanceActions.leaveThemAlone.equals(action)) {
             //TODO stop asking the user for termination
         }
+        return "Done!";
     }
 
 }

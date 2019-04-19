@@ -8,8 +8,8 @@ import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder
 import com.amazonaws.services.securitytoken.model.AssumeRoleRequest;
 import com.amazonaws.services.securitytoken.model.AssumeRoleResult;
 import com.amazonaws.services.securitytoken.model.Credentials;
-import com.omigost.server.config.AWSCredentialsConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -39,14 +39,14 @@ public class AWSRoleBasedCredentialProvider {
     }
 
     @Autowired
-    private AWSCredentialsConfig config;
+    @Qualifier("iamCredentials")
+    private AWSCredentialsProvider iamCredentials;
     private AWSSecurityTokenService stsClient;
 
     @PostConstruct
     void init() {
-        AWSCredentialsProvider nonRootCredentials = config.getNonRootCredentials();
         stsClient = AWSSecurityTokenServiceClientBuilder.standard()
-                .withCredentials(nonRootCredentials)
+                .withCredentials(iamCredentials)
                 .withRegion(region)
                 .build();
     }

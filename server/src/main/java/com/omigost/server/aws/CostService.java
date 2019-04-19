@@ -21,6 +21,8 @@ public class CostService {
     private String region;
 
     private final AWSCredentialsProvider credentialsProvider;
+
+    @Autowired
     private AWSCostExplorer client;
 
     private static final String COST_TYPE = "BlendedCost";
@@ -28,15 +30,6 @@ public class CostService {
     @Autowired
     public CostService(AWSCredentialsProvider credentialsProvider) {
         this.credentialsProvider = credentialsProvider;
-    }
-
-    @PostConstruct
-    void init() {
-        client = AWSCostExplorerClientBuilder
-                .standard()
-                .withRegion(region)
-                .withCredentials(credentialsProvider)
-                .build();
     }
 
     private GetCostAndUsageRequest defaultRequest() {

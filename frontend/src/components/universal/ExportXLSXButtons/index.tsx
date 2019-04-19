@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import TinyButtons from "components/TinyButtons";
 import ExportXLSX, {ExportFormat} from "components/ExportXLSX";
+import TinyButtons from "components/TinyButtons";
 
 import {
-    faDownload
+    faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 
 export interface ExportXLSXButtonsProps {
@@ -24,7 +24,7 @@ export default class ExportXLSXButtons extends React.Component<ExportXLSXButtons
                                             icon: faDownload.iconName,
                                             text: "Export CSV",
                                             onClick: () => doExport({
-                                                format: ExportFormat.CSV
+                                                format: ExportFormat.CSV,
                                             }),
                                         },
                                     ]

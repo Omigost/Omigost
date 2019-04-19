@@ -6,6 +6,7 @@ const { CheckerPlugin } = require('awesome-typescript-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const sass = require("node-sass");
 const sassUtils = require("node-sass-utils")(sass);
+const webpack = require('webpack');
 
 const sassVars = require(path.join(__dirname, "../../src/themes/default.ts"));
 
@@ -27,30 +28,18 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts|\.tsx$/,
-        enforce: 'pre',
-        use: [
-           {
-              loader: 'tslint-loader',
-              options: {
-                  configFile: 'tslint.json',
-                  typeCheck: true,
-                  tsConfigFile: 'tsconfig.json',
-                  emitErrors: true,
-                  failOnHint: true,
-                  fix: true
-              }
-           }
-        ]
-      },
-      {
         test: /\.js$/,
         use: ['babel-loader', 'source-map-loader'],
         exclude: /node_modules/,
       },
       {
         test: /\.tsx?$/,
-        use: ['babel-loader', 'awesome-typescript-loader'],
+        use: ['babel-loader', {
+          loader: 'awesome-typescript-loader',
+          options:{
+            transpileOnly: true
+          },
+        }],
       },
       {
         test: /\.css$/,
@@ -91,7 +80,10 @@ module.exports = {
   },
   plugins: [
     new CheckerPlugin(),
-    new HtmlWebpackPlugin({template: 'index.html.ejs',})
+    new HtmlWebpackPlugin({template: 'index.html.ejs',}),
+    new webpack.ProgressPlugin((percentage, message, ...args) => {
+      console.info(message, ...args);
+    }),
   ],
   externals: {
     'react': 'React',

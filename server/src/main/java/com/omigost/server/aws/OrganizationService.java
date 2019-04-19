@@ -17,19 +17,12 @@ import java.util.List;
 public class OrganizationService {
     @Value("${aws.region}")
     private String region;
+
     @Autowired
     private AWSCredentialsProvider credentialsProvider;
+
+    @Autowired
     private AWSOrganizations orgClient;
-
-
-    @PostConstruct
-    private void initializeOrganizationClient() {
-        orgClient = AWSOrganizationsClientBuilder
-                .standard()
-                .withCredentials(credentialsProvider)
-                .withRegion(region)
-                .build();
-    }
 
     //Can be optimized not to fetch accounts every time
     public List<Account> fetchAccounts() {

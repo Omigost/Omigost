@@ -28,7 +28,7 @@ export abstract class CompositeNode<O, M extends NodeSchema> extends Node<NodeS,
     abstract getCompositeOutput(output: NodeO): NodeOutputValue<O>;
 
     renderComposite(context: FormContext, children: ChildrenMap<React.ReactNode>): React.ReactNode {
-        return Object.values(children);
+        return Object.keys(children).map(key => children[key]);
     }
 
     resolveInitialState() {

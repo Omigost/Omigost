@@ -46,7 +46,7 @@ class CellRenderer extends React.Component<CellRendererProps, undefined> {
     }
 
     render() {
-        
+
         const dataCol = this.props.context.data.columns.filter(col => (col.field || col.name) === this.props.colDef.field)[0];
 
         const formatedData: FormatedDataPoint = formatData(DataTargetOutput.Cell, { value: this.props.value }, this.props.context.data, {

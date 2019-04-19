@@ -1,5 +1,6 @@
 package com.omigost.server.scheduledTermination;
 
+import com.omigost.server.DevConfigTestTemplate;
 import com.omigost.server.aws.termination.ScheduledNotificationService;
 import com.omigost.server.aws.termination.SlackCommunicationService;
 import com.omigost.server.aws.termination.TokenEncryptingService;
@@ -10,7 +11,6 @@ import com.omigost.server.model.User;
 import com.omigost.server.repository.AccountRepository;
 import com.omigost.server.repository.CommunicationRepository;
 import com.omigost.server.repository.UserRepository;
-import com.omigost.server.rest.dto.SlackResponse.SlackResponseDTO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 
-public class ScheduledNotificationIntegrationTest extends TestTemplate {
+public class ScheduledNotificationTest extends DevConfigTestTemplate {
     @Autowired
     CommunicationRepository communicationRepository;
     @Autowired
@@ -67,32 +67,26 @@ public class ScheduledNotificationIntegrationTest extends TestTemplate {
         communicationRepository.save(communication);
     }
 
-    void communicationRepositoryTest() {
+    void communicationRepositoryTestCase() {
         Set<Communication> communicationCollections = communicationRepository.getCommunicationsForAWSId(testAwsId);
         assertThat(communicationCollections.size(), is(1));
         List<Communication> communicationList = new ArrayList<>(communicationCollections);
         assertThat(communicationList.get(0).getValue(), is(slackUserName));
     }
 
-    void slackNotificationTest() {
-        scheduledNotificationService.notifyOutOfBusinessHours();
-    }
-
-    void slackResponseTest() {
-        //just to get the callbackId
-        //side effect is that 2 messages are sent
-        String callbackId = slackCommunicationService.sendSlackReminder(testAwsId, -1);
-        assertThat(testAwsId,is(tokenEncryptingService.descryptMessage(callbackId)));
-        SlackResponseDTO slackResponseDTO = new SlackResponseDTO();
-        slackResponseDTO.setCallback_id(callbackId);
+    @Test
+    public void tokenEncryptionTest() {
+        final String testString = "Encrypt me if you can.";
+        String encrypted = tokenEncryptingService.encryptMessage(testString);
+        String decrypted = tokenEncryptingService.descryptMessage(encrypted);
+        assertThat(testString, is(decrypted));
     }
 
     @Test
-    public void integrationTest() {
+    public void communicationRepositoryTest() {
         initDB();
-        communicationRepositoryTest();
-        slackNotificationTest();
-        slackResponseTest();
+        communicationRepositoryTestCase();
     }
+
 
 }

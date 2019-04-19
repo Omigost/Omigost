@@ -108,7 +108,8 @@ export function transformOutputToRawData(metaOutput: any): any {
 }
 
 export async function validateRoot(rootNode: RootNode) {
-    const Ajv = await import("ajv");
+    const Ajv = ((await import("ajv")) as unknown as any).default;
+
     const ajv = new Ajv({
         allErrors: true,
         ...rootNode.getConfig().ajvOptions,
