@@ -1,5 +1,5 @@
 export default {
-    apiBase: "http://localhost:8100/",
+    apiBase: "http://fba56dfc.ngrok.io/",
     getBudgets: {
         endpoint: "budgets",
     },
@@ -9,6 +9,21 @@ export default {
     },
     deleteBudget: {
         endpoint: ({data}) => `budgets?name=${data.name}`,
+        method: "delete",
+    },
+    getUsers: {
+        endpoint: "config/users",
+    },
+    createUser: {
+        endpoint: ({data}) => `config/user?name=${data.name}`,
+        method: "post",
+    },
+    addCommunicationToUser: {
+        endpoint: ({data}) => `config/addCommunicationToUser?userName=${data.userName}&communicationName=${data.communicationName}&communicationValue=${data.communicationValue}`,
+        method: "post",
+    },
+    deleteUserCommunication: {
+        endpoint: ({data}) => `config/deleteUserCommunication?userName=${data.userName}&communicationName=${data.communicationName}&communicationValue=${data.communicationValue}`,
         method: "delete",
     },
 };

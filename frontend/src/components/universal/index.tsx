@@ -35,6 +35,7 @@ import Dialog from "./Dialog";
 import DialogSet from "./DialogSet";
 import CardVerticalList from "./CardVerticalList";
 import { DialogsConsumer } from "./DialogProvider";
+import PlainList from "./PlainList";
 
 export default {
     Button,
@@ -76,4 +77,5 @@ export default {
     DialogSet,
     CardVerticalList,
     DialogsConsumer,
+    PlainList,
 };

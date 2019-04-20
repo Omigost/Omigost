@@ -26,6 +26,7 @@ export interface OmigostClientInterface {
     createBudget(data: any): ResponsePromise;
     createUser(data: any): ResponsePromise;
     addCommunicationToUser(data: any): ResponsePromise;
+    deleteUserCommunication(data: any): ResponsePromise;
 }
 
 export class OmigostClient implements OmigostClientInterface {
@@ -60,6 +61,10 @@ export class OmigostClient implements OmigostClientInterface {
     
     addCommunicationToUser(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.addCommunicationToUser, data });
+    }
+    
+    deleteUserCommunication(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.deleteUserCommunication, data });
     }
     
     callEndpoint(endpoint, options): ResponsePromise {
