@@ -7,7 +7,7 @@ import {
     faWindowClose, faWindowMaximize, faWindowMinimize,
     faTimes, faExpand, faMoneyBillAlt, faCheckSquare, faAddressCard,
     faUser, faCommentSlash, faCommentDots, faEnvelope,
-    faCompress, faBoxOpen,
+    faCompress, faBoxOpen, faExclamationTriangle,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -29,7 +29,7 @@ export function init(): Promise<InitState> {
             faWindowMinimize, faWindowMaximize, faWindowClose,
             faTimes, faExpand, faMoneyBillAlt, faCheckSquare, faAddressCard,
             faUser, faCommentSlash, faCommentDots, faEnvelope,
-            faSlackHash, faCompress, faBoxOpen,
+            faSlackHash, faCompress, faBoxOpen, faExclamationTriangle,
         );
         
         resolve({

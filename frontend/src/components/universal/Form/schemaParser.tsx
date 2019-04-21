@@ -37,8 +37,10 @@ function getHandlerForType<M extends NodeSchema>(node: M, config: SchemaParserCo
             return config.handlers.OBJECT;
         case NodeType.STRING:
             return config.handlers.STRING;
-        case NodeType.NOTICE:
-            return config.handlers.NOTICE;
+        case NodeType.NUMBER:
+            return config.handlers.NUMBER;
+        case NodeType.ARRAY:
+            return config.handlers.ARRAY;
         case NodeType.ROOT:
             return null;
         default:
@@ -100,7 +102,7 @@ export function transformOutputToRawData(metaOutput: any): any {
     if (isNodeMetaOutputValue(metaOutput)) {
         return transformOutputToRawData(metaOutput.__data);
     } else if (Array.isArray(metaOutput)) {
-        metaOutput.map(item => transformOutputToRawData(item));
+        return metaOutput.map(item => transformOutputToRawData(item));
     } else if (metaOutput instanceof Object) {
         const result = {};
         Object.keys(metaOutput).forEach(key => {
@@ -112,6 +114,21 @@ export function transformOutputToRawData(metaOutput: any): any {
     }
 }
 
+const debounce = (func, wait, immediate) => {
+	let timeout;
+	return () => {
+		const context = this, args = arguments;
+		const later = () => {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		const callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+
 export async function validateRoot(rootNode: RootNode) {
     const Ajv = ((await import("ajv")) as unknown as any).default;
 
@@ -120,7 +137,8 @@ export async function validateRoot(rootNode: RootNode) {
         ...rootNode.getConfig().ajvOptions,
     });
     const validateSchema = ajv.compile(rootNode.getSchema() as unknown as object);
-    const output = rootNode.getOutput();
+    const output = rootNode.getOutput({ enableFormat: false });
+    
     const data = transformOutputToRawData(output);
 
     validateSchema(data);
@@ -138,7 +156,7 @@ export async function validateRoot(rootNode: RootNode) {
         } else {
             source = getMetaOutputSourceNodeByPath(output, error.dataPath);
         }
-
+        
         if (source !== null) {
             const err: NodeError = error;
 
@@ -166,7 +184,7 @@ export function transformSchemaIntoTree<M extends NodeSchema>(node: M, rootNode:
 
     if (!rootNode) {
         rootNode = new RootNode(
-            node, conf, recTransformSchemaIntoTree, transformOutputToRawData, validateRoot,
+            node, conf, recTransformSchemaIntoTree, transformOutputToRawData, debounce(validateRoot, 750),
         );
         rootNode.resolve();
     }

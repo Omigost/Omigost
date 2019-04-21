@@ -17,6 +17,15 @@ export abstract class SimpleNode<V, M extends NodeSchema> extends Node<{ value: 
         };
     }
 
+    setValue(value: NodeOutputValue<O>) {
+        if (this.getSchema().formatInput) {
+            value = this.getSchema().formatInput(value);
+        }
+        if (value !== null && typeof value !== 'undefined') {
+            this.setState({ value });
+        }
+    }
+    
     getRawOutput() {
         return this.getState().value;
     }

@@ -36,6 +36,8 @@ import DialogSet from "./DialogSet";
 import CardVerticalList from "./CardVerticalList";
 import { DialogsConsumer } from "./DialogProvider";
 import PlainList from "./PlainList";
+import Slider from "./Slider";
+import { ThemeSetter } from "./ThemeProvider";
 
 export default {
     Button,
@@ -78,4 +80,6 @@ export default {
     CardVerticalList,
     DialogsConsumer,
     PlainList,
+    Slider,
+    ThemeSetter,
 };

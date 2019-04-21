@@ -5,7 +5,7 @@ import WithMargins from "./utils/WithMargins";
 import WithDescription from "./utils/WithDescription";
 import WithErrors from "./utils/WithErrors";
 
-import TextInput from "../../TextInput";
+import Slider from "../../Slider";
 import { SimpleNode } from "../simpleNodes";
 
 import {
@@ -13,20 +13,22 @@ import {
     NodeStringSchema,
 } from "../schemaTypes";
 
-export default class StringDefault extends SimpleNode<string, NodeStringSchema> {
+export default class NumberSlider extends SimpleNode<number, NodeStringSchema> {
     getInitialValue() {
-        return "";
+        return 0;
     }
 
-    renderSimple(value: string, context: FormContext) {
+    renderSimple(value: number, context: FormContext) {
         return (
             <WithMargins parent={this}>
                 <WithErrors parent={this} context={context}>
                     <WithDescription parent={this}>
-                        <TextInput
-                            value={value}
-                            onChange={(text) => {
-                                this.setState({ value: text });
+                        <Slider
+                            value={parseFloat(value) || 0}
+                            min={this.getSchema().minimum || 0}
+                            max={this.getSchema().maximum || 100}
+                            onChange={(value) => {
+                                this.setState({ value: parseFloat(value) });
                             }}
                         />
                     </WithDescription>

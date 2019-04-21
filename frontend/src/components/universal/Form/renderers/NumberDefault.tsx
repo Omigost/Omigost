@@ -13,20 +13,20 @@ import {
     NodeStringSchema,
 } from "../schemaTypes";
 
-export default class StringDefault extends SimpleNode<string, NodeStringSchema> {
+export default class NumberDefault extends SimpleNode<number, NodeStringSchema> {
     getInitialValue() {
-        return "";
+        return 0;
     }
 
-    renderSimple(value: string, context: FormContext) {
+    renderSimple(value: number, context: FormContext) {
         return (
             <WithMargins parent={this}>
                 <WithErrors parent={this} context={context}>
                     <WithDescription parent={this}>
                         <TextInput
-                            value={value}
+                            value={(value || 0).toString()}
                             onChange={(text) => {
-                                this.setState({ value: text });
+                                this.setState({ value: parseFloat(text) });
                             }}
                         />
                     </WithDescription>

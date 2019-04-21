@@ -12,6 +12,12 @@ const Wrapper = styled.div`
   font-size: 1vw;
 `;
 
+const SubmitButtonWrapper = styled.div`
+  width: 50%;
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+`;
+
 export interface FormProps {
     fontSize?: string;
     theme?: any;
@@ -19,7 +25,10 @@ export interface FormProps {
     validateOnInit?: boolean;
     children: Schema;
     onSubmit: (data: any) => void;
+    onChange: (data: any) => void;
     submitButton?: any;
+    defaultValue?: any;
+    value?: any;
 }
 
 interface FormState {
@@ -27,33 +36,61 @@ interface FormState {
     formContext: FormContext;
 }
 
+const debounce = (func, wait, immediate) => {
+	let timeout;
+	return () => {
+		const context = this, args = arguments;
+		const later = () => {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		const callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+
 export default class Form extends React.Component<FormProps, FormState> {
 
     state: FormState;
 
     constructor(props) {
         super(props);
-
+        
         this.state = {
             tree: null,
+            disableOnChangeListener: false,
             formContext: {
                 errors: [],
                 getErrorsForNode: () => [],
             },
         };
+        
+        this.handleChangeEvent = debounce(this.handleChangeEvent.bind(this), 250);
+    }
+    
+    handleChangeEvent() {
+        if (this.state.disableOnChangeListener) return;
+        if (this.props.validateOnChange !== false) {
+            this.state.tree.validate();
+        }
+        if (this.state.tree && this.props.onChange) {
+            this.props.onChange(this.state.tree.getData());
+        }
     }
 
     handleFormStateUpdate(state: NodeState<any>, root: RootNode) {
+        if (this.state.disableOnChangeListener) return;
         this.setState({
             tree: root,
         }, () => {
-            if (this.props.validateOnChange !== false) {
-                this.state.tree.validate();
-            }
+            this.handleChangeEvent();
         });
     }
 
     handleFormContextUpdate(context: FormContext, source: NodeAny) {
+        if (this.state.disableOnChangeListener) return;
         this.setState({
             formContext: {
                 ...this.state.formContext,
@@ -63,6 +100,7 @@ export default class Form extends React.Component<FormProps, FormState> {
     }
 
     handleFormContextMapping(fn: (context: FormContext) => FormContext, source: NodeAny) {
+        if (this.state.disableOnChangeListener) return;
         this.handleFormContextUpdate(fn(this.state.formContext), source);
     }
 
@@ -78,6 +116,17 @@ export default class Form extends React.Component<FormProps, FormState> {
                     rootState: {},
                 });
 
+                if (this.props.defaultValue) {
+                    this.setState({
+                        disableOnChangeListener: true,
+                    }, () => {
+                        tree.setValue(this.props.defaultValue);
+                        this.setState({
+                            disableOnChangeListener: false,
+                        });
+                    });
+                }
+                
                 this.setState({
                     tree,
                 }, () => {
@@ -95,13 +144,13 @@ export default class Form extends React.Component<FormProps, FormState> {
 
     render() {
         this.createTree();
-
+        
         return (
             <Wrapper>
                 {(this.state.tree) ? (this.state.tree.render(this.state.formContext)) : (null)}
                 {
                     (this.state.tree && this.props.onSubmit) ? (
-                        <div
+                        <SubmitButtonWrapper
                             style={{
                                 marginLeft: "-2vw",
                             }}
@@ -115,7 +164,7 @@ export default class Form extends React.Component<FormProps, FormState> {
                             >
                                 {this.props.submitButton || "Save"}
                             </Button>
-                        </div>
+                        </SubmitButtonWrapper>
                     ) :(null)
                 }
             </Wrapper>

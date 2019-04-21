@@ -5,7 +5,7 @@ import WithMargins from "./utils/WithMargins";
 import WithDescription from "./utils/WithDescription";
 import WithErrors from "./utils/WithErrors";
 
-import TextInput from "../../TextInput";
+import ColorPicker from "../../ColorPicker";
 import { SimpleNode } from "../simpleNodes";
 
 import {
@@ -13,7 +13,7 @@ import {
     NodeStringSchema,
 } from "../schemaTypes";
 
-export default class StringDefault extends SimpleNode<string, NodeStringSchema> {
+export default class StringColorPicker extends SimpleNode<string, NodeStringSchema> {
     getInitialValue() {
         return "";
     }
@@ -23,10 +23,10 @@ export default class StringDefault extends SimpleNode<string, NodeStringSchema> 
             <WithMargins parent={this}>
                 <WithErrors parent={this} context={context}>
                     <WithDescription parent={this}>
-                        <TextInput
+                        <ColorPicker
                             value={value}
-                            onChange={(text) => {
-                                this.setState({ value: text });
+                            onChangeComplete={({ hex }) => {
+                                this.setState({ value: hex });
                             }}
                         />
                     </WithDescription>

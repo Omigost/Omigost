@@ -8,14 +8,30 @@ import {
     NodeObjectSchema,
 } from "../schemaTypes";
 
-export default class ObjectDefault extends CompositeNode<NodeO, NodeObjectSchema> {
+export default class ArrayTuple extends CompositeNode<NodeO, NodeObjectSchema> {
 
     getChildrenMapFromSchema() {
-        return this.getSchema().properties;
+        return { ...this.getSchema().items };
     }
 
+    setValue(value: NodeOutputValue<O>) {
+        if (this.getSchema().formatInput) {
+            value = this.getSchema().formatInput(value);
+        }
+        value = this.getValueMapFromValue(value);
+        
+        Object.keys(this.getChildrenMapFromSchema()).forEach(key => {
+            if (this.findChild(key)) {
+                this.findChild(key).setValue(value[key]);
+            }
+        });
+    }
+    
     getCompositeOutput(output: NodeO) {
-        return output;
+        const items = [];
+        Object.keys(output).sort().forEach(key => items.push(output[key]));
+        
+        return items;
     }
     
     renderComposite(context: FormContext, children: ChildrenMap<React.ReactNode>): React.ReactNode {

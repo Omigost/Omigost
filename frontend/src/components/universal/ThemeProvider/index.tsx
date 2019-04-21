@@ -25,7 +25,7 @@ export interface Theme {
 };
 
 export enum Action {
-    SetTheme = 'THEMES_SET_THEME';
+    SetTheme = 'THEMES_SET_THEME',
 };
 
 export interface SetThemeAction {
@@ -85,6 +85,14 @@ export function withReduxThemes(Component) {
         mapProviderDispatchToProps,
     )(Component);
 };
+
+export class ThemeSetterRaw extends React.Component<any, undefined> {
+    render() {
+        return this.props.children(this.props);
+    }
+}
+
+export const ThemeSetter = withReduxThemes(ThemeSetterRaw);
 
 export class ThemeProviderRaw extends React.Component<any, undefined> {
     render() {

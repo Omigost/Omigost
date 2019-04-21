@@ -66,7 +66,7 @@ export default class Card extends React.Component<CardProps, undefined> {
                 <ContentRow>
                     {
                         (!this.props.description) ? (null) :(
-                            <div>
+                            <div style={{...((!this.props.title) ? ({ width: '100%' }) : ({}))}} >
                                 <CardDescription>
                                     {this.props.description}
                                 </CardDescription>
