@@ -4,11 +4,16 @@ import { Route } from "react-router";
 import { withRouter } from "react-router-dom";
 
 import ExtensionsSettingsPanel from "../ExtensionsSettingsPanel";
+import ThemesSettingsPanel from "../ThemesSettingsPanel";
 
 const PANELS = {
     "Integrations and Extensions": {
         route: "integrations-and-extensions",
         component: ExtensionsSettingsPanel,
+    },
+    "Themes": {
+        route: "themes",
+        component: ThemesSettingsPanel,
     },
 };
 
@@ -48,6 +53,10 @@ const SETTINGS_OPTIONS = [
         options: [
             {
                 name: "Integrations and Extensions",
+                icon: "plus",
+            },
+            {
+                name: "Themes",
                 icon: "plus",
             },
         ],
