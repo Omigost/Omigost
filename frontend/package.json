@@ -23,10 +23,10 @@
   },
   "homepage": "https://github.com/vikpe/react-webpack-typescript-starter",
   "scripts": {
-    "build": "rm -r -f -d node_modules/@types/react-native && yarn run clean-dist && yarn run lint && webpack -p --config=configs/webpack/prod.js && jest --coverage --config=configs/jest.json",
+    "build": "rm -r -f -d node_modules/@types/react-native && yarn run clean-dist && yarn run lint && webpack -p --config=configs/webpack/prod.ts && jest --coverage --config=configs/jest.json",
     "clean-dist": "rm -f -r -d dist",
     "start": "yarn run start-dev",
-    "start-dev": "rm -r -f -d node_modules/@types/react-native && node ./node_modules/ts-node/dist/bin.js -P ./tsconfig.node.json ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config=configs/webpack/dev.js",
+    "start-dev": "rm -r -f -d node_modules/@types/react-native && node ./node_modules/ts-node/dist/bin.js -P ./tsconfig.node.json ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config=configs/webpack/dev.ts",
     "start-prod": "rm -r -f -d node_modules/@types/react-native && yarn run build && node ./node_modules/ts-node/dist/bin.js -P ./tsconfig.node.json express.js",
     "lint": "rm -r -f -d node_modules/@types/react-native && node ./node_modules/tslint/bin/tslint -p . --type-check -c 'tslint.json'",
     "lint-fix": "rm -r -f -d node_modules/@types/react-native && node ./node_modules/tslint/bin/tslint -p . --type-check --fix -c 'tslint.json'",
