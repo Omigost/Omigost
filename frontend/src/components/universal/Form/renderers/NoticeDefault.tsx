@@ -6,6 +6,7 @@ import { SimpleNode } from "../simpleNodes";
 import {
     FormContext,
     NodeNoticeSchema,
+    NodeError,
 } from "../schemaTypes";
 
 export default class NoticeDefault extends SimpleNode<string, NodeNoticeSchema> {
@@ -14,7 +15,11 @@ export default class NoticeDefault extends SimpleNode<string, NodeNoticeSchema> 
     }
 
     isOutputAvailable(): boolean {
-        return true;
+        return false;
+    }
+    
+    validateCustom(): Array<NodeError> {
+        return [];
     }
 
     renderSimple(value: string, context: FormContext) {

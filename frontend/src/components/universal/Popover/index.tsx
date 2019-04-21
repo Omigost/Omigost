@@ -1,33 +1,65 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import * as ReactPopover from "react-awesome-popover";
-import "react-awesome-popover/dest/react-awesome-popover.css";
+import TooltipComponent from "rc-tooltip";
 import "./index.scss";
 
 const PopoverTrigger = styled.div`
 `;
 
 const PopoverContent = styled.div`
-  background: white;
-  /* Box shadow is the default style for popover extracted from react-awesome-popover */
-  box-shadow: 0 8px 24px rgba(16, 22, 26, 0.2);
-  padding: 10px;
-  width: 200px;
+  width: 100%;
+  height: 100%;
 `;
 
 export interface PopoverProps {
     content?: React.ReactNode;
 }
 
-export default class Popover extends React.Component<PopoverProps, undefined> {
+interface PopoverState {
+    isOpen: boolean;
+}
+
+export default class Popover extends React.Component<PopoverProps, PopoverState> {
+    state: PopoverState;
+    
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            isOpen: false,
+        };
+    }
+    
     render() {
         if (!this.props.content) {
             return this.props.children || null;
         }
 
         return (
-            <ReactPopover>
+            <TooltipComponent
+                prefixCls={"rc-popover rc-tooltip"}
+                destroyTooltipOnHide
+                placement="right"
+                trigger={"click"}
+                overlay={
+                    <PopoverContent theme={this.props.theme}>
+                        {this.props.content}
+                    </PopoverContent>
+                }
+            >
+                <PopoverTrigger>
+                    {this.props.children}
+                </PopoverTrigger>
+            </TooltipComponent>
+        );
+        
+        /*return (
+            <ReactPopover
+                open={this.state.isOpen}
+                onOpen={() => this.setState({ isOpen: true })}
+                onClose={() => this.setState({ isOpen: false })}
+            >
                 <PopoverTrigger>
                     {this.props.children}
                 </PopoverTrigger>
@@ -35,6 +67,6 @@ export default class Popover extends React.Component<PopoverProps, undefined> {
                     {this.props.content}
                 </PopoverContent>
             </ReactPopover>
-        );
+        );*/
     }
 }

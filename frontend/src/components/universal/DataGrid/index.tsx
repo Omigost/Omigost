@@ -154,11 +154,17 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
                 className="ag-theme-balham"
             >
                 <AgGridReact
+                    getRowStyle={function(params) {
+                        return {
+                            zIndex: 9000-params.node.rowIndex,
+                        };
+                    }}
                     columnDefs={columnDefs}
                     rowData={rowData}
                     enableFilter
                     enableSorting
                     context={gridContext}
+                    reactNext={true}
                     onGridReady={({ api, columnApi }) => {
                         this.api = api;
                         this.columnApi = columnApi;

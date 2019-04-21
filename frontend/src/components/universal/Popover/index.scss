@@ -1,3 +1,13 @@
-.rap-popover-content {
+.rc-popover.rc-tooltip {
     z-index: 9999999 !important;
+}
+
+.rc-popover.rc-tooltip .rc-tooltip-inner {
+    background-color: white;
+    box-shadow: 0 8px 24px rgba(16, 22, 26, 0.2);
+    padding: 2vw;
+}
+
+.rc-popover.rc-tooltip.rc-tooltip-placement-right .rc-tooltip-arrow {
+    border-right-color: white;
 }

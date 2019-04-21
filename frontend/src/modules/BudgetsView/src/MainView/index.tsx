@@ -67,31 +67,30 @@ class MainView extends React.Component<any, any> {
                                                         <this.props.app.client.component mutation>
                                                             {({data, error, loading}, post) => {
                                                                 return (
-                                                                    <div style={{padding: "1vw", color: "black"}}>
-                                                                        <this.props.app.UI.Form
-                                                                            submitButton="Remove"
-                                                                            onSubmit={(data) => {
-                                                                                post(client => client.deleteBudget({
-                                                                                    name: p,
-                                                                                })).then(() => {
-                                                                                    if (this.refresh) this.refresh();
-                                                                                    this.forceUpdate();
-                                                                                });
-                                                                            }}
-                                                                        >
-                                                                            {{
-                                                                                title: "A registration form",
-                                                                                description: "The description",
-                                                                                type: "object",
-                                                                                properties: {
-                                                                                    "notice": {
-                                                                                        type: "notice",
-                                                                                        value: `Remove budget ${p}?`,
-                                                                                    },
+                                                                    <this.props.app.UI.Form
+                                                                        submitButton="Remove"
+                                                                        onSubmit={(data) => {
+                                                                            post(client => client.deleteBudget({
+                                                                                name: p,
+                                                                            })).then(() => {
+                                                                                if (this.refresh) this.refresh();
+                                                                                this.forceUpdate();
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        {{
+                                                                            title: "A registration form",
+                                                                            description: "The description",
+                                                                            type: "object",
+                                                                            properties: {
+                                                                                "notice": {
+                                                                                    type: "string",
+                                                                                    ui: "notice",
+                                                                                    value: `Remove budget ${p}?`,
                                                                                 },
-                                                                            }}
-                                                                        </this.props.app.UI.Form>
-                                                                    </div>
+                                                                            },
+                                                                        }}
+                                                                    </this.props.app.UI.Form>
                                                                 );
                                                             }}
                                                         </this.props.app.client.component>

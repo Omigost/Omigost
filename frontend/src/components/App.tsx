@@ -14,6 +14,7 @@ import createRootReducer from "../redux/reducers";
 import preloadedState from "../redux/store";
 
 import ModulesProvider, { withModules, WithLoaderProps } from "modules/ModulesProvider";
+import ToastProvider from "./universal/ToastProvider";
 
 const AppWrapper = styled.div`
   background: ${props => props.theme.colors.background};
@@ -72,6 +73,7 @@ export default class App extends React.Component<AppProps, undefined> {
 
         return (
             <Provider store={store}>
+                <ToastProvider />
                 <I18n locale={locale} messages={messages}>
                     <ThemeProvider theme={defaultTheme}>
                         <ModulesProvider modules={[ "dashboard-view", "budgets-view", "users-view", "settings-view" ]}>

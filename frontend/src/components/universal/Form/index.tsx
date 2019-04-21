@@ -7,6 +7,9 @@ import { FormContext, NodeAny, NodeState, RootNode, Schema } from "./schemaTypes
 
 const Wrapper = styled.div`
   width: 100%;
+  color: black;
+  font-family: ${(props) => props.theme.primaryFont};
+  font-size: 1vw;
 `;
 
 export interface FormProps {

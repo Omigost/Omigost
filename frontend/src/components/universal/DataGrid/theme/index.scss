@@ -1,4 +1,14 @@
-@import "./ag-theme.scss";
+@import "~ag-grid-community/dist/styles/ag-grid";
+@import "~ag-grid-community/dist/styles/compiled-icons";
+@import "~ag-grid-community/dist/styles/ag-theme-balham";
+
+.ag-root-wrapper-body > .ag-root {
+    border: none;
+}
+
+.ag-root-wrapper-body > .ag-root .ag-header {
+    background: transparent;
+}
 
 .ag-cell.ag-cell-with-height.ag-cell-value {
     height: 100%;

@@ -11,12 +11,10 @@ export const defaultParserConfig: SchemaParserConfig = {
         },
         STRING: {
             default: StringDefault,
+            notice:  NoticeDefault,
         },
         OBJECT: {
             default: ObjectDefault,
-        },
-        NOTICE: {
-            default: NoticeDefault,
         },
     },
     rootState: null,
