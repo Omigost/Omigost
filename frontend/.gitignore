@@ -7,3 +7,4 @@ docs/
 tmp/
 yarn-*/
 v8-*/
+.awcache/

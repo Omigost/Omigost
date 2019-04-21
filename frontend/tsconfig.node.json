@@ -5,8 +5,6 @@
         "allowSyntheticDefaultImports": true,
         "sourceMap": true,
         "noImplicitAny": false,
-        "moduleResolution": "node",
-        "module": "esnext",
         "importHelpers": true,
         "target": "es5",
         "jsx": "react",

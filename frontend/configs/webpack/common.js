@@ -1,5 +1,3 @@
-require('typescript-require');
-
 // shared config (dev and prod)
 const path = require('path');
 const { CheckerPlugin } = require('awesome-typescript-loader');
@@ -37,7 +35,8 @@ module.exports = {
         use: ['babel-loader', {
           loader: 'awesome-typescript-loader',
           options:{
-            transpileOnly: true
+            useCache: true,
+            transpileOnly: true,
           },
         }],
       },
