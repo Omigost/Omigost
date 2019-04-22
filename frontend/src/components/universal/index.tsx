@@ -12,7 +12,7 @@ import ExportXLSXButtons from "./ExportXLSXButtons";
 import FloatingWindow from "./FloatingWindow";
 import Form from "./Form";
 import InteractiveGrid from "./InteractiveGrid";
-import InteractiveGrid2 from "./InteractiveGrid2";
+import InteractiveGrid2, { addItemToLayout as addItemToInteractiveGrid2Layout } from "./InteractiveGrid2";
 import CustomDataRenderer from "./CustomDataRenderer";
 import Toggle from "./Toggle";
 import InteractiveNestedGrid from "./InteractiveNestedGrid";
@@ -55,6 +55,7 @@ export default {
     TextInput,
     InteractiveGrid,
     InteractiveGrid2,
+    addItemToInteractiveGrid2Layout,
     CustomDataRenderer,
     Toggle,
     InteractiveNestedGrid,

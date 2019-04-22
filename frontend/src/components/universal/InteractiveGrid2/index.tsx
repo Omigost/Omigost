@@ -114,6 +114,50 @@ interface InteractiveGridState {
     layout: Layout;
 }
 
+export function addItemToLayout(layout: Layout, item: ItemType) {
+    
+    if (!layout) {
+        const newItem = {
+            ...item,
+            x: 0,
+            y: 0,
+            w: item.width,
+            h: item.height,
+            i: "0",
+            content: item.content,
+            static: item.static,
+        };
+        
+        return {
+            items: [newItem],
+            positions: [newItem],
+        };
+    } else {
+        const newItem = {
+            ...item,
+            x: 0,
+            y: 0,
+            w: item.width,
+            h: item.height,
+            i: layout.positions.length.toString(),
+            content: item.content,
+            static: item.static,
+        };
+        
+        return {
+            ...layout,
+            items: [
+                ...layout.items,
+                newItem,
+            ],
+            positions: [
+                ...layout.positions,
+                newItem,
+            ],
+        };
+    }
+}
+
 class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveGridState> {
 
     state: InteractiveGridState;
@@ -132,7 +176,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
             currentBreakpoint: "lg",
             compactType: "vertical",
             mounted: false,
-            items: this.props.items,
+            items: [],
             layout: null,
         };
 
@@ -152,7 +196,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
         if (this.props.onLayoutChange) {
             const positions = ((this.props.layout || {}).positions || this.state.layout);
             this.props.onLayoutChange({
-                items: this.state.items.map((item, i) => {
+                items: ((this.props.layout || {}).items || this.state.items).map((item, i) => {
                     const newItem = { ...item };
                     delete newItem['content'];
                     if (i === index) {
@@ -165,7 +209,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
         }
         
         this.setState({
-            items: this.state.items.map((item, i) => {
+            items: ((this.props.layout || {}).items || this.state.items).map((item, i) => {
                 if (i === index) {
                     return {
                         ...item,
@@ -179,7 +223,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
 
     onRemoveItem(index) {
         
-        const newItems = this.state.items.filter((item, i) => i !== index);
+        const newItems = ((this.props.layout || {}).items || this.state.items).filter((item, i) => i !== index);
         
         if (this.props.onLayoutChange) {
             const positions = ((this.props.layout || {}).positions || this.state.layout);
@@ -219,7 +263,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
         }
         
         return {
-            lg: this.state.items.map((item, i) => {
+            lg: ((this.props.layout || {}).items || this.state.items).map((item, i) => {
                 return {
                     ...item,
                     x: 0,
@@ -257,6 +301,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
                             <CardBoxRemove
                                 onClick={() => openDialog("interactive-grid-settings-dialog", {
                                     form: l.optionsForm,
+                                    options: (l.options || l.initialOptions),
                                     onSubmit: (data) => {
                                         closeDialog("interactive-grid-settings-dialog");
                                         this.onSetItemOptions(i, data);
@@ -301,7 +346,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
         const canDispatch = (this.props.enableActionDrag !== false) || (this.props.enableActionResize !== false) || (this.props.enableActionRemove !== false);
         if (canDispatch && this.props.onLayoutChange) {
             this.props.onLayoutChange({
-                items: this.state.items.map(item => {
+                items: ((this.props.layout || {}).items || this.state.items).map(item => {
                     const newItem = { ...item };
                     delete newItem['content'];
                     return newItem;
@@ -322,6 +367,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
                         return (
                             <div>
                                 <Form
+                                    defaultValue={parameters.options}
                                     submitButton="Save settings"
                                     onSubmit={(data) => {
                                         parameters.onSubmit(data);

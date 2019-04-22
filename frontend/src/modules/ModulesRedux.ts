@@ -107,8 +107,6 @@ export function reducer(stateIn: ModulesState, action) {
     const state = stateIn || INITIAL_STATE;
     const actionType: Action = action.type;
     
-    console.error(actionType);
-    console.error(JSON.stringify(state, null, 2));
     switch(actionType) {
         case Action.LoadModuleInstance: {
             return {

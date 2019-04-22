@@ -14,30 +14,25 @@ export interface CardItemSpecs {
     description: string;
     img?: string;
     value?: any;
+    header?: () => React.Node;
 }
 
 export interface CardVerticalListProps {
     items: Array<CardItemSpecs>;
     onSelected: (item: CardItemSpecs) => void;
+    disableHoverAnimaions?: boolean;
 }
 
 interface ItemComponentProps {
   theme?: any;
+  disableHoverAnimaions?: boolean;
 }
  
 const Arrow = styled.div`
   font-size: 1vw;
 `;
 
-const Item = styled.div`
-  border-radius: 0.5vw;
-  background: #ffffff;
-  box-shadow: 0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1);
-  margin: 1vw;
-  height: 20vw;
-  width: 15vw;
-  cursor: pointer;
-
+const itemHoverStyle = `
   &:hover .ItemHeader {
     height: 100%;
   }
@@ -50,6 +45,18 @@ const Item = styled.div`
   &:hover .ItemImage {
     opacity: 0;
   }
+`;
+
+const Item = styled.div<ItemComponentProps>`
+  border-radius: 0.5vw;
+  background: #ffffff;
+  box-shadow: 0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1);
+  margin: 1vw;
+  height: 20vw;
+  width: 15vw;
+  cursor: pointer;
+
+  ${(props: ItemComponentProps) => ((props.disableHoverAnimaions) ? ('') : (itemHoverStyle))}
 `;
 
 const ItemInner = styled.div`
@@ -121,17 +128,21 @@ class CardVerticalList extends React.Component<CardVerticalListProps, undefined>
  
     render() {
         const menu = this.props.items.map(item => {
-            const { img, name, description } = item;
+            const { img, name, description, header } = item;
             return (
-                <Item key={name} className="menu-item">
+                <Item key={name} className="menu-item" disableHoverAnimaions={this.props.disableHoverAnimaions}>
                     <ItemInner>
                         <ItemHeader className="ItemHeader">
-                            <ItemSelectBoxIcon className="ItemSelectBoxIcon">
-                                <FontAwesomeIcon icon={faBoxOpen.iconName} />
-                            </ItemSelectBoxIcon>
-                            <ItemSelectBoxText>
-                                Use that communication channel
-                            </ItemSelectBoxText>
+                            {
+                                (header) ? (header()) : (
+                                    <ItemSelectBoxIcon className="ItemSelectBoxIcon">
+                                        <FontAwesomeIcon icon={faBoxOpen.iconName} />
+                                    </ItemSelectBoxIcon>
+                                    <ItemSelectBoxText>
+                                        Use that communication channel
+                                    </ItemSelectBoxText>
+                                )
+                            }
                         </ItemHeader>
                         <ItemTitle>
                             {name}
@@ -140,7 +151,11 @@ class CardVerticalList extends React.Component<CardVerticalListProps, undefined>
                             {description}
                         </ItemDescription>
                     </ItemInner>
-                    <ItemImage className="ItemImage" src={img}/>
+                    {
+                        (img) ? (
+                            <ItemImage className="ItemImage" src={img}/>
+                        ) : (null)
+                    }
                 </Item>
             );
         });
