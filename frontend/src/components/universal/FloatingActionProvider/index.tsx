@@ -9,11 +9,13 @@ import FloatingActionProviderRaw from "./FloatingActionProviderRaw";
 
 export enum Action {
     ShowAction = 'FLOATING_ACTION_SHOW';
+    CancelAction = 'FLOATING_ACTION_CANCEL';
 }
 
 export interface FloatingActionOption {
     icon: IconName;
     description: string;
+    onClick?: () => void;
 }
 
 export interface FloatingActionSpecs {
@@ -27,10 +29,20 @@ export interface ShowFloatingAction {
     specs: FloatingActionSpecs;
 }
 
+export interface CancelFloatingAction {
+    type: Action.CancelAction;
+}
+
 export function executeShowAction(actionSpecs: FloatingActionSpecs): ShowFloatingAction {
     return {
         type: Action.ShowAction,
         specs: actionSpecs,
+    };
+}
+
+export function executeCancelAction(): CancelFloatingAction {
+    return {
+        type: Action.CancelAction,
     };
 }
 
@@ -47,6 +59,12 @@ export function reducer(stateIn: FloatingActionsReduxState, action): FloatingAct
     const actionType: Action = action.type;
     
     switch(actionType) {
+        case Action.CancelAction: {
+            return {
+                ...state,
+                currentAction: null,
+            };
+        }
         case Action.ShowAction: {
             return {
                 ...state,
@@ -69,6 +87,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         showAction: (action: FloatingActionSpecs) => {
             dispatch(executeShowAction(action));
+        },
+        cancelAction: () => {
+            dispatch(executeCancelAction());
         },
     };
 }

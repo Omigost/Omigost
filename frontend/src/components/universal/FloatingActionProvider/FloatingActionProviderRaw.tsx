@@ -4,6 +4,10 @@ import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FloatingActionSpecs } from "./index";
 
+import {
+    faTimes,
+} from "@fortawesome/free-solid-svg-icons";
+
 import Tooltip from "../Tooltip";
 
 export interface FloatingActionProviderProps {
@@ -96,6 +100,11 @@ const OptionIconWrapper = styled.div`
   cursor: pointer;
   border: 0.3vw solid transparent;
   border-radius: 1vw;
+  margin-left: 1vw;
+  
+  width: 1.5vw;
+  height: 1.5vw;
+  text-align: center;
   
   &:hover {
       border: 0.3vw solid white;
@@ -125,9 +134,19 @@ class FloatingActionProviderRaw extends React.Component<FloatingActionProviderPr
                                 Actions:
                             </ActionTitleHover>
                             <ActionActionsPanelHover>
-                                {(specs.options || []).map(option => {
+                                {(specs.options || []).concat([
+                                    {
+                                        description: "Ignore this message",
+                                        icon: faTimes.iconName,
+                                        onClick: () => {
+                                            this.props.cancelAction();
+                                        },
+                                    }
+                                ]).map(option => {
                                     return (
-                                        <OptionIconWrapper>
+                                        <OptionIconWrapper
+                                            onClick={option.onClick}
+                                        >
                                             <Tooltip
                                                 content={
                                                     <div>
