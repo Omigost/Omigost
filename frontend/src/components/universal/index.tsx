@@ -39,6 +39,7 @@ import PlainList from "./PlainList";
 import Slider from "./Slider";
 import { ThemeSetter } from "./ThemeProvider";
 import { FloatingActionConsumer } from "./FloatingActionProvider";
+import BarLine from "./BarLine";
 
 export default {
     Button,
@@ -85,4 +86,5 @@ export default {
     Slider,
     ThemeSetter,
     FloatingActionConsumer,
+    BarLine,
 };
