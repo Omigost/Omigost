@@ -20,10 +20,18 @@ const BUILTIN_MODULES: Array<OmigostModule> = [
     new DesignGuideViewModule(),
 ];
 
+export type OmigostModuleRenderInterceptor = (module: OmigostModule, props: any, next: (props: any, settings: any) => React.ReactElement<any>) => React.ReactElement<any>;
+
+export interface OmigostAppModuleHelper {
+    setSettings: (settings: any) => void;
+    resetSettings: () => void;
+}
+
 export interface OmigostApp {
     UI: any;
     modulesLoader: OmigostModulesLoaderInterface;
     client: OmigostClientInterface;
+    module: OmigostAppModuleHelper;
 }
 
 export interface OmigostModuleDetails {
@@ -39,9 +47,10 @@ export interface OmigostModule {
     getName(): string | null;
     getMenuName?(): string;
     getDetails(): OmigostModuleDetails;
-    renderDashboardView?(props: any): React.ReactElement<any> | null;
+    renderDashboardView?(props: any, settings?: any): React.ReactElement<any> | null;
     getRoutes?(): Array<OmigostModuleRoute>;
     getSettingsForm?(): Schema;
+    getInitialSettings(): any;
 }
 
 export type ModuleSource = String | OmigostModule;
@@ -56,6 +65,7 @@ export interface OmigostModulesStore {
     put(instance: OmigostModuleInstance): Array<OmigostModuleInstance>;
     enable(instance: OmigostModuleInstance): void;
     disable(instance: OmigostModuleInstance): void;
+    setSettings(instance: OmigostModuleInstance, settings: any): void;
 }
 
 export interface OmigostModulesLoaderInterface {
@@ -65,6 +75,7 @@ export interface OmigostModulesLoaderInterface {
     getAllModules(): Array<OmigostModule>;
     getRegisteredRoutes(): Array<OmigostModuleRoute>;
     setStore(store: OmigostModulesStore);
+    resetModuleSettings(module: OmigostModule);
 }
 
 export interface OmigostModuleInstance {
@@ -76,20 +87,34 @@ export interface OmigostModuleInstance {
 
 export default class OmigostModulesLoader implements OmigostModulesLoaderInterface {
     modulesStore: OmigostModulesStore;
-
+    renderInterceptor: OmigostModuleRenderInterceptor;
+    
     constructor() {
         this.modulesStore = null;
+        this.renderInterceptor = null;
+    }
+    
+    setRenderInterceptor(renderInterceptor: OmigostModuleRenderInterceptor) {
+        this.renderInterceptor = renderInterceptor;
     }
     
     setStore(store: OmigostModulesStore) {
         this.modulesStore = store;
     }
 
-    getApp(): OmigostApp {
+    getApp(instance: OmigostModuleInstance): OmigostApp {
         return {
             UI: OmigostUI,
             modulesLoader: this,
             client: OmigostClient,
+            module: {
+                setSettings: (settings: any) => {
+                    this.modulesStore.setSettings(instance.module, settings);
+                },
+                resetSettings: () => {
+                    this.resetModuleSettings(instance.module);
+                },
+            },
         };
     }
 
@@ -123,6 +148,10 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
         this.modulesStore.disable(module);
     }
 
+    resetModuleSettings(module: OmigostModule) {
+        this.modulesStore.setSettings(module, (module.getInitialSettings) ? ({ ...module.getInitialSettings() }) : ({}));
+    }
+    
     loadModule(src: ModuleSource) {
         let modInst: OmigostModule = null;
         if (typeof src === "string") {
@@ -140,6 +169,13 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
                 return;
             }
             
+            if (this.renderInterceptor) {
+                const renderDashboardViewOriginal = modInst.renderDashboardView;
+                modInst.renderDashboardView = (props, settings) => {
+                    return this.renderInterceptor(modInst, props, renderDashboardViewOriginal);
+                };
+            }
+            
             const inst = {
                 enable: () => this.enableModule(modInst),
                 disable: () => this.disableModule(modInst),
@@ -147,8 +183,10 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
                 module: modInst,
             };
             
+            this.resetModuleSettings(modInst);
+            
             this.modulesStore.put(inst);
-            modInst.onLoad(this.getApp(), this);
+            modInst.onLoad(this.getApp(inst), this);
         }
     }
 

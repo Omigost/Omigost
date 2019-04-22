@@ -12,9 +12,9 @@ export default class DashBoardViewModule implements OmigostModule {
         this.app = app;
     }
 
-    renderDashboardView(props: any) {
+    renderDashboardView(props: any, settings: any) {
         return (
-            <Panel app={this.app} />
+            <Panel app={this.app} settings={settings} />
         );
     }
 

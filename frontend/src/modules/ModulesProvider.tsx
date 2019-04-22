@@ -27,7 +27,18 @@ export class ModulesProvider extends React.Component<ModulesProviderProps, undef
             put: (instance) => this.props.putInstance(instance),
             enable: this.props.enable,
             disable: this.props.disable,
+            setSettings: this.props.setSettings,
         };
+        
+        loader.setRenderInterceptor((module, props, next) => {
+            return (
+                <ModulesStoreConsumer>
+                    {({ settings }) => {
+                        return next.call(module, props, settings[module.getName()]);
+                    }}
+                </ModulesStoreConsumer>
+            );
+        });
         
         loader.setStore(store);
 
@@ -45,8 +56,15 @@ export class ModulesProvider extends React.Component<ModulesProviderProps, undef
 
 export default connectProvider(ModulesProvider);
 
+class ModulesStoreConsumerRaw extends React.Component<any, undefined> {
+    render() {
+        return this.props.children(this.props);
+    }
+}
+
+export const ModulesStoreConsumer = connectProvider(ModulesStoreConsumerRaw);
+
 export class ModulesConsumer extends React.Component<any & { children: Array<React.ReactElement<any>> }, undefined> {
-  // static contextType = ModulesLoaderContext;
   render() {
     return (
         <ModulesLoaderContext.Consumer>

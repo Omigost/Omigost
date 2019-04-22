@@ -5,6 +5,7 @@ export enum Action {
     LoadModuleInstance = 'MODULES_LOAD_INSTANCE';
     EnableModule = 'MODULES_ENABLE';
     DisableModule = 'MODULES_DISABLE';
+    SetModuleSettings = 'MODULES_SET_SETTINGS';
 };
 
 export interface EnableModuleAction {
@@ -20,6 +21,12 @@ export interface DisableModuleAction {
 export interface LoadModuleInstanceAction {
     type: Action.LoadModuleInstance;
     module: OmigostModule;
+};
+
+export interface SetModuleSettingsAction {
+    type: Action.SetModuleSettings;
+    module: OmigostModule;
+    settings: any;
 };
 
 export function executeLoadModuleInstance(instance: OmigostModuleInstance): LoadModuleInstanceAction {
@@ -43,9 +50,18 @@ export function executeDisableModule(module: OmigostModule): DisableModuleAction
     };
 };
 
+export function executeSetModuleSettings(module: OmigostModule, settings: any): SetModuleSettingsAction {
+    return {
+        type: Action.SetModuleSettings,
+        module,
+        settings,
+    };
+};
+
 const mapProviderStateToProps = (state, ownProps) => {
     return {
         instances: state.modules.instances,
+        settings: state.modules.settings,
     };
 }
 
@@ -60,9 +76,11 @@ const mapProviderDispatchToProps = (dispatch, ownProps) => {
         disable: (module: OmigostModule) => {
             dispatch(executeDisableModule(module));
         },
+        setSettings: (module: OmigostModule, settings: any) => {
+            dispatch(executeSetModuleSettings(module, settings));
+        },
     };
 }
-//this.modulesStore.getAll().find(item => item.module === module).activated = false;
 
 export function connectProvider(provider) {
     return connect(
@@ -71,18 +89,26 @@ export function connectProvider(provider) {
     )(provider);
 }
 
+export interface ModulesSettingsMapping {
+    [key: string]: any;
+}
+
 export interface ModulesState {
     instances: Array<OmigostModuleInstance>;
+    settings: ModulesSettingsMapping;
 };
 
 export const INITIAL_STATE: ModulesState = {
     instances: [],
+    settings: {},
 };
 
 export function reducer(stateIn: ModulesState, action) {
     const state = stateIn || INITIAL_STATE;
     const actionType: Action = action.type;
     
+    console.error(actionType);
+    console.error(JSON.stringify(state, null, 2));
     switch(actionType) {
         case Action.LoadModuleInstance: {
             return {
@@ -119,6 +145,15 @@ export function reducer(stateIn: ModulesState, action) {
                     }
                     return instance;
                 })
+            };
+        }
+        case Action.SetModuleSettings: {
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    [action.module.getName()]: action.settings,
+                },
             };
         }
         default: {
