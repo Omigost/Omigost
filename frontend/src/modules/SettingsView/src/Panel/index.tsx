@@ -57,7 +57,7 @@ const SETTINGS_OPTIONS = [
             },
             {
                 name: "Themes",
-                icon: "plus",
+                icon: "palette",
             },
         ],
     },
@@ -100,7 +100,6 @@ class Panel extends React.Component<any, undefined> {
                                 renderItem={(props) => {
                                     return (
                                         <div>
-                                            <span className="nestedGridHandler">Drag</span>
                                             <this.props.app.UI.ButtonPanel
                                                 icon={props.item.icon}
                                                 onClick={() => {

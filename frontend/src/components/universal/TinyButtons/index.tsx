@@ -43,6 +43,7 @@ export interface ButtonSpecs {
     onClick?: () => void;
     text?: any;
     tooltip?: React.ReactElement<any>;
+    tooltipClickTrigger?: boolean;
     popover?: React.ReactElement<any>;
 }
 
@@ -98,7 +99,7 @@ class TinyButtons extends React.Component<TinyButtonsProps, any> {
                             contentNode = (
                                 <Tooltip
                                     content={button.tooltip}
-                                    clickTrigger
+                                    clickTrigger={(button.tooltipClickTrigger === false) ? (false) : (true)}
                                 >
                                     {contentNode}
                                 </Tooltip>

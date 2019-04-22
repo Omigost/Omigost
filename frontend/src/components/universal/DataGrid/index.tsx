@@ -14,7 +14,7 @@ import FilterRenderer from "./FilterRenderer";
 
 const Wrapper = styled.div`
   padding: 1.2vw;
-  width: 100%;
+  width: 95%;
   height: 100%;
 
   &.ag-theme-balham {
@@ -149,6 +149,16 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
 
         const { columnDefs, rowData } = this.extractAgGridDataFormat(resolveData(this.props.data));
 
+        setTimeout(() => {
+            if (this.columnApi) {
+                const allColumnIds = [];
+                this.columnApi.getAllColumns().forEach(column => {
+                     allColumnIds.push(column.colId);
+                });
+                this.columnApi.autoSizeColumns(allColumnIds);
+            }
+        }, 500);
+        
         return (
             <Wrapper
                 className="ag-theme-balham"

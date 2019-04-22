@@ -4,21 +4,31 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled, { ThemeProvider } from "styled-components";
 import defaultTheme from "themes/default";
 
+import {
+    faWrench, faRedo,
+} from "@fortawesome/free-solid-svg-icons";
+
 import { Box, Flex } from "@rebass/grid";
 
 const CursorIcon = styled.div`
-  margin-right: 0.3vw;
-  display: inline-block;
+    margin-right: 0.3vw;
+    display: inline-block;
 `;
 
 const GridWrapper = styled.div`
-  height: 100%;
-  width: 100%;
-  overflow-y: scroll;
+    height: 92%;
+    width: 100%;
+    position: relative;
+    top: -1vw;
 `;
 
 const TooltipContent = styled.div`
-  width: 10vw;
+    width: 10vw;
+`;
+
+const HeaderOptions = styled.div`
+    display: inline-block;
+    font-size: 1vw;
 `;
 
 const DATA = {
@@ -73,7 +83,21 @@ const PanelHeader = styled.div`
   margin-top: 2vw;
 `;
 
-export default class Panel extends React.Component<any, any> {
+interface PanelState {
+    draggableMode: boolean;
+}
+
+export default class Panel extends React.Component<any, PanelState> {
+
+    state: PanelState;
+
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            draggableMode: false,
+        };
+    }
 
     render() {
         return (
@@ -82,9 +106,51 @@ export default class Panel extends React.Component<any, any> {
             >
                 <PanelHeader>
                     Budgets dashboard
+                    <HeaderOptions>
+                        <this.props.app.UI.FloatingActionConsumer>
+                            {({ showAction }) => {
+                                return (
+                                    <this.props.app.UI.TinyButtons>
+                                        {[
+                                            {
+                                                icon: faWrench.iconName,
+                                                tooltip: "Customize layout",
+                                                tooltipClickTrigger: false,
+                                                onClick: () => {
+                                                    this.setState({
+                                                        draggableMode: !this.state.draggableMode,
+                                                    });
+                                                },
+                                            },
+                                            {
+                                                icon: faRedo.iconName,
+                                                tooltip: "Refresh",
+                                                tooltipClickTrigger: false,
+                                                onClick: () => {
+                                                    showAction({
+                                                        title: "Save the layout",
+                                                        description: "Current layout was not saved click here to save it.",
+                                                        options: [
+                                                            {
+                                                                icon: faWrench.iconName,
+                                                                description: "Save the layout",
+                                                            },
+                                                        ],
+                                                    });
+                                                },
+                                            },
+                                        ]}
+                                    </this.props.app.UI.TinyButtons>
+                                );
+                            }}
+                        </this.props.app.UI.FloatingActionConsumer>
+                    </HeaderOptions>
                 </PanelHeader>
 
                 <this.props.app.UI.InteractiveGrid2
+                    enableActionDrag={this.state.draggableMode}
+                    enableActionRemove={this.state.draggableMode}
+                    enableActionResize={this.state.draggableMode}
                     items={[
                         {
                             content: (

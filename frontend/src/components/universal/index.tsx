@@ -38,6 +38,7 @@ import { DialogsConsumer } from "./DialogProvider";
 import PlainList from "./PlainList";
 import Slider from "./Slider";
 import { ThemeSetter } from "./ThemeProvider";
+import { FloatingActionConsumer } from "./FloatingActionProvider";
 
 export default {
     Button,
@@ -82,4 +83,5 @@ export default {
     PlainList,
     Slider,
     ThemeSetter,
+    FloatingActionConsumer,
 };

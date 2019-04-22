@@ -4,6 +4,7 @@ import { reducer as modulesReducer } from "../modules/ModulesRedux";
 import { reducer as dialogsReducer } from "../components/universal/DialogProvider";
 import { reducer as toastsReducer } from "../components/universal/ToastProvider";
 import { reducer as themeReducer } from "../components/universal/ThemeProvider";
+import { reducer as floatingActionReducer } from "../components/universal/FloatingActionProvider";
 
 export interface AppState {
     appIsInitialized: boolean;
@@ -19,6 +20,7 @@ export default function createRootReducer(history) {
         dialogs: dialogsReducer,
         toasts: toastsReducer,
         themes: themeReducer,
+        floatingActions: floatingActionReducer,
         app: (stateIn: AppState, action): AppState => {
             const state = stateIn || INITIAL_STATE;
             const actionType: Action = action.type;

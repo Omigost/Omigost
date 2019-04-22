@@ -135,12 +135,20 @@ class ShowcaseLayout extends React.Component {
         return this.generateLayouts().lg.map((l, i) => {
             return (
                 <CardBoxWrapper key={i} className={l.static ? "static" : ""}>
-                    <CardBoxHandle className="handle">
-                        <FontAwesomeIcon icon="expand" />
-                    </CardBoxHandle>
-                    <CardBoxRemove onClick={() => this.onRemoveItem(i)}>
-                        <FontAwesomeIcon icon="times" />
-                    </CardBoxRemove>
+                    {
+                        (this.props.enableActionDrag !== false) ? (
+                            <CardBoxHandle className="handle">
+                                <FontAwesomeIcon icon="expand" />
+                            </CardBoxHandle>
+                        ) : (null)
+                    }
+                    {
+                        (this.props.enableActionRemove !== false) ? (
+                            <CardBoxRemove onClick={() => this.onRemoveItem(i)}>
+                                <FontAwesomeIcon icon="times" />
+                            </CardBoxRemove>
+                        ) : (null)
+                    }
                     <CardBoxContent>
                         {l.content}
                     </CardBoxContent>
@@ -175,6 +183,8 @@ class ShowcaseLayout extends React.Component {
             <div>
                 <ResponsiveReactGridLayout
                     {...this.props}
+                    isDraggable={(this.props.enableActionDrag !== false)}
+                    isResizable={(this.props.enableActionResize !== false)}
                     layouts={this.generateLayouts()}
                     onBreakpointChange={this.onBreakpointChange}
                     onLayoutChange={this.onLayoutChange}

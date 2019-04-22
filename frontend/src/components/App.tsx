@@ -16,6 +16,7 @@ import preloadedState from "../redux/store";
 import ModulesProvider, { withModules, WithLoaderProps } from "modules/ModulesProvider";
 import ToastProvider from "./universal/ToastProvider";
 import { ThemeProvider, executeSetTheme } from "./universal/ThemeProvider";
+import FloatingActionProvider from "./universal/FloatingActionProvider";
 
 const AppWrapper = styled.div`
   background: ${props => props.theme.colors.background};
@@ -81,6 +82,7 @@ export default class App extends React.Component<AppProps, undefined> {
                         <ModulesProvider modules={[ "dashboard-view", "budgets-view", "users-view", "settings-view", "design-guide" ]}>
                             <ConnectedRouter history={history}>
                                 <AppWrapper>
+                                    <FloatingActionProvider />
                                     <RoutesModuleComponent />
                                 </AppWrapper>
                             </ConnectedRouter>

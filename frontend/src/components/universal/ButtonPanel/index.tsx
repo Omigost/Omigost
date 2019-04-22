@@ -26,6 +26,7 @@ const ButtonComponent = styled.button<ButtonComponentProps>`
   padding-top: 0.5vw;
   padding-bottom: 0.5vw;
   width: 100%;
+  min-height: 11vw;
 `;
 
 const IconWrapper = styled.div<ButtonComponentProps>`
