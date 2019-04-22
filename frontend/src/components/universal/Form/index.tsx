@@ -16,6 +16,8 @@ const SubmitButtonWrapper = styled.div`
   width: 50%;
   margin-top: 1vw;
   margin-bottom: 1vw;
+  
+  width: 40%;
 `;
 
 export interface FormProps {
@@ -152,7 +154,8 @@ export default class Form extends React.Component<FormProps, FormState> {
                     (this.state.tree && this.props.onSubmit) ? (
                         <SubmitButtonWrapper
                             style={{
-                                marginLeft: "-2vw",
+                                marginLeft: "30%",
+                                marginRight: "30%",
                             }}
                         >
                             <Button

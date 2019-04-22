@@ -8,7 +8,6 @@ import { Rnd } from "react-rnd";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
 const ModalContent = styled.div`
   width: 100%;
   height: 100%;
@@ -54,6 +53,7 @@ const CardBoxRemove = styled.div`
 const CardBoxContent = styled.div`
     margin: 1vw;
     height: 89%;
+    width: 100%;
 `;
 
 export interface DialogProps {
@@ -66,14 +66,16 @@ export interface DialogProps {
     onFullscreen?: () => void;
     onMinimize?: () => void;
     transparent?: boolean;
+    minWidth?: number;
 }
 
 const CardBoxWrapper = styled.div<DialogProps>`
-  width: 100%;
   height: 100%;
   border-radius: 0.5vw;
   background: ${(props: DialogProps) => (props.transparent) ? ('transparent') : ('#ffffff')};
   box-shadow: ${(props: DialogProps) => (props.transparent) ? ('none') : ('0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1)')};
+
+  width: ${(props: ModalContentProps) => ((props.minWidth) ? (props.minWidth+'vw') : ('100%'))}
 `;
 
 export interface DialogState {

@@ -141,6 +141,7 @@ export default class Panel extends React.Component<any, PanelState> {
                                 enableActionDrag={this.state.draggableMode}
                                 enableActionRemove={this.state.draggableMode}
                                 enableActionResize={this.state.draggableMode}
+                                enableActionSettings={this.state.draggableMode}
                                 layout={this.state.layout}
                                 onLayoutChange={(layout) => {
                                     showAction({
@@ -232,11 +233,18 @@ export default class Panel extends React.Component<any, PanelState> {
                                         initialOptions: {
                                             title: "Test!",
                                         },
-                                        content: (options, setOptions) => (
+                                        optionsForm: {
+                                            type: "object",
+                                            title: "Meter widget",
+                                            description: "Shows single value",
+                                            properties: {
+                                                title: {
+                                                    type: "string",
+                                                },
+                                            },
+                                        },
+                                        content: (options) => (
                                             <div>
-                                                <button onClick={() => setOptions({ title: "Woops" })}>
-                                                    Set title to "Woops"
-                                                </button>
                                                 <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
                                                 <this.props.app.UI.Meter
                                                     value={30}

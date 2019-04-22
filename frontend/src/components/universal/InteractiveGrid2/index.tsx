@@ -5,6 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Responsive, WidthProvider, Layout as BaseLayout } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
+import Dialog from "../Dialog";
+import Form from "../Form";
+import { DialogsConsumer } from "../DialogProvider";
+
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import "./index.scss";
@@ -89,6 +93,7 @@ export interface InteractiveGridItem {
     static: boolean;
     content: (options: any) => React.Node;
     initialOptions: any;
+    optionsForm?: any;
 }
 
 export interface InteractiveGridProps {
@@ -97,6 +102,7 @@ export interface InteractiveGridProps {
     enableActionDrag?: boolean;
     enableActionRemove?: boolean;
     enableActionResize?: boolean;
+    enableActionSettings?: boolean;
     layout?: Layout;
 }
 
@@ -228,7 +234,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
         };
     }
 
-    generateDOM() {
+    generateDOM(openDialog, closeDialog) {
         return this.generateLayouts().lg.map((l, i) => {
             return (
                 <CardBoxWrapper key={i} className={l.static ? "static" : ""}>
@@ -243,6 +249,21 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
                         (this.props.enableActionRemove !== false) ? (
                             <CardBoxRemove onClick={() => this.onRemoveItem(i)}>
                                 <FontAwesomeIcon icon="times" />
+                            </CardBoxRemove>
+                        ) : (null)
+                    }
+                    {
+                        (l.optionsForm && this.props.enableActionSettings !== false) ? (
+                            <CardBoxRemove
+                                onClick={() => openDialog("interactive-grid-settings-dialog", {
+                                    form: l.optionsForm,
+                                    onSubmit: (data) => {
+                                        closeDialog("interactive-grid-settings-dialog");
+                                        this.onSetItemOptions(i, data);
+                                    },
+                                })}
+                            >
+                                <FontAwesomeIcon icon="tools" />
                             </CardBoxRemove>
                         ) : (null)
                     }
@@ -293,21 +314,46 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
     render() {
         return (
             <div>
-                <ResponsiveReactGridLayout
-                    {...this.props}
-                    isDraggable={(this.props.enableActionDrag !== false)}
-                    isResizable={(this.props.enableActionResize !== false)}
-                    layouts={this.generateLayouts()}
-                    onBreakpointChange={this.onBreakpointChange}
-                    onLayoutChange={this.onLayoutChange}
-                    measureBeforeMount={false}
-                    useCSSTransforms={this.state.mounted}
-                    compactType={this.state.compactType}
-                    preventCollision={!this.state.compactType}
-                    draggableHandle=".handle"
+                <Dialog
+                    name="interactive-grid-settings-dialog"
+                    minWidth={40}
                 >
-                    {this.generateDOM()}
-                </ResponsiveReactGridLayout>
+                    {({ closeDialog, parameters }) => {
+                        return (
+                            <div>
+                                <Form
+                                    submitButton="Save settings"
+                                    onSubmit={(data) => {
+                                        parameters.onSubmit(data);
+                                    }}
+                                >
+                                    {parameters.form}
+                                </Form>
+                            </div>
+                        );
+                    }}
+                </Dialog>
+                <DialogsConsumer>
+                    {({ openDialog, closeDialog }) => {
+                        return (
+                            <ResponsiveReactGridLayout
+                                {...this.props}
+                                isDraggable={(this.props.enableActionDrag !== false)}
+                                isResizable={(this.props.enableActionResize !== false)}
+                                layouts={this.generateLayouts()}
+                                onBreakpointChange={this.onBreakpointChange}
+                                onLayoutChange={this.onLayoutChange}
+                                measureBeforeMount={false}
+                                useCSSTransforms={this.state.mounted}
+                                compactType={this.state.compactType}
+                                preventCollision={!this.state.compactType}
+                                draggableHandle=".handle"
+                            >
+                                {this.generateDOM(openDialog, closeDialog)}
+                            </ResponsiveReactGridLayout>
+                        );
+                    }}
+                </DialogsConsumer>
             </div>
         );
     }
