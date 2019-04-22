@@ -10,12 +10,14 @@ import BudgetsViewModule from "./BudgetsView";
 import DashboardViewModule from "./DashboardView";
 import SettingsViewModule from "./SettingsView";
 import UsersViewModule from "./UsersView";
+import DesignGuideViewModule from "./DesignGuideView";
 
 const BUILTIN_MODULES: Array<OmigostModule> = [
     new DashboardViewModule(),
     new BudgetsViewModule(),
     new SettingsViewModule(),
     new UsersViewModule(),
+    new DesignGuideViewModule(),
 ];
 
 export interface OmigostApp {

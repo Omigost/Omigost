@@ -1,28 +1,22 @@
 import * as path from "path";
+import * as fs from "fs";
 import { CheckerPlugin } from "awesome-typescript-loader";
 import * as HtmlWebpackPlugin from "html-webpack-plugin";
 import * as sass from "node-sass";
 import * as sassUtilsFactory from "node-sass-utils";
 import * as webpack from "webpack";
 
+import webpackPaths from "./webpackPaths";
+const webpackPathsResolved = webpackPaths([__dirname, '..', '..']);
+
 const sassUtils = sassUtilsFactory(sass);
-const sassVars = require(path.join(__dirname, "../../src/themes/default.ts")).default;
+const sassVars = (fs.existsSync(path.join(__dirname, "../../src/themes"))) ? (
+    require(path.join(__dirname, "../../src/themes/default.ts")).default
+) : ({});
 
 export default {
-    resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx', 'index.ts', 'index.tsx', 'index.js', 'index.jsx'],
-        alias: {
-            'scss': path.join(__dirname, '..', '..', 'src', 'scss'),
-            'components': path.join(__dirname, '..', '..', 'src', 'components', 'universal'),
-            'pages': path.join(__dirname, '..', '..', 'src', 'components', 'pages'),
-            'langs': path.join(__dirname, '..', '..', 'src', 'langs'),
-            'routes': path.join(__dirname, '..', '..', 'src', 'routes'),
-            'themes': path.join(__dirname, '..', '..', 'src', 'themes'),
-            'modules': path.join(__dirname, '..', '..', 'src', 'modules'),
-            'img': path.join(__dirname, '..', '..', 'src', 'assets', 'img'),
-        }
-    },
-    context: path.resolve(__dirname, '../../src'),
+    resolve: webpackPathsResolved.resolve,
+    context: webpackPathsResolved.context,
     module: {
         rules: [
             {

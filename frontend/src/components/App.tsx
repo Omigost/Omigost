@@ -78,7 +78,7 @@ export default class App extends React.Component<AppProps, undefined> {
                 <ToastProvider />
                 <I18n locale={locale} messages={messages}>
                     <ThemeProvider>
-                        <ModulesProvider modules={[ "dashboard-view", "budgets-view", "users-view", "settings-view" ]}>
+                        <ModulesProvider modules={[ "dashboard-view", "budgets-view", "users-view", "settings-view", "design-guide" ]}>
                             <ConnectedRouter history={history}>
                                 <AppWrapper>
                                     <RoutesModuleComponent />

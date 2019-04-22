@@ -8,6 +8,7 @@ import {
     faTimes, faExpand, faMoneyBillAlt, faCheckSquare, faAddressCard,
     faUser, faCommentSlash, faCommentDots, faEnvelope,
     faCompress, faBoxOpen, faExclamationTriangle,
+    faPalette,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -30,6 +31,7 @@ export function init(): Promise<InitState> {
             faTimes, faExpand, faMoneyBillAlt, faCheckSquare, faAddressCard,
             faUser, faCommentSlash, faCommentDots, faEnvelope,
             faSlackHash, faCompress, faBoxOpen, faExclamationTriangle,
+            faPalette,
         );
         
         resolve({
