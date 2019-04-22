@@ -2,7 +2,7 @@ import * as React from "react";
 import styled  from "styled-components";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Responsive, WidthProvider } from "react-grid-layout";
+import { Responsive, WidthProvider, Layout as BaseLayout } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 import "react-grid-layout/css/styles.css";
@@ -31,6 +31,11 @@ export interface InteractiveGridProps {
 
 interface InteractiveGridState {
     items: Array<ItemType>;
+}
+
+interface Layout {
+    items: Array<ItemType>;
+    positions: BaseLayout;
 }
 
 const CardBoxWrapper = styled.div`
@@ -77,16 +82,43 @@ const CardBoxContent = styled.div`
     height: 89%;
 `;
 
-class ShowcaseLayout extends React.Component {
+export interface InteractiveGridItem {
+    type: string;
+    width: number;
+    height: number;
+    static: boolean;
+    content: (options: any) => React.Node;
+    initialOptions: any;
+}
 
-    static defaultProps = {
+export interface InteractiveGridProps {
+    items: Array<InteractiveGridItem>;
+    onLayoutChange?: () => void;
+    enableActionDrag?: boolean;
+    enableActionRemove?: boolean;
+    enableActionResize?: boolean;
+    layout?: Layout;
+}
+
+interface InteractiveGridState {
+    currentBreakpoint: string;
+    compactType: string;
+    mounted: boolean;
+    items: Array<InteractiveGridItem>;
+    layout: Layout;
+}
+
+class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveGridState> {
+
+    state: InteractiveGridState;
+
+    static defaultProps: InteractiveGridProps = {
         className: "layout",
         rowHeight: 30,
         onLayoutChange: () => {},
         cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
         initialLayout: [],
     };
-
 
     constructor(props) {
         super(props);
@@ -95,6 +127,7 @@ class ShowcaseLayout extends React.Component {
             compactType: "vertical",
             mounted: false,
             items: this.props.items,
+            layout: null,
         };
 
         this.generateDOM = this.generateDOM.bind(this);
@@ -108,17 +141,81 @@ class ShowcaseLayout extends React.Component {
     componentDidMount() {
         this.setState({ mounted: true });
     }
+    
+    onSetItemOptions(index, newOptions) {
+        if (this.props.onLayoutChange) {
+            const positions = ((this.props.layout || {}).positions || this.state.layout);
+            this.props.onLayoutChange({
+                items: this.state.items.map((item, i) => {
+                    const newItem = { ...item };
+                    delete newItem['content'];
+                    if (i === index) {
+                        newItem.options = { ...newItem.options, ...newOptions };
+                    }
+                    return newItem;
+                }),
+                positions: positions,
+            });
+        }
+        
+        this.setState({
+            items: this.state.items.map((item, i) => {
+                if (i === index) {
+                    return {
+                        ...item,
+                        options: { ...item.options, ...newOptions },
+                    };
+                }
+                return item;
+            });
+        });
+    }
 
     onRemoveItem(index) {
+        
+        const newItems = this.state.items.filter((item, i) => i !== index);
+        
+        if (this.props.onLayoutChange) {
+            const positions = ((this.props.layout || {}).positions || this.state.layout);
+            this.props.onLayoutChange({
+                items: newItems.map(item => {
+                    const newItem = { ...item };
+                    delete newItem['content'];
+                    return newItem;
+                }),
+                positions: positions.filter((item, i) => {
+                    return i !== index;
+                }).map((item, i) => {
+                    return {
+                        ...item,
+                        i: i.toString(),
+                    };
+                }),
+            });
+        }
+            
         this.setState({
-            items: this.state.items.filter((item, i) => i !== index),
+            items: newItems,
         });
     }
 
     generateLayouts() {
+        if (this.props.layout) {
+            return {
+                lg: this.props.layout.items.map((item, index) => {
+                    return {
+                        ...item,
+                        ...this.props.layout.positions[index],
+                        content: this.props.items.find(i => i.name === item.name).content,
+                    };
+                })
+            };
+        }
+        
         return {
             lg: this.state.items.map((item, i) => {
                 return {
+                    ...item,
                     x: 0,
                     y: 0,
                     w: item.width,
@@ -150,7 +247,9 @@ class ShowcaseLayout extends React.Component {
                         ) : (null)
                     }
                     <CardBoxContent>
-                        {l.content}
+                        {l.content(l.options || l.initialOptions, (newOptions) => {
+                            this.onSetItemOptions(i, newOptions);
+                        })}
                     </CardBoxContent>
                 </CardBoxWrapper>
             );
@@ -172,9 +271,22 @@ class ShowcaseLayout extends React.Component {
         this.setState({ compactType });
     }
 
-    onLayoutChange (layout, layouts) {
-        if (this.props.onLayoutChange) {
-            this.props.onLayoutChange(layout, layouts);
+    onLayoutChange(layout: BaseLayout) {
+        
+        this.setState({
+            layout,
+        });
+        
+        const canDispatch = (this.props.enableActionDrag !== false) || (this.props.enableActionResize !== false) || (this.props.enableActionRemove !== false);
+        if (canDispatch && this.props.onLayoutChange) {
+            this.props.onLayoutChange({
+                items: this.state.items.map(item => {
+                    const newItem = { ...item };
+                    delete newItem['content'];
+                    return newItem;
+                }),
+                positions: layout,
+            });
         }
     }
 
@@ -188,10 +300,7 @@ class ShowcaseLayout extends React.Component {
                     layouts={this.generateLayouts()}
                     onBreakpointChange={this.onBreakpointChange}
                     onLayoutChange={this.onLayoutChange}
-                    // WidthProvider option
                     measureBeforeMount={false}
-                    // I like to have it animate on mount. If you don't, delete `useCSSTransforms` (it's default `true`)
-                    // and set `measureBeforeMount={true}`.
                     useCSSTransforms={this.state.mounted}
                     compactType={this.state.compactType}
                     preventCollision={!this.state.compactType}
@@ -204,4 +313,4 @@ class ShowcaseLayout extends React.Component {
     }
 }
 
-export default ShowcaseLayout;
+export default InteractiveGrid;

@@ -85,6 +85,7 @@ const PanelHeader = styled.div`
 
 interface PanelState {
     draggableMode: boolean;
+    layout: any;
 }
 
 export default class Panel extends React.Component<any, PanelState> {
@@ -96,6 +97,7 @@ export default class Panel extends React.Component<any, PanelState> {
         
         this.state = {
             draggableMode: false,
+            layout: null,
         };
     }
 
@@ -151,9 +153,19 @@ export default class Panel extends React.Component<any, PanelState> {
                     enableActionDrag={this.state.draggableMode}
                     enableActionRemove={this.state.draggableMode}
                     enableActionResize={this.state.draggableMode}
+                    layout={this.state.layout}
+                    onLayoutChange={(layout) => {
+                        console.log("NEWLAYOUT");
+                        console.log(layout);
+                        this.setState({
+                            layout,
+                        });
+                    }}
                     items={[
                         {
-                            content: (
+                            name: "chart",
+                            initialOptions: {},
+                            content: (options) => (
                                 <this.props.app.UI.Chart
                                     graphType={"line"}
                                     input={"x"}
@@ -167,7 +179,9 @@ export default class Panel extends React.Component<any, PanelState> {
                             height: 9,
                         },
                         {
-                            content: (
+                            name: "grid",
+                            initialOptions: {},
+                            content: (options) => (
                                 <GridWrapper>
                                     <this.props.app.UI.DataGrid
                                         renderCell={(props) => {
@@ -212,29 +226,21 @@ export default class Panel extends React.Component<any, PanelState> {
                             height: 7,
                         },
                         {
-                            content: (
+                            name: "meter",
+                            initialOptions: {
+                                title: "Test!",
+                            },
+                            content: (options, setOptions) => (
                                 <div>
+                                    <button onClick={() => setOptions({ title: "Woops" })}>
+                                        Set title to "Woops"
+                                    </button>
                                     <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
                                     <this.props.app.UI.Meter
                                         value={30}
-                                        label="test"
+                                        label={options.title}
                                         format={(value) => `\$ ${value}`}
-                                        tooltipContent={<div>hello!</div>}
-                                    />
-                                </div>
-                            ),
-                            width: 2,
-                            height: 6,
-                        },
-                        {
-                            content: (
-                                <div>
-                                    <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
-                                    <this.props.app.UI.Meter
-                                        value={30}
-                                        label="test"
-                                        format={(value) => `\$ ${value}`}
-                                        tooltipContent={<div>hello!</div>}
+                                        tooltipContent={<div>{options.title}</div>}
                                     />
                                 </div>
                             ),
