@@ -13,6 +13,7 @@ export default (pathComponents) => {
                 'themes': path.join.apply(this, [...pathComponents, 'src', 'themes']),
                 'modules': path.join.apply(this, [...pathComponents, 'src', 'modules']),
                 'img': path.join.apply(this, [...pathComponents, 'src', 'assets', 'img']),
+                'client': path.join.apply(this, [...pathComponents, 'src', 'client']),
             },
         },
         context: path.join.apply(this, [...pathComponents, 'src']),

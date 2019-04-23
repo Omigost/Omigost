@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { Route } from "react-router-dom";
 
+import RequestLimitsPage from "pages/BudgetLimitRequestPage";
 import DashboardPage from "pages/Dashboard";
 import LoadingPage from "pages/Loading";
 import LoginPage from "pages/Login";
@@ -13,6 +14,7 @@ const ROUTES = {
     "/home": DashboardPage,
     "/login": LoginPage,
     "/loading": LoadingPage,
+    "/requestBudgetLimit": RequestLimitsPage,
 };
 
 function mapper(key, index, options) {

@@ -26,4 +26,8 @@ export default {
         endpoint: ({data}) => `config/deleteUserCommunication?userName=${data.userName}&communicationName=${data.communicationName}&communicationValue=${data.communicationValue}`,
         method: "delete",
     },
+    postBudgetIncreaseLimit: {
+        endpoint: "alerts/requestLimitIncrease",
+        method: "post",
+    },
 };
