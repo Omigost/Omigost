@@ -55,6 +55,16 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             }
         );
     }
+    
+    postBudgetIncreaseLimit(formContext, data): ResponsePromise {
+        return wrapPromise(
+            this.client.postBudgetIncreaseLimit(formContext, data),
+            idFn,
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not increase budgets limit", error);
+            }
+        );
+    }
 
     deleteBudget(data): ResponsePromise {
         return wrapPromise(

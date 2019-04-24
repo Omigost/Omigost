@@ -38,10 +38,10 @@ const ActionWrapper = styled.div`
 `;
 
 export interface CardProps {
-    title: string;
-    description?: string;
+    title?: React.ReactNode;
+    description?: React.ReactNode;
     image?: string;
-    action?: React.Node;
+    action?: React.ReactNode;
 }
 
 export default class Card extends React.Component<CardProps, undefined> {

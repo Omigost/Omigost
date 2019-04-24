@@ -6,13 +6,13 @@ const Wrapper = styled.div`
 `;
 
 const TitleWrapper = styled.div`
-  font-family: ${(props: ButtonComponentProps) => props.theme.primaryFont};
+  font-family: ${(props) => props.theme.primaryFont};
   font-size: 1.4vw;
   display: inline-block;
 `;
 
 const DescriptionWrapper = styled.div`
-  font-family: ${(props: ButtonComponentProps) => props.theme.primaryFont};
+  font-family: ${(props) => props.theme.primaryFont};
   font-size: 1vw;
 `;
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { withToasts } from "../components/universal/ToastProvider";
+import { withToasts, ToastActions } from "../components/universal/ToastProvider";
 import { OmigostToastifiedClient } from "./ToastifiedClient";
 
 import { OmigostClientInterface, ResponseData, ResponsePromise } from "./OmigostClient";
@@ -29,7 +29,7 @@ export interface ClientComponentState {
 
 export abstract class ClientAbstractComponentNode extends React.Component<ClientComponentProps & {
     mutation?: boolean;
-}, ClientComponentState> {
+} & ToastActions, ClientComponentState> {
 }
 
 export interface ClientAbstractComponent {

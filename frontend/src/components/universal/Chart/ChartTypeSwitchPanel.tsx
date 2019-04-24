@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 `;
 
 export interface ChartTypeSwitchPanelProps {
-    chart: ChartInstance;
+    chart?: ChartInstance;
 }
 
 class ChartTypeSwitchPanel extends React.Component<ChartTypeSwitchPanelProps, any> {
@@ -40,8 +40,8 @@ class ChartTypeSwitchPanel extends React.Component<ChartTypeSwitchPanelProps, an
 
         return (
             <Wrapper>
-                <TinyButtons>
-                    {
+                <TinyButtons
+                    items={
                         [
                             {
                                 icon: faChartLine,
@@ -58,7 +58,7 @@ class ChartTypeSwitchPanel extends React.Component<ChartTypeSwitchPanelProps, an
                             },
                         ].map(generateButton)
                     }
-                </TinyButtons>
+                />
             </Wrapper>
 
         );

@@ -1,4 +1,6 @@
-import { CompositeNode, NodeO } from "../compositeNodes";
+import * as React from "react";
+
+import { CompositeNode, NodeO, ChildrenMap } from "../compositeNodes";
 
 import WithMargins from "./utils/WithMargins";
 import WithDescription from "./utils/WithDescription";
@@ -6,6 +8,7 @@ import WithErrors from "./utils/WithErrors";
 
 import {
     NodeObjectSchema,
+    FormContext,
 } from "../schemaTypes";
 
 export default class ObjectDefault extends CompositeNode<NodeO, NodeObjectSchema> {

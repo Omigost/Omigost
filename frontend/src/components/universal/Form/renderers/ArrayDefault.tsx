@@ -1,4 +1,4 @@
-import { NodeO } from "../compositeNodes";
+import * as React from "react";
 
 import Card from "../../Card";
 import TinyButtons from "../../TinyButtons";
@@ -12,19 +12,25 @@ import WithDescription from "./utils/WithDescription";
 import WithErrors from "./utils/WithErrors";
 
 import {
-    NodeObjectSchema,
+    NodeArraySchema,
     Node,
+    NodeState,
+    NodeOutputValue,
+    FormContext,
+    NodeAny,
 } from "../schemaTypes";
 
 export type NodeSMapping = {
     [key: string]: NodeState<any>;
 };
 
+export type NodeO = NodeOutputValue<Array<NodeOutputValue<any>>>;
+
 export type NodeS = {
     items: NodeSMapping;
 };
 
-export default class ArrayDefault extends Node<NodeS, NodeO, NodeObjectSchema> {
+export default class ArrayDefault extends Node<NodeS, NodeO, NodeArraySchema> {
 
     resolveInitialState() {
         return {
@@ -32,7 +38,7 @@ export default class ArrayDefault extends Node<NodeS, NodeO, NodeObjectSchema> {
         };
     }
     
-    setValue(value: NodeOutputValue<O>) {
+    setValue(value: NodeO) {
         if (this.getSchema().formatInput) {
             value = this.getSchema().formatInput(value);
         }
@@ -43,7 +49,7 @@ export default class ArrayDefault extends Node<NodeS, NodeO, NodeObjectSchema> {
                 const child = this.resolveNode(this.getSchema().items, this, this.getConfig());
                 child.setTag(key);
                 return child;
-            });
+            }));
         }
         
         this.getChildren().forEach((child, index) => {
@@ -57,7 +63,7 @@ export default class ArrayDefault extends Node<NodeS, NodeO, NodeObjectSchema> {
             if (child.isOutputAvailable()) {
                 results.push(child.getOutput(options));
             }
-        );
+        });
         return results;
     }
 
@@ -75,7 +81,7 @@ export default class ArrayDefault extends Node<NodeS, NodeO, NodeObjectSchema> {
         delete newItems[index];
         
         this.overrideChildren(this.getChildren().filter((child, i) => index !== i).map((child, i) => {
-            child.setTag(i);
+            child.setTag(i.toString());
             return child;
         }));
             
@@ -107,14 +113,14 @@ export default class ArrayDefault extends Node<NodeS, NodeO, NodeObjectSchema> {
                     <WithDescription
                         parent={this}
                         titleExtra={
-                            <TinyButtons>
-                                {[
+                            <TinyButtons
+                                items={[
                                     {
                                         icon: faPlus.iconName,
                                         onClick: () => this.addNewItem(),
                                     },
                                 ]}
-                            </TinyButtons>
+                            />
                         }
                     >
                         {
@@ -122,14 +128,14 @@ export default class ArrayDefault extends Node<NodeS, NodeO, NodeObjectSchema> {
                                 return (
                                     <Card
                                         action={
-                                            <TinyButtons>
-                                                {[
+                                            <TinyButtons
+                                                items={[
                                                     {
                                                         icon: faTimes.iconName,
                                                         onClick: () => this.removeItem(index),
                                                     },
                                                 ]}
-                                            </TinyButtons>
+                                            />
                                         }
                                         description={child.render(context)}
                                     />

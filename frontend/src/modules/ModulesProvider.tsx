@@ -1,7 +1,7 @@
 import OmigostModulesLoader, { ModuleSource, OmigostModulesLoaderInterface, OmigostModulesStore } from "modules/ModulesLoader";
 import * as React from "react";
 
-import { connectProvider } from "./ModulesRedux";
+import { connectProvider, ConnectedProviderProps } from "./ModulesRedux";
 
 export interface ModulesProviderProps {
     children?: any;
@@ -13,7 +13,7 @@ const ModulesLoaderContext = React.createContext(null);
 
 export type ModulesLoader = OmigostModulesLoaderInterface;
 
-export class ModulesProvider extends React.Component<ModulesProviderProps, undefined> {
+export class ModulesProvider extends React.Component<ModulesProviderProps & ConnectedProviderProps, undefined> {
     render() {
         let loader = null;
         if (this.props.loader) {
@@ -56,7 +56,11 @@ export class ModulesProvider extends React.Component<ModulesProviderProps, undef
 
 export default connectProvider(ModulesProvider);
 
-class ModulesStoreConsumerRaw extends React.Component<any, undefined> {
+interface ModulesStoreConsumerRawProps {
+    children: (props: ConnectedProviderProps & any) => React.ReactNode;
+}
+
+class ModulesStoreConsumerRaw extends React.Component<ModulesStoreConsumerRawProps, undefined> {
     render() {
         return this.props.children(this.props);
     }

@@ -15,10 +15,12 @@ const GridWrapper = styled.div`
 
 export interface ItemType {
     content?: any;
+    height?: number;
+    width?: number;
 }
 
-export interface RenderItemArgs {
-    item: ItemType;
+export interface RenderItemArgs<ItemT> {
+    item: ItemT;
 }
 
 export interface InteractiveGridProps {

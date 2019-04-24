@@ -48,14 +48,14 @@ export interface ButtonSpecs {
 }
 
 export interface TinyButtonsProps {
-    children: Array<ButtonSpecs | null>;
+    items: Array<ButtonSpecs | null>;
     info?: string | React.ReactElement<any>;
 }
 
 class TinyButtons extends React.Component<TinyButtonsProps, any> {
 
     render() {
-        const buttons = (this.props.children || []).filter(button => !!button);
+        const buttons = (this.props.items || []).filter(button => !!button);
 
         if (this.props.info) {
             buttons.push({

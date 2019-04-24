@@ -50,7 +50,7 @@ export interface OmigostModule {
     renderDashboardView?(props: any, settings?: any): React.ReactElement<any> | null;
     getRoutes?(): Array<OmigostModuleRoute>;
     getSettingsForm?(): Schema;
-    getInitialSettings(): any;
+    getInitialSettings?(): any;
 }
 
 export type ModuleSource = String | OmigostModule;
@@ -62,10 +62,10 @@ export interface OmigostModuleRoute {
 
 export interface OmigostModulesStore {
     getAll(): Array<OmigostModuleInstance>;
-    put(instance: OmigostModuleInstance): Array<OmigostModuleInstance>;
-    enable(instance: OmigostModuleInstance): void;
-    disable(instance: OmigostModuleInstance): void;
-    setSettings(instance: OmigostModuleInstance, settings: any): void;
+    put(instance: OmigostModuleInstance): void;
+    enable(module: OmigostModule): void;
+    disable(module: OmigostModule): void;
+    setSettings(module: OmigostModule, settings: any): void;
 }
 
 export interface OmigostModulesLoaderInterface {

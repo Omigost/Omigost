@@ -4,7 +4,8 @@ import styled, { withTheme } from "styled-components";
 import { resolveData, withData, DataFormat, FormatedDataPoint, RowSpecs } from "components/DataProvider";
 
 interface CustomDataRendererProps {
-    renderData(data: DataFormat): React.Node;
+    renderData(data: DataFormat): React.ReactNode;
+    data: DataFormat;
 }
 
 class CustomDataRenderer extends React.Component<CustomDataRendererProps, undefined> {

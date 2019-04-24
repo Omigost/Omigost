@@ -1,20 +1,25 @@
-import { CompositeNode, NodeO } from "../compositeNodes";
+import * as React from "react";
+
+import { CompositeNode, ChildrenMap, NodeO } from "../compositeNodes";
 
 import WithMargins from "./utils/WithMargins";
 import WithDescription from "./utils/WithDescription";
 import WithErrors from "./utils/WithErrors";
 
 import {
-    NodeObjectSchema,
+    NodeArraySchema,
+    FormContext,
+    NodeOutputValue,
+    NodeSchema,
 } from "../schemaTypes";
 
-export default class ArrayTuple extends CompositeNode<NodeO, NodeObjectSchema> {
+export default class ArrayTuple<O, M extends NodeSchema> extends CompositeNode<Array<O>, M> {
 
     getChildrenMapFromSchema() {
         return { ...this.getSchema().items };
     }
 
-    setValue(value: NodeOutputValue<O>) {
+    setValue(value: NodeOutputValue<Array<O>>) {
         if (this.getSchema().formatInput) {
             value = this.getSchema().formatInput(value);
         }

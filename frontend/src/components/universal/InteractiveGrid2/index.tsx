@@ -21,27 +21,6 @@ const GridWrapper = styled.div`
   position: relative;
 `;
 
-export interface ItemType {
-    content?: any;
-}
-
-export interface RenderItemArgs {
-    item: ItemType;
-}
-
-export interface InteractiveGridProps {
-    items: Array<ItemType>;
-}
-
-interface InteractiveGridState {
-    items: Array<ItemType>;
-}
-
-interface Layout {
-    items: Array<ItemType>;
-    positions: BaseLayout;
-}
-
 const CardBoxWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -87,18 +66,23 @@ const CardBoxContent = styled.div`
 `;
 
 export interface InteractiveGridItem {
-    type: string;
+    name: string;
     width: number;
     height: number;
     static: boolean;
-    content: (options: any) => React.Node;
+    content: (options: any) => React.ReactNode;
     initialOptions: any;
     optionsForm?: any;
 }
 
+interface Layout {
+    items: Array<InteractiveGridItem>;
+    positions: BaseLayout;
+}
+
 export interface InteractiveGridProps {
     items: Array<InteractiveGridItem>;
-    onLayoutChange?: () => void;
+    onLayoutChange?: (layout: Layout) => void;
     enableActionDrag?: boolean;
     enableActionRemove?: boolean;
     enableActionResize?: boolean;
@@ -114,7 +98,7 @@ interface InteractiveGridState {
     layout: Layout;
 }
 
-export function addItemToLayout(layout: Layout, item: ItemType) {
+export function addItemToLayout(layout: Layout, item: InteractiveGridItem) {
     
     if (!layout) {
         const newItem = {
@@ -163,11 +147,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
     state: InteractiveGridState;
 
     static defaultProps: InteractiveGridProps = {
-        className: "layout",
-        rowHeight: 30,
-        onLayoutChange: () => {},
-        cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
-        initialLayout: [],
+        items: [],
     };
 
     constructor(props) {
@@ -194,9 +174,9 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
     
     onSetItemOptions(index, newOptions) {
         if (this.props.onLayoutChange) {
-            const positions = ((this.props.layout || {}).positions || this.state.layout);
+            const positions = ((this.props.layout || { positions: null }).positions || this.state.layout);
             this.props.onLayoutChange({
-                items: ((this.props.layout || {}).items || this.state.items).map((item, i) => {
+                items: ((this.props.layout || { items: null }).items || this.state.items).map((item, i) => {
                     const newItem = { ...item };
                     delete newItem['content'];
                     if (i === index) {
@@ -209,7 +189,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
         }
         
         this.setState({
-            items: ((this.props.layout || {}).items || this.state.items).map((item, i) => {
+            items: ((this.props.layout || { items: null }).items || this.state.items).map((item, i) => {
                 if (i === index) {
                     return {
                         ...item,
@@ -217,16 +197,16 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
                     };
                 }
                 return item;
-            });
+            }),
         });
     }
 
     onRemoveItem(index) {
         
-        const newItems = ((this.props.layout || {}).items || this.state.items).filter((item, i) => i !== index);
+        const newItems = ((this.props.layout || { items: null }).items || this.state.items).filter((item, i) => i !== index);
         
         if (this.props.onLayoutChange) {
-            const positions = ((this.props.layout || {}).positions || this.state.layout);
+            const positions = ((this.props.layout || { positions: null }).positions || this.state.layout);
             this.props.onLayoutChange({
                 items: newItems.map(item => {
                     const newItem = { ...item };
@@ -258,12 +238,12 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
                         ...this.props.layout.positions[index],
                         content: this.props.items.find(i => i.name === item.name).content,
                     };
-                })
+                }),
             };
         }
         
         return {
-            lg: ((this.props.layout || {}).items || this.state.items).map((item, i) => {
+            lg: ((this.props.layout || { items: null }).items || this.state.items).map((item, i) => {
                 return {
                     ...item,
                     x: 0,
@@ -346,7 +326,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
         const canDispatch = (this.props.enableActionDrag !== false) || (this.props.enableActionResize !== false) || (this.props.enableActionRemove !== false);
         if (canDispatch && this.props.onLayoutChange) {
             this.props.onLayoutChange({
-                items: ((this.props.layout || {}).items || this.state.items).map(item => {
+                items: ((this.props.layout || { items: null }).items || this.state.items).map(item => {
                     const newItem = { ...item };
                     delete newItem['content'];
                     return newItem;

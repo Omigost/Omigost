@@ -187,11 +187,11 @@ class ThemesSettingsPanel extends React.Component<any, undefined> {
                                 </div>
                             </div>
                         );
-                    }
+                    }}
                 />
             </div>
         );
     }
 }
 
-export default withRouter(withTheme(ThemesSettingsPanel));
+export default withTheme(withRouter(ThemesSettingsPanel));

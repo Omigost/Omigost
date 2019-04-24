@@ -19,7 +19,7 @@ export function executeDismissToast(id?: string) {
     return dismiss(id);
 }
 
-export function executeUpdateToast(id?: string, options: any) {
+export function executeUpdateToast(id?: string, options?: any) {
     return update(id, options);
 }
 
@@ -28,10 +28,12 @@ export function executeShowErrorToast(messageContent: string) {
 }
 
 export function executeShowExceptionToast(messageContent: string, errorPayload: any) {
-    return error({
+    const payload = {
         messageContent,
         errorPayload,
-    });
+    };
+    
+    return error(payload as unknown as any);
 }
 
 export function executeShowMessageToast(messageContent: string) {
@@ -54,7 +56,9 @@ export interface ToastProviderProps {
     
 }
 
-export const ToastComponent = ({ type, message }) => {
+export const ToastComponent = (props: any) => {
+    const { type, message } = props;
+    
     if (typeof message === 'string') {
         return (
             <div className='toast'>
@@ -111,7 +115,7 @@ export default class ToastProvider extends React.Component<ToastProviderProps, u
 
 export interface ToastActions {
     dismissToast: (id?: string) => void;
-    updateToast: (id?: string, options: any) => void;
+    updateToast: (id?: string, options?: any) => void;
     displayErrorToast: (messageContent: string) => void;
     displayExceptionToast: (messageContent: string, errorPayload: any) => void;
     displayMessageToast: (messageContent: string) => void;
@@ -130,7 +134,7 @@ export function withToasts(Component) {
                 dismissToast: (id?: string) => {
                     dispatch(executeDismissToast());
                 },
-                updateToast: (id?: string, options: any) => {
+                updateToast: (id?: string, options?: any) => {
                     dispatch(executeUpdateToast(id, options));
                 },
                 displayErrorToast: (messageContent: string) => {

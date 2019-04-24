@@ -5,7 +5,6 @@ import { text } from "@storybook/addon-knobs";
 
 import { I18n } from "react-polyglot";
 const locale = "en";
-import messages from "langs/en";
 
 import TextBox from "./index";
 import messages from "langs/en";

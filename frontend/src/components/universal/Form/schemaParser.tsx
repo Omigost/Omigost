@@ -46,9 +46,8 @@ function getHandlerForType<M extends NodeSchema>(node: M, config: SchemaParserCo
         default:
             console.error(node);
             throw `Unknown node type ${node.type}`;
+            return null;
     }
-    const never: never = t;
-    return never;
 }
 
 function createNode<M extends NodeSchema>(node: M, parentNode: NodeAny, config: SchemaParserConfig, handler: NodeHandler<any, any, M>): Node<any, any, M> {
@@ -114,9 +113,9 @@ export function transformOutputToRawData(metaOutput: any): any {
     }
 }
 
-const debounce = (func, wait, immediate) => {
+function debounce(func: any, wait: number, immediate?: boolean) {
 	let timeout;
-	return () => {
+	return function() {
 		const context = this, args = arguments;
 		const later = () => {
 			timeout = null;

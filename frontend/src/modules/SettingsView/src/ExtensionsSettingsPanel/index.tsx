@@ -61,8 +61,8 @@ class ExtensionsSettingsPanel extends React.Component<any, undefined> {
                                                 description={
                                                     <div>
                                                         {(details.description) ? (details.description) :(null)}
-                                                        <this.props.app.UI.TinyButtons>
-                                                            {[
+                                                        <this.props.app.UI.TinyButtons
+                                                            items={[
                                                                 {
                                                                     icon: faTools.iconName,
                                                                     text: "Settings",
@@ -77,7 +77,7 @@ class ExtensionsSettingsPanel extends React.Component<any, undefined> {
                                                                     text: "Reset",
                                                                 },
                                                             ]}
-                                                        </this.props.app.UI.TinyButtons>
+                                                        />
                                                     </div>
                                                 }
                                                 action={
@@ -104,7 +104,7 @@ class ExtensionsSettingsPanel extends React.Component<any, undefined> {
                                 </this.props.app.UI.SearchableList>
                             </div>
                         );
-                    }
+                    }}
                 />
             </div>
         );

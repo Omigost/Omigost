@@ -32,7 +32,7 @@ const TooltipContent = styled.div`
 
 const PanelHeader = styled.div`
   font-family: ${(props) => props.theme.primaryFont};
-  font-size: ${(props => props.theme.fontSize[props.fontSize || "XXL"]};
+  font-size: ${(props) => props.theme.fontSize["XXL"]};
   color: #727277;
   margin-left: 1vw;
   margin-top: 2vw;
@@ -202,8 +202,8 @@ class MainView extends React.Component<any, MainViewState> {
                                                                     {
                                                                         (doExport) => {
                                                                             return (
-                                                                                 <this.props.app.UI.TinyButtons>
-                                                                                    {
+                                                                                 <this.props.app.UI.TinyButtons
+                                                                                    items={
                                                                                         [
                                                                                             {
                                                                                                 icon: faPlus.iconName,
@@ -221,7 +221,7 @@ class MainView extends React.Component<any, MainViewState> {
                                                                                             },
                                                                                         ]
                                                                                     }
-                                                                                </this.props.app.UI.TinyButtons>
+                                                                                 />
                                                                             );
                                                                         }
                                                                     }

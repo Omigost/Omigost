@@ -70,9 +70,9 @@ export default class PlainList<DataT> extends React.Component<PlainListProps<Dat
                                 {
                                     (item.actions) ? (
                                         <ItemActionsWrapper>
-                                            <TinyButtons>
-                                                {item.actions}
-                                            </TinyButtons>
+                                            <TinyButtons
+                                                items={item.actions}
+                                            />
                                         </ItemActionsWrapper>
                                     ) : (null)
                                 }

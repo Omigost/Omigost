@@ -63,11 +63,11 @@ const Wrapper = styled.div`
     }
 
     & .react-toggle--checked .react-toggle-track {
-      background: ${(props: ButtonComponentProps) => props.theme.colors.primaryGradient};
+      background: ${(props) => props.theme.colors.primaryGradient};
     }
 
     & .react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
-      background: ${(props: ButtonComponentProps) => props.theme.colors.primaryGradient};
+      background: ${(props) => props.theme.colors.primaryGradient};
     }
 
     & .react-toggle-track-check {
@@ -135,7 +135,7 @@ const Wrapper = styled.div`
 
     & .react-toggle--checked .react-toggle-thumb {
       left: 27px;
-      border-color: ${(props: ButtonComponentProps) => props.theme.colors.primary};
+      border-color: ${(props) => props.theme.colors.primary};
     }
 
     & .react-toggle--focus .react-toggle-thumb {

@@ -1,7 +1,10 @@
+import { AnyAction } from "redux";
+import { Dispatch } from 'redux';
+
 import { init, InitState } from "./init";
 
 export enum Action {
-    AppInit = 'APP_INIT';
+    AppInit = 'APP_INIT',
 };
 
 export interface AppInitAction {
@@ -9,13 +12,13 @@ export interface AppInitAction {
     stateUpdate: InitState;
 };
 
-export function executeAppInit(): AppInitAction {
-    return dispatch => {
+export function executeAppInit(): AnyAction {
+    return (((dispatch: Dispatch<any>) => {
         init().then((initState: InitState) => {
             dispatch({
                 type: Action.AppInit,
                 stateUpdate: initState,
             });
         });
-    };
+    }) as unknown as AnyAction);
 }

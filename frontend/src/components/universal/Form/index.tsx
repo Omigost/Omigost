@@ -27,7 +27,7 @@ export interface FormProps {
     validateOnInit?: boolean;
     children: Schema;
     onSubmit: (data: any) => void;
-    onChange: (data: any) => void;
+    onChange?: (data: any) => void;
     submitButton?: any;
     defaultValue?: any;
     value?: any;
@@ -36,11 +36,12 @@ export interface FormProps {
 interface FormState {
     tree: RootNode;
     formContext: FormContext;
+    disableOnChangeListener: boolean;
 }
 
-const debounce = (func, wait, immediate) => {
+function debounce(func: any, wait: number, immediate?: boolean) {
 	let timeout;
-	return () => {
+	return function() {
 		const context = this, args = arguments;
 		const later = () => {
 			timeout = null;

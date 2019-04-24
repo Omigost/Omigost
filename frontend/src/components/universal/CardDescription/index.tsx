@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 `;
 
 export interface CardDescriptionProps {
-    children: string;
+    children: React.ReactNode;
 }
 
 export default class CardDescription extends React.Component<CardDescriptionProps, undefined> {

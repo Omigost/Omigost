@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import styled  from "styled-components";
 
 import { connect } from "react-redux";
@@ -8,8 +7,8 @@ import { IconName } from "@fortawesome/fontawesome-svg-core";
 import FloatingActionProviderRaw from "./FloatingActionProviderRaw";
 
 export enum Action {
-    ShowAction = 'FLOATING_ACTION_SHOW';
-    CancelAction = 'FLOATING_ACTION_CANCEL';
+    ShowAction = 'FLOATING_ACTION_SHOW',
+    CancelAction = 'FLOATING_ACTION_CANCEL',
 }
 
 export interface FloatingActionOption {
@@ -101,7 +100,11 @@ export function withFloatingActions(Component) {
     )(Component);
 }
 
-class FloatingActionConsumerRaw extends React.Component<{}, undefined> {
+interface FloatingActionConsumerRawProps {
+    children: (props: any) => React.ReactNode;
+}
+
+class FloatingActionConsumerRaw extends React.Component<FloatingActionConsumerRawProps, undefined> {
     render() {
         return this.props.children(this.props);
     }

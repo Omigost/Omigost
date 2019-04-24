@@ -67,9 +67,9 @@ const DATA = {
 
 const PanelHeader = styled.div`
   font-family: ${(props) => props.theme.primaryFont};
-  font-size: ${(props => props.theme.fontSize[props.fontSize || "XXL"]};
+  font-size: ${(props) => props.theme.fontSize["XXL"]};
   color: #727277;
-  margin-left: 2vw;
+  margin-left: 1vw;
   margin-top: 2vw;
 `;
 
@@ -180,8 +180,8 @@ export default class Panel extends React.Component<any, PanelState> {
                                             </this.props.app.UI.Dialog>
                                     
                                             <HeaderOptions>
-                                                <this.props.app.UI.TinyButtons>
-                                                    {[
+                                                <this.props.app.UI.TinyButtons
+                                                    items={[
                                                         {
                                                             icon: faWrench.iconName,
                                                             tooltip: "Customize layout",
@@ -209,7 +209,7 @@ export default class Panel extends React.Component<any, PanelState> {
                                                             },
                                                         },
                                                     ]}
-                                                </this.props.app.UI.TinyButtons>
+                                                />
                                             </HeaderOptions>
                                         </PanelHeader>
 

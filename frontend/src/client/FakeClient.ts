@@ -9,6 +9,12 @@ import {callFormEndpoint} from "./formHelpers";
 
 import fakeBudget from "./fakes/budget";
 
+function createSimplePromise(value: ResponseData): ResponsePromise {
+    return new Promise<ResponseData>((resolve, reject) => {
+        resolve(value);
+    });
+}
+
 export class OmigostFakeClient implements OmigostClientInterface {
 
     component: ClientAbstractComponent;
@@ -21,7 +27,6 @@ export class OmigostFakeClient implements OmigostClientInterface {
         return new Promise<ResponseData>((resolve, reject) => {
             resolve(null);
         });
-        //return (new OmigostClient()).createBudget(data);
     }
 
     getBudgets(): ResponsePromise {
@@ -49,6 +54,26 @@ export class OmigostFakeClient implements OmigostClientInterface {
         return callFormEndpoint(() => fakeRequest, formContext, data);
     }
 
+    deleteBudget(data): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    getUsers(): ResponsePromise {
+        return createSimplePromise(null);
+    }
+    
+    createUser(data): ResponsePromise {
+        return createSimplePromise(null);
+    }
+    
+    addCommunicationToUser(data): ResponsePromise {
+        return createSimplePromise(null);
+    }
+    
+    deleteUserCommunication(data): ResponsePromise {
+        return createSimplePromise(null);
+    }
+    
     callEndpoint(endpoint, options): ResponsePromise {
         return new Promise<ResponseData>((resolve, reject) => {
             reject("Method 'callEndpoint' is not yet implemented");

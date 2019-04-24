@@ -24,6 +24,10 @@ export interface Theme {
     };
 };
 
+export interface PropsWithTheme {
+    theme?: Theme;
+};
+
 export enum Action {
     SetTheme = 'THEMES_SET_THEME',
 };
@@ -86,7 +90,11 @@ export function withReduxThemes(Component) {
     )(Component);
 };
 
-export class ThemeSetterRaw extends React.Component<any, undefined> {
+export interface ThemeSetterRawProps {
+    children: (props: any) => React.ReactNode;
+}
+
+export class ThemeSetterRaw extends React.Component<ThemeSetterRawProps, undefined> {
     render() {
         return this.props.children(this.props);
     }
@@ -94,7 +102,11 @@ export class ThemeSetterRaw extends React.Component<any, undefined> {
 
 export const ThemeSetter = withReduxThemes(ThemeSetterRaw);
 
-export class ThemeProviderRaw extends React.Component<any, undefined> {
+export class ThemeProviderRaw extends React.Component<{
+    currentTheme: Theme;
+    setTheme: (theme: Theme) => void;
+    children: JSX.Element;
+}, undefined> {
     render() {
         
         if (this.props.currentTheme === null) {

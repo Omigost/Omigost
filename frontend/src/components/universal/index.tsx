@@ -10,7 +10,7 @@ import Description from "./Description";
 import ExportXLSX from "./ExportXLSX";
 import ExportXLSXButtons from "./ExportXLSXButtons";
 import FloatingWindow from "./FloatingWindow";
-import Form from "./Form";
+import * as Form from "./Form";
 import InteractiveGrid from "./InteractiveGrid";
 import InteractiveGrid2, { addItemToLayout as addItemToInteractiveGrid2Layout } from "./InteractiveGrid2";
 import CustomDataRenderer from "./CustomDataRenderer";
@@ -32,7 +32,6 @@ import TinyButtons from "./TinyButtons";
 import Tooltip from "./Tooltip";
 import Collapse from "./Collapse";
 import Dialog from "./Dialog";
-import DialogSet from "./DialogSet";
 import CardVerticalList from "./CardVerticalList";
 import { DialogsConsumer } from "./DialogProvider";
 import PlainList from "./PlainList";
@@ -72,14 +71,14 @@ export default {
     Chart,
     ChartDataOptionsPanel,
     ChartTypeSwitchPanel,
-    Form,
+    Form: Form.default,
+    FormUtils: Form,
     Popover,
     ExportXLSX,
     ExportXLSXButtons,
     FloatingWindow,
     Collapse,
     Dialog,
-    DialogSet,
     CardVerticalList,
     DialogsConsumer,
     PlainList,

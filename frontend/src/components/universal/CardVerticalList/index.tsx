@@ -14,7 +14,7 @@ export interface CardItemSpecs {
     description: string;
     img?: string;
     value?: any;
-    header?: () => React.Node;
+    header?: () => React.ReactNode;
 }
 
 export interface CardVerticalListProps {
@@ -135,12 +135,14 @@ class CardVerticalList extends React.Component<CardVerticalListProps, undefined>
                         <ItemHeader className="ItemHeader">
                             {
                                 (header) ? (header()) : (
-                                    <ItemSelectBoxIcon className="ItemSelectBoxIcon">
-                                        <FontAwesomeIcon icon={faBoxOpen.iconName} />
-                                    </ItemSelectBoxIcon>
-                                    <ItemSelectBoxText>
-                                        Use that communication channel
-                                    </ItemSelectBoxText>
+                                    <>
+                                        <ItemSelectBoxIcon className="ItemSelectBoxIcon">
+                                            <FontAwesomeIcon icon={faBoxOpen.iconName} />
+                                        </ItemSelectBoxIcon>
+                                        <ItemSelectBoxText>
+                                            Use that communication channel
+                                        </ItemSelectBoxText>
+                                    </>
                                 )
                             }
                         </ItemHeader>

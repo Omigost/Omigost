@@ -1,8 +1,9 @@
 import { SchemaParserConfig } from "./schemaTypes";
 
 import ObjectDefault from "./renderers/ObjectDefault";
+
 import StringDefault from "./renderers/StringDefault";
-import NoticeDefault from "./renderers/NoticeDefault";
+import StringNotice from "./renderers/StringNotice";
 import StringColorPicker from "./renderers/StringColorPicker";
 
 import ArrayDefault from "./renderers/ArrayDefault";
@@ -18,7 +19,7 @@ export const defaultParserConfig: SchemaParserConfig = {
         },
         STRING: {
             default: StringDefault,
-            notice:  NoticeDefault,
+            notice:  StringNotice,
             colorPicker: StringColorPicker,
         },
         OBJECT: {

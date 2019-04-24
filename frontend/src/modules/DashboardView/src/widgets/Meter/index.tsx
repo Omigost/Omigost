@@ -1,3 +1,5 @@
+import * as React from "react";
+
 export default (app) => ({
     name: "meter",
     description: "Widget to meter things",

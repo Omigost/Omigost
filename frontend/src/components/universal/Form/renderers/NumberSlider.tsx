@@ -10,10 +10,10 @@ import { SimpleNode } from "../simpleNodes";
 
 import {
     FormContext,
-    NodeStringSchema,
+    NodeNumberSchema,
 } from "../schemaTypes";
 
-export default class NumberSlider extends SimpleNode<number, NodeStringSchema> {
+export default class NumberSlider extends SimpleNode<number, NodeNumberSchema> {
     getInitialValue() {
         return 0;
     }
@@ -24,11 +24,11 @@ export default class NumberSlider extends SimpleNode<number, NodeStringSchema> {
                 <WithErrors parent={this} context={context}>
                     <WithDescription parent={this}>
                         <Slider
-                            value={parseFloat(value) || 0}
+                            value={parseFloat(value.toString()) || 0}
                             min={this.getSchema().minimum || 0}
                             max={this.getSchema().maximum || 100}
                             onChange={(value) => {
-                                this.setState({ value: parseFloat(value) });
+                                this.setState({ value: parseFloat(value.toString()) });
                             }}
                         />
                     </WithDescription>

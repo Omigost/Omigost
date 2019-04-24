@@ -10,10 +10,10 @@ import { SimpleNode } from "../simpleNodes";
 
 import {
     FormContext,
-    NodeStringSchema,
+    NodeNumberSchema,
 } from "../schemaTypes";
 
-export default class NumberDefault extends SimpleNode<number, NodeStringSchema> {
+export default class NumberDefault extends SimpleNode<number, NodeNumberSchema> {
     getInitialValue() {
         return 0;
     }

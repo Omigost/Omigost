@@ -38,10 +38,10 @@ export default class BudgetsViewModule implements OmigostModule {
         return {
             title: "A registration form",
             description: "The description",
-            type: "object",
+            type: this.app.UI.FormUtils.NodeType.OBJECT,
             properties: {
                 "limit": {
-                    type: "string",
+                    type: this.app.UI.FormUtils.NodeType.STRING,
                     title: "The budget limit",
                     minLength: 1,
                 },

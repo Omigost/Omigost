@@ -5,11 +5,11 @@ import { SimpleNode } from "../simpleNodes";
 
 import {
     FormContext,
-    NodeNoticeSchema,
+    NodeStringSchema,
     NodeError,
 } from "../schemaTypes";
 
-export default class NoticeDefault extends SimpleNode<string, NodeNoticeSchema> {
+export default class StringNotice extends SimpleNode<string, NodeStringSchema> {
     getInitialValue() {
         return "null";
     }

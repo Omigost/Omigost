@@ -4,6 +4,7 @@ import {
     FormContext,
     Node,
     NodeSchema,
+    NodeOutputValue,
 } from "./schemaTypes";
 
 export abstract class SimpleNode<V, M extends NodeSchema> extends Node<{ value: V }, V, M> {
@@ -17,7 +18,7 @@ export abstract class SimpleNode<V, M extends NodeSchema> extends Node<{ value: 
         };
     }
 
-    setValue(value: NodeOutputValue<O>) {
+    setValue(value: NodeOutputValue<V>) {
         if (this.getSchema().formatInput) {
             value = this.getSchema().formatInput(value);
         }

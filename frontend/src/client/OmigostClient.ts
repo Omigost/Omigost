@@ -28,6 +28,7 @@ export interface OmigostClientInterface {
     getUsers(): ResponsePromise;
     postBudgetIncreaseLimit(formContext: FormComponentContext, data: PostBudgetIncreaseLimitPayload): ResponsePromise;
     createBudget(data: any): ResponsePromise;
+    deleteBudget(data: any): ResponsePromise;
     createUser(data: any): ResponsePromise;
     addCommunicationToUser(data: any): ResponsePromise;
     deleteUserCommunication(data: any): ResponsePromise;
@@ -128,5 +129,4 @@ export class OmigostClient implements OmigostClientInterface {
  * Uncomment this to use fake client
  */
 //export default OmigostFakeClient;
-//export default new OmigostCachedClient(OmigostFakeClient);
 export default new OmigostClient();

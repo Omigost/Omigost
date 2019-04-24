@@ -24,7 +24,7 @@ const TooltipContent = styled.div`
 
 const PanelHeader = styled.div`
   font-family: ${(props) => props.theme.primaryFont};
-  font-size: ${(props => props.theme.fontSize[props.fontSize || "XXL"]};
+  font-size: ${(props) => props.theme.fontSize["XXL"]};
   color: #727277;
   margin-left: 1vw;
   margin-top: 2vw;
@@ -58,8 +58,8 @@ class MainView extends React.Component<any, any> {
                         <ThemeProvider theme={defaultTheme}>
                             <div>
                                 <div style={{ display: "inline-block" }}>
-                                    <this.props.app.UI.TinyButtons>
-                                        {
+                                    <this.props.app.UI.TinyButtons
+                                        items={
                                             [
                                                 {
                                                     icon: faTimes.iconName,
@@ -98,7 +98,7 @@ class MainView extends React.Component<any, any> {
                                                 },
                                             ]
                                         }
-                                    </this.props.app.UI.TinyButtons>
+                                    />
                                 </div>
                                 <div style={{ display: "inline-block" }}>
                                     {p}

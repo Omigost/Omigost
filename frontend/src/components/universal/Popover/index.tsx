@@ -7,7 +7,7 @@ const Wrapper = styled.div``;
 
 const GlobalStyle = createGlobalStyle`
     .rc-popover.rc-tooltip {
-        font-family: ${(props: ButtonComponentProps) => props.theme.primaryFont};
+        font-family: ${(props: any) => props.theme.primaryFont};
     }
 
     .rc-popover.rc-tooltip {
@@ -25,11 +25,11 @@ const GlobalStyle = createGlobalStyle`
     }
 
     .rc-popover-error.rc-tooltip .rc-tooltip-inner {
-        background-color: ${(props) => props.theme.colors.primary};
+        background-color: ${(props: any) => props.theme.colors.primary};
     }
 
     .rc-popover-error.rc-tooltip.rc-tooltip-placement-right .rc-tooltip-arrow {
-        border-right-color: ${(props) => props.theme.colors.primary};
+        border-right-color: ${(props: any) => props.theme.colors.primary};
         color: white;
     }
 `;
@@ -65,7 +65,7 @@ export default class Popover extends React.Component<PopoverProps, undefined> {
                     placement={this.props.placement || "right"}
                     trigger={(this.props.trigger) ? ([ this.props.trigger ]) : ("click")}
                     overlay={
-                        <PopoverContent theme={this.props.theme}>
+                        <PopoverContent>
                             {this.props.content}
                         </PopoverContent>
                     }

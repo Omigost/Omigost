@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 import styled, { keyframes } from "styled-components";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,11 +10,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import Tooltip from "../Tooltip";
-
-export interface FloatingActionProviderProps {
-    showAction: (action: FloatingActionSpecs) => void;
-    currentFloatingAction: FloatingActionSpecs;
-}
 
 const showActionAnimation = keyframes`
     from {
@@ -112,6 +108,12 @@ const OptionIconWrapper = styled.div`
       color: white;
   }
 `;
+
+export interface FloatingActionProviderProps {
+    showAction: (action: FloatingActionSpecs) => void;
+    cancelAction: () => void;
+    currentFloatingAction: FloatingActionSpecs;
+}
 
 class FloatingActionProviderRaw extends React.Component<FloatingActionProviderProps, undefined> {
     render() {

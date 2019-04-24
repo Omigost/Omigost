@@ -17,8 +17,8 @@ export default class ExportXLSXButtons extends React.Component<ExportXLSXButtons
                 {
                     (doExport) => {
                         return (
-                            <TinyButtons>
-                                {
+                            <TinyButtons
+                                items={
                                     [
                                         {
                                             icon: faDownload.iconName,
@@ -29,7 +29,7 @@ export default class ExportXLSXButtons extends React.Component<ExportXLSXButtons
                                         },
                                     ]
                                 }
-                            </TinyButtons>
+                            />
                         );
                     }
                 }

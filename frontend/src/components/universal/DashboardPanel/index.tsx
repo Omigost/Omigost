@@ -6,6 +6,9 @@ import { withRouter } from "react-router-dom";
 import SideMenu, { MenuOption } from "components/SideMenu";
 import { withModules, ModulesLoader } from "modules/ModulesProvider";
 
+import { History } from 'history';
+import { RouteComponentProps } from 'react-router-dom';
+
 const Wrapper = styled.aside`
   width: 100%;
 `;
@@ -19,8 +22,13 @@ const PanelContentWrapper = styled.div`
   max-width: 90vw;
 `;
 
-export interface DashboardPanelProps {
+export interface DashboardPanelMatchParams {
+    url?: string;
+}
+
+export interface DashboardPanelProps extends RouteComponentProps<DashboardPanelMatchParams> {
     modulesLoader?: ModulesLoader;
+    history: History;
 }
 
 interface DashboardPanelState {
@@ -40,9 +48,6 @@ class DashboardPanel extends React.Component<DashboardPanelProps, DashboardPanel
     }
 
     handleSideMenuSelection(menuOption: MenuOption, index: number) {
-        /*this.setState({
-            selectedOptionIndex: index,
-        });*/
         const modules = this.props.modulesLoader.getActiveModules();
 
         this.props.history.push(`${this.props.match.url}/${modules[index].getName()}`);
@@ -87,13 +92,5 @@ class DashboardPanel extends React.Component<DashboardPanelProps, DashboardPanel
         );
     }
 }
-
-/*
-{
-    (this.state.selectedOptionIndex === null) ? (null) :(
-         modules[this.state.selectedOptionIndex].renderDashboardView(null)
-    )
-}
- */
 
 export default withModules(withRouter(DashboardPanel));

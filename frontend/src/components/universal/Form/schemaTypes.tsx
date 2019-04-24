@@ -279,7 +279,7 @@ export class RootNode extends Node<any, any, NodeSchema> {
         }
     }
 
-    getData(options) {
+    getData(options?: any) {
         return this.dataTransformer(this.getOutput(options));
     }
 
@@ -301,7 +301,7 @@ export class RootNode extends Node<any, any, NodeSchema> {
         this.getConfig().rootSetState(this.getState(), this, originalSource);
     }
     
-    setValue(value: NodeOutputValue<O>) {
+    setValue(value: NodeOutputValue<any>) {
         this.getChildren().forEach(child => child.setValue(value));
     }
 }

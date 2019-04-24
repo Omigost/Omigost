@@ -1,16 +1,16 @@
-import { OmigostModuleInstance, OmigostModule } from "./ModulesProvider";
+import { OmigostModuleInstance, OmigostModule } from "./ModulesLoader";
 import { connect } from "react-redux";
 
 export enum Action {
-    LoadModuleInstance = 'MODULES_LOAD_INSTANCE';
-    EnableModule = 'MODULES_ENABLE';
-    DisableModule = 'MODULES_DISABLE';
-    SetModuleSettings = 'MODULES_SET_SETTINGS';
+    LoadModuleInstance = 'MODULES_LOAD_INSTANCE',
+    EnableModule = 'MODULES_ENABLE',
+    DisableModule = 'MODULES_DISABLE',
+    SetModuleSettings = 'MODULES_SET_SETTINGS',
 };
 
 export interface EnableModuleAction {
     type: Action.EnableModule;
-    instance: OmigostModuleInstance;
+    module: OmigostModule;
 };
 
 export interface DisableModuleAction {
@@ -20,7 +20,7 @@ export interface DisableModuleAction {
 
 export interface LoadModuleInstanceAction {
     type: Action.LoadModuleInstance;
-    module: OmigostModule;
+    instance: OmigostModuleInstance;
 };
 
 export interface SetModuleSettingsAction {
@@ -58,14 +58,14 @@ export function executeSetModuleSettings(module: OmigostModule, settings: any): 
     };
 };
 
-const mapProviderStateToProps = (state, ownProps) => {
+const mapProviderStateToProps = (state, ownProps): ConnectedProviderMappedStateProps => {
     return {
         instances: state.modules.instances,
         settings: state.modules.settings,
     };
 }
 
-const mapProviderDispatchToProps = (dispatch, ownProps) => {
+const mapProviderDispatchToProps = (dispatch, ownProps): ConnectedProviderMappedDispatchProps => {
     return {
         putInstance: (instance: OmigostModuleInstance) => {
             dispatch(executeLoadModuleInstance(instance));
@@ -81,6 +81,20 @@ const mapProviderDispatchToProps = (dispatch, ownProps) => {
         },
     };
 }
+
+export interface ConnectedProviderMappedStateProps {
+    instances: Array<OmigostModuleInstance>;
+    settings: ModulesSettingsMapping;
+}
+
+export interface ConnectedProviderMappedDispatchProps {
+    putInstance: (instance: OmigostModuleInstance) => void;
+    enable: (module: OmigostModule) => void;
+    disable: (module: OmigostModule) => void;
+    setSettings: (module: OmigostModule, settings: any) => void;
+}
+
+export type ConnectedProviderProps = ConnectedProviderMappedStateProps & ConnectedProviderMappedDispatchProps;
 
 export function connectProvider(provider) {
     return connect(
