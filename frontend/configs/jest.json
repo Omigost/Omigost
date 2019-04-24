@@ -16,7 +16,8 @@
     "^langs/(.*)$": "<rootDir>/src/langs/$1",
     "^routes/(.*)$": "<rootDir>/src/routes/$1",
     "^themes/(.*)$": "<rootDir>/src/themes/$1",
-    "^modules/(.*)$": "<rootDir>/src/modules/$1"
+    "^modules/(.*)$": "<rootDir>/src/modules/$1",
+    "^react-toastify-redux$": "<rootDir>/node_modules/react-toastify-redux/src/index.ts"    
   },
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
   "transform": {
