@@ -1,13 +1,13 @@
 import * as React from "react";
 
-import styled, { ThemeProvider } from "styled-components";
 import { Box, Flex } from "@rebass/grid";
 import { withRouter } from "react-router-dom";
+import styled from "styled-components";
 
 
 const PanelHeader = styled.div`
   font-family: ${(props) => props.theme.primaryFont};
-  font-size: ${(props) => props.theme.fontSize["XXL"]};
+  font-size: ${(props) => props.theme.fontSize.XXL};
   color: #727277;
   margin-left: 1vw;
   margin-top: 2vw;
@@ -17,17 +17,17 @@ class CommunicationSettingsView extends React.Component<any, undefined> {
 
     render() {
         const { match: { params } } = this.props;
-        
+
         return (
             <this.props.app.client.component
                 request={(client) => client.getUsers()}
             >
                 {({data, error, loading}, refresh) => {
                     if (loading || !data) return null;
-                    
+
                     const userData = data.find(user => user.name === params.user);
                     const communicationData = userData.communications[parseInt(params.com)];
-                    
+
                     return (
                         <div>
                             <PanelHeader>
@@ -97,7 +97,7 @@ class CommunicationSettingsView extends React.Component<any, undefined> {
                             </Flex>
                         </div>
                     );
-                    
+
                 }}
             </this.props.app.client.component>
         );

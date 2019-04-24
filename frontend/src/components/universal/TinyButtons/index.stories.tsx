@@ -1,12 +1,12 @@
+import { text } from "@storybook/addon-knobs";
+import { storiesOf } from "@storybook/react";
 import React from "react";
 import styled from "styled-components";
-import { storiesOf } from "@storybook/react";
-import { object, text } from "@storybook/addon-knobs";
 
 import TinyButtons from "./index";
 
 import {
-    faClock, faCommentAlt, faDollarSign
+    faClock, faCommentAlt, faDollarSign,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Wrapper = styled.div`
@@ -88,12 +88,12 @@ storiesOf("TinyButtons", module)
                         {
                             "icon": faDollarSign.iconName,
                             text: text("Text for item 1", "Some text"),
-                            popover: <div style={{color: 'black'}}>Hello 1!</div>,
+                            popover: <div style={{color: "black"}}>Hello 1!</div>,
                         },
                         {
                             "icon": faCommentAlt.iconName,
                             text: text("Text for item 2", "Some text"),
-                            popover: <div style={{color: 'black'}}>Hello 2!</div>,
+                            popover: <div style={{color: "black"}}>Hello 2!</div>,
                         },
                     ]}
                 />

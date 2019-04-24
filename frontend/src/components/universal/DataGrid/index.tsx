@@ -158,15 +158,15 @@ class DataGrid extends React.Component<DataGridProps, undefined> {
                 this.columnApi.autoSizeColumns(allColumnIds);
             }
         }, 500);
-        
+
         return (
             <Wrapper
                 className="ag-theme-balham"
             >
                 <AgGridReact
-                    getRowStyle={function(params) {
+                    getRowStyle={(params) => {
                         return {
-                            zIndex: 9000-params.node.rowIndex,
+                            zIndex: 9000 - params.node.rowIndex,
                         };
                     }}
                     columnDefs={columnDefs}

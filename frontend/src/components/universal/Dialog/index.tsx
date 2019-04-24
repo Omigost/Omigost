@@ -3,7 +3,7 @@ import styled, { withTheme } from "styled-components";
 
 import { withRegisteredDialog, DialogsConsumer } from "../DialogProvider";
 
-import Modal from 'react-modal';
+import Modal from "react-modal";
 import { Rnd } from "react-rnd";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const ModalContent = styled.div`
   width: 100%;
   height: 100%;
-  
+
   & > div {
     position: relative !important;
     top: 0 !important;
@@ -60,10 +60,10 @@ const CardBoxWrapper = styled.div<DialogProps>`
   width: 100%;
   height: 100%;
   border-radius: 0.5vw;
-  background: ${(props: DialogProps) => (props.transparent) ? ('transparent') : ('#ffffff')};
-  box-shadow: ${(props: DialogProps) => (props.transparent) ? ('none') : ('0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1)')};
+  background: ${(props: DialogProps) => (props.transparent) ? ("transparent") : ("#ffffff")};
+  box-shadow: ${(props: DialogProps) => (props.transparent) ? ("none") : ("0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1)")};
 
-  min-width: ${(props: DialogProps) => ((props.minWidth) ? (props.minWidth+'vw') : ('unset'))}
+  min-width: ${(props: DialogProps) => ((props.minWidth) ? (props.minWidth + "vw") : ("unset"))}
 `;
 
 export interface DialogState {
@@ -105,27 +105,27 @@ class Dialog extends React.Component<DialogProps, DialogState> {
         const showButtonFullscreen = (this.props.showButtonFullscreen === false) ? (false) : (true);
         const showButtonMinimize = (this.props.showButtonMinimize === false) ? (false) : (true);
         const showButtonClose = (this.props.showButtonClose === false) ? (false) : (true);
-        
+
         return (
             <Modal
                 isOpen={this.props.isOpen}
                 style={{
                     overlay: {
-                        zIndex: '9999999',
-                        background: 'rgba(0, 0, 0, 0.49019607843137253)',
+                        zIndex: "9999999",
+                        background: "rgba(0, 0, 0, 0.49019607843137253)",
                     },
                     content: {
-                        top: '50%',
-                        left: '50%',
-                        right: 'auto',
-                        bottom: 'auto',
-                        marginRight: '-50%',
-                        transform: 'translate(-50%, -50%)',
-                        paddingLeft: '0',
-                        paddingTop: '0',
-                        background: 'transparent',
-                        border: 'none',
-                        overflow: 'visible',
+                        top: "50%",
+                        left: "50%",
+                        right: "auto",
+                        bottom: "auto",
+                        marginRight: "-50%",
+                        transform: "translate(-50%, -50%)",
+                        paddingLeft: "0",
+                        paddingTop: "0",
+                        background: "transparent",
+                        border: "none",
+                        overflow: "visible",
                     },
                 }}
                 contentLabel="Example Modal"
@@ -134,8 +134,8 @@ class Dialog extends React.Component<DialogProps, DialogState> {
                     <Rnd
                         disableDragging
                         size={(this.props.isFullscreen) ? ({
-                            width: '90vw',
-                            height: '85vh',
+                            width: "90vw",
+                            height: "85vh",
                         }) : ((this.state.width === null || this.state.height === null) ? (null) : ({
                             width: this.state.width,
                             height: this.state.height,

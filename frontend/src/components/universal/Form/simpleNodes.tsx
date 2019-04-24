@@ -3,8 +3,8 @@ import * as React from "react";
 import {
     FormContext,
     Node,
-    NodeSchema,
     NodeOutputValue,
+    NodeSchema,
 } from "./schemaTypes";
 
 export abstract class SimpleNode<V, M extends NodeSchema> extends Node<{ value: V }, V, M> {
@@ -22,11 +22,11 @@ export abstract class SimpleNode<V, M extends NodeSchema> extends Node<{ value: 
         if (this.getSchema().formatInput) {
             value = this.getSchema().formatInput(value);
         }
-        if (value !== null && typeof value !== 'undefined') {
+        if (value !== null && typeof value !== "undefined") {
             this.setState({ value });
         }
     }
-    
+
     getRawOutput() {
         return this.getState().value;
     }

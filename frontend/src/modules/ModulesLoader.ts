@@ -8,9 +8,9 @@ import { Schema } from "../components/universal/Form/schemaTypes";
 
 import BudgetsViewModule from "./BudgetsView";
 import DashboardViewModule from "./DashboardView";
+import DesignGuideViewModule from "./DesignGuideView";
 import SettingsViewModule from "./SettingsView";
 import UsersViewModule from "./UsersView";
-import DesignGuideViewModule from "./DesignGuideView";
 
 const BUILTIN_MODULES: Array<OmigostModule> = [
     new DashboardViewModule(),
@@ -88,16 +88,16 @@ export interface OmigostModuleInstance {
 export default class OmigostModulesLoader implements OmigostModulesLoaderInterface {
     modulesStore: OmigostModulesStore;
     renderInterceptor: OmigostModuleRenderInterceptor;
-    
+
     constructor() {
         this.modulesStore = null;
         this.renderInterceptor = null;
     }
-    
+
     setRenderInterceptor(renderInterceptor: OmigostModuleRenderInterceptor) {
         this.renderInterceptor = renderInterceptor;
     }
-    
+
     setStore(store: OmigostModulesStore) {
         this.modulesStore = store;
     }
@@ -143,15 +143,13 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
     }
 
     disableModule(module: OmigostModule) {
-        console.error("TRIGGER DISABLE MODULE!");
-        console.log(module);
         this.modulesStore.disable(module);
     }
 
     resetModuleSettings(module: OmigostModule) {
         this.modulesStore.setSettings(module, (module.getInitialSettings) ? ({ ...module.getInitialSettings() }) : ({}));
     }
-    
+
     loadModule(src: ModuleSource) {
         let modInst: OmigostModule = null;
         if (typeof src === "string") {
@@ -164,27 +162,27 @@ export default class OmigostModulesLoader implements OmigostModulesLoaderInterfa
         }
 
         if (modInst) {
-                        
+
             if (this.modulesStore.getAll().find(inst => modInst.getName() === inst.module.getName())) {
                 return;
             }
-            
+
             if (this.renderInterceptor) {
                 const renderDashboardViewOriginal = modInst.renderDashboardView;
                 modInst.renderDashboardView = (props, settings) => {
                     return this.renderInterceptor(modInst, props, renderDashboardViewOriginal);
                 };
             }
-            
+
             const inst = {
                 enable: () => this.enableModule(modInst),
                 disable: () => this.disableModule(modInst),
                 activated: true,
                 module: modInst,
             };
-            
+
             this.resetModuleSettings(modInst);
-            
+
             this.modulesStore.put(inst);
             modInst.onLoad(this.getApp(inst), this);
         }

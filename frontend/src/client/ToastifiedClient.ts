@@ -20,7 +20,7 @@ function wrapPromise(promise: ResponsePromise, whenOk: (data: any) => void, when
            reject(error);
        });
     });
-};
+}
 
 export class OmigostToastifiedClient implements OmigostClientInterface {
 
@@ -42,7 +42,7 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
             (error) => {
                 this.toastActions.displayExceptionToast("Could not create new budget", error);
-            }
+            },
         );
     }
 
@@ -52,17 +52,17 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             idFn,
             (error) => {
                 this.toastActions.displayExceptionToast("Could not get budgets from server", error);
-            }
+            },
         );
     }
-    
+
     postBudgetIncreaseLimit(formContext, data): ResponsePromise {
         return wrapPromise(
             this.client.postBudgetIncreaseLimit(formContext, data),
             idFn,
             (error) => {
                 this.toastActions.displayExceptionToast("Could not increase budgets limit", error);
-            }
+            },
         );
     }
 
@@ -74,7 +74,7 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
             (error) => {
                 this.toastActions.displayExceptionToast("Could not delete the given budget", error);
-            }
+            },
         );
     }
 
@@ -84,10 +84,10 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             idFn,
             (error) => {
                 this.toastActions.displayExceptionToast("Could not get users from server", error);
-            }
+            },
         );
     }
-    
+
     createUser(data): ResponsePromise {
         return wrapPromise(
             this.client.createUser(data),
@@ -96,10 +96,10 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
             (error) => {
                 this.toastActions.displayExceptionToast("Could not create new user", error);
-            }
+            },
         );
     }
-    
+
     addCommunicationToUser(data): ResponsePromise {
         return wrapPromise(
             this.client.addCommunicationToUser(data),
@@ -108,10 +108,10 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
             (error) => {
                 this.toastActions.displayExceptionToast("Could not add communication method to user", error);
-            }
+            },
         );
     }
-    
+
     deleteUserCommunication(data): ResponsePromise {
         return wrapPromise(
             this.client.deleteUserCommunication(data),
@@ -120,10 +120,10 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
             (error) => {
                 this.toastActions.displayExceptionToast("Could not remove the communication method for user", error);
-            }
+            },
         );
     }
-    
+
     callEndpoint(endpoint, options): ResponsePromise {
         return this.client.callEndpoint(endpoint, options);
     }

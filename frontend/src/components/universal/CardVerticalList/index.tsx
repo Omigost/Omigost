@@ -1,5 +1,5 @@
 import * as React from "react";
-import styled, { withTheme } from "styled-components";
+import styled from "styled-components";
 
 import ScrollMenu from "react-horizontal-scrolling-menu";
 
@@ -27,7 +27,7 @@ interface ItemComponentProps {
   theme?: any;
   disableHoverAnimaions?: boolean;
 }
- 
+
 const Arrow = styled.div`
   font-size: 1vw;
 `;
@@ -36,12 +36,12 @@ const itemHoverStyle = `
   &:hover .ItemHeader {
     height: 100%;
   }
-  
+
   &:hover .ItemSelectBoxIcon {
     font-size: 6vw;
     padding-top: 4vw;
   }
-  
+
   &:hover .ItemImage {
     opacity: 0;
   }
@@ -56,7 +56,7 @@ const Item = styled.div<ItemComponentProps>`
   width: 15vw;
   cursor: pointer;
 
-  ${(props: ItemComponentProps) => ((props.disableHoverAnimaions) ? ('') : (itemHoverStyle))}
+  ${(props: ItemComponentProps) => ((props.disableHoverAnimaions) ? ("") : (itemHoverStyle))}
 `;
 
 const ItemInner = styled.div`
@@ -64,23 +64,23 @@ const ItemInner = styled.div`
   height: 100%;
   overflow: hidden;
 `;
- 
+
 const ItemHeader = styled.div<ItemComponentProps>`
   height: 40%;
   width: 100%;
   background: ${(props: ItemComponentProps) => props.theme.colors.primaryGradient};
   text-align: center;
-  
+
   transition: height 0.6s ease;
 `;
- 
+
 const ItemImage = styled.img`
   position: relative;
   width: 5vw;
   height: 5vw;
   left: -1.3vw;
   top: -21.3vw;
-  
+
   transition: all 0.6s ease;
 `;
 
@@ -88,7 +88,7 @@ const ItemSelectBoxIcon = styled.div`
   padding-top: 0.5vw;
   font-size: 3.5vw;
   color: white;
-  
+
   transition: all 0.6s ease;
 `;
 
@@ -98,7 +98,7 @@ const ItemSelectBoxText = styled.div`
   color: white;
   font-weight: bold;
 `;
- 
+
 const ItemTitle = styled.div`
   text-align: center;
   margin-top: 0.5vw;
@@ -113,19 +113,19 @@ const ItemDescription = styled.div`
   white-space: normal;
   text-align: center;
 `;
- 
+
 const Container = styled.div<ItemComponentProps>`
   width: 100%;
   height: 100%;
   font-family: ${(props: ItemComponentProps) => props.theme.primaryFont};
 `;
- 
+
 class CardVerticalList extends React.Component<CardVerticalListProps, undefined> {
-    
+
     constructor(props) {
         super(props);
     }
- 
+
     render() {
         const menu = this.props.items.map(item => {
             const { img, name, description, header } = item;
@@ -183,7 +183,7 @@ class CardVerticalList extends React.Component<CardVerticalListProps, undefined>
                 />
             </Container>
         );
-    } 
+    }
 }
 export default CardVerticalList;
 

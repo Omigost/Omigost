@@ -33,7 +33,7 @@ export default class BudgetsViewModule implements OmigostModule {
     getMenuName(): string {
         return "Your budgets";
     }
-    
+
     getSettingsForm() {
         return {
             title: "A registration form",

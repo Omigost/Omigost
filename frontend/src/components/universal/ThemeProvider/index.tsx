@@ -1,6 +1,6 @@
 import * as React from "react";
-import styled, { withTheme, ThemeProvider as StyledThemeProvider } from "styled-components";
 import { connect } from "react-redux";
+import { ThemeProvider as StyledThemeProvider } from "styled-components";
 
 export interface Theme {
     primaryFont: string;
@@ -22,20 +22,20 @@ export interface Theme {
         XL: string;
         XXL: string;
     };
-};
+}
 
 export interface PropsWithTheme {
     theme?: Theme;
-};
+}
 
 export enum Action {
-    SetTheme = 'THEMES_SET_THEME',
-};
+    SetTheme = "THEMES_SET_THEME",
+}
 
 export interface SetThemeAction {
     type: Action.SetTheme;
     theme: Theme;
-};
+}
 
 export function executeSetTheme(theme: Theme): SetThemeAction {
     return {
@@ -46,7 +46,7 @@ export function executeSetTheme(theme: Theme): SetThemeAction {
 
 export interface ThemesReduxState {
     currentTheme: Theme;
-};
+}
 
 export const INITIAL_STATE: ThemesReduxState = {
     currentTheme: null,
@@ -55,8 +55,8 @@ export const INITIAL_STATE: ThemesReduxState = {
 export function reducer(stateIn: ThemesReduxState, action): ThemesReduxState {
     const state = stateIn || INITIAL_STATE;
     const actionType: Action = action.type;
-    
-    switch(actionType) {
+
+    switch (actionType) {
         case Action.SetTheme: {
             return {
                 ...state,
@@ -73,7 +73,7 @@ const mapProviderStateToProps = (state, ownProps) => {
     return {
         currentTheme: state.themes.currentTheme,
     };
-}
+};
 
 const mapProviderDispatchToProps = (dispatch, ownProps) => {
     return {
@@ -81,14 +81,14 @@ const mapProviderDispatchToProps = (dispatch, ownProps) => {
             dispatch(executeSetTheme(theme));
         },
     };
-}
+};
 
 export function withReduxThemes(Component) {
     return connect(
         mapProviderStateToProps,
         mapProviderDispatchToProps,
     )(Component);
-};
+}
 
 export interface ThemeSetterRawProps {
     children: (props: any) => React.ReactNode;
@@ -108,11 +108,11 @@ export class ThemeProviderRaw extends React.Component<{
     children: JSX.Element;
 }, undefined> {
     render() {
-        
+
         if (this.props.currentTheme === null) {
             return null;
         }
-        
+
         return (
             <StyledThemeProvider
                 theme={this.props.currentTheme}

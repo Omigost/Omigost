@@ -6,10 +6,9 @@ import styled from "styled-components";
 import widgetsFactory from "../widgets";
 
 import {
-    faWrench, faHistory, faPlus,
+    faHistory, faPlus, faWrench,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Box, Flex } from "@rebass/grid";
 
 const CursorIcon = styled.div`
     margin-right: 0.3vw;
@@ -67,7 +66,7 @@ const DATA = {
 
 const PanelHeader = styled.div`
   font-family: ${(props) => props.theme.primaryFont};
-  font-size: ${(props) => props.theme.fontSize["XXL"]};
+  font-size: ${(props) => props.theme.fontSize.XXL};
   color: #727277;
   margin-left: 1vw;
   margin-top: 2vw;
@@ -113,7 +112,7 @@ export default class Panel extends React.Component<any, PanelState> {
 
     constructor(props) {
         super(props);
-        
+
         this.state = {
             draggableMode: false,
             layout: this.props.settings.layout,
@@ -133,7 +132,7 @@ export default class Panel extends React.Component<any, PanelState> {
                                     >
                                         <PanelHeader>
                                             Budgets dashboard
-                                            
+
                                             <this.props.app.UI.Dialog
                                                 name="add-widget-dialog"
                                                 transparent
@@ -144,16 +143,12 @@ export default class Panel extends React.Component<any, PanelState> {
                                                             <this.props.app.UI.CardVerticalList
                                                                 disableHoverAnimaions
                                                                 onSelected={(item) => {
-                                                                    console.log(item);
                                                                     const widget = widgetsFactory(this.props.app).find(w => w.name === item.name);
                                                                     const newLayout = this.props.app.UI.addItemToInteractiveGrid2Layout(this.state.layout, widget);
-                                                                    
-                                                                    console.log("THAT WILL BE NEW LAYOUT");
-                                                                    console.log(newLayout);
-                                                                    
+
                                                                     this.setState({
                                                                         layout: newLayout,
-                                                                    }, () => { closeDialog() });
+                                                                    }, () => { closeDialog(); });
                                                                 }}
                                                                 items={widgetsFactory(this.props.app).map(widget => {
                                                                     return {
@@ -178,7 +173,7 @@ export default class Panel extends React.Component<any, PanelState> {
                                                     );
                                                 }}
                                             </this.props.app.UI.Dialog>
-                                    
+
                                             <HeaderOptions>
                                                 <this.props.app.UI.TinyButtons
                                                     items={[
@@ -236,10 +231,7 @@ export default class Panel extends React.Component<any, PanelState> {
                                                         },
                                                     ],
                                                 });
-                                                
-                                                console.log("LAYOUT CHANGED");
-                                                console.log(layout);
-                                                
+
                                                 this.setState({
                                                     layout,
                                                 });

@@ -1,10 +1,9 @@
+import { storiesOf } from "@storybook/react";
 import React from "react";
 import styled from "styled-components";
-import { storiesOf } from "@storybook/react";
-import { text } from "@storybook/addon-knobs";
 
-import { NodeType } from './schemaTypes'
 import Form from "./index";
+import { NodeType } from "./schemaTypes";
 
 storiesOf("Form", module)
     .add("basic string form", () => {
@@ -25,7 +24,7 @@ storiesOf("Form", module)
                             },
                             "surname": {
                                 title: "User surname",
-                                type: NodeType.STRING
+                                type: NodeType.STRING,
                             },
                         },
                     }}

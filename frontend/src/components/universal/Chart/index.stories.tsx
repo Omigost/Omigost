@@ -1,11 +1,10 @@
-import React from "react";
-import styled from "styled-components";
+import { boolean, object, text } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
-import { text, boolean, object, number } from "@storybook/addon-knobs";
+import React from "react";
 
-import Chart from "./index";
-import ChartTypeSwitchPanel from "./ChartTypeSwitchPanel";
 import ChartDataOptionsPanel from "./ChartDataOptionsPanel";
+import ChartTypeSwitchPanel from "./ChartTypeSwitchPanel";
+import Chart from "./index";
 
 storiesOf("Chart", module)
     .addWithJSX("area chart", () => {

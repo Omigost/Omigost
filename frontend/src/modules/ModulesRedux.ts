@@ -1,33 +1,33 @@
-import { OmigostModuleInstance, OmigostModule } from "./ModulesLoader";
 import { connect } from "react-redux";
+import { OmigostModule, OmigostModuleInstance } from "./ModulesLoader";
 
 export enum Action {
-    LoadModuleInstance = 'MODULES_LOAD_INSTANCE',
-    EnableModule = 'MODULES_ENABLE',
-    DisableModule = 'MODULES_DISABLE',
-    SetModuleSettings = 'MODULES_SET_SETTINGS',
-};
+    LoadModuleInstance = "MODULES_LOAD_INSTANCE",
+    EnableModule = "MODULES_ENABLE",
+    DisableModule = "MODULES_DISABLE",
+    SetModuleSettings = "MODULES_SET_SETTINGS",
+}
 
 export interface EnableModuleAction {
     type: Action.EnableModule;
     module: OmigostModule;
-};
+}
 
 export interface DisableModuleAction {
     type: Action.DisableModule;
     module: OmigostModule;
-};
+}
 
 export interface LoadModuleInstanceAction {
     type: Action.LoadModuleInstance;
     instance: OmigostModuleInstance;
-};
+}
 
 export interface SetModuleSettingsAction {
     type: Action.SetModuleSettings;
     module: OmigostModule;
     settings: any;
-};
+}
 
 export function executeLoadModuleInstance(instance: OmigostModuleInstance): LoadModuleInstanceAction {
     return {
@@ -41,14 +41,14 @@ export function executeEnableModule(module: OmigostModule): EnableModuleAction {
         type: Action.EnableModule,
         module,
     };
-};
+}
 
 export function executeDisableModule(module: OmigostModule): DisableModuleAction {
     return {
         type: Action.DisableModule,
         module,
     };
-};
+}
 
 export function executeSetModuleSettings(module: OmigostModule, settings: any): SetModuleSettingsAction {
     return {
@@ -56,14 +56,14 @@ export function executeSetModuleSettings(module: OmigostModule, settings: any): 
         module,
         settings,
     };
-};
+}
 
 const mapProviderStateToProps = (state, ownProps): ConnectedProviderMappedStateProps => {
     return {
         instances: state.modules.instances,
         settings: state.modules.settings,
     };
-}
+};
 
 const mapProviderDispatchToProps = (dispatch, ownProps): ConnectedProviderMappedDispatchProps => {
     return {
@@ -80,7 +80,7 @@ const mapProviderDispatchToProps = (dispatch, ownProps): ConnectedProviderMapped
             dispatch(executeSetModuleSettings(module, settings));
         },
     };
-}
+};
 
 export interface ConnectedProviderMappedStateProps {
     instances: Array<OmigostModuleInstance>;
@@ -110,7 +110,7 @@ export interface ModulesSettingsMapping {
 export interface ModulesState {
     instances: Array<OmigostModuleInstance>;
     settings: ModulesSettingsMapping;
-};
+}
 
 export const INITIAL_STATE: ModulesState = {
     instances: [],
@@ -120,14 +120,14 @@ export const INITIAL_STATE: ModulesState = {
 export function reducer(stateIn: ModulesState, action) {
     const state = stateIn || INITIAL_STATE;
     const actionType: Action = action.type;
-    
-    switch(actionType) {
+
+    switch (actionType) {
         case Action.LoadModuleInstance: {
             return {
                 ...state,
                 instances: [
                     ...state.instances,
-                    action.instance
+                    action.instance,
                 ],
             };
         }
@@ -142,7 +142,7 @@ export function reducer(stateIn: ModulesState, action) {
                         };
                     }
                     return instance;
-                })
+                }),
             };
         }
         case Action.DisableModule: {
@@ -156,7 +156,7 @@ export function reducer(stateIn: ModulesState, action) {
                         };
                     }
                     return instance;
-                })
+                }),
             };
         }
         case Action.SetModuleSettings: {

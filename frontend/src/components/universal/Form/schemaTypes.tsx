@@ -157,7 +157,7 @@ export abstract class Node<
     overrideChildren(children: Array<Node<CS, CO, CM>>) {
         this.children = [ ...children ];
     }
-    
+
     getChildren() {
         return this.children;
     }
@@ -222,7 +222,7 @@ export abstract class Node<
     resolveChildren(): Array<Node<CS, CO, CM>> {
         return [];
     }
-    
+
     getOutput(options): NodeMetaOutputValue<O> {
         if ((!options || (options && options.enableFormat !== false)) && this.getSchema().formatOutput) {
             return {
@@ -235,7 +235,7 @@ export abstract class Node<
             __source: this,
         };
     }
-    
+
     setValue(value: NodeOutputValue<O>) {
         // Do nothing
     }
@@ -300,7 +300,7 @@ export class RootNode extends Node<any, any, NodeSchema> {
         this.setStateSilently(state, source, originalSource);
         this.getConfig().rootSetState(this.getState(), this, originalSource);
     }
-    
+
     setValue(value: NodeOutputValue<any>) {
         this.getChildren().forEach(child => child.setValue(value));
     }

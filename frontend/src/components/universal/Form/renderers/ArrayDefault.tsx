@@ -4,20 +4,20 @@ import Card from "../../Card";
 import TinyButtons from "../../TinyButtons";
 
 import {
-    faTimes, faPlus,
+    faPlus, faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 
-import WithMargins from "./utils/WithMargins";
 import WithDescription from "./utils/WithDescription";
 import WithErrors from "./utils/WithErrors";
+import WithMargins from "./utils/WithMargins";
 
 import {
-    NodeArraySchema,
-    Node,
-    NodeState,
-    NodeOutputValue,
     FormContext,
+    Node,
     NodeAny,
+    NodeArraySchema,
+    NodeOutputValue,
+    NodeState,
 } from "../schemaTypes";
 
 export type NodeSMapping = {
@@ -37,13 +37,13 @@ export default class ArrayDefault extends Node<NodeS, NodeO, NodeArraySchema> {
             items: {},
         };
     }
-    
+
     setValue(value: NodeO) {
         if (this.getSchema().formatInput) {
             value = this.getSchema().formatInput(value);
         }
         value = { ...value };
-        
+
         if (Object.keys(value).length !== this.getChildren().length) {
             this.overrideChildren(Object.keys(value).map(key => {
                 const child = this.resolveNode(this.getSchema().items, this, this.getConfig());
@@ -51,12 +51,12 @@ export default class ArrayDefault extends Node<NodeS, NodeO, NodeArraySchema> {
                 return child;
             }));
         }
-        
+
         this.getChildren().forEach((child, index) => {
             child.setValue(value[index]);
         });
     }
-    
+
     getRawOutput(options) {
         const results = [];
         this.getChildren().forEach(child => {
@@ -79,20 +79,20 @@ export default class ArrayDefault extends Node<NodeS, NodeO, NodeArraySchema> {
     removeItem(index: number) {
         const newItems = { ...this.getState().items };
         delete newItems[index];
-        
+
         this.overrideChildren(this.getChildren().filter((child, i) => index !== i).map((child, i) => {
             child.setTag(i.toString());
             return child;
         }));
-            
+
         this.setState({
             items: newItems,
         });
     }
-    
+
     addNewItem() {
         const key = this.getChildren().length;
-        
+
         const child = this.resolveNode(this.getSchema().items, this, this.getConfig());
         this.setState({
             items: {
@@ -101,11 +101,11 @@ export default class ArrayDefault extends Node<NodeS, NodeO, NodeArraySchema> {
             },
         });
     }
-    
+
     resolveChildren() {
         return [];
     }
-    
+
     render(context: FormContext): React.ReactNode {
         return (
             <WithMargins parent={this}>

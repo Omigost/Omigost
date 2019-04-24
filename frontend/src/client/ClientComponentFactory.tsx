@@ -37,7 +37,7 @@ export interface ClientAbstractComponent {
 }
 
 export default (clientPrototype: OmigostClientInterface): ClientAbstractComponent => {
-    
+
     const ClientComponentWrapper = class extends ClientAbstractComponentNode {
 
         state: ClientComponentState;
@@ -58,7 +58,7 @@ export default (clientPrototype: OmigostClientInterface): ClientAbstractComponen
             if (!forceRequest && (this.state.data || this.state.error)) return;
 
             const dataPromise = (promiseOverride) ? (promiseOverride) :(this.props.request(
-                new OmigostToastifiedClient(clientPrototype, this.props)
+                new OmigostToastifiedClient(clientPrototype, this.props),
             ));
             this.setState({
                 loading: true,
@@ -96,7 +96,7 @@ export default (clientPrototype: OmigostClientInterface): ClientAbstractComponen
             let refreshFn: RefreshCallback = () => this.makeRequest(true);
             if (this.props.mutation) {
                 refreshFn = (request: RequestProducer) => this.makeRequest(true, request(
-                    new OmigostToastifiedClient(clientPrototype, this.props)
+                    new OmigostToastifiedClient(clientPrototype, this.props),
                 ));
             }
 
@@ -108,6 +108,6 @@ export default (clientPrototype: OmigostClientInterface): ClientAbstractComponen
             }, refreshFn);
         }
     };
-    
+
     return withToasts(ClientComponentWrapper);
 };

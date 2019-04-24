@@ -34,28 +34,28 @@ const FloatingAction = styled.div`
   padding: 1vw;
   width: 30vw;
   color: white;
-  
+
   animation: ${showActionAnimation} 0.7s normal ease-in-out;
   transition: background-color 0.3s linear;
-  
+
   &:hover {
       background-color: ${(props) => props.theme.colors.primary};
   }
-  
+
   & .actionContentHover {
       transition: opacity 0.3s linear;
       opacity: 0;
   }
-  
+
   &:hover .actionContentHover {
       opacity: 1;
   }
-  
+
   & .actionContentNormal {
       transition: opacity 0.3s linear;
       opacity: 1;
   }
-  
+
   &:hover .actionContentNormal {
       opacity: 0;
   }
@@ -97,11 +97,11 @@ const OptionIconWrapper = styled.div`
   border: 0.3vw solid transparent;
   border-radius: 1vw;
   margin-left: 1vw;
-  
+
   width: 1.5vw;
   height: 1.5vw;
   text-align: center;
-  
+
   &:hover {
       border: 0.3vw solid white;
       background: transparent;
@@ -118,7 +118,7 @@ export interface FloatingActionProviderProps {
 class FloatingActionProviderRaw extends React.Component<FloatingActionProviderProps, undefined> {
     render() {
         const specs = this.props.currentFloatingAction;
-        
+
         const contentNode = (
             <FloatingActionsContainer>
                 {(specs) ? (
@@ -143,7 +143,7 @@ class FloatingActionProviderRaw extends React.Component<FloatingActionProviderPr
                                         onClick: () => {
                                             this.props.cancelAction();
                                         },
-                                    }
+                                    },
                                 ]).map(option => {
                                     return (
                                         <OptionIconWrapper
@@ -167,7 +167,7 @@ class FloatingActionProviderRaw extends React.Component<FloatingActionProviderPr
                 ) : (null)}
             </FloatingActionsContainer>
         );
-        
+
         return ReactDOM.createPortal(contentNode, document.body);
     }
 }

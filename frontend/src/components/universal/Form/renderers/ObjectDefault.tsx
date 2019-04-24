@@ -1,14 +1,14 @@
 import * as React from "react";
 
-import { CompositeNode, NodeO, ChildrenMap } from "../compositeNodes";
+import { ChildrenMap, CompositeNode, NodeO } from "../compositeNodes";
 
-import WithMargins from "./utils/WithMargins";
 import WithDescription from "./utils/WithDescription";
 import WithErrors from "./utils/WithErrors";
+import WithMargins from "./utils/WithMargins";
 
 import {
-    NodeObjectSchema,
     FormContext,
+    NodeObjectSchema,
 } from "../schemaTypes";
 
 export default class ObjectDefault extends CompositeNode<NodeO, NodeObjectSchema> {
@@ -20,7 +20,7 @@ export default class ObjectDefault extends CompositeNode<NodeO, NodeObjectSchema
     getCompositeOutput(output: NodeO) {
         return output;
     }
-    
+
     renderComposite(context: FormContext, children: ChildrenMap<React.ReactNode>): React.ReactNode {
         return (
             <WithMargins parent={this}>

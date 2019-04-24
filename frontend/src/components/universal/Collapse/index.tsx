@@ -1,7 +1,6 @@
 import * as React from "react";
-import styled from "styled-components";
 
-import { Collapse as CollapseComponent } from 'react-collapse';
+import { Collapse as CollapseComponent } from "react-collapse";
 
 export interface CollapseProps {
     collapsed: boolean;

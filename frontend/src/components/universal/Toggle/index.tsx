@@ -1,7 +1,7 @@
-import * as React from "react";
-import styled  from "styled-components";
-import ToggleComponent from "react-toggle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as React from "react";
+import ToggleComponent from "react-toggle";
+import styled  from "styled-components";
 
 import {
     faCheckSquare,
@@ -168,7 +168,7 @@ export interface ToggleProps {
 export default class Toggle extends React.Component<ToggleProps, undefined> {
     constructor(props) {
         super(props);
-        this.handleValueChange = this.handleValueChange.bind(this)
+        this.handleValueChange = this.handleValueChange.bind(this);
     }
 
     handleValueChange(e) {

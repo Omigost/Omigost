@@ -16,7 +16,7 @@ const SubmitButtonWrapper = styled.div`
   width: 50%;
   margin-top: 1vw;
   margin-bottom: 1vw;
-  
+
   width: 40%;
 `;
 
@@ -40,19 +40,19 @@ interface FormState {
 }
 
 function debounce(func: any, wait: number, immediate?: boolean) {
-	let timeout;
-	return function() {
-		const context = this, args = arguments;
-		const later = () => {
-			timeout = null;
-			if (!immediate) func.apply(context, args);
-		};
-		const callNow = immediate && !timeout;
-		clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
-		if (callNow) func.apply(context, args);
-	};
-};
+    let timeout;
+    return function() {
+        const context = this, args = arguments;
+        const later = () => {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        const callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
+}
 
 export default class Form extends React.Component<FormProps, FormState> {
 
@@ -60,7 +60,7 @@ export default class Form extends React.Component<FormProps, FormState> {
 
     constructor(props) {
         super(props);
-        
+
         this.state = {
             tree: null,
             disableOnChangeListener: false,
@@ -69,10 +69,10 @@ export default class Form extends React.Component<FormProps, FormState> {
                 getErrorsForNode: () => [],
             },
         };
-        
+
         this.handleChangeEvent = debounce(this.handleChangeEvent.bind(this), 250);
     }
-    
+
     handleChangeEvent() {
         if (this.state.disableOnChangeListener) return;
         if (this.props.validateOnChange !== false) {
@@ -129,7 +129,7 @@ export default class Form extends React.Component<FormProps, FormState> {
                         });
                     });
                 }
-                
+
                 this.setState({
                     tree,
                 }, () => {
@@ -147,7 +147,7 @@ export default class Form extends React.Component<FormProps, FormState> {
 
     render() {
         this.createTree();
-        
+
         return (
             <Wrapper>
                 {(this.state.tree) ? (this.state.tree.render(this.state.formContext)) : (null)}

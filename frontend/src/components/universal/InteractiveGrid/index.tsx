@@ -43,7 +43,6 @@ const CardBoxWrapper = styled.div`
     box-shadow: 0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1);
 `;
 
-import { Box, Flex } from "@rebass/grid";
 
 export default class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveGridState> {
     grid: any = null;
@@ -92,7 +91,7 @@ export default class InteractiveGrid extends React.Component<InteractiveGridProp
                                           (item.content) ? (
                                               <CardBoxWrapper>
                                                   <div style={{
-                                                      width: `${item.width/7*60}vw`,
+                                                      width: `${item.width / 7 * 60}vw`,
                                                   }}>
                                                     {item.content}
                                                   </div>

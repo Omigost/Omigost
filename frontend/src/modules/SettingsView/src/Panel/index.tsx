@@ -76,7 +76,7 @@ class Panel extends React.Component<any, undefined> {
                                 path={`${this.props.match.url}/${PANELS[key].route}`}
                                 component={() => {
                                     const SettingsComponent = PANELS[key].component;
-                                    
+
                                     return (
                                         <div>
                                             <SettingsComponent

@@ -1,7 +1,6 @@
 import axios from "axios";
 
 import ClientComponentFactory, { ClientAbstractComponent } from "./ClientComponentFactory";
-import OmigostFakeClient from "./FakeClient";
 import CLIENT_URLS from "./clientUrls";
 import {callFormEndpoint, FormComponentContext} from "./formHelpers";
 
@@ -67,19 +66,19 @@ export class OmigostClient implements OmigostClientInterface {
     getUsers(): ResponsePromise {
         return this.callEndpoint(null, CLIENT_URLS.getUsers);
     }
-    
+
     createUser(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.createUser, data });
     }
-    
+
     addCommunicationToUser(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.addCommunicationToUser, data });
     }
-    
+
     deleteUserCommunication(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.deleteUserCommunication, data });
     }
-    
+
     callEndpoint(endpoint, options): ResponsePromise {
         return new Promise<ResponseData>((resolve, reject) => {
             let method = "get";

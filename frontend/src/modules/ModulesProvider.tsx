@@ -21,7 +21,7 @@ export class ModulesProvider extends React.Component<ModulesProviderProps & Conn
         } else {
             loader = new OmigostModulesLoader();
         }
-        
+
         const store: OmigostModulesStore = {
             getAll: () => this.props.instances,
             put: (instance) => this.props.putInstance(instance),
@@ -29,7 +29,7 @@ export class ModulesProvider extends React.Component<ModulesProviderProps & Conn
             disable: this.props.disable,
             setSettings: this.props.setSettings,
         };
-        
+
         loader.setRenderInterceptor((module, props, next) => {
             return (
                 <ModulesStoreConsumer>
@@ -39,7 +39,7 @@ export class ModulesProvider extends React.Component<ModulesProviderProps & Conn
                 </ModulesStoreConsumer>
             );
         });
-        
+
         loader.setStore(store);
 
         if (this.props.modules) {

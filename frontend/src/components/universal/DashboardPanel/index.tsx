@@ -1,13 +1,12 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { Route } from "react-router";
-import { withRouter } from "react-router-dom";
 import SideMenu, { MenuOption } from "components/SideMenu";
 import { withModules, ModulesLoader } from "modules/ModulesProvider";
+import { Route } from "react-router";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
-import { History } from 'history';
-import { RouteComponentProps } from 'react-router-dom';
+import { History } from "history";
 
 const Wrapper = styled.aside`
   width: 100%;

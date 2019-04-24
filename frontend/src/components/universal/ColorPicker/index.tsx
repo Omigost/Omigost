@@ -43,7 +43,7 @@ export default class ColorPicker extends React.Component<ColorPickerProps, undef
                 >
                     <ColorBox
                         style={{
-                            backgroundColor: ((this.props.value) ? (this.props.value) : ('black')),
+                            backgroundColor: ((this.props.value) ? (this.props.value) : ("black")),
                         }}
                     />
                 </Popover>

@@ -1,13 +1,13 @@
 import * as React from "react";
 
-import styled, { ThemeProvider } from "styled-components";
 import { Box, Flex } from "@rebass/grid";
 import { withRouter } from "react-router-dom";
+import styled from "styled-components";
 
 
 const PanelHeader = styled.div`
   font-family: ${(props) => props.theme.primaryFont};
-  font-size: ${(props) => props.theme.fontSize["XXL"]};
+  font-size: ${(props) => props.theme.fontSize.XXL};
   color: #727277;
   margin-left: 1vw;
   margin-top: 2vw;

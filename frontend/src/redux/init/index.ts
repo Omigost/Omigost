@@ -1,24 +1,24 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-    faChartArea, faChartBar, faChartLine,
-    faClock, faCommentAlt, faDollarSign, faDownload, faFlag,
-    faPlus, faRulerHorizontal, faRulerVertical, faSearchDollar,
-    faShieldAlt, faTachometerAlt, faTools, faUpload, faUserCircle,
-    faWindowClose, faWindowMaximize, faWindowMinimize,
-    faTimes, faExpand, faMoneyBillAlt, faCheckSquare, faAddressCard,
-    faUser, faCommentSlash, faCommentDots, faEnvelope,
-    faCompress, faBoxOpen, faExclamationTriangle,
-    faPalette, faWrench, faRedo, faHistory,
+    faAddressCard, faBoxOpen, faChartArea,
+    faChartBar, faChartLine, faCheckSquare, faClock, faCommentAlt,
+    faCommentDots, faCommentSlash, faCompress, faDollarSign,
+    faDownload, faEnvelope, faExclamationTriangle, faExpand, faFlag,
+    faHistory, faMoneyBillAlt, faPalette,
+    faPlus, faRedo, faRulerHorizontal, faRulerVertical, faSearchDollar,
+    faShieldAlt, faTachometerAlt, faTimes, faTools,
+    faUpload, faUser, faUserCircle,
+    faWindowClose, faWindowMaximize, faWindowMinimize, faWrench,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
     faSlackHash,
-} from "@fortawesome/free-brands-svg-icons"
+} from "@fortawesome/free-brands-svg-icons";
 
 
 export interface InitState {
     fine: boolean;
-};
+}
 
 export function init(): Promise<InitState> {
     return new Promise<InitState>((resolve, reject) => {
@@ -33,7 +33,7 @@ export function init(): Promise<InitState> {
             faSlackHash, faCompress, faBoxOpen, faExclamationTriangle,
             faPalette, faWrench, faRedo, faHistory,
         );
-        
+
         resolve({
             fine: true,
         });

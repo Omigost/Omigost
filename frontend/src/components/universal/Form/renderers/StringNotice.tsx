@@ -1,12 +1,11 @@
 import * as React from "react";
-import styled from "styled-components";
 
 import { SimpleNode } from "../simpleNodes";
 
 import {
     FormContext,
-    NodeStringSchema,
     NodeError,
+    NodeStringSchema,
 } from "../schemaTypes";
 
 export default class StringNotice extends SimpleNode<string, NodeStringSchema> {
@@ -17,7 +16,7 @@ export default class StringNotice extends SimpleNode<string, NodeStringSchema> {
     isOutputAvailable(): boolean {
         return false;
     }
-    
+
     validateCustom(): Array<NodeError> {
         return [];
     }

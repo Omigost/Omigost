@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled  from "styled-components";
 
 import { connect } from "react-redux";
 
@@ -7,8 +6,8 @@ import { IconName } from "@fortawesome/fontawesome-svg-core";
 import FloatingActionProviderRaw from "./FloatingActionProviderRaw";
 
 export enum Action {
-    ShowAction = 'FLOATING_ACTION_SHOW',
-    CancelAction = 'FLOATING_ACTION_CANCEL',
+    ShowAction = "FLOATING_ACTION_SHOW",
+    CancelAction = "FLOATING_ACTION_CANCEL",
 }
 
 export interface FloatingActionOption {
@@ -51,13 +50,13 @@ export interface FloatingActionsReduxState {
 
 export const INITIAL_STATE: FloatingActionsReduxState = {
     currentAction: null,
-}
+};
 
 export function reducer(stateIn: FloatingActionsReduxState, action): FloatingActionsReduxState {
     const state = stateIn || INITIAL_STATE;
     const actionType: Action = action.type;
-    
-    switch(actionType) {
+
+    switch (actionType) {
         case Action.CancelAction: {
             return {
                 ...state,
@@ -80,7 +79,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         currentFloatingAction: state.floatingActions.currentAction,
     };
-}
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
@@ -91,7 +90,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(executeCancelAction());
         },
     };
-}
+};
 
 export function withFloatingActions(Component) {
     return connect(

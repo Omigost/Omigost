@@ -8,10 +8,6 @@ const GridWrapper = styled.div`
     top: -1vw;
 `;
 
-const TooltipContent = styled.div`
-    width: 10vw;
-`;
-
 export default (app) => ({
     name: "grid",
     description: "Budgeting data grid",

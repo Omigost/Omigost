@@ -49,16 +49,16 @@ export enum LayoutMode {
 
 export default class WithDescription extends React.Component<WithDescriptionProps, undefined> {
     render() {
-        
-        let layout = this.props.parent.getSchema().layout || LayoutMode.NORMAL;
-        
+
+        const layout = this.props.parent.getSchema().layout || LayoutMode.NORMAL;
+
         const titleExtraNode = (this.props.titleExtra) ? (
             <TitleExtraWrapper>
                 {this.props.titleExtra}
             </TitleExtraWrapper>
         ) : (null);
-        
-        switch(layout) {
+
+        switch (layout) {
             case LayoutMode.NORMAL: {
                 return (
                     <Wrapper>

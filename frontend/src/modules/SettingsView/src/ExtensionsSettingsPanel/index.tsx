@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 import ModuleSettingsView from "./ModuleSettingsView";
 
 import {
-    faTools, faQuestion, faRedo,
+    faQuestion, faRedo, faTools,
 } from "@fortawesome/free-solid-svg-icons";
 
 class ExtensionsSettingsPanel extends React.Component<any, undefined> {

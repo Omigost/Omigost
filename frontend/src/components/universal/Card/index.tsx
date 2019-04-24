@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   border-left: solid 2px ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.primaryFont};
   color: ${(props) => props.theme.colors.accent};
-  
+
   border-radius: 0.5vw;
   box-shadow: 0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1);
 `;
@@ -66,7 +66,7 @@ export default class Card extends React.Component<CardProps, undefined> {
                 <ContentRow>
                     {
                         (!this.props.description) ? (null) :(
-                            <div style={{...((!this.props.title) ? ({ width: '100%' }) : ({}))}} >
+                            <div style={{...((!this.props.title) ? ({ width: "100%" }) : ({}))}} >
                                 <CardDescription>
                                     {this.props.description}
                                 </CardDescription>

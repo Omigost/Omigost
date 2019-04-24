@@ -2,24 +2,16 @@ import * as React from "react";
 import styled  from "styled-components";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Responsive, WidthProvider, Layout as BaseLayout } from "react-grid-layout";
+import { Layout as BaseLayout, Responsive, WidthProvider } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 import Dialog from "../Dialog";
-import Form from "../Form";
 import { DialogsConsumer } from "../DialogProvider";
+import Form from "../Form";
 
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import "./index.scss";
-
-const Wrapper = styled.div``;
-
-const GridWrapper = styled.div`
-  padding: 1.2vw;
-  width: 100vw;
-  position: relative;
-`;
 
 const CardBoxWrapper = styled.div`
   width: 100%;
@@ -99,7 +91,7 @@ interface InteractiveGridState {
 }
 
 export function addItemToLayout(layout: Layout, item: InteractiveGridItem) {
-    
+
     if (!layout) {
         const newItem = {
             ...item,
@@ -111,7 +103,7 @@ export function addItemToLayout(layout: Layout, item: InteractiveGridItem) {
             content: item.content,
             static: item.static,
         };
-        
+
         return {
             items: [newItem],
             positions: [newItem],
@@ -127,7 +119,7 @@ export function addItemToLayout(layout: Layout, item: InteractiveGridItem) {
             content: item.content,
             static: item.static,
         };
-        
+
         return {
             ...layout,
             items: [
@@ -144,11 +136,11 @@ export function addItemToLayout(layout: Layout, item: InteractiveGridItem) {
 
 class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveGridState> {
 
-    state: InteractiveGridState;
-
     static defaultProps: InteractiveGridProps = {
         items: [],
     };
+
+    state: InteractiveGridState;
 
     constructor(props) {
         super(props);
@@ -171,14 +163,14 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
     componentDidMount() {
         this.setState({ mounted: true });
     }
-    
+
     onSetItemOptions(index, newOptions) {
         if (this.props.onLayoutChange) {
             const positions = ((this.props.layout || { positions: null }).positions || this.state.layout);
             this.props.onLayoutChange({
                 items: ((this.props.layout || { items: null }).items || this.state.items).map((item, i) => {
                     const newItem = { ...item };
-                    delete newItem['content'];
+                    delete newItem.content;
                     if (i === index) {
                         newItem.options = { ...newItem.options, ...newOptions };
                     }
@@ -187,7 +179,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
                 positions: positions,
             });
         }
-        
+
         this.setState({
             items: ((this.props.layout || { items: null }).items || this.state.items).map((item, i) => {
                 if (i === index) {
@@ -202,15 +194,15 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
     }
 
     onRemoveItem(index) {
-        
+
         const newItems = ((this.props.layout || { items: null }).items || this.state.items).filter((item, i) => i !== index);
-        
+
         if (this.props.onLayoutChange) {
             const positions = ((this.props.layout || { positions: null }).positions || this.state.layout);
             this.props.onLayoutChange({
                 items: newItems.map(item => {
                     const newItem = { ...item };
-                    delete newItem['content'];
+                    delete newItem.content;
                     return newItem;
                 }),
                 positions: positions.filter((item, i) => {
@@ -223,7 +215,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
                 }),
             });
         }
-            
+
         this.setState({
             items: newItems,
         });
@@ -241,7 +233,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
                 }),
             };
         }
-        
+
         return {
             lg: ((this.props.layout || { items: null }).items || this.state.items).map((item, i) => {
                 return {
@@ -318,17 +310,17 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
     }
 
     onLayoutChange(layout: BaseLayout) {
-        
+
         this.setState({
             layout,
         });
-        
+
         const canDispatch = (this.props.enableActionDrag !== false) || (this.props.enableActionResize !== false) || (this.props.enableActionRemove !== false);
         if (canDispatch && this.props.onLayoutChange) {
             this.props.onLayoutChange({
                 items: ((this.props.layout || { items: null }).items || this.state.items).map(item => {
                     const newItem = { ...item };
-                    delete newItem['content'];
+                    delete newItem.content;
                     return newItem;
                 }),
                 positions: layout,

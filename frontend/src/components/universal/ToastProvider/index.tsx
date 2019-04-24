@@ -1,16 +1,16 @@
 import * as React from "react";
 import styled  from "styled-components";
 
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { connect } from "react-redux";
 
 import {
-    toastsReducer as toasts,
-    ToastContainer,
-    dismiss, update, error, message,
-    warning, success, info,
+    dismiss,
+    error,
+    info, message, success, toastsReducer as toasts,
+    update, warning, ToastContainer,
 } from "react-toastify-redux";
 
 export const reducer = toasts;
@@ -32,7 +32,7 @@ export function executeShowExceptionToast(messageContent: string, errorPayload: 
         messageContent,
         errorPayload,
     };
-    
+
     return error(payload as unknown as any);
 }
 
@@ -53,36 +53,36 @@ export function executeShowInfoToast(messageContent: string) {
 }
 
 export interface ToastProviderProps {
-    
+
 }
 
 export const ToastComponent = (props: any) => {
     const { type, message } = props;
-    
-    if (typeof message === 'string') {
+
+    if (typeof message === "string") {
         return (
-            <div className='toast'>
-                <div className='header'>{type}</div>
-                <div className='message'>{message}</div>
+            <div className="toast">
+                <div className="header">{type}</div>
+                <div className="message">{message}</div>
             </div>
         );
     } else if (message && (message.messageContent || message.errorPayload)) {
         return (
-            <div className='toast'>
-                <div className='header'>Error</div>
-                <div className='message'>
+            <div className="toast">
+                <div className="header">Error</div>
+                <div className="message">
                     <p>{message.messageContent}</p>
                     <p>
-                        {''+message.errorPayload}
+                        {"" + message.errorPayload}
                     </p>
                 </div>
             </div>
         );
     } else {
         return (
-            <div className='toast'>
-                <div className='header'>Error</div>
-                <div className='message'>
+            <div className="toast">
+                <div className="header">Error</div>
+                <div className="message">
                     <p>Unknown error has occured.</p>
                     <p>
                         {JSON.stringify(message, null, 2)}
@@ -122,7 +122,7 @@ export interface ToastActions {
     displayWarningToast: (messageContent: string) => void;
     displaySuccessToast: (messageContent: string) => void;
     displayInfoToast: (messageContent: string) => void;
-};
+}
 
 export function withToasts(Component) {
     return connect(

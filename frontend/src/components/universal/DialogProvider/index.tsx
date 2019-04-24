@@ -1,40 +1,39 @@
 import * as React from "react";
-import styled, { withTheme } from "styled-components";
 import { connect } from "react-redux";
 
 export enum Action {
-    RegisterDialog = 'DIALOGS_REGISTER_NEW_DIALOG',
-    OpenDialog = 'DIALOGS_OPEN_DIALOG',
-    CloseDialog = 'DIALOGS_CLOSE_DIALOG',
-    EnableDialogFullscreen = 'DIALOGS_ENABLE_DIALOG_FULLSCREEN',
-    DisableDialogFullscreen = 'DIALOGS_DISABLE_DIALOG_FULLSCREEN',
-};
+    RegisterDialog = "DIALOGS_REGISTER_NEW_DIALOG",
+    OpenDialog = "DIALOGS_OPEN_DIALOG",
+    CloseDialog = "DIALOGS_CLOSE_DIALOG",
+    EnableDialogFullscreen = "DIALOGS_ENABLE_DIALOG_FULLSCREEN",
+    DisableDialogFullscreen = "DIALOGS_DISABLE_DIALOG_FULLSCREEN",
+}
 
 export interface RegisterDialogAction {
     type: Action.RegisterDialog;
     name: string;
-};
+}
 
 export interface OpenDialogAction {
     type: Action.OpenDialog;
     name: string;
     parameters: any;
-};
+}
 
 export interface CloseDialogAction {
     type: Action.CloseDialog;
     name: string;
-};
+}
 
 export interface EnableDialogFullscreenAction {
     type: Action.EnableDialogFullscreen;
     name: string;
-};
+}
 
 export interface DisableDialogFullscreenAction {
     type: Action.DisableDialogFullscreen;
     name: string;
-};
+}
 
 export function executeRegisterDialog(name: string): RegisterDialogAction {
     return {
@@ -81,7 +80,7 @@ export interface DialogSpecs {
 
 export interface DialogsReduxState {
     loadedDialogs: Array<DialogSpecs>;
-};
+}
 
 export const INITIAL_STATE: DialogsReduxState = {
     loadedDialogs: [],
@@ -90,7 +89,7 @@ export const INITIAL_STATE: DialogsReduxState = {
 function mapSingleDialog(dialogs: Array<DialogSpecs>, name: string, transformFn: (dialog: DialogSpecs) => DialogSpecs): Array<DialogSpecs> {
     return dialogs.map(dialog => {
        if (dialog.name === name) {
-            return { ...transformFn(dialog) }; 
+            return { ...transformFn(dialog) };
        }
        return { ...dialog };
     });
@@ -99,8 +98,8 @@ function mapSingleDialog(dialogs: Array<DialogSpecs>, name: string, transformFn:
 export function reducer(stateIn: DialogsReduxState, action): DialogsReduxState {
     const state = stateIn || INITIAL_STATE;
     const actionType: Action = action.type;
-    
-    switch(actionType) {
+
+    switch (actionType) {
         case Action.OpenDialog: {
             return {
                 ...state,
@@ -160,7 +159,7 @@ export function reducer(stateIn: DialogsReduxState, action): DialogsReduxState {
                         isOpen: false,
                         isFullscreen: false,
                         parameters: null,
-                    }
+                    },
                 ],
             };
         }
@@ -186,7 +185,7 @@ const mapProviderStateToProps = (state, ownProps): ConnectedProviderMappedStateP
     return {
         ...dialog,
     };
-}
+};
 
 const mapProviderDispatchToProps = (dispatch, ownProps): ConnectedProviderMappedDispatchProps => {
     return {
@@ -203,7 +202,7 @@ const mapProviderDispatchToProps = (dispatch, ownProps): ConnectedProviderMapped
             dispatch(executeDisableDialogFullscreen(ownProps.name));
         },
     };
-}
+};
 
 export function withRegisteredDialog(Component) {
     return connect(
@@ -214,7 +213,7 @@ export function withRegisteredDialog(Component) {
             componentDidMount() {
                 this.props.registerDialog();
             }
-            
+
             render() {
                 return (
                     <Component
@@ -222,9 +221,9 @@ export function withRegisteredDialog(Component) {
                     />
                 );
             }
-        }
+        },
     );
-};
+}
 
 export function withDialogs(Component) {
     return connect(
@@ -254,13 +253,13 @@ export function withDialogs(Component) {
             };
         },
     )(Component);
-};
+}
 
 export interface DialogsConsumerRawProps {
     children: (props: any) => React.ReactNode;
 }
 
-export class DialogsConsumerRaw extends React.Component<DialogsConsumerRawProps, undefined> {    
+export class DialogsConsumerRaw extends React.Component<DialogsConsumerRawProps, undefined> {
     render() {
         return this.props.children(this.props);
     }

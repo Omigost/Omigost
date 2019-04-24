@@ -63,13 +63,13 @@ const ErrorContainer = styled.div`
 export default class WithErrors extends React.Component<WithErrorsProps, undefined> {
     render() {
         const errors = this.props.context.getErrorsForNode(this.props.parent) || [];
-        
+
         const iconNode = (
             <Popover
                 type={"error"}
                 placement={"left"}
                 trigger={"hover"}
-                content={(errors.length == 0) ? (null) : (
+                content={(errors.length === 0) ? (null) : (
                     <ErrorContainer>
                         <div>
                             <FontAwesomeIcon icon={faExclamationTriangle.iconName} />
@@ -86,7 +86,7 @@ export default class WithErrors extends React.Component<WithErrorsProps, undefin
                 </IconWrapper>
             </Popover>
         );
-        
+
         return (
             <Wrapper>
                 {

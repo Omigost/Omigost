@@ -1,13 +1,13 @@
+import { text } from "@storybook/addon-knobs";
+import { storiesOf } from "@storybook/react";
 import React from "react";
 import styled from "styled-components";
-import { storiesOf } from "@storybook/react";
-import { text } from "@storybook/addon-knobs";
 
 import { I18n } from "react-polyglot";
 const locale = "en";
 
-import TextBox from "./index";
 import messages from "langs/en";
+import TextBox from "./index";
 
 const Wrapper = styled.div`
     width: 30vw;

@@ -1,9 +1,8 @@
 import * as React from "react";
-import styled from "styled-components";
 
-import WithMargins from "./utils/WithMargins";
 import WithDescription from "./utils/WithDescription";
 import WithErrors from "./utils/WithErrors";
+import WithMargins from "./utils/WithMargins";
 
 import TextInput from "../../TextInput";
 import { SimpleNode } from "../simpleNodes";

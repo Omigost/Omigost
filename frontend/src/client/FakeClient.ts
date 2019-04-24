@@ -61,19 +61,19 @@ export class OmigostFakeClient implements OmigostClientInterface {
     getUsers(): ResponsePromise {
         return createSimplePromise(null);
     }
-    
+
     createUser(data): ResponsePromise {
         return createSimplePromise(null);
     }
-    
+
     addCommunicationToUser(data): ResponsePromise {
         return createSimplePromise(null);
     }
-    
+
     deleteUserCommunication(data): ResponsePromise {
         return createSimplePromise(null);
     }
-    
+
     callEndpoint(endpoint, options): ResponsePromise {
         return new Promise<ResponseData>((resolve, reject) => {
             reject("Method 'callEndpoint' is not yet implemented");

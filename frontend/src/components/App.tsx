@@ -2,11 +2,10 @@ import * as React from "react";
 import { I18n } from "react-polyglot";
 import styled from "styled-components";
 
-import { Provider } from "react-redux";
+import { connectRouter, routerMiddleware, ConnectedRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
-import { applyMiddleware, compose, createStore, combineReducers } from "redux";
-import { routerMiddleware } from "connected-react-router";
-import { connectRouter, ConnectedRouter } from "connected-react-router";
+import { Provider } from "react-redux";
+import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 
 import { executeAppInit } from "../redux/actions";
@@ -14,9 +13,9 @@ import createRootReducer from "../redux/reducers";
 import preloadedState from "../redux/store";
 
 import ModulesProvider, { withModules, WithLoaderProps } from "modules/ModulesProvider";
-import ToastProvider from "./universal/ToastProvider";
-import { ThemeProvider, executeSetTheme } from "./universal/ThemeProvider";
 import FloatingActionProvider from "./universal/FloatingActionProvider";
+import { executeSetTheme, ThemeProvider } from "./universal/ThemeProvider";
+import ToastProvider from "./universal/ToastProvider";
 
 const AppWrapper = styled.div`
   background: ${props => props.theme.colors.background};
@@ -59,12 +58,12 @@ export function configureStore() {
 const store = configureStore();
 
 export default class App extends React.Component<AppProps, undefined> {
-    
+
     componentDidMount() {
         store.dispatch(executeAppInit());
         store.dispatch(executeSetTheme(defaultTheme));
     }
-    
+
     render() {
         const RoutesModuleComponent = withModules((props: WithLoaderProps) => {
             return (

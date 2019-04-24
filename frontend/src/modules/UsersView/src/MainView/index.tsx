@@ -1,23 +1,21 @@
 import * as React from "react";
 
-import styled, { ThemeProvider } from "styled-components";
-import defaultTheme from "themes/default";
+import styled from "styled-components";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { withRouter } from "react-router-dom";
 
 import {
-    faDownload, faPlus, faCommentSlash,
-    faCommentDots, faUser, faEnvelope,
-    faCommentAlt, faTimes, faTools,
+    faCommentAlt, faCommentDots, faCommentSlash,
+    faDownload, faEnvelope,
+    faPlus, faTimes, faTools,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
     faSlackHash,
 } from "@fortawesome/free-brands-svg-icons";
 
-import * as Fuse from "fuse-js-latest";
 
 import { Box, Flex } from "@rebass/grid";
 
@@ -26,13 +24,9 @@ const GridWrapper = styled.div`
   width: 100%;
 `;
 
-const TooltipContent = styled.div`
-  width: 12vw;
-`;
-
 const PanelHeader = styled.div`
   font-family: ${(props) => props.theme.primaryFont};
-  font-size: ${(props) => props.theme.fontSize["XXL"]};
+  font-size: ${(props) => props.theme.fontSize.XXL};
   color: #727277;
   margin-left: 1vw;
   margin-top: 2vw;
@@ -42,10 +36,6 @@ const UserItemIconWrapper = styled.span`
   display: inline-block;
   font-size: 1vw;
   margin-left: 0.2vw;
-`;
-
-const UserItemTextWrapper = styled.span`
-  font-size: 1.3vw;
 `;
 
 const UserNameWrapper = styled.div`
@@ -72,29 +62,29 @@ const UserItemIconDescription = styled.div`
 let DATA = {};
 
 function getSpecsForCommunication(com) {
-    if (com.name === 'slack') {
+    if (com.name === "slack") {
         return {
             description: "This user will be notified by slack",
             icon: faSlackHash,
         };
-    } else if (com.name === 'email') {
+    } else if (com.name === "email") {
         return {
             description: "This user will be notified by an email message",
             icon: faEnvelope.iconName,
         };
-    } else if (com.name === 'silent') {
+    } else if (com.name === "silent") {
         return {
             title: "No notifications",
             description: "This user won't receive any notifications. You can set them up via the settings button next to the user",
             icon: faCommentSlash.iconName,
         };
     }
-    
+
     return {
         description: `This user will be notified using non-standard messaging method.`,
         icon: faCommentDots.iconName,
     };
-};
+}
 
 const CommunicationCardListContainer = styled.div`
   width: 60vw;
@@ -120,12 +110,12 @@ interface MainViewState {
 }
 
 class MainView extends React.Component<any, MainViewState> {
-    
+
     state: MainViewState;
 
     constructor(props) {
         super(props);
-        
+
         this.state = {
             activeItem: null,
         };
@@ -179,7 +169,7 @@ class MainView extends React.Component<any, MainViewState> {
                                                                 post(client => client.addCommunicationToUser({
                                                                     userName: parameters.userName,
                                                                     communicationName: item.value,
-                                                                    communicationValue: '',
+                                                                    communicationValue: "",
                                                                 })).then(() => {
                                                                     closeDialog();
                                                                     refresh();
@@ -191,7 +181,7 @@ class MainView extends React.Component<any, MainViewState> {
                                                 );
                                             }}
                                         </this.props.app.UI.Dialog>
-                                        
+
                                         <this.props.app.UI.DialogsConsumer>
                                             {({ openDialog }) => {
                                                 return (
@@ -234,11 +224,11 @@ class MainView extends React.Component<any, MainViewState> {
                                                                                     renderItem={(row) => {
                                                                                         const name = row.name;
                                                                                         let communications = row.communications || [];
-                                                                                        
+
                                                                                         if (communications.length === 0) {
-                                                                                            communications = [ { name: 'silent' } ];
+                                                                                            communications = [ { name: "silent" } ];
                                                                                         }
-                                                                                        
+
                                                                                         return (
                                                                                             <this.props.app.UI.Card
                                                                                                 action={
@@ -291,12 +281,11 @@ class MainView extends React.Component<any, MainViewState> {
                                                                                                                 <this.props.app.UI.PlainList
                                                                                                                     items={
                                                                                                                         communications.map((com, index) => {
-                                                                                                                            const { description, icon, title } = getSpecsForCommunication(com);
                                                                                                                             const comMethod = AVAILABLE_COMMUNICATION_METHODS.find(item => item.value === com.name);
                                                                                                                             if (!comMethod) {
                                                                                                                                 return null;
                                                                                                                             }
-                                                                                                                            
+
                                                                                                                             return {
                                                                                                                                 img: comMethod.img,
                                                                                                                                 name: comMethod.name || com.name,
@@ -310,7 +299,7 @@ class MainView extends React.Component<any, MainViewState> {
                                                                                                                                                 communicationName: com.name,
                                                                                                                                                 communicationValue: com.value,
                                                                                                                                             })).then(() => {
-                                                                                                                                                refresh(); 
+                                                                                                                                                refresh();
                                                                                                                                             });
                                                                                                                                         },
                                                                                                                                     },
@@ -321,14 +310,14 @@ class MainView extends React.Component<any, MainViewState> {
                                                                                                                                             this.props.history.push(`${this.props.match.url}/users/${row.name}/communication/${index}`);
                                                                                                                                         },
                                                                                                                                     },
-                                                                                                                                ]
+                                                                                                                                ],
                                                                                                                             };
                                                                                                                         })
                                                                                                                     }
                                                                                                                 />
                                                                                                             </CommunicationCardExpandedListWrapper>
                                                                                                             <this.props.app.UI.Button
-                                                                                                                onClick={() => openDialog('test-dialog', {
+                                                                                                                onClick={() => openDialog("test-dialog", {
                                                                                                                     userName: row.name,
                                                                                                                     availableCommunications: AVAILABLE_COMMUNICATION_METHODS,
                                                                                                                 })}

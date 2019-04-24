@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { IconName } from "@fortawesome/fontawesome-svg-core";
 import ButtonPanel from "components/ButtonPanel";
-import InteractiveGrid, { RenderItemArgs, ItemType } from "components/InteractiveGrid";
+import InteractiveGrid, { ItemType, RenderItemArgs } from "components/InteractiveGrid";
 
 const Wrapper = styled.div`
   margin: 0;
@@ -36,18 +36,18 @@ const NestedGridHandler = styled.span`
   color: gray;
   opacity: 0.3;
   cursor: pointer;
-  
+
   &:hover {
         opacity: 1;
   }
-`
+`;
 
 export type OptionNode = ItemType & {
     options?: Array<ItemType>;
     name?: string;
     icon?: IconName;
     data?: any;
-}
+};
 
 export interface InteractiveNestedGridProps {
     showHandlers?: boolean;
@@ -67,9 +67,9 @@ const DEFAULT_ITEM_RENDERER = (props: RenderItemArgs<OptionNode>) => {
 
 export default class InteractiveNestedGrid extends React.Component<InteractiveNestedGridProps, undefined> {
     render() {
-        
+
         const showHandlers = (this.props.showHandlers === false) ? (false) : (true);
-        
+
         return (
             <Wrapper>
                 <InteractiveGrid

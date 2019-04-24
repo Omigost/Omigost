@@ -2,8 +2,8 @@ import * as React from "react";
 import { Route } from "react-router";
 import { withRouter } from "react-router-dom";
 
-import MainView from "../MainView";
 import AddBudgetView from "../AddBudgetView";
+import MainView from "../MainView";
 
 class Panel extends React.Component<any, any> {
 

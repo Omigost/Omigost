@@ -1,11 +1,11 @@
 import * as React from "react";
-import styled, { withTheme } from "styled-components";
+import { withTheme } from "styled-components";
 
-import { resolveData, withData, DataFormat, FormatedDataPoint, RowSpecs } from "components/DataProvider";
+import { resolveData, withData, DataFormat } from "components/DataProvider";
 
 interface CustomDataRendererProps {
-    renderData(data: DataFormat): React.ReactNode;
     data: DataFormat;
+    renderData(data: DataFormat): React.ReactNode;
 }
 
 class CustomDataRenderer extends React.Component<CustomDataRendererProps, undefined> {

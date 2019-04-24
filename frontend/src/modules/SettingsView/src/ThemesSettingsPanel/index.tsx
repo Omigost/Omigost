@@ -1,13 +1,10 @@
 import * as React from "react";
 
-import { withTheme } from 'styled-components';
+import { withTheme } from "styled-components";
 
 import { Route } from "react-router";
 import { withRouter } from "react-router-dom";
 
-import {
-    faTools, faQuestion, faRedo,
-} from "@fortawesome/free-solid-svg-icons";
 
 class ThemesSettingsPanel extends React.Component<any, undefined> {
     render() {
@@ -39,10 +36,6 @@ class ThemesSettingsPanel extends React.Component<any, undefined> {
                                                     submitButton="Save new budget"
                                                     onSubmit={(data) => {
                                                         data.colors.primaryGradient = `linear-gradient(to right, ${data.colors.primary}, ${data.colors.secondary})`;
-                                                        
-                                                        console.error("SET DATA");
-                                                        console.log(data);
-                                                        
                                                         setTheme(data);
                                                     }}
                                                     defaultValue={this.props.theme}
@@ -128,7 +121,7 @@ class ThemesSettingsPanel extends React.Component<any, undefined> {
                                                                         description: "S-size font",
                                                                         minimum: 0,
                                                                         maximum: 10,
-                                                                        formatInput: value => parseFloat(value.replace('vw', '')),
+                                                                        formatInput: value => parseFloat(value.replace("vw", "")),
                                                                         formatOutput: value => `${value}vw`,
                                                                     },
                                                                     "default": {
@@ -137,7 +130,7 @@ class ThemesSettingsPanel extends React.Component<any, undefined> {
                                                                         description: "Default font size",
                                                                         minimum: 0,
                                                                         maximum: 10,
-                                                                        formatInput: value => parseFloat(value.replace('vw', '')),
+                                                                        formatInput: value => parseFloat(value.replace("vw", "")),
                                                                         formatOutput: value => `${value}vw`,
                                                                     },
                                                                     "M": {
@@ -146,7 +139,7 @@ class ThemesSettingsPanel extends React.Component<any, undefined> {
                                                                         description: "M-size font",
                                                                         minimum: 0,
                                                                         maximum: 10,
-                                                                        formatInput: value => parseFloat(value.replace('vw', '')),
+                                                                        formatInput: value => parseFloat(value.replace("vw", "")),
                                                                         formatOutput: value => `${value}vw`,
                                                                     },
                                                                     "L": {
@@ -155,7 +148,7 @@ class ThemesSettingsPanel extends React.Component<any, undefined> {
                                                                         description: "L-size font",
                                                                         minimum: 0,
                                                                         maximum: 10,
-                                                                        formatInput: value => parseFloat(value.replace('vw', '')),
+                                                                        formatInput: value => parseFloat(value.replace("vw", "")),
                                                                         formatOutput: value => `${value}vw`,
                                                                     },
                                                                     "XL": {
@@ -164,7 +157,7 @@ class ThemesSettingsPanel extends React.Component<any, undefined> {
                                                                         description: "XL-size font",
                                                                         minimum: 0,
                                                                         maximum: 10,
-                                                                        formatInput: value => parseFloat(value.replace('vw', '')),
+                                                                        formatInput: value => parseFloat(value.replace("vw", "")),
                                                                         formatOutput: value => `${value}vw`,
                                                                     },
                                                                     "XXL": {
@@ -173,7 +166,7 @@ class ThemesSettingsPanel extends React.Component<any, undefined> {
                                                                         description: "XXL-size font",
                                                                         minimum: 0,
                                                                         maximum: 10,
-                                                                        formatInput: value => parseFloat(value.replace('vw', '')),
+                                                                        formatInput: value => parseFloat(value.replace("vw", "")),
                                                                         formatOutput: value => `${value}vw`,
                                                                     },
                                                                 },

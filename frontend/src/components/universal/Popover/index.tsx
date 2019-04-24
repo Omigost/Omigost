@@ -50,7 +50,7 @@ export interface PopoverProps {
 }
 
 export default class Popover extends React.Component<PopoverProps, undefined> {
-   
+
     render() {
         if (!this.props.content) {
             return this.props.children || null;
