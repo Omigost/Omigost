@@ -20,10 +20,11 @@
   },
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
   "transform": {
-    "^.+\\.(ts|tsx)$": "<rootDir>/configs/jest.preprocessor.js"
+    "^.+\\.(ts|tsx)$": "<rootDir>/configs/jest.preprocessor.js",
+    "^.+\\.(js|jsx)$": "babel-jest"
   },
   "transformIgnorePatterns": [
-    "/node_modules/"
+    "/node_modules/(?!.*react-toastify-redux.*)"
   ],
   "testRegex": "/tests/.*\\.(ts|tsx)$",
   "moduleDirectories": [

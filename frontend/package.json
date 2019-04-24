@@ -25,7 +25,7 @@
   "scripts": {
     "modules-fix": "rm -r -f -d node_modules/@types/react-native",
     "build": "yarn run modules-fix && yarn run clean-dist && yarn run lint && node ./node_modules/ts-node/dist/bin.js -P ./tsconfig.node.json ./node_modules/webpack-cli/bin/cli.js -p --config=configs/webpack/prod.ts && yarn run test",
-    "test": "node ./node_modules/ts-node/dist/bin.js -P ./tsconfig.node.json ./node_modules/jest/bin/jest.js --coverage --config=configs/jest.json",
+    "test": "node ./node_modules/ts-node/dist/bin.js -P ./tsconfig.node.json ./node_modules/jest/bin/jest.js --coverage --no-cache --config=configs/jest.json",
     "clean-dist": "rm -f -r -d dist",
     "start": "yarn run start-dev",
     "start-dev": "yarn run modules-fix && node ./node_modules/ts-node/dist/bin.js -P ./tsconfig.node.json ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config=configs/webpack/dev.ts",
@@ -57,6 +57,8 @@
     "@types/react-dom": "^16.0.11",
     "@types/react-redux": "^7.0.0",
     "awesome-typescript-loader": "^5.2.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.4.2",
     "babel-loader": "^8.0.4",
     "css-loader": "^1.0.1",
     "express": "^4.16.4",
@@ -96,6 +98,7 @@
     "xlsx": "^0.14.1"
   },
   "dependencies": {
+    "@babel/core": "^7.0.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.10",
     "@fortawesome/free-brands-svg-icons": "^5.8.1",
