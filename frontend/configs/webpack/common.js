@@ -15,6 +15,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.jsx', 'index.ts', 'index.tsx', 'index.js', 'index.jsx'],
     alias: {
       'scss': path.join(__dirname, '..', '..', 'src', 'scss'),
+      'client': path.join(__dirname, '..', '..', 'src', 'client'),
       'components': path.join(__dirname, '..', '..', 'src', 'components', 'universal'),
       'pages': path.join(__dirname, '..', '..', 'src', 'components', 'pages'),
       'langs': path.join(__dirname, '..', '..', 'src', 'langs'),

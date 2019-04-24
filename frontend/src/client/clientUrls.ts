@@ -7,4 +7,8 @@ export default {
         endpoint: "budgets/create",
         method: "post",
     },
+    postBudgetIncreaseLimit: {
+        endpoint: "alerts/requestLimitIncrease",
+        method: "post",
+    },
 };
