@@ -78,8 +78,19 @@ export interface DialogSpecs {
     parameters: any;
 }
 
+export interface ConnectedProviderMappedStateProps {
+    name?: string;
+    isOpen?: boolean;
+    isFullscreen?: boolean;
+    parameters?: any;
+}
+
 export interface DialogsReduxState {
     loadedDialogs: Array<DialogSpecs>;
+}
+
+export interface DialogsReduxStateStore {
+    dialogs?: DialogsReduxState;
 }
 
 export const INITIAL_STATE: DialogsReduxState = {
@@ -169,8 +180,6 @@ export function reducer(stateIn: DialogsReduxState, action): DialogsReduxState {
     }
 }
 
-export type ConnectedProviderMappedStateProps = DialogSpecs;
-
 export interface ConnectedProviderMappedDispatchProps {
     registerDialog: () => void;
     onClose: () => void;
@@ -225,18 +234,31 @@ export function withRegisteredDialog(Component) {
     );
 }
 
-export function withDialogs(Component) {
+export interface WithDialogsProps {
+    name?: string;
+}
+
+export interface ConnectedMappedDispatchProps {
+    openDialog?: (name: string, parameters: any) => void;
+    closeDialog?: (name: string) => void;
+    maximizeDialog?: (name: string) => void;
+    minimizeDialog?: (name: string) => void;
+}
+
+export type ConnectedProps = ConnectedProviderMappedStateProps & ConnectedMappedDispatchProps;
+
+export function withDialogs<P>(Component: React.ComponentType<P & WithDialogsProps>): React.ComponentType<P> {
     return connect(
-        (state, ownProps) => {
+        (state: DialogsReduxStateStore, ownProps: WithDialogsProps): ConnectedProviderMappedStateProps => {
             if (ownProps.name) {
                 const dialog = state.dialogs.loadedDialogs.find(dialog => dialog.name === ownProps.name);
                 return {
                     ...dialog,
                 };
             }
-            return {};
+            return null;
         },
-        (dispatch, ownProps) => {
+        (dispatch, ownProps: WithDialogsProps): ConnectedMappedDispatchProps => {
             return {
                 openDialog: (name: string, parameters: any) => {
                     dispatch(executeOpenDialog(name || ownProps.name, parameters));
@@ -252,14 +274,16 @@ export function withDialogs(Component) {
                 },
             };
         },
+    // @ts-ignore
     )(Component);
 }
 
-export interface DialogsConsumerRawProps {
-    children: (props: any) => React.ReactNode;
+export interface DialogsConsumerRawProps<P> {
+    children: (props: P) => React.ReactNode;
+    name?: string;
 }
 
-export class DialogsConsumerRaw extends React.Component<DialogsConsumerRawProps, undefined> {
+export class DialogsConsumerRaw<P> extends React.Component<P & ConnectedProps & DialogsConsumerRawProps<P & ConnectedProps>, undefined> {
     render() {
         return this.props.children(this.props);
     }

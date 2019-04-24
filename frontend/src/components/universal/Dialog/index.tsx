@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled, { withTheme } from "styled-components";
 
-import { withRegisteredDialog, DialogsConsumer } from "../DialogProvider";
+import { withRegisteredDialog, ConnectedProps, DialogsConsumer } from "../DialogProvider";
 
 import Modal from "react-modal";
 import { Rnd } from "react-rnd";
@@ -56,19 +56,24 @@ const CardBoxContent = styled.div`
     width: 100%;
 `;
 
-const CardBoxWrapper = styled.div<DialogProps>`
+const CardBoxWrapper = styled.div<CardBoxWrapperProps>`
   width: 100%;
   height: 100%;
   border-radius: 0.5vw;
-  background: ${(props: DialogProps) => (props.transparent) ? ("transparent") : ("#ffffff")};
-  box-shadow: ${(props: DialogProps) => (props.transparent) ? ("none") : ("0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1)")};
+  background: ${(props: CardBoxWrapperProps) => (props.transparent) ? ("transparent") : ("#ffffff")};
+  box-shadow: ${(props: CardBoxWrapperProps) => (props.transparent) ? ("none") : ("0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1)")};
 
-  min-width: ${(props: DialogProps) => ((props.minWidth) ? (props.minWidth + "vw") : ("unset"))}
+  min-width: ${(props: CardBoxWrapperProps) => ((props.minWidth) ? (props.minWidth + "vw") : ("unset"))}
 `;
 
 export interface DialogState {
     width: string;
     height: string;
+}
+
+export interface CardBoxWrapperProps {
+    transparent?: boolean;
+    minWidth?: number;
 }
 
 export interface DialogProps {
@@ -82,6 +87,7 @@ export interface DialogProps {
     onMinimize?: () => void;
     transparent?: boolean;
     minWidth?: number;
+    children: (props: ConnectedProps) => React.ReactNode;
 }
 
 class Dialog extends React.Component<DialogProps, DialogState> {

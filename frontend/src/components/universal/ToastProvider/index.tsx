@@ -114,17 +114,18 @@ export default class ToastProvider extends React.Component<ToastProviderProps, u
 }
 
 export interface ToastActions {
-    dismissToast: (id?: string) => void;
-    updateToast: (id?: string, options?: any) => void;
-    displayErrorToast: (messageContent: string) => void;
-    displayExceptionToast: (messageContent: string, errorPayload: any) => void;
-    displayMessageToast: (messageContent: string) => void;
-    displayWarningToast: (messageContent: string) => void;
-    displaySuccessToast: (messageContent: string) => void;
-    displayInfoToast: (messageContent: string) => void;
+    dismissToast?: (id?: string) => void;
+    updateToast?: (id?: string, options?: any) => void;
+    displayErrorToast?: (messageContent: string) => void;
+    displayExceptionToast?: (messageContent: string, errorPayload: any) => void;
+    displayMessageToast?: (messageContent: string) => void;
+    displayWarningToast?: (messageContent: string) => void;
+    displaySuccessToast?: (messageContent: string) => void;
+    displayInfoToast?: (messageContent: string) => void;
 }
 
-export function withToasts(Component) {
+export function withToasts<P, S>(Component: React.Component<P & ToastActions, S>): React.Component<P, S> {
+
     return connect(
         (state, ownProps) => {
             return {};
@@ -157,5 +158,6 @@ export function withToasts(Component) {
                 },
             };
         },
-    )(Component);
+    // @ts-ignore
+    )(Component) as unknown as React.Component<P & ToastActions, S>;
 }

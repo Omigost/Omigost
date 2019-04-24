@@ -109,5 +109,6 @@ export default (clientPrototype: OmigostClientInterface): ClientAbstractComponen
         }
     };
 
+    // @ts-ignore
     return withToasts(ClientComponentWrapper);
 };
