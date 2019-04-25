@@ -25,6 +25,7 @@ export interface OmigostClientInterface {
     callEndpoint(endpoint?: string, options?: RequestOptions): Promise<ResponseData>;
     getBudgets(): ResponsePromise;
     getUsers(): ResponsePromise;
+    getUserSpendings(data): ResponsePromise;
     postBudgetIncreaseLimit(formContext: FormComponentContext, data: PostBudgetIncreaseLimitPayload): ResponsePromise;
     createBudget(data: any): ResponsePromise;
     deleteBudget(data: any): ResponsePromise;
@@ -65,6 +66,10 @@ export class OmigostClient implements OmigostClientInterface {
 
     getUsers(): ResponsePromise {
         return this.callEndpoint(null, CLIENT_URLS.getUsers);
+    }
+
+    getUserSpendings(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.getUserSpendings, data });
     }
 
     createUser(data): ResponsePromise {

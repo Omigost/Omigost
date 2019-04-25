@@ -29,12 +29,7 @@ class NotificationsSettingsPanel extends React.Component<any, undefined> {
                                     ]}
                                 </this.props.app.UI.Breadcrumbs>
                                 <div>
-                                    <this.props.app.UI.Form
-                                        submitButton="Save settings"
-                                        onSubmit={(data) => {
-                                            this.props.onGoBack();
-                                        }}
-                                    >
+                                    <this.props.app.UI.Form>
                                         {{
                                             title: "Configure users",
                                             description: "Notifications",

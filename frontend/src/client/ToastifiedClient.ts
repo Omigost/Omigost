@@ -7,6 +7,7 @@ import {
 } from "./OmigostClient";
 
 import { ToastActions } from "../components/universal/ToastProvider";
+import CLIENT_URLS from "./clientUrls";
 
 const idFn = (input: any) => {};
 
@@ -84,6 +85,16 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             idFn,
             (error) => {
                 this.toastActions.displayExceptionToast("Could not get users from server", error);
+            },
+        );
+    }
+
+    getUserSpendings(data): ResponsePromise {
+        return wrapPromise(
+            this.client.getUserSpendings(data),
+            idFn,
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not get user spendings from server", error);
             },
         );
     }

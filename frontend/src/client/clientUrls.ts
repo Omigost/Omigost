@@ -14,6 +14,10 @@ export default {
     getUsers: {
         endpoint: "config/users",
     },
+    getUserSpendings: {
+        endpoint: "aws/spending/account",
+        method: "post",
+    },
     createUser: {
         endpoint: ({data}) => `config/user?name=${data.name}`,
         method: "post",

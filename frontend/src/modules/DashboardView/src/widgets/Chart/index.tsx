@@ -18,14 +18,58 @@ export default (app) => ({
         },
     },
     content: (options) => (
-        <app.UI.Chart
-            graphType={options.graphType}
-            input={"x"}
-            output={["z", "y"]}
+        <app.client.component
+            request={(client) => client.getUserSpendings({
+                userId: "815845460664",
+                "dateInterval": {
+                    "start": "2019-01-01",
+                    "end": "2019-04-29",
+                },
+            })}
         >
-            <app.UI.ChartTypeSwitchPanel />
-            <app.UI.ChartDataOptionsPanel />
-        </app.UI.Chart>
+            {({data, error, loading}, refresh) => {
+                if (loading || !data) return null;
+                return (
+                    <app.UI.DataProvider
+                        data={{
+                            columns: [
+                                {
+                                    name: "Day",
+                                    field: "day",
+                                    type: "date",
+                                    parseFormat: "YYYY-MM-DD",
+                                    cursorFormat: "YYYY-MM-DD",
+                                    axisFormat: "YYYY-MM-DD",
+                                },
+                                {
+                                    name: "Spending",
+                                    field: "spending",
+                                    type: "number",
+                                },
+                            ],
+                            rows: data,
+                        }}
+                    >
+                        <app.UI.DataFilter>
+                            {(updateFilter) => {
+                                return (
+                                    <div>
+                                        <app.UI.Chart
+                                            graphType={options.graphType}
+                                            input={"day"}
+                                            output={["spending"]}
+                                        >
+                                            <app.UI.ChartTypeSwitchPanel />
+                                            <app.UI.ChartDataOptionsPanel />
+                                        </app.UI.Chart>
+                                    </div>
+                                );
+                            }}
+                        </app.UI.DataFilter>
+                    </app.UI.DataProvider>
+                );
+            }}
+        </app.client.component>
     ),
     width: 7,
     height: 9,
