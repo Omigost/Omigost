@@ -5,6 +5,7 @@ import ObjectDefault from "./renderers/ObjectDefault";
 import StringColorPicker from "./renderers/StringColorPicker";
 import StringDefault from "./renderers/StringDefault";
 import StringNotice from "./renderers/StringNotice";
+import StringHourTime from "./renderers/StringHourTime";
 
 import ArrayDefault from "./renderers/ArrayDefault";
 import ArrayTuple from "./renderers/ArrayTuple";
@@ -21,6 +22,7 @@ export const defaultParserConfig: SchemaParserConfig = {
             default: StringDefault,
             notice:  StringNotice,
             colorPicker: StringColorPicker,
+            hourTime: StringHourTime,
         },
         OBJECT: {
             default: ObjectDefault,

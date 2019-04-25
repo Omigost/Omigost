@@ -232,14 +232,14 @@ class MainView extends React.Component<any, MainViewState> {
                                                                                         return (
                                                                                             <this.props.app.UI.Card
                                                                                                 action={
-                                                                                                    <this.props.app.UI.TinyButtons>
-                                                                                                        {(this.state.activeItem === row.name) ? ([]) : ([
+                                                                                                    <this.props.app.UI.TinyButtons
+                                                                                                        items={(this.state.activeItem === row.name) ? ([]) : ([
                                                                                                                 {
                                                                                                                     icon: faCommentAlt.iconName,
                                                                                                                     onClick: () => this.setState({ activeItem: row.name }),
                                                                                                                 },
                                                                                                         ])}
-                                                                                                    </this.props.app.UI.TinyButtons>
+                                                                                                    />
                                                                                                 }
                                                                                                 description={
                                                                                                     <div>

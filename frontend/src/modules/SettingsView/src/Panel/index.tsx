@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 
 import ExtensionsSettingsPanel from "../ExtensionsSettingsPanel";
 import ThemesSettingsPanel from "../ThemesSettingsPanel";
+import NotificationsSettingsPanel from "../NotificationsSettingsPanel";
 
 const PANELS = {
     "Integrations and Extensions": {
@@ -14,6 +15,10 @@ const PANELS = {
     "Themes": {
         route: "themes",
         component: ThemesSettingsPanel,
+    },
+    "Notification settings": {
+        route: "notifications",
+        component: NotificationsSettingsPanel,
     },
 };
 

@@ -134,6 +134,14 @@ export function addItemToLayout(layout: Layout, item: InteractiveGridItem) {
     }
 }
 
+const DEFAULT_GRID_PROPS = {
+    className: "layout",
+    rowHeight: 30,
+    onLayoutChange: () => {},
+    cols: { lg: 12, md :10, sm: 6, xs: 4, xxs: 2 },
+    initialLayout: [],
+};
+
 class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveGridState> {
 
     static defaultProps: InteractiveGridProps = {
@@ -355,6 +363,7 @@ class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveG
                     {({ openDialog, closeDialog }) => {
                         return (
                             <ResponsiveReactGridLayout
+                                {...DEFAULT_GRID_PROPS}
                                 {...this.props}
                                 isDraggable={(this.props.enableActionDrag !== false)}
                                 isResizable={(this.props.enableActionResize !== false)}

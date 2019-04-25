@@ -67,30 +67,32 @@ class MainView extends React.Component<any, any> {
                                                         <this.props.app.client.component mutation>
                                                             {({data, error, loading}, post) => {
                                                                 return (
-                                                                    <this.props.app.UI.Form
-                                                                        submitButton="Remove"
-                                                                        onSubmit={(data) => {
-                                                                            post(client => client.deleteBudget({
-                                                                                name: p,
-                                                                            })).then(() => {
-                                                                                if (this.refresh) this.refresh();
-                                                                                this.forceUpdate();
-                                                                            });
-                                                                        }}
-                                                                    >
-                                                                        {{
-                                                                            title: "A registration form",
-                                                                            description: "The description",
-                                                                            type: "object",
-                                                                            properties: {
-                                                                                "notice": {
-                                                                                    type: "string",
-                                                                                    ui: "notice",
-                                                                                    value: `Remove budget ${p}?`,
+                                                                    <div style={{ minWidth: '30vw' }}>
+                                                                        <this.props.app.UI.Form
+                                                                            submitButton="Remove"
+                                                                            onSubmit={(data) => {
+                                                                                post(client => client.deleteBudget({
+                                                                                    name: p,
+                                                                                })).then(() => {
+                                                                                    if (this.refresh) this.refresh();
+                                                                                    this.forceUpdate();
+                                                                                });
+                                                                            }}
+                                                                        >
+                                                                            {{
+                                                                                title: "A registration form",
+                                                                                description: "The description",
+                                                                                type: "object",
+                                                                                properties: {
+                                                                                    "notice": {
+                                                                                        type: "string",
+                                                                                        ui: "notice",
+                                                                                        value: `Remove budget ${p}?`,
+                                                                                    },
                                                                                 },
-                                                                            },
-                                                                        }}
-                                                                    </this.props.app.UI.Form>
+                                                                            }}
+                                                                        </this.props.app.UI.Form>
+                                                                    </div>
                                                                 );
                                                             }}
                                                         </this.props.app.client.component>
@@ -179,8 +181,8 @@ class MainView extends React.Component<any, any> {
                                             {
                                                 (doExport) => {
                                                     return (
-                                                         <this.props.app.UI.TinyButtons>
-                                                            {
+                                                         <this.props.app.UI.TinyButtons
+                                                            items={
                                                                 [
                                                                     {
                                                                         icon: faPlus.iconName,
@@ -198,7 +200,7 @@ class MainView extends React.Component<any, any> {
                                                                     },
                                                                 ]
                                                             }
-                                                        </this.props.app.UI.TinyButtons>
+                                                        />
                                                     );
                                                 }
                                             }

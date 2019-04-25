@@ -37,4 +37,5 @@ export default class BudgetsViewModule implements OmigostModule {
     getMenuName(): string {
         return "User accounts";
     }
+
 }

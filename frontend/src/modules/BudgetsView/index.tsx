@@ -34,18 +34,4 @@ export default class BudgetsViewModule implements OmigostModule {
         return "Your budgets";
     }
 
-    getSettingsForm() {
-        return {
-            title: "A registration form",
-            description: "The description",
-            type: this.app.UI.FormUtils.NodeType.OBJECT,
-            properties: {
-                "limit": {
-                    type: this.app.UI.FormUtils.NodeType.STRING,
-                    title: "The budget limit",
-                    minLength: 1,
-                },
-            },
-        };
-    }
 }
