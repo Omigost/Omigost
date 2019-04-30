@@ -2,6 +2,7 @@ package com.omigost.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,7 +17,13 @@ public class Account {
     Integer id;
 
     @NotNull
+    String awsId;
+
+    @NotNull
     String name;
+
+    @NotNull
+    boolean scheduledNotification = false;
 
     @ManyToMany
     @JsonIgnore

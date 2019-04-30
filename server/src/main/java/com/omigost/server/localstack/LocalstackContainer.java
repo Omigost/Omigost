@@ -32,7 +32,7 @@ public class LocalstackContainer implements ImageContainer {
         return container.getEndpointConfiguration(LocalStackContainer.Service.API_GATEWAY);
     }
 
-    public AWSCredentialsProvider getCredentailsProvider() {
+    public AWSCredentialsProvider getCredentialsProvider() {
         return container.getDefaultCredentialsProvider();
     }
 }

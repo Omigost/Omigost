@@ -1,6 +1,8 @@
 package com.omigost.server.config;
 
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.budgets.AWSBudgets;
 import com.amazonaws.services.budgets.AWSBudgetsClientBuilder;
 import com.amazonaws.services.costexplorer.AWSCostExplorer;
@@ -20,6 +22,7 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -69,10 +72,15 @@ public class AWSLocalstackConfig {
         }
     }
 
+    @Primary
     @Bean
     AWSCredentialsProvider credentials() {
-        return awsContainer.getCredentailsProvider();
+        return awsContainer.getCredentialsProvider();
     }
+
+    //TODO get iam credentials for root
+    @Bean(name = "iamCredentials")
+    AWSCredentialsProvider iamRootCredentials() {return  awsContainer.getCredentialsProvider();}
 
     @Bean
     public AmazonIdentityManagement amazonIdentityManagement() {

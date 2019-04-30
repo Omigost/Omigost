@@ -71,6 +71,10 @@ public class SlackService implements NotificationService {
         sendAlertToUser(communication.getValue(), new SlackMessage(message, pullCallbackId()));
     }
 
+    public void sendAlertToUser(Communication communication, NotificationMessage message, String callbackId) {
+        sendAlertToUser(communication.getValue(), new SlackMessage(message, callbackId));
+    }
+
     public void sendAlertToUser(String username, String message) {
         sendAlertToUser(username, SlackMessage.builder().mainText(message).build());
     }

@@ -72,7 +72,7 @@ public class NewBudgetRequestBuilder {
     }
 
     private Collection<NotificationWithSubscribers> getNotificationsWithSubscribers() {
-        // Not sure if "withAdress" takes name or arn of the SNS topic
+        // Not sure if "withAdress" takes type or arn of the SNS topic
         List<NotificationWithSubscribers> result = new ArrayList<>();
         Subscriber snsSubscriber = new Subscriber()
                 .withSubscriptionType(SubscriptionType.SNS)
