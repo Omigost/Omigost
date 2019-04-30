@@ -67,7 +67,7 @@ class MainView extends React.Component<any, any> {
                                                         <this.props.app.client.component mutation>
                                                             {({data, error, loading}, post) => {
                                                                 return (
-                                                                    <div style={{ minWidth: '30vw' }}>
+                                                                    <div style={{ minWidth: "30vw" }}>
                                                                         <this.props.app.UI.Form
                                                                             submitButton="Remove"
                                                                             onSubmit={(data) => {

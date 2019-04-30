@@ -29,7 +29,7 @@ export default class StringHourTime extends SimpleNode<string, NodeStringSchema>
             const valueTokens = value.split(";");
             hourValue.hours = parseInt(valueTokens[0]);
             hourValue.minutes = parseInt(valueTokens[1]);
-        } catch(e) {
+        } catch (e) {
             // Do nothing
         }
 

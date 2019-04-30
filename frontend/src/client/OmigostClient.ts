@@ -23,9 +23,9 @@ export interface RequestOptions {
 
 export interface OmigostClientInterface {
     callEndpoint(endpoint?: string, options?: RequestOptions): Promise<ResponseData>;
-    getBudgets(): ResponsePromise;
+    getBudgets(data: any): ResponsePromise;
     getUsers(): ResponsePromise;
-    getUserSpendings(data): ResponsePromise;
+    getUserSpendings(data: any): ResponsePromise;
     postBudgetIncreaseLimit(formContext: FormComponentContext, data: PostBudgetIncreaseLimitPayload): ResponsePromise;
     createBudget(data: any): ResponsePromise;
     deleteBudget(data: any): ResponsePromise;

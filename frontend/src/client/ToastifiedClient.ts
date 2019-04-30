@@ -7,7 +7,6 @@ import {
 } from "./OmigostClient";
 
 import { ToastActions } from "../components/universal/ToastProvider";
-import CLIENT_URLS from "./clientUrls";
 
 const idFn = (input: any) => {};
 
@@ -47,9 +46,9 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
         );
     }
 
-    getBudgets(): ResponsePromise {
+    getBudgets(data): ResponsePromise {
         return wrapPromise(
-            this.client.getBudgets(),
+            this.client.getBudgets(data),
             idFn,
             (error) => {
                 this.toastActions.displayExceptionToast("Could not get budgets from server", error);
