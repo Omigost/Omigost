@@ -2,6 +2,7 @@ package com.omigost.server.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.budgets.AWSBudgets;
 import com.amazonaws.services.budgets.AWSBudgetsClientBuilder;
@@ -51,11 +52,11 @@ public class AWSLocalstackConfig {
     @Autowired
     private LocalstackContainer awsContainer;
     @Autowired
-    private MotoContainer motoIAM;
+    private MotoContainerIAM motoIAM;
     @Autowired
-    private MotoContainer motoOrganizations;
+    private MotoContainerOrganizations motoOrganizations;
     @Autowired
-    private MotoContainer motoEC2;
+    private MotoContainerEC2 motoEC2;
     @Autowired
     private BudgetsContainer budgetsContainer;
 
@@ -83,7 +84,7 @@ public class AWSLocalstackConfig {
 
     @Bean
     AWSCredentialsProvider credentials() {
-        return awsContainer.getCredentailsProvider();
+        return new AWSStaticCredentialsProvider(new BasicAWSCredentials(AWSAccessKey,  AWSSecretkey));
     }
 
     @Bean

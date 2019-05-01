@@ -15,7 +15,7 @@ import java.net.UnknownHostException;
 
 @Slf4j
 @Component
-public abstract class AWSServiceImageContainer extends GenericContainer<BudgetsContainer> implements ImageContainer {
+public abstract class AWSServiceImageContainer implements ImageContainer {
 
     @Value("${aws.region}")
     private String awsRegion;
@@ -27,37 +27,56 @@ public abstract class AWSServiceImageContainer extends GenericContainer<BudgetsC
     private String secretKey;
 
     private boolean wasInitialized = false;
+    private AWSServiceImage image;
 
-    public AWSServiceImageContainer() {
-        super();
-    }
+    public abstract boolean willIUseExternalizedContainer();
 
     public abstract String getServiceStartMessage();
 
     public abstract String getServiceImageName();
 
+    public abstract String getExternalServiceIP();
+
     public abstract int getServicePort();
 
-    @Override
-    protected void configure() {
-        super.configure();
+    public void configure() {
+        if (image != null) {
+            image.configureImage();
+        }
+    }
+
+    public AWSServiceImage getImage() {
+        ensureImageIsCreated();
+        return image;
+    }
+
+    private void ensureImageIsCreated() {
+        if (!willIUseExternalizedContainer()) {
+            image = new AWSServiceImage();
+        }
     }
 
     public AwsClientBuilder.EndpointConfiguration getEndpointConfiguration() {
-        final String address = getContainerIpAddress();
-        String ipAddress = address;
-        try {
-            ipAddress = InetAddress.getByName(address).getHostAddress();
-        } catch (UnknownHostException e) {
-            log.error("Could not determine host for AWS docker service", e);
-        }
-        ipAddress = ipAddress + ".nip.io";
+        String ipAddress;
+        int port;
 
-        return new AwsClientBuilder.EndpointConfiguration(
-                "http://" +
-                        ipAddress +
-                        ":" +
-                        getMappedPort(getServicePort()), awsRegion);
+        if (willIUseExternalizedContainer()) {
+            ipAddress = getExternalServiceIP();
+            port = getServicePort();
+        } else {
+            ensureImageIsCreated();
+            String address = image.getContainerIpAddress();
+            ipAddress = address;
+            try {
+                ipAddress = InetAddress.getByName(address).getHostAddress();
+            } catch (UnknownHostException e) {
+                log.error("Could not determine host for AWS docker service", e);
+            }
+            ipAddress = ipAddress + ".nip.io";
+            port = image.getMappedPort(getServicePort());
+        }
+
+        return new AwsClientBuilder.EndpointConfiguration("http://" + ipAddress + ":" + port, awsRegion);
     }
 
     public AWSCredentialsProvider getDefaultCredentialsProvider() {
@@ -66,13 +85,17 @@ public abstract class AWSServiceImageContainer extends GenericContainer<BudgetsC
 
     public void launch() {
         if (!wasInitialized) {
-            this.setDockerImageName(getServiceImageName());
-            withFileSystemBind("//var/run/docker.sock", "/var/run/docker.sock");
-            waitingFor(Wait.forLogMessage(".*" + getServiceStartMessage() + ".*", 1));
+            if (!willIUseExternalizedContainer()) {
+                ensureImageIsCreated();
+                image.setDockerImageName(getServiceImageName());
+                image.withFileSystemBind("//var/run/docker.sock", "/var/run/docker.sock");
+                image.waitingFor(Wait.forLogMessage(".*" + getServiceStartMessage() + ".*", 1));
+            }
             wasInitialized = true;
         }
-        if (!isRunning()) {
-            start();
+        if (!willIUseExternalizedContainer() && !image.isRunning()) {
+            ensureImageIsCreated();
+            image.start();
         }
     }
 

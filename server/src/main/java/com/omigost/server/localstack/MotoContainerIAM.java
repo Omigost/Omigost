@@ -1,35 +1,31 @@
 package com.omigost.server.localstack;
 
-import com.amazonaws.client.builder.AwsClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 @Component
-public class BudgetsContainer extends AWSServiceImageContainer {
+public class MotoContainerIAM extends MotoContainer {
 
-    @Value("${localstack.localAWSBudgets.image:}")
+    @Value("${localstack.motocker.iam.image:}")
     private String imageName;
 
-    @Value("${localstack.localAWSBudgets.port}")
+    @Value("${localstack.motocker.iam.port}")
     private int imagePort;
 
-    @Value("${localstack.localAWSBudgets.useExternal:false}")
+    @Value("${localstack.motocker.iam.useExternal:false}")
     private boolean useExternal;
 
-    @Value("${localstack.localAWSBudgets.ip:localhost}")
+    @Value("${localstack.motocker.iam.ip:localhost}")
     private String externalIP;
+
+    public MotoContainerIAM() {
+        super();
+        setService(Service.IAM);
+    }
 
     @Override
     public String getServiceImageName() {
         return imageName;
-    }
-
-    @Override
-    public String getServiceStartMessage() {
-        return "Started ServerApplication";
     }
 
     @Override

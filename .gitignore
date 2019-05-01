@@ -3,6 +3,8 @@
 !gradle/wrapper/gradle-wrapper.jar
 frontend/build/
 nohup.out
+deployment/venv/
+deployment/venv/**
 
 ### STS ###
 .apt_generated
