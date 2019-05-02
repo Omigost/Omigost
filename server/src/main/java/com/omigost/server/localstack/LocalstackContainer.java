@@ -11,7 +11,7 @@ import org.testcontainers.containers.localstack.LocalStackContainer;
 @Component
 public class LocalstackContainer implements ImageContainer {
 
-    LocalStackContainer container;
+    private LocalStackContainer container = null;
 
     @Autowired
     private AWSCredentials creds;
@@ -29,6 +29,9 @@ public class LocalstackContainer implements ImageContainer {
     private int externalNothingPort;
 
     private void ensureContainerIsPresent() {
+        if (container != null) {
+            return;
+        }
         container = new LocalStackContainer()
             .withServices(
                     LocalStackContainer.Service.SNS,
@@ -37,7 +40,7 @@ public class LocalstackContainer implements ImageContainer {
     }
 
     public void launch() {
-        if (!useExternal && !container.isRunning()) {
+        if (!useExternal && (container == null || !container.isRunning())) {
             ensureContainerIsPresent();
             container.start();
         }

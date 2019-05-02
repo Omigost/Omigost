@@ -42,6 +42,8 @@ public class AWSLocalstackConfig {
     @Autowired
     private com.omigost.server.config.AWSCredentials creds;
 
+    private boolean wasInitialized = false;
+
     private static PostgresContainer postgresContainer;
     @Autowired
     private LocalstackContainer awsContainer;
@@ -54,7 +56,12 @@ public class AWSLocalstackConfig {
     @Autowired
     private BudgetsContainer budgetsContainer;
 
-    private void ensureLocalstackIsRunning() {
+    private synchronized void ensureLocalstackIsRunning() {
+        if (wasInitialized) {
+            return;
+        }
+
+        wasInitialized = true;
         List<ImageContainer> c = new ArrayList<ImageContainer>() {{
             add(budgetsContainer);
             add(motoEC2);
@@ -73,6 +80,7 @@ public class AWSLocalstackConfig {
             ).get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("Could not setup all containers", e);
+            System.exit(-1);
         }
     }
 

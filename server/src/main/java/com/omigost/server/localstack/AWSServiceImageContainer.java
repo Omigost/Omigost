@@ -42,14 +42,7 @@ public abstract class AWSServiceImageContainer implements ImageContainer {
     }
 
     public AWSServiceImage getImage() {
-        ensureImageIsCreated();
         return image;
-    }
-
-    private void ensureImageIsCreated() {
-        if (!willIUseExternalizedContainer()) {
-            image = new AWSServiceImage();
-        }
     }
 
     public AwsClientBuilder.EndpointConfiguration getEndpointConfiguration() {
@@ -60,7 +53,6 @@ public abstract class AWSServiceImageContainer implements ImageContainer {
             ipAddress = getExternalServiceIP();
             port = getServicePort();
         } else {
-            ensureImageIsCreated();
             String address = image.getContainerIpAddress();
             ipAddress = address;
             try {
@@ -78,16 +70,15 @@ public abstract class AWSServiceImageContainer implements ImageContainer {
     public void launch() {
         if (!wasInitialized) {
             if (!willIUseExternalizedContainer()) {
-                ensureImageIsCreated();
-                image.setDockerImageName(getServiceImageName());
+                image = new AWSServiceImage(getServiceImageName());
+                configure();
                 image.withFileSystemBind("//var/run/docker.sock", "/var/run/docker.sock");
                 image.waitingFor(Wait.forLogMessage(".*" + getServiceStartMessage() + ".*", 1));
+                if (!image.isRunning()) {
+                    image.start();
+                }
             }
             wasInitialized = true;
-        }
-        if (!willIUseExternalizedContainer() && !image.isRunning()) {
-            ensureImageIsCreated();
-            image.start();
         }
     }
 
