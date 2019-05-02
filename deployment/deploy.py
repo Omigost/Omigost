@@ -34,8 +34,8 @@ def runCli(
 
         hasEBDirectory = os.path.exists('{}/.elasticbeanstalk'.format(path))
         if not hasEBDirectory:
-            logger.log('EB configuration was not detected. EB will be initialized.')
-            runEBCli(['init', 'Omigost', '-p', '"Multi-container Docker"'], path=path, logger=logger)
+            logger.info('EB configuration was not detected. EB will be initialized.')
+            runEBCli(['init', 'Omigost', '-p', 'Multi-container Docker'], path=path, logger=logger)
 
         createEnvCommand = ['create', newenvname]
         if newenvinstance:

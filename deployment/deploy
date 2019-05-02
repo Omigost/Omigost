@@ -29,10 +29,12 @@ VIRTUALENV_EXECUTABLE=virtualenv
 
 DEPLOY_SCRIPT=./deploy.py
 VENV_PATH=.
+VENV_PATH_BACK=.
 VENV_NAME=venv
 
 if [ -d "./deployment" ]; then
     VENV_PATH=./deployment
+    VENV_PATH_BACK=..
     DEPLOY_SCRIPT=./deployment/deploy.py
 fi
 
@@ -69,13 +71,13 @@ if [ ! -d "${VENV_PATH}/${VENV_NAME}" ]; then
     ${PIP_EXECUTABLE} install virtualenv
 
     echo "[i] Create virtual environment..."
-    ${VIRTUALENV_EXECUTABLE} ${VENV_NAME}
+    cd ${VENV_PATH} && ${VIRTUALENV_EXECUTABLE} ${VENV_NAME} && cd ${VENV_PATH_BACK}
 
     echo "[i] Activate environment..."
     source ${VENV_PATH}/${VENV_NAME}/Scripts/activate || source ${VENV_PATH}/${VENV_NAME}/bin/activate
 
     echo "[i] Install requirements..."
-    ${PIP_EXECUTABLE} install -r requirements.txt
+    ${PIP_EXECUTABLE} install -r ${VENV_PATH}/requirements.txt
 
     echo "[i] Deactivate environment..."
     deactivate
