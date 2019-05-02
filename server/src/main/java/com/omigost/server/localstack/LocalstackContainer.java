@@ -2,6 +2,8 @@ package com.omigost.server.localstack;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.omigost.server.config.AWSCredentials;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.testcontainers.containers.localstack.LocalStackContainer;
@@ -11,8 +13,8 @@ public class LocalstackContainer implements ImageContainer {
 
     LocalStackContainer container;
 
-    @Value("${aws.region}")
-    private String awsRegion;
+    @Autowired
+    private AWSCredentials creds;
 
     @Value("${localstack.services.useExternal:false}")
     private boolean useExternal;
@@ -43,27 +45,23 @@ public class LocalstackContainer implements ImageContainer {
 
     public AwsClientBuilder.EndpointConfiguration getEndpointSNS() {
         if (useExternal) {
-            return new AwsClientBuilder.EndpointConfiguration("http://" + externalIP + ":" + externalSNSPort, awsRegion);
+            return new AwsClientBuilder.EndpointConfiguration("http://" + externalIP + ":" + externalSNSPort, creds.getAwsRegion());
         }
         ensureContainerIsPresent();
         return new AwsClientBuilder.EndpointConfiguration(
                 container.getEndpointConfiguration(LocalStackContainer.Service.SNS).getServiceEndpoint(),
-                awsRegion
+                creds.getAwsRegion()
         );
     }
 
     public AwsClientBuilder.EndpointConfiguration getEndpointNothing() {
         if (useExternal) {
-            return new AwsClientBuilder.EndpointConfiguration("http://" + externalIP + ":" + externalNothingPort, awsRegion);
+            return new AwsClientBuilder.EndpointConfiguration("http://" + externalIP + ":" + externalNothingPort, creds.getAwsRegion());
         }
         ensureContainerIsPresent();
         return new AwsClientBuilder.EndpointConfiguration(
                 container.getEndpointConfiguration(LocalStackContainer.Service.API_GATEWAY).getServiceEndpoint(),
-                awsRegion
+                creds.getAwsRegion()
         );
-    }
-
-    public AWSCredentialsProvider getCredentailsProvider() {
-        return container.getDefaultCredentialsProvider();
     }
 }

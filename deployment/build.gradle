@@ -1,0 +1,5 @@
+task buildDockerImages {}
+task pushDockerImages {}
+
+buildDockerImages.dependsOn("dev:docker")
+pushDockerImages.dependsOn("dev:dockerPush")

@@ -1,6 +1,6 @@
 version: "3"
 services:
-  postgresql:
+  postgres:
     image: postgres:11-alpine
     container_name: "postgres"
     restart: always
@@ -37,10 +37,15 @@ services:
       - MOTO_SERVICE=ec2
     restart: "on-failure"
   omigost:
+    image: "omigost/omigost-localstack"
     container_name: "omigost"
+    links:
+      - postgres
+      - budgets
+      - localstack
+      - iam
+      - organizations
+      - ec2
     ports:
       - "80:8080"
-    build:
-      context: "../.."
-      dockerfile: ./deployment/dev/Dockerfile
     restart: "on-failure"

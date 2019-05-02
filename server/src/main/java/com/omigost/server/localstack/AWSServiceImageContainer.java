@@ -4,7 +4,9 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.omigost.server.config.AWSCredentials;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.testcontainers.containers.GenericContainer;
@@ -17,14 +19,8 @@ import java.net.UnknownHostException;
 @Component
 public abstract class AWSServiceImageContainer implements ImageContainer {
 
-    @Value("${aws.region}")
-    private String awsRegion;
-
-    @Value("${aws.accessKey}")
-    private String accessKey;
-
-    @Value("${aws.secretKey}")
-    private String secretKey;
+    @Autowired
+    private AWSCredentials creds;
 
     private boolean wasInitialized = false;
     private AWSServiceImage image;
@@ -76,11 +72,7 @@ public abstract class AWSServiceImageContainer implements ImageContainer {
             port = image.getMappedPort(getServicePort());
         }
 
-        return new AwsClientBuilder.EndpointConfiguration("http://" + ipAddress + ":" + port, awsRegion);
-    }
-
-    public AWSCredentialsProvider getDefaultCredentialsProvider() {
-        return new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey));
+        return new AwsClientBuilder.EndpointConfiguration("http://" + ipAddress + ":" + port, creds.getAwsRegion());
     }
 
     public void launch() {

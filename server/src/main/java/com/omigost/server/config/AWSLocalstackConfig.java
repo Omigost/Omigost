@@ -39,14 +39,8 @@ import java.util.stream.Collectors;
 @Profile("dev")
 public class AWSLocalstackConfig {
 
-    @Value("${aws.region}")
-    private String region;
-
-    @Value("${aws.accessKey}")
-    private String AWSAccessKey;
-
-    @Value("${aws.secretKey}")
-    private String AWSSecretkey;
+    @Autowired
+    private com.omigost.server.config.AWSCredentials creds;
 
     private static PostgresContainer postgresContainer;
     @Autowired
@@ -84,7 +78,7 @@ public class AWSLocalstackConfig {
 
     @Bean
     AWSCredentialsProvider credentials() {
-        return new AWSStaticCredentialsProvider(new BasicAWSCredentials(AWSAccessKey,  AWSSecretkey));
+        return creds.getProvider();
     }
 
     @Bean
@@ -111,17 +105,8 @@ public class AWSLocalstackConfig {
     public AWSCostExplorer awsCostExplorer() {
         return AWSCostExplorerClientBuilder
                 .standard()
-                .withCredentials(new AWSCredentialsProvider() {
-                    @Override
-                    public AWSCredentials getCredentials() {
-                        return new BasicAWSCredentials(AWSAccessKey, AWSSecretkey);
-                    }
-
-                    @Override
-                    public void refresh() {
-                    }
-                })
-                .withRegion(region)
+                .withCredentials(creds.getProvider())
+                .withRegion(creds.getAwsRegion())
                 .build();
     }
 
