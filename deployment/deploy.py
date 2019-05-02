@@ -1,5 +1,6 @@
 import click
 import json
+import webbrowser
 import os.path
 from scripts.logger import createLogger, setLoggerLevel
 from scripts.generate_config import generateConfig
@@ -24,46 +25,63 @@ def runCli(
     ):
     logger = createLogger('deploy.py')
     logger = setLoggerLevel(logger, logginglevel)
-    with open('{}/{}'.format(path, outputjson), 'w') as the_file:
-        the_file.write(generateConfig(profile, path=path, logger=logger, secretEnv=secretenv, keyEnv=keyenv))
-    if dry:
-        logger.info('Dry mode is active. Nothing to do.')
-        return
 
-    if createnewenv:
+    if False:
+        with open('{}/{}'.format(path, outputjson), 'w') as the_file:
+            the_file.write(generateConfig(profile, path=path, logger=logger, secretEnv=secretenv, keyEnv=keyenv))
+        if dry:
+            logger.info('Dry mode is active. Nothing to do.')
+            return
 
-        hasEBDirectory = os.path.exists('{}/.elasticbeanstalk'.format(path))
-        if not hasEBDirectory:
-            logger.info('EB configuration was not detected. EB will be initialized.')
-            runEBCli(['init', 'Omigost', '-p', 'Multi-container Docker'], path=path, logger=logger)
+        if createnewenv:
 
-        createEnvCommand = ['create', newenvname]
-        if newenvinstance:
-            createEnvCommand = createEnvCommand + ['-i', newenvinstance]
-        if newenvoptions:
+            hasEBDirectory = os.path.exists('{}/.elasticbeanstalk'.format(path))
+            if not hasEBDirectory:
+                logger.info('EB configuration was not detected. EB will be initialized.')
+                runEBCli(['init', 'Omigost', '-p', 'Multi-container Docker'], path=path, logger=logger)
+
+            createEnvCommand = ['create', newenvname]
+            if newenvinstance:
+                createEnvCommand = createEnvCommand + ['-i', newenvinstance]
+            if newenvoptions:
+                try:
+                    opts = json.loads(newenvoptions)
+                    createEnvCommand = createEnvCommand + opts
+                except:
+                    raise Exception('Invalid --newEnvOptions parameter. It should be JSON array containing Cli options')
+
+            listOutput = runEBCli(['list'], path=path, logger=logger, collectOutput=True)
+            envAlreadyExists = False
+            ebEnvs = listOutput.splitlines()
+            for env in ebEnvs:
+                normalizedName = env.replace('* ', '').replace(' ', '')
+                if normalizedName == newenvname:
+                    envAlreadyExists = True
+
+            if envAlreadyExists:
+                logger.info('Environment {} already exists so --createNewEnv flags has no effect.'.format(newenvname))
+                runEBCli(['use', newenvname], path=path, logger=logger)
+            else:
+                runEBCli(createEnvCommand, path=path, logger=logger)
+
+        runEBCli(['deploy'], path=path, logger=logger)
+
+    statusOutput = runEBCli(['status'], path=path, logger=logger, collectOutput=True).splitlines()
+    cnameUrl = None
+    for line in statusOutput:
+        lineTokens = line.split(':')
+        if len(lineTokens) == 2:
+            varName = lineTokens[0].replace(' ', '')
+            varValue = lineTokens[1].replace(' ', '')
+            if varName == 'CNAME':
+                cnameUrl = varValue
+
+    if not (cnameUrl is None):
+        logger.info('\n   ---> Deployed application to http://{}/\n'.format(cnameUrl))
+        if not cli:
             try:
-                opts = json.loads(newenvoptions)
-                createEnvCommand = createEnvCommand + opts
+                webbrowser.open_new_tab('http://{}/'.format(cnameUrl))
             except:
-                raise Exception('Invalid --newEnvOptions parameter. It should be JSON array containing Cli options')
+                doNothing = True
 
-        listOutput = runEBCli(['list'], path=path, logger=logger, collectOutput=True)
-        envAlreadyExists = False
-        ebEnvs = listOutput.splitlines()
-        for env in ebEnvs:
-            normalizedName = env.replace('* ', '').replace(' ', '')
-            if normalizedName == newenvname:
-                envAlreadyExists = True
-
-        if envAlreadyExists:
-            logger.info('Environment {} already exists so --createNewEnv flags has no effect.'.format(newenvname))
-            runEBCli(['use', newenvname], path=path, logger=logger)
-        else:
-            runEBCli(createEnvCommand, path=path, logger=logger)
-
-    runEBCli(['deploy'], path=path, logger=logger)
-
-    # eb open fails :(
-    #if not cli:
-    #    runEBCli(['open'], path=path, logger=logger)
 runCli()
