@@ -85,6 +85,6 @@ fi
 
 source .${VENV_PATH}/${VENV_NAME}/Scripts/activate 2> /dev/null || source ${VENV_PATH}/${VENV_NAME}/bin/activate
 
-${PYTHON_EXECUTABLE} ${DEPLOY_SCRIPT} "$@"
+${PYTHON_EXECUTABLE} ${DEPLOY_SCRIPT} --path "${VENV_PATH}" "$@"
 
 deactivate

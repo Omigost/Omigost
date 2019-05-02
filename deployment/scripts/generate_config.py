@@ -3,8 +3,8 @@ import os
 from container_transform.compose import ComposeTransformer
 from container_transform.ecs import ECSTransformer
 
-def generateConfig(envName='dev', logger=None, secretEnv=None, keyEnv=None):
-    configInputPath = './{}/docker-compose.yml'.format(envName)
+def generateConfig(envName='dev', path='.', logger=None, secretEnv=None, keyEnv=None):
+    configInputPath = '{}/{}/docker-compose.yml'.format(path, envName)
     if logger:
         logger.info('Reading configuration from {} file'.format(configInputPath))
 
@@ -16,12 +16,12 @@ def generateConfig(envName='dev', logger=None, secretEnv=None, keyEnv=None):
 
     if keyEnv in os.environ:
         awsKey = os.environ[keyEnv]
-    else:
+    elif keyEnv != 'AWS_KEY':
         awsKey = keyEnv
 
     if secretEnv in os.environ:
         awsSecret = os.environ[secretEnv]
-    else:
+    elif secretEnv != "AWS_SECRET":
         awsSecret = secretEnv
 
     if (awsKey is None) or (awsSecret is None):
