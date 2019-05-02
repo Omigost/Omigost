@@ -31,7 +31,7 @@ public class PostgresContainer implements ImageContainer {
     }
 
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-        if (!configurableApplicationContext.getEnvironment().getProperty("localstack.postgres.useExternal", "false").equals("false")) {
+        if (configurableApplicationContext.getEnvironment().getProperty("localstack.postgres.useExternal", "false").equals("false")) {
             launch();
             ConfigurableEnvironment environment = new StandardEnvironment();
             Map<String, Object> overrideConfig = new HashMap<String, Object>() {{
