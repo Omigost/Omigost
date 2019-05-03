@@ -9,7 +9,7 @@ import { withRouter } from "react-router-dom";
 import {
     faCommentAlt, faCommentDots, faCommentSlash,
     faDownload, faEnvelope,
-    faPlus, faTimes, faTools,
+    faPlus, faTimes, faTools, faUser, faUserSlash,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -49,6 +49,10 @@ const UserIconsContainer = styled.div`
 
 const CommunicationDescriptionName = styled.span`
   margin-left: 0.3vw;
+`;
+
+const UserDetailsActionsWrapper = styled.div`
+  margin-top: 1vw;
 `;
 
 const CommunicationCardExpandedListWrapper = styled.div`
@@ -223,6 +227,9 @@ class TabUsers extends React.Component<any, TabUsersState> {
                                                                                 <this.props.app.UI.SearchableList
                                                                                     renderItem={(row) => {
                                                                                         const name = row.name;
+                                                                                        const accounts = row.accounts || [];
+                                                                                        const userID = row.id;
+                                                                                        
                                                                                         let communications = row.communications || [];
 
                                                                                         if (communications.length === 0) {
@@ -247,6 +254,51 @@ class TabUsers extends React.Component<any, TabUsersState> {
                                                                                                             {name}
                                                                                                         </UserNameWrapper>
                                                                                                         <UserIconsContainer>
+                                                                                                        {
+                                                                                                            (accounts.length === 0) ? (
+                                                                                                                <UserItemIconWrapper>
+                                                                                                                    <this.props.app.UI.Tooltip
+                                                                                                                        content={
+                                                                                                                            <div>
+                                                                                                                                <div>
+                                                                                                                                    <FontAwesomeIcon icon={faUserSlash.iconName} />
+                                                                                                                                    <CommunicationDescriptionName>
+                                                                                                                                        No accounts
+                                                                                                                                    </CommunicationDescriptionName>
+                                                                                                                                </div>
+                                                                                                                                <UserItemIconDescription>
+                                                                                                                                    This user is not connected to any account.
+                                                                                                                                    No notifications will be sent until you connect it
+                                                                                                                                    to any AWS account.
+                                                                                                                                </UserItemIconDescription>
+                                                                                                                            </div>
+                                                                                                                        }
+                                                                                                                    >
+                                                                                                                        <FontAwesomeIcon icon={faUserSlash.iconName} />
+                                                                                                                    </this.props.app.UI.Tooltip>
+                                                                                                                </UserItemIconWrapper>
+                                                                                                            ) : (
+                                                                                                                <UserItemIconWrapper>
+                                                                                                                    <this.props.app.UI.Tooltip
+                                                                                                                        content={
+                                                                                                                            <div>
+                                                                                                                                <div>
+                                                                                                                                    <FontAwesomeIcon icon={faUser.iconName} />
+                                                                                                                                    <CommunicationDescriptionName>
+                                                                                                                                        Connected accounts
+                                                                                                                                    </CommunicationDescriptionName>
+                                                                                                                                </div>
+                                                                                                                                <UserItemIconDescription>
+                                                                                                                                    This user is connected to {accounts.length} account/-s
+                                                                                                                                </UserItemIconDescription>
+                                                                                                                            </div>
+                                                                                                                        }
+                                                                                                                    >
+                                                                                                                        <FontAwesomeIcon icon={faUser.iconName} />
+                                                                                                                    </this.props.app.UI.Tooltip>
+                                                                                                                </UserItemIconWrapper>
+                                                                                                            )
+                                                                                                        }
                                                                                                         {
                                                                                                             communications.map(com => {
                                                                                                                 const { description, icon, title } = getSpecsForCommunication(com);
@@ -277,6 +329,38 @@ class TabUsers extends React.Component<any, TabUsersState> {
                                                                                                         <this.props.app.UI.Collapse
                                                                                                             collapsed={this.state.activeItem !== row.name}
                                                                                                         >
+                                                                                                            <UserDetailsActionsWrapper>
+                                                                                                                <this.props.app.UI.TinyButtons
+                                                                                                                    items={
+                                                                                                                        [
+                                                                                                                            {
+                                                                                                                                icon: faTimes.iconName,
+                                                                                                                                text: "Remove user",
+                                                                                                                                onClick: () => {
+                                                                                                                                    post(client => client.deleteUser({
+                                                                                                                                        name,
+                                                                                                                                    })).then(() => {
+                                                                                                                                        refresh();
+                                                                                                                                    });
+                                                                                                                                },
+                                                                                                                            },
+                                                                                                                            {
+                                                                                                                                icon: faTools.iconName,
+                                                                                                                                text: "Edit user",
+                                                                                                                                onClick: () => this.props.history.push(`${this.props.match.url}/users/edit/${userID}`),
+                                                                                                                            },
+                                                                                                                            {
+                                                                                                                                icon: faPlus.iconName,
+                                                                                                                                text: "Add new communication",
+                                                                                                                                onClick: () => openDialog("test-dialog", {
+                                                                                                                                    userName: row.name,
+                                                                                                                                    availableCommunications: AVAILABLE_COMMUNICATION_METHODS,
+                                                                                                                                }),
+                                                                                                                            },
+                                                                                                                        ]
+                                                                                                                    }
+                                                                                                                />
+                                                                                                            </UserDetailsActionsWrapper>
                                                                                                             <CommunicationCardExpandedListWrapper>
                                                                                                                 <this.props.app.UI.PlainList
                                                                                                                     items={
@@ -316,14 +400,6 @@ class TabUsers extends React.Component<any, TabUsersState> {
                                                                                                                     }
                                                                                                                 />
                                                                                                             </CommunicationCardExpandedListWrapper>
-                                                                                                            <this.props.app.UI.Button
-                                                                                                                onClick={() => openDialog("test-dialog", {
-                                                                                                                    userName: row.name,
-                                                                                                                    availableCommunications: AVAILABLE_COMMUNICATION_METHODS,
-                                                                                                                })}
-                                                                                                            >
-                                                                                                                Add new communication!
-                                                                                                            </this.props.app.UI.Button>
                                                                                                         </this.props.app.UI.Collapse>
                                                                                                     </div>
                                                                                                 }

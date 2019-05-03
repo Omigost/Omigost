@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as moment from "moment";
 
 import ClientComponentFactory, { ClientAbstractComponent } from "./ClientComponentFactory";
 import CLIENT_URLS from "./clientUrls";
@@ -31,8 +32,12 @@ export interface OmigostClientInterface {
     createBudget(data: any): ResponsePromise;
     deleteBudget(data: any): ResponsePromise;
     createUser(data: any): ResponsePromise;
+    deleteUser(data: any): ResponsePromise;
     addCommunicationToUser(data: any): ResponsePromise;
+    addAccountToUser(data: any): ResponsePromise;
     deleteUserCommunication(data: any): ResponsePromise;
+    deleteAccountFromUser(data: any): ResponsePromise;
+    getRecentEC2CostAllocationTags(): ResponsePromise;
 }
 
 export class OmigostClient implements OmigostClientInterface {
@@ -80,15 +85,61 @@ export class OmigostClient implements OmigostClientInterface {
     createUser(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.createUser, data });
     }
+    
+    deleteUser(data) : ResponsePromise {
+        return new Promise<ResponseData>((resolve, reject) => {
+            this.getUsers().then(users => {
+                const userToDelete = users.find(user => user.name === data.name);
+                Promise.all(
+                    userToDelete.communications.map(com => this.deleteUserCommunication({
+                        userName: userToDelete.name,
+                        communicationName: com.name,
+                        communicationValue: com.value,
+                    }))
+                ).then(() => {
+                    Promise.all(
+                        userToDelete.accounts.map(acc => this.deleteAccountFromUser({
+                            userName: userToDelete.name,
+                            accountName: acc.name,
+                        }))
+                    ).then(() => {
+                        this.callEndpoint(null, { ...CLIENT_URLS.deleteUser, data }).then((outputData) => {
+                            resolve(outputData);
+                        });
+                    });
+                });
+            });
+        });
+    }
 
     addCommunicationToUser(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.addCommunicationToUser, data });
+    }
+    
+    addAccountToUser(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.addAccountToUser, data });
     }
 
     deleteUserCommunication(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.deleteUserCommunication, data });
     }
 
+    deleteAccountFromUser(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.deleteAccountFromUser, data });
+    }
+    
+    getRecentEC2CostAllocationTags(): ResponsePromise {
+        const endDate = moment().format("YYYY-MM-DD");
+        const startDate = moment().subtract(90, "days").format("YYYY-MM-DD");
+        return this.callEndpoint(null, {
+            ...CLIENT_URLS.getRecentEC2CostAllocationTags,
+            data: {
+                startDate,
+                endDate,
+            },
+        });
+    }
+    
     callEndpoint(endpoint, options): ResponsePromise {
         return new Promise<ResponseData>((resolve, reject) => {
             let method = "get";

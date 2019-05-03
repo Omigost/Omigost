@@ -41,6 +41,7 @@ import Toggle from "./Toggle";
 import Tooltip from "./Tooltip";
 import Tabs from "./Tabs";
 import ClipboardCopy from "./ClipboardCopy";
+import Select from "./Select";
 
 export default {
     Button,
@@ -90,4 +91,5 @@ export default {
     BarLine,
     Tabs,
     ClipboardCopy,
+    Select,
 };

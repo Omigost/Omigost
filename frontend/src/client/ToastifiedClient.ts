@@ -119,6 +119,16 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
         );
     }
+    
+    deleteUser(data): ResponsePromise {
+        return wrapPromise(
+            this.client.deleteUser(data),
+            (data) => {},
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not delete existing user", error);
+            },
+        );
+    }
 
     addCommunicationToUser(data): ResponsePromise {
         return wrapPromise(
@@ -131,6 +141,16 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
         );
     }
+    
+    addAccountToUser(data): ResponsePromise {
+        return wrapPromise(
+            this.client.addAccountToUser(data),
+            (data) => {},
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not add account to the user", error);
+            },
+        );
+    }
 
     deleteUserCommunication(data): ResponsePromise {
         return wrapPromise(
@@ -140,6 +160,26 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
             (error) => {
                 this.toastActions.displayExceptionToast("Could not remove the communication method for user", error);
+            },
+        );
+    }
+    
+    deleteAccountFromUser(data): ResponsePromise {
+        return wrapPromise(
+            this.client.deleteAccountFromUser(data),
+            (data) => {},
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not remove the account for user", error);
+            },
+        );
+    }
+    
+    getRecentEC2CostAllocationTags(): ResponsePromise {
+        return wrapPromise(
+            this.client.getRecentEC2CostAllocationTags(),
+            idFn,
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not get EC2 allocation tags", error);
             },
         );
     }
