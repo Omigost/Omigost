@@ -1,7 +1,7 @@
 package com.omigost.server.scheduledTermination;
 
 import com.omigost.server.DevConfigTestTemplate;
-import com.omigost.server.aws.termination.ScheduledNotificationService;
+import com.omigost.server.aws.termination.ScheduledTerminationService;
 import com.omigost.server.aws.termination.SlackCommunicationService;
 import com.omigost.server.aws.termination.TokenEncryptingService;
 import com.omigost.server.model.Account;
@@ -33,7 +33,7 @@ public class ScheduledNotificationTest extends DevConfigTestTemplate {
     @Autowired
     SlackCommunicationService slackCommunicationService;
     @Autowired
-    ScheduledNotificationService scheduledNotificationService;
+    ScheduledTerminationService scheduledNotificationService;
     @Autowired
     TokenEncryptingService tokenEncryptingService;
 

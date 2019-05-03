@@ -4,17 +4,21 @@ import com.omigost.server.aws.MachineListingService;
 import com.omigost.server.model.Account;
 import com.omigost.server.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
+import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * Terminates machines when running out of business hours
  */
 @Service
-public class ScheduledNotificationService {
+public class ScheduledTerminationService {
     @Autowired
     MachineListingService machineListingService;
 
@@ -24,11 +28,13 @@ public class ScheduledNotificationService {
     @Autowired
     SlackCommunicationService slackCommunicationService;
 
-    //TODO time by time update list of new organization members
-    //TODO programmable scheduler
-    //@Scheduled(cron = "30 18-23/1,0-8/1 * * *")
-    @Scheduled(cron = "0 0/1 * * * ?")
-    public void notifyOutOfBusinessHours() {
+    private final String initialCron = "0 0/30 18-23,0-8 * * *";
+
+    private ScheduledFuture<?> runningFuture = null;
+    private TaskScheduler taskScheduler = new ConcurrentTaskScheduler();
+
+
+    private void notifyOutOfBusinessHours() {
         Collection<Account> accounts = accountRepository.getAllByScheduledNotification(true);
         for (Account account : accounts) {
             List<String> runningEC2Instances = machineListingService.getRunningEC2Instances(account.getAwsId());
@@ -36,6 +42,20 @@ public class ScheduledNotificationService {
                 slackCommunicationService.sendSlackReminder(account.getAwsId(), runningEC2Instances.size());
             }
         }
+    }
+
+    @PostConstruct
+    private void startInitialCronJob() {
+        scheduleNotificationService(initialCron);
+    }
+
+    public void scheduleNotificationService(String cron) {
+        if (runningFuture != null) {
+            runningFuture.cancel(false);
+        }
+
+        CronTrigger trigger = new CronTrigger(cron);
+        runningFuture = taskScheduler.schedule(this::notifyOutOfBusinessHours, trigger);
     }
 
 }
