@@ -60,6 +60,16 @@ class AddUserView extends React.Component<any, undefined> {
                                                         title: "The user name",
                                                         minLength: 1,
                                                     },
+                                                    "accounts": {
+                                                        type: "array",
+                                                        title: "Attached accounts",
+                                                        items: {
+                                                            type: "string",
+                                                            description: "Account",
+                                                            minLength: 0,
+                                                            layout: "inlineLabel",
+                                                        },
+                                                    },
                                                 },
                                             }}
                                         </this.props.app.UI.Form>

@@ -88,6 +88,16 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
         );
     }
 
+    getAccounts(): ResponsePromise {
+        return wrapPromise(
+            this.client.getAccounts(),
+            idFn,
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not get accounts from server", error);
+            },
+        );
+    }
+    
     getUserSpendings(data): ResponsePromise {
         return wrapPromise(
             this.client.getUserSpendings(data),

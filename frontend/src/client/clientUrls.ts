@@ -1,5 +1,5 @@
 export default {
-    apiBase: "/",
+    apiBase: "http://1be146f4.ngrok.io/",
     getBudgets: {
         endpoint: "budgets",
     },
@@ -13,6 +13,9 @@ export default {
     },
     getUsers: {
         endpoint: "config/users",
+    },
+    getAccounts: {
+        endpoint: "aws/organizations",  
     },
     getUserSpendings: {
         endpoint: "aws/spending/account",

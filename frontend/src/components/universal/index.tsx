@@ -39,6 +39,8 @@ import { ThemeSetter } from "./ThemeProvider";
 import TinyButtons from "./TinyButtons";
 import Toggle from "./Toggle";
 import Tooltip from "./Tooltip";
+import Tabs from "./Tabs";
+import ClipboardCopy from "./ClipboardCopy";
 
 export default {
     Button,
@@ -86,4 +88,6 @@ export default {
     ThemeSetter,
     FloatingActionConsumer,
     BarLine,
+    Tabs,
+    ClipboardCopy,
 };
