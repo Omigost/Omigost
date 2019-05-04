@@ -120,6 +120,7 @@
     "moment": "^2.23.0",
     "node-polyglot": "^2.3.0",
     "node-sass-utils": "^1.1.2",
+    "rc-checkbox": "^2.1.6",
     "rc-slider": "^8.6.9",
     "rc-tooltip": "^3.7.3",
     "react": "^16.8.6",

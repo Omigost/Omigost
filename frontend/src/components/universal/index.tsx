@@ -42,6 +42,7 @@ import Tooltip from "./Tooltip";
 import Tabs from "./Tabs";
 import ClipboardCopy from "./ClipboardCopy";
 import Select from "./Select";
+import Checkbox from "./Checkbox";
 
 export default {
     Button,
@@ -92,4 +93,5 @@ export default {
     Tabs,
     ClipboardCopy,
     Select,
+    Checkbox,
 };
