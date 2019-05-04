@@ -5,11 +5,6 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.budgets.AWSBudgets;
 import com.amazonaws.services.budgets.AWSBudgetsClientBuilder;
-import com.amazonaws.services.sns.AmazonSNS;
-import com.amazonaws.services.sns.AmazonSNSClientBuilder;
-import lombok.Getter;
-import com.amazonaws.services.budgets.AWSBudgets;
-import com.amazonaws.services.budgets.AWSBudgetsClientBuilder;
 import com.amazonaws.services.costexplorer.AWSCostExplorer;
 import com.amazonaws.services.costexplorer.AWSCostExplorerClientBuilder;
 import com.amazonaws.services.ec2.AmazonEC2;
@@ -25,10 +20,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
 @Configuration
 @Service
@@ -56,11 +49,13 @@ public class AWSConfig {
             public AWSCredentials getCredentials() {
                 return new BasicAWSCredentials(nonRootAccessKey, nonRootSecretKey);
             }
+
             @Override
             public void refresh() {
             }
         };
     }
+
     @Bean
     public AmazonIdentityManagement amazonIdentityManagement() {
         return AmazonIdentityManagementClientBuilder
