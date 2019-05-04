@@ -26,12 +26,16 @@ public class AWSController {
     public void rescheduleTerminate(@RequestBody TerminationCronDTO cronDTO) {
         StringBuilder stringBuilder = new StringBuilder();
         for (TerminationCronDTO.TimeInterval timeInterval : cronDTO.getDayIntervals()) {
-            stringBuilder.append(timeInterval.getStartHour())
-                    .append("-")
-                    .append(timeInterval.getEndHour())
-                    .append(",");
+            if (timeInterval.getStartHour() > timeInterval.getEndHour()) {
+                stringBuilder.append(timeInterval.getStartHour()).append("-").append("23").append(",");
+                stringBuilder.append("0").append("-").append(timeInterval.getEndHour()).append(",");
+
+            } else {
+                stringBuilder.append(timeInterval.getStartHour())
+                        .append("-").append(timeInterval.getEndHour()).append(",");
+            }
         }
-        String withoutLastComma = stringBuilder.toString().substring(0, stringBuilder.length() - 1  );
+        String withoutLastComma = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
         String cron = String.format("0 0/%d %s * * *", cronDTO.getPeriod(), withoutLastComma);
         terminationService.scheduleNotificationService(cron);
     }

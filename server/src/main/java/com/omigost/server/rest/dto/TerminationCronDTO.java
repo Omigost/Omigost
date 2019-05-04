@@ -12,7 +12,6 @@ public class TerminationCronDTO {
         int endHour;
 
     }
-
     List<TimeInterval> dayIntervals;
     int period;
 }
