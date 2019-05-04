@@ -64,11 +64,19 @@ class AddBudgetView extends React.Component<any, undefined> {
                                                                             }
                                                                             tagMapping[tagSpec.tagKey].push(tagSpec.tagValue);
                                                                         });
-                                                                        post(client => client.createBudget({
-                                                                            limit: parseInt(data.limit),
-                                                                            linkedAccounts: data.accounts,
-                                                                            tags: tagMapping,
-                                                                        })).then(() => {
+                                                                        post(client => {
+                                                                            const newBudgetData = {
+                                                                                limit: parseInt(data.limit),
+                                                                                linkedAccounts: data.accounts,
+                                                                                tags: tagMapping,
+                                                                            };
+                                                                            
+                                                                            if(data.separateBudgets) {
+                                                                                return client.createSeparateBudget(newBudgetData);
+                                                                            } else {
+                                                                                return client.createBudget(newBudgetData);
+                                                                            }
+                                                                        }).then(() => {
                                                                             this.setState({
                                                                                 showBudgetNewDialog: false,
                                                                             }, () => {
@@ -86,6 +94,11 @@ class AddBudgetView extends React.Component<any, undefined> {
                                                                                 type: "string",
                                                                                 title: "The budget limit",
                                                                                 minLength: 1,
+                                                                            },
+                                                                            "separateBudgets": {
+                                                                                type: "boolean",
+                                                                                title: "Create separate budget for each user",
+                                                                                layout: "inlineLabel",
                                                                             },
                                                                             "accounts": {
                                                                                 type: "array",

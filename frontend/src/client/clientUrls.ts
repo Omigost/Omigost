@@ -7,6 +7,10 @@ export default {
         endpoint: "budgets/create",
         method: "post",
     },
+    createSeparateBudget: {
+        endpoint: "budgets/createSeparateBudgets",
+        method: "post",
+    },
     deleteBudget: {
         endpoint: ({data}) => `budgets?name=${data.name}`,
         method: "delete",

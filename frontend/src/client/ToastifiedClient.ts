@@ -45,6 +45,18 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
         );
     }
+    
+    createSeparateBudget(data): ResponsePromise {
+        return wrapPromise(
+            this.client.createSeparateBudget(data),
+            (data) => {
+                this.toastActions.displaySuccessToast("New budget was successfully created");
+            },
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not create new budget", error);
+            },
+        );
+    }
 
     getBudgets(data): ResponsePromise {
         return wrapPromise(

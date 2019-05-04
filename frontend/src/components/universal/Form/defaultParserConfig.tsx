@@ -14,6 +14,8 @@ import ArrayTuple from "./renderers/ArrayTuple";
 import NumberDefault from "./renderers/NumberDefault";
 import NumberSlider from "./renderers/NumberSlider";
 
+import BooleanDefault from "./renderers/BooleanDefault";
+
 export const defaultParserConfig: SchemaParserConfig = {
     handlers: {
         ROOT: {
@@ -32,6 +34,9 @@ export const defaultParserConfig: SchemaParserConfig = {
         NUMBER: {
             default: NumberDefault,
             slider: NumberSlider,
+        },
+        BOOLEAN: {
+            default: BooleanDefault,
         },
         ARRAY: {
             default: ArrayDefault,

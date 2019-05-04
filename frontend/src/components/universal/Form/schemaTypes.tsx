@@ -5,6 +5,7 @@ type ValueOf<T> = T[keyof T];
 export enum NodeType {
     STRING = "string",
     NUMBER = "number",
+    BOOLEAN = "boolean",
     OBJECT = "object",
     ARRAY = "array",
     ROOT = "root",
@@ -13,6 +14,7 @@ export enum NodeType {
 export interface NodeTypeSchemas {
     STRING: NodeStringSchema;
     NUMBER: NodeNumberSchema;
+    BOOLEAN: NodeBooleanSchema;
     OBJECT: NodeObjectSchema;
     ARRAY: NodeArraySchema;
     ROOT: any;
@@ -43,6 +45,10 @@ export interface NodeStringSchema extends NodeBaseSchema {
 
 export interface NodeNumberSchema extends NodeBaseSchema {
     type: NodeType.NUMBER;
+}
+
+export interface NodeBooleanSchema extends NodeBaseSchema {
+    type: NodeType.BOOLEAN;
 }
 
 export interface NodeArraySchema extends NodeBaseSchema {

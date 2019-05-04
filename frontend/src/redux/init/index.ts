@@ -9,7 +9,7 @@ import {
     faShieldAlt, faTachometerAlt, faTimes, faTools,
     faUpload, faUser, faUserCircle,
     faWindowClose, faWindowMaximize, faWindowMinimize, faWrench,
-    faCopy, faUserSlash,
+    faCopy, faUserSlash, faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -33,6 +33,7 @@ export function init(): Promise<InitState> {
             faUser, faCommentSlash, faCommentDots, faEnvelope,
             faSlackHash, faCompress, faBoxOpen, faExclamationTriangle,
             faPalette, faWrench, faRedo, faHistory, faCopy, faUserSlash,
+            faCheck,
         );
 
         resolve({
