@@ -23,10 +23,15 @@ export default class BudgetsViewModule implements OmigostModule {
     }
 
     getIcon(): IconName {
-        return "chart-bar";
+        return "money-bill-alt";
     }
 
     getName(): string {
         return "budgets-view";
     }
+
+    getMenuName(): string {
+        return "Your budgets";
+    }
+
 }

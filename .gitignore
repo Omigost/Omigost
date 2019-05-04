@@ -3,6 +3,7 @@
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 frontend/build/
+nohup.out
 
 ### STS ###
 .apt_generated

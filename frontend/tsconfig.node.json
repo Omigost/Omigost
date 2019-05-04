@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": true,
+        "noImplicitAny": false,
+        "importHelpers": true,
+        "target": "es5",
+        "jsx": "react",
+        "lib": ["es5", "es6", "dom"],
+        "baseUrl": "./",
+        "paths": {
+            "scss/*": ["src/scss/*"],
+            "components/*": ["src/components/universal/*"],
+            "pages/*": ["src/components/pages/*"],
+            "langs/*": ["src/langs/*"],
+            "routes/*": ["src/routes/*"],
+            "themes/*": ["src/themes/*"],
+            "modules/*": ["src/modules/*"],
+            "img/*": ["src/assets/img/*"]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "awesomeTypescriptLoaderOptions": {
+        "reportFiles": [
+            "./src/**/*"
+        ]
+    }
+}

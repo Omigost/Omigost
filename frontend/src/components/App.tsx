@@ -1,26 +1,21 @@
 import * as React from "react";
 import { I18n } from "react-polyglot";
-import { BrowserRouter as Router } from "react-router-dom";
-import styled, { ThemeProvider } from "styled-components";
+import styled from "styled-components";
+
+import { connectRouter, routerMiddleware, ConnectedRouter } from "connected-react-router";
+import { createBrowserHistory } from "history";
+import { Provider } from "react-redux";
+import { applyMiddleware, combineReducers, compose, createStore } from "redux";
+import thunk from "redux-thunk";
+
+import { executeAppInit } from "../redux/actions";
+import createRootReducer from "../redux/reducers";
+import preloadedState from "../redux/store";
 
 import ModulesProvider, { withModules, WithLoaderProps } from "modules/ModulesProvider";
-
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-    faChartArea, faChartBar, faChartLine,
-    faClock, faCommentAlt, faDollarSign, faDownload, faFlag,
-    faPlus, faRulerHorizontal, faRulerVertical, faSearchDollar,
-    faShieldAlt, faTachometerAlt, faTools, faUpload, faUserCircle,
-    faWindowClose, faWindowMaximize, faWindowMinimize,
-} from "@fortawesome/free-solid-svg-icons";
-
-library.add(
-     faUserCircle, faTachometerAlt, faSearchDollar,
-     faTools, faChartBar, faDownload, faUpload, faShieldAlt,
-     faCommentAlt, faFlag, faPlus, faDollarSign,
-     faRulerHorizontal, faRulerVertical, faChartArea, faClock, faChartLine,
-     faWindowMinimize, faWindowMaximize, faWindowClose,
-);
+import FloatingActionProvider from "./universal/FloatingActionProvider";
+import { executeSetTheme, ThemeProvider } from "./universal/ThemeProvider";
+import ToastProvider from "./universal/ToastProvider";
 
 const AppWrapper = styled.div`
   background: ${props => props.theme.colors.background};
@@ -40,7 +35,35 @@ import defaultTheme from "themes/default";
 export interface AppProps {
 }
 
+export const history = createBrowserHistory();
+
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+export function configureStore() {
+    const store = createStore(
+        combineReducers({
+            router: connectRouter(history),
+            ...createRootReducer(history),
+        }),
+        preloadedState,
+        composeEnhancers(
+            applyMiddleware(routerMiddleware(history)),
+            applyMiddleware(thunk),
+        ),
+    );
+
+    return store;
+}
+
+const store = configureStore();
+
 export default class App extends React.Component<AppProps, undefined> {
+
+    componentDidMount() {
+        store.dispatch(executeAppInit());
+        store.dispatch(executeSetTheme(defaultTheme));
+    }
+
     render() {
         const RoutesModuleComponent = withModules((props: WithLoaderProps) => {
             return (
@@ -51,17 +74,21 @@ export default class App extends React.Component<AppProps, undefined> {
         });
 
         return (
-            <I18n locale={locale} messages={messages}>
-                <ThemeProvider theme={defaultTheme}>
-                    <ModulesProvider modules={[ "dashboard-view", "budgets-view", "settings-view" ]}>
-                        <Router>
-                            <AppWrapper>
-                                <RoutesModuleComponent />
-                            </AppWrapper>
-                        </Router>
-                    </ModulesProvider>
-                </ThemeProvider>
-            </I18n>
+            <Provider store={store}>
+                <ToastProvider />
+                <I18n locale={locale} messages={messages}>
+                    <ThemeProvider>
+                        <ModulesProvider modules={[ "dashboard-view", "budgets-view", "users-view", "settings-view", "design-guide" ]}>
+                            <ConnectedRouter history={history}>
+                                <AppWrapper>
+                                    <FloatingActionProvider />
+                                    <RoutesModuleComponent />
+                                </AppWrapper>
+                            </ConnectedRouter>
+                        </ModulesProvider>
+                    </ThemeProvider>
+                </I18n>
+            </Provider>
         );
     }
 }

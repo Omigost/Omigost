@@ -1,10 +1,11 @@
 import * as React from "react";
 import styled  from "styled-components";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { IconName } from "@fortawesome/fontawesome-svg-core";
 import ButtonPanel from "components/ButtonPanel";
-import InteractiveGrid, { RenderItemArgs } from "components/InteractiveGrid";
+import InteractiveGrid, { ItemType, RenderItemArgs } from "components/InteractiveGrid";
 
 const Wrapper = styled.div`
   margin: 0;
@@ -28,15 +29,29 @@ const CategoryContent = styled.div`
   position: relative;
 `;
 
-export interface OptionNode {
-    options?: Array<OptionNode>;
+const NestedGridHandler = styled.span`
+  position: relative;
+  left: -0.3vw;
+  top: -0.1vw;
+  color: gray;
+  opacity: 0.3;
+  cursor: pointer;
+
+  &:hover {
+        opacity: 1;
+  }
+`;
+
+export type OptionNode = ItemType & {
+    options?: Array<ItemType>;
     name?: string;
     icon?: IconName;
     data?: any;
-}
+};
 
 export interface InteractiveNestedGridProps {
-    options?: Array<OptionNode>;
+    showHandlers?: boolean;
+    options?: Array<ItemType>;
     renderItem?: (option: RenderItemArgs<OptionNode>) => React.ReactNode;
 }
 
@@ -52,6 +67,9 @@ const DEFAULT_ITEM_RENDERER = (props: RenderItemArgs<OptionNode>) => {
 
 export default class InteractiveNestedGrid extends React.Component<InteractiveNestedGridProps, undefined> {
     render() {
+
+        const showHandlers = (this.props.showHandlers === false) ? (false) : (true);
+
         return (
             <Wrapper>
                 <InteractiveGrid
@@ -67,7 +85,14 @@ export default class InteractiveNestedGrid extends React.Component<InteractiveNe
                         return (
                             <CategoryWrapper>
                                 <CatogryTitle className="topGridWrapper">
-                                     {props.item.name}
+                                    {
+                                        (showHandlers) ? (
+                                            <NestedGridHandler className="nestedGridHandler">
+                                                <FontAwesomeIcon icon="expand" />
+                                            </NestedGridHandler>
+                                        ) : (null)
+                                    }
+                                    {props.item.name}
                                 </CatogryTitle>
                                 <CategoryContent>
                                     <InteractiveGrid
@@ -79,8 +104,19 @@ export default class InteractiveNestedGrid extends React.Component<InteractiveNe
                                             },
                                         }}
                                         items={props.item.options}
-                                        renderItem={(props) => {
-                                            return (this.props.renderItem || DEFAULT_ITEM_RENDERER)(props);
+                                        renderItem={(props: RenderItemArgs<ItemType>) => {
+                                            return (
+                                                <div>
+                                                    {
+                                                        (showHandlers) ? (
+                                                            <NestedGridHandler className="nestedGridHandler">
+                                                                <FontAwesomeIcon icon="expand" />
+                                                            </NestedGridHandler>
+                                                        ) : (null)
+                                                    }
+                                                    {(this.props.renderItem || DEFAULT_ITEM_RENDERER)(props)}
+                                                </div>
+                                            );
                                         }}
                                     />
                                 </CategoryContent>

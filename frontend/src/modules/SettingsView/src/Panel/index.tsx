@@ -1,5 +1,27 @@
 import * as React from "react";
 
+import { Route } from "react-router";
+import { withRouter } from "react-router-dom";
+
+import ExtensionsSettingsPanel from "../ExtensionsSettingsPanel";
+import NotificationsSettingsPanel from "../NotificationsSettingsPanel";
+import ThemesSettingsPanel from "../ThemesSettingsPanel";
+
+const PANELS = {
+    "Integrations and Extensions": {
+        route: "integrations-and-extensions",
+        component: ExtensionsSettingsPanel,
+    },
+    "Themes": {
+        route: "themes",
+        component: ThemesSettingsPanel,
+    },
+    "Notification settings": {
+        route: "notifications",
+        component: NotificationsSettingsPanel,
+    },
+};
+
 const SETTINGS_OPTIONS = [
     {
         name: "Dump configs",
@@ -38,66 +60,72 @@ const SETTINGS_OPTIONS = [
                 name: "Integrations and Extensions",
                 icon: "plus",
             },
+            {
+                name: "Themes",
+                icon: "palette",
+            },
         ],
     },
 ];
 
-export default class Panel extends React.Component<any, any> {
-
-    state: any = null;
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            openedPaneName: null,
-        };
-        this.handlePanelClick = this.handlePanelClick.bind(this);
-    }
-
-    handlePanelClick(item) {
-        this.setState({
-            openedPaneName: item.name,
-        });
-    }
+class Panel extends React.Component<any, undefined> {
 
     render() {
-
-        if (this.state.openedPaneName) {
-            return (
-                <div>
-                    <this.props.app.UI.Breadcrumbs>
-                        {[
-                            {
-                                name: "Settings",
-                                onClick: () => this.setState({ openedPaneName: null }),
-                            },
-                            {
-                                name: this.state.openedPaneName,
-                            },
-                        ]}
-                    </this.props.app.UI.Breadcrumbs>
-                </div>
-            );
-        }
-
         return (
-            <this.props.app.UI.InteractiveNestedGrid
-                options={SETTINGS_OPTIONS}
-                renderItem={(props) => {
-                    return (
-                        <div>
-                            <span className="nestedGridHandler">Drag</span>
-                            <this.props.app.UI.ButtonPanel
-                                icon={props.item.icon}
-                                onClick={() => this.handlePanelClick(props.item)}
-                            >
-                                {props.item.name}
-                            </this.props.app.UI.ButtonPanel>
-                        </div>
-                    );
-                }}
-            />
+            <div>
+                {
+                    Object.keys(PANELS).map((key, index) => {
+                        return (
+                            <Route
+                                key={`panel-route-${index}`}
+                                path={`${this.props.match.url}/${PANELS[key].route}`}
+                                component={() => {
+                                    const SettingsComponent = PANELS[key].component;
+
+                                    return (
+                                        <div>
+                                            <SettingsComponent
+                                                app={this.props.app}
+                                                onGoBack={() => this.props.history.push(`${this.props.match.url}`)}
+                                            />
+                                        </div>
+                                    );
+                                }}
+                            />
+                        );
+                    })
+                }
+                <Route
+                    exact
+                    path={`${this.props.match.url}`}
+                    component={() => {
+                        return (
+                            <this.props.app.UI.InteractiveNestedGrid
+                                options={SETTINGS_OPTIONS}
+                                renderItem={(props) => {
+                                    return (
+                                        <div>
+                                            <this.props.app.UI.ButtonPanel
+                                                icon={props.item.icon}
+                                                onClick={() => {
+                                                    const panel = PANELS[props.item.name];
+                                                    if (panel) {
+                                                        this.props.history.push(`${this.props.match.url}/${panel.route}`);
+                                                    }
+                                                }}
+                                            >
+                                                {props.item.name}
+                                            </this.props.app.UI.ButtonPanel>
+                                        </div>
+                                    );
+                                }}
+                            />
+                        );
+                    }}
+                />
+            </div>
         );
     }
 }
+
+export default withRouter(Panel);

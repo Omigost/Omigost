@@ -55,8 +55,6 @@ class CellRenderer extends React.Component<CellRendererProps, undefined> {
 
         return (
             <CellWrapper
-                onMouseOver={this.handleMouseEnter}
-                onMouseOut={this.handleMouseLeave}
                 hovered={this.props.node.data.hovered}
                 theme={this.props.context.theme}
             >

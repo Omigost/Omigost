@@ -10,17 +10,17 @@ import LoginPage from "pages/Login";
 import { ModulesLoader } from "modules/ModulesProvider";
 
 const ROUTES = {
+    "/": LoginPage,
     "/home": DashboardPage,
     "/login": LoginPage,
     "/loading": LoadingPage,
     "/requestBudgetLimit": RequestLimitsPage,
-    "/": LoginPage,
 };
 
 function mapper(key, index, options) {
     return (
         <Route
-          exact
+          exact={index === 0}
           key={`route-${index}-${key}`}
           path={key}
           component={options}

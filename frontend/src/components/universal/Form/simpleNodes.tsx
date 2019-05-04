@@ -3,6 +3,7 @@ import * as React from "react";
 import {
     FormContext,
     Node,
+    NodeOutputValue,
     NodeSchema,
 } from "./schemaTypes";
 
@@ -15,6 +16,15 @@ export abstract class SimpleNode<V, M extends NodeSchema> extends Node<{ value: 
         return {
             value: this.getInitialValue(),
         };
+    }
+
+    setValue(value: NodeOutputValue<V>) {
+        if (this.getSchema().formatInput) {
+            value = this.getSchema().formatInput(value);
+        }
+        if (value !== null && typeof value !== "undefined") {
+            this.setState({ value });
+        }
     }
 
     getRawOutput() {

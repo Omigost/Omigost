@@ -22,8 +22,9 @@ const PanelButton = styled.div<PanelButtonProps>`
   display: inline-block;
   margin-left: 0.1vw;
   margin-right: 0.1vw;
+  border-radius: 0.5vw;
   color: ${(props: PanelButtonProps) => (props.active) ? (props.theme.colors.lightAccent) :(props.theme.colors.primary)};
-  background: ${(props: PanelButtonProps) => (props.active) ? (props.theme.colors.primary) :("transparent")};
+  background: ${(props: PanelButtonProps) => (props.active) ? (props.theme.colors.primaryGradient) :("transparent")};
   cursor: pointer;
 
   &:hover {
@@ -40,20 +41,21 @@ export interface ButtonSpecs {
     icon: IconName;
     active?: boolean;
     onClick?: () => void;
-    text?: string;
+    text?: any;
     tooltip?: React.ReactElement<any>;
+    tooltipClickTrigger?: boolean;
     popover?: React.ReactElement<any>;
 }
 
 export interface TinyButtonsProps {
-    children: Array<ButtonSpecs | null>;
+    items: Array<ButtonSpecs | null>;
     info?: string | React.ReactElement<any>;
 }
 
 class TinyButtons extends React.Component<TinyButtonsProps, any> {
 
     render() {
-        const buttons = (this.props.children || []).filter(button => !!button);
+        const buttons = (this.props.items || []).filter(button => !!button);
 
         if (this.props.info) {
             buttons.push({
@@ -97,7 +99,7 @@ class TinyButtons extends React.Component<TinyButtonsProps, any> {
                             contentNode = (
                                 <Tooltip
                                     content={button.tooltip}
-                                    clickTrigger
+                                    clickTrigger={(button.tooltipClickTrigger === false) ? (false) : (true)}
                                 >
                                     {contentNode}
                                 </Tooltip>

@@ -1,7 +1,6 @@
 import axios from "axios";
 
 import ClientComponentFactory, { ClientAbstractComponent } from "./ClientComponentFactory";
-import OmigostFakeClient from "./FakeClient";
 import CLIENT_URLS from "./clientUrls";
 import {callFormEndpoint, FormComponentContext} from "./formHelpers";
 
@@ -24,9 +23,15 @@ export interface RequestOptions {
 
 export interface OmigostClientInterface {
     callEndpoint(endpoint?: string, options?: RequestOptions): Promise<ResponseData>;
-    getBudgets(): ResponsePromise;
+    getBudgets(data: any): ResponsePromise;
+    getUsers(): ResponsePromise;
+    getUserSpendings(data: any): ResponsePromise;
     postBudgetIncreaseLimit(formContext: FormComponentContext, data: PostBudgetIncreaseLimitPayload): ResponsePromise;
     createBudget(data: any): ResponsePromise;
+    deleteBudget(data: any): ResponsePromise;
+    createUser(data: any): ResponsePromise;
+    addCommunicationToUser(data: any): ResponsePromise;
+    deleteUserCommunication(data: any): ResponsePromise;
 }
 
 export class OmigostClient implements OmigostClientInterface {
@@ -43,8 +48,8 @@ export class OmigostClient implements OmigostClientInterface {
         return this.callEndpoint(null, { ...CLIENT_URLS.createBudget, data });
     }
 
-    getBudgets(): ResponsePromise {
-        return this.callEndpoint(CLIENT_URLS.getBudgets.endpoint, null);
+    getBudgets(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.getBudgets, data });
     }
 
     postBudgetIncreaseLimit(formContext, data): ResponsePromise {
@@ -53,6 +58,30 @@ export class OmigostClient implements OmigostClientInterface {
 
     submitForm(formContext, options) {
         return callFormEndpoint(this.callEndpoint.bind(this), formContext, options);
+    }
+
+    deleteBudget(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.deleteBudget, data });
+    }
+
+    getUsers(): ResponsePromise {
+        return this.callEndpoint(null, CLIENT_URLS.getUsers);
+    }
+
+    getUserSpendings(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.getUserSpendings, data });
+    }
+
+    createUser(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.createUser, data });
+    }
+
+    addCommunicationToUser(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.addCommunicationToUser, data });
+    }
+
+    deleteUserCommunication(data): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.deleteUserCommunication, data });
     }
 
     callEndpoint(endpoint, options): ResponsePromise {
@@ -71,7 +100,11 @@ export class OmigostClient implements OmigostClientInterface {
             if (endpoint) {
                 url = endpoint;
             } else if (options && options.endpoint) {
-                url = options.endpoint;
+                if ({}.toString.call(options.endpoint) === "[object Function]") {
+                    url = options.endpoint(options);
+                } else {
+                    url = options.endpoint;
+                }
             }
 
             url = `${this.apiBase}${url}`;
@@ -79,7 +112,7 @@ export class OmigostClient implements OmigostClientInterface {
             axios({
                 method,
                 url,
-                withCredentials: true,
+                withCredentials: false,
                 params,
                 data: options.data,
             }).then((response) => {
@@ -99,6 +132,5 @@ export class OmigostClient implements OmigostClientInterface {
 /*
  * Uncomment this to use fake client
  */
-export default OmigostFakeClient;
-//export default new OmigostCachedClient(OmigostFakeClient);
-//export default new OmigostClient();
+//export default OmigostFakeClient;
+export default new OmigostClient();

@@ -4,13 +4,17 @@ type ValueOf<T> = T[keyof T];
 
 export enum NodeType {
     STRING = "string",
+    NUMBER = "number",
     OBJECT = "object",
+    ARRAY = "array",
     ROOT = "root",
 }
 
 export interface NodeTypeSchemas {
     STRING: NodeStringSchema;
+    NUMBER: NodeNumberSchema;
     OBJECT: NodeObjectSchema;
+    ARRAY: NodeArraySchema;
     ROOT: any;
 }
 
@@ -19,6 +23,8 @@ export type NodeBaseSchema = {
     description?: string;
     ui?: string;
     [key: string]: any;
+    formatOutput?: (output: any) => any;
+    formatInput?: (output: any) => any;
 };
 
 export interface NodeProperties {
@@ -33,6 +39,15 @@ export interface NodeObjectSchema extends NodeBaseSchema {
 
 export interface NodeStringSchema extends NodeBaseSchema {
     type: NodeType.STRING;
+}
+
+export interface NodeNumberSchema extends NodeBaseSchema {
+    type: NodeType.NUMBER;
+}
+
+export interface NodeArraySchema extends NodeBaseSchema {
+    type: NodeType.ARRAY;
+    items: Array<NodeBaseSchema> | NodeBaseSchema;
 }
 
 export type NodeSchema = ValueOf<NodeTypeSchemas>;
@@ -67,6 +82,10 @@ export abstract class Node<
 
     getHandler(): NodeHandler<S, O, M, CS, CO, CM, PS, PO, PM> {
         return this.handler;
+    }
+
+    isOutputAvailable(): boolean {
+        return true;
     }
 
     validateCustom(): Array<NodeError> {
@@ -135,6 +154,10 @@ export abstract class Node<
         this.children.push(child);
     }
 
+    overrideChildren(children: Array<Node<CS, CO, CM>>) {
+        this.children = [ ...children ];
+    }
+
     getChildren() {
         return this.children;
     }
@@ -169,7 +192,7 @@ export abstract class Node<
 
     abstract render(context: FormContext): React.ReactNode;
 
-    getRawOutput(): NodeOutputValue<O> {
+    getRawOutput(options): NodeOutputValue<O> {
         return null;
     }
 
@@ -200,11 +223,21 @@ export abstract class Node<
         return [];
     }
 
-    getOutput(): NodeMetaOutputValue<O> {
+    getOutput(options): NodeMetaOutputValue<O> {
+        if ((!options || (options && options.enableFormat !== false)) && this.getSchema().formatOutput) {
+            return {
+                __data: this.getSchema().formatOutput(this.getRawOutput(options)),
+                __source: this,
+            };
+        }
         return {
-            __data: this.getRawOutput(),
+            __data: this.getRawOutput(options),
             __source: this,
         };
+    }
+
+    setValue(value: NodeOutputValue<O>) {
+        // Do nothing
     }
 }
 
@@ -227,7 +260,7 @@ export class RootNode extends Node<any, any, NodeSchema> {
         this.validator(this);
     }
 
-    getOutput() {
+    getOutput(options) {
         if (this.getChildren().length === 0) {
             return {
                 __data: null,
@@ -235,19 +268,19 @@ export class RootNode extends Node<any, any, NodeSchema> {
             };
         } else if (this.getChildren().length === 1) {
             return {
-                __data: this.getChildren()[0].getOutput(),
+                __data: this.getChildren()[0].getOutput(options),
                 __source: this,
             };
         } else {
             return {
-                __data: this.getChildren().map(child => child.getOutput()),
+                __data: this.getChildren().map(child => child.getOutput(options)),
                 __source: this,
             };
         }
     }
 
-    getData() {
-        return this.dataTransformer(this.getOutput());
+    getData(options?: any) {
+        return this.dataTransformer(this.getOutput(options));
     }
 
     render(context: FormContext) {
@@ -266,6 +299,10 @@ export class RootNode extends Node<any, any, NodeSchema> {
     setState(state: NodeState<any>, source?: NodeAny, originalSource?: NodeAny): void {
         this.setStateSilently(state, source, originalSource);
         this.getConfig().rootSetState(this.getState(), this, originalSource);
+    }
+
+    setValue(value: NodeOutputValue<any>) {
+        this.getChildren().forEach(child => child.setValue(value));
     }
 }
 

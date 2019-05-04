@@ -2,6 +2,7 @@ package com.omigost.server.localstack;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 
@@ -9,6 +10,9 @@ import org.testcontainers.containers.localstack.LocalStackContainer;
 public class LocalstackContainer implements ImageContainer {
 
     LocalStackContainer container;
+
+    @Value("${aws.region}")
+    private String awsRegion;
 
     public LocalstackContainer() {
         container = new LocalStackContainer()
@@ -25,11 +29,17 @@ public class LocalstackContainer implements ImageContainer {
     }
 
     public AwsClientBuilder.EndpointConfiguration getEndpointSNS() {
-        return container.getEndpointConfiguration(LocalStackContainer.Service.SNS);
+        return new AwsClientBuilder.EndpointConfiguration(
+                container.getEndpointConfiguration(LocalStackContainer.Service.SNS).getServiceEndpoint(),
+                awsRegion
+        );
     }
 
     public AwsClientBuilder.EndpointConfiguration getEndpointNothing() {
-        return container.getEndpointConfiguration(LocalStackContainer.Service.API_GATEWAY);
+        return new AwsClientBuilder.EndpointConfiguration(
+                container.getEndpointConfiguration(LocalStackContainer.Service.API_GATEWAY).getServiceEndpoint(),
+                awsRegion
+        );
     }
 
     public AWSCredentialsProvider getCredentialsProvider() {

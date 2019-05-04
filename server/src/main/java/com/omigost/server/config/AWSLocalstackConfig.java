@@ -18,6 +18,7 @@ import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.omigost.server.localstack.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,15 @@ import java.util.stream.Collectors;
 @Slf4j
 @Profile("dev")
 public class AWSLocalstackConfig {
+
+    @Value("${aws.region}")
+    private String region;
+
+    @Value("${aws.accessKey}")
+    private String AWSAccessKey;
+
+    @Value("${aws.secretKey}")
+    private String AWSSecretkey;
 
     private static PostgresContainer postgresContainer;
     @Autowired
@@ -104,11 +114,19 @@ public class AWSLocalstackConfig {
 
     @Bean
     public AWSCostExplorer awsCostExplorer() {
-        ensureLocalstackIsRunning();
         return AWSCostExplorerClientBuilder
                 .standard()
-                .withEndpointConfiguration(awsContainer.getEndpointNothing())
-                .withCredentials(credentials())
+                .withCredentials(new AWSCredentialsProvider() {
+                    @Override
+                    public AWSCredentials getCredentials() {
+                        return new BasicAWSCredentials(AWSAccessKey, AWSSecretkey);
+                    }
+
+                    @Override
+                    public void refresh() {
+                    }
+                })
+                .withRegion(region)
                 .build();
     }
 

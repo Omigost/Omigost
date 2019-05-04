@@ -5,28 +5,46 @@ import "./index.scss";
 
 import MuuriGrid from "react-muuri";
 
-const Wrapper = styled.div`
+const Wrapper = styled.div``;
+
+const GridWrapper = styled.div`
   padding: 1.2vw;
   width: 100vw;
-
+  position: relative;
 `;
 
-export interface RenderItemArgs<ItemType> {
-    item: ItemType;
+export interface ItemType {
+    content?: any;
+    height?: number;
+    width?: number;
 }
 
-export interface InteractiveGridProps<ItemType> {
-    renderItem: (props: RenderItemArgs<ItemType>) => React.ReactNode;
+export interface RenderItemArgs<ItemT> {
+    item: ItemT;
+}
+
+export interface InteractiveGridProps {
+    renderItem?: (props: RenderItemArgs<ItemType>) => React.ReactNode;
     items: Array<ItemType>;
     onMove?: (items: Array<ItemType>) => void;
     muuriOptions?: any;
 }
 
-interface InteractiveGridState<ItemType> {
+interface InteractiveGridState {
     items: Array<ItemType>;
 }
 
-export default class InteractiveGrid<ItemType> extends React.Component<InteractiveGridProps<ItemType>, InteractiveGridState<ItemType>> {
+const CardBoxWrapper = styled.div`
+    width: 100%;
+    height: 100%;
+    padding: 1vw;
+    border-radius: 0.5vw;
+    background: #ffffff;
+    box-shadow: 0 2px 0 rgba(90,97,105,.11), 0 4px 8px rgba(90,97,105,.12), 0 10px 10px rgba(90,97,105,.06), 0 7px 70px rgba(90,97,105,.1);
+`;
+
+
+export default class InteractiveGrid extends React.Component<InteractiveGridProps, InteractiveGridState> {
     grid: any = null;
     gridElement: any = null;
 
@@ -59,26 +77,38 @@ export default class InteractiveGrid<ItemType> extends React.Component<Interacti
 
     render() {
         return (
-            <div>
-                <Wrapper ref={gridElement => this.gridElement = gridElement}>
+            <Wrapper>
+                <GridWrapper ref={gridElement => this.gridElement = gridElement}>
                     {
                         this.props.items.map((item: ItemType, index: number) => {
                             return (
                                 <div
                                     key={`grid-item-${index}`}
-                                    className="item box1"
+                                    className={`item h${item.height || 1} w${item.width || 1} blue`}
                                 >
                                     <div className="item-content">
-                                      {this.props.renderItem({
-                                          item,
-                                      })}
+                                      {
+                                          (item.content) ? (
+                                              <CardBoxWrapper>
+                                                  <div style={{
+                                                      width: `${item.width / 7 * 60}vw`,
+                                                  }}>
+                                                    {item.content}
+                                                  </div>
+                                              </CardBoxWrapper>
+                                          ) : (
+                                              this.props.renderItem({
+                                                  item,
+                                              })
+                                          )
+                                      }
                                     </div>
                                 </div>
                             );
                         })
                     }
-                </Wrapper>
-            </div>
+                </GridWrapper>
+            </Wrapper>
         );
     }
 }
