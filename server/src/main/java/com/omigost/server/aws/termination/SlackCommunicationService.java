@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RestController
@@ -28,15 +29,13 @@ import java.util.Map;
 @Slf4j
 public class SlackCommunicationService {
     @Autowired
-    TokenEncryptingService tokenEncryptingService;
+    private CommunicationRepository communicationRepository;
     @Autowired
-    CommunicationRepository communicationRepository;
+    private SlackService slackService;
     @Autowired
-    SlackService slackService;
-
+    private EC2TerminationService ec2TerminationService;
     @Autowired
-    EC2TerminationService ec2TerminationService;
-
+    private TerminationTokenService terminationTokenService;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     /**
@@ -44,7 +43,7 @@ public class SlackCommunicationService {
      */
     public String sendSlackReminder(String awsId, int instanceCount) {
         Collection<Communication> communications = communicationRepository.getCommunicationsForAWSId(awsId);
-        String callbackId = tokenEncryptingService.encryptMessage(awsId);
+        String callbackId = terminationTokenService.serializeToken(awsId);
 
         for (Communication communication : communications) {
             if (!communication.getType().equals(CommunicationType.SLACK)) continue;
@@ -58,7 +57,7 @@ public class SlackCommunicationService {
                     .build();
 
             slackService.sendAlertToUser(communication, notificationMessage, callbackId);
-            log.info("sent message to " + communication.getUser() + " via " + communication.getType() + " for ec2s working in account " + awsId);
+            log.info("sent message via slack for ec2s working in account " + awsId);
         }
         return callbackId;
     }
@@ -70,8 +69,8 @@ public class SlackCommunicationService {
         Action action = responseDTO.getActions().get(0);
 
         String callBackId = responseDTO.getCallback_id();
-        String awsUserId = tokenEncryptingService.descryptMessage(callBackId);
-        return processInstanceAction(action.getValue(), awsUserId);
+        Optional<String> awsUserId = terminationTokenService.deserializeToken(callBackId);
+        return awsUserId.map(s -> processInstanceAction(action.getValue(), s)).orElse("I am sorry, but the message token has timed out. :(");
     }
 
     private String processInstanceAction(String action, String awsId) {

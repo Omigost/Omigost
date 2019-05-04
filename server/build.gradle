@@ -72,7 +72,6 @@ task classpathJar(type: Jar) {
 bootRun {
     classpath = classpathJar.outputs.files + configurations.dev
     main = 'com.omigost.server.ServerApplication'
-    args = ['--spring.profiles.active=dev', '--server.port=8100']
 }
 
 dependencies {

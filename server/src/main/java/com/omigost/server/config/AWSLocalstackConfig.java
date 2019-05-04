@@ -1,8 +1,6 @@
 package com.omigost.server.config;
 
-import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.budgets.AWSBudgets;
 import com.amazonaws.services.budgets.AWSBudgetsClientBuilder;
 import com.amazonaws.services.costexplorer.AWSCostExplorer;
@@ -80,7 +78,9 @@ public class AWSLocalstackConfig {
 
     //TODO get iam credentials for root
     @Bean(name = "iamCredentials")
-    AWSCredentialsProvider iamRootCredentials() {return  awsContainer.getCredentialsProvider();}
+    AWSCredentialsProvider iamRootCredentials() {
+        return awsContainer.getCredentialsProvider();
+    }
 
     @Bean
     public AmazonIdentityManagement amazonIdentityManagement() {
