@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * 0 <=startHour, endHour <=23
+ */
 @Data
 public class TerminationCronDTO {
     @Data
@@ -12,6 +15,7 @@ public class TerminationCronDTO {
         int endHour;
 
     }
+
     List<TimeInterval> dayIntervals;
     int period;
 }
