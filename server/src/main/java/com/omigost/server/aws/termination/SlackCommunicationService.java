@@ -11,6 +11,7 @@ import com.omigost.server.rest.dto.SlackResponse.Action;
 import com.omigost.server.rest.dto.SlackResponse.SlackResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,8 @@ public class SlackCommunicationService {
     private EC2TerminationService ec2TerminationService;
     @Autowired
     private TerminationTokenService terminationTokenService;
+    @Value("${communication.remind.period}")
+    long remindPeriod;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     /**
@@ -44,9 +47,13 @@ public class SlackCommunicationService {
     public String sendSlackReminder(String awsId, int instanceCount) {
         Collection<Communication> communications = communicationRepository.getCommunicationsForAWSId(awsId);
         String callbackId = terminationTokenService.serializeToken(awsId);
-
+        long currentTimestramp = System.currentTimeMillis() / 1000;
         for (Communication communication : communications) {
             if (!communication.getType().equals(CommunicationType.SLACK)) continue;
+
+            long timeAfterLastReminder = currentTimestramp - communication.getLastMessageTimestamp();
+            timeAfterLastReminder=timeAfterLastReminder/(60*60);//convert to hours
+            if (remindPeriod > timeAfterLastReminder) continue;
 
             NotificationMessage notificationMessage = NotificationMessage.builder()
                     .mainText("There are " + instanceCount + " EC2 instances running out of business hours.")
@@ -57,6 +64,9 @@ public class SlackCommunicationService {
                     .build();
 
             slackService.sendAlertToUser(communication, notificationMessage, callbackId);
+            communication.setLastMessageTimestamp(currentTimestramp);
+            communicationRepository.save(communication);
+
             log.info("sent message via slack for ec2s working in account " + awsId);
         }
         return callbackId;
