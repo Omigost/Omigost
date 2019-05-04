@@ -1,5 +1,5 @@
 export default {
-    apiBase: "http://f1a378fc.ngrok.io/",
+    apiBase: "/",
     getBudgets: {
         endpoint: "budgets",
     },
