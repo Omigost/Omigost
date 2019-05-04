@@ -25,7 +25,7 @@ import java.util.Optional;
 @Service
 @RestController
 //TODO should be in applications.properties
-@RequestMapping("/slackResponseHandler")
+@RequestMapping("${slack.response.endpoint}")
 @Slf4j
 public class SlackCommunicationService {
     @Autowired
