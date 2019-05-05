@@ -146,11 +146,11 @@ export class OmigostClient implements OmigostClientInterface {
             },
         });
     }
-    
+
     getSettings(): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.getSettings });
     }
-    
+
     updateSettings(data: any): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.updateSettings, data });
     }

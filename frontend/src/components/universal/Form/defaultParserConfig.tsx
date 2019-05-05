@@ -4,10 +4,10 @@ import ObjectDefault from "./renderers/ObjectDefault";
 
 import StringColorPicker from "./renderers/StringColorPicker";
 import StringDefault from "./renderers/StringDefault";
-import StringPassword from "./renderers/StringPassword";
 import StringEnum from "./renderers/StringEnum";
 import StringHourTime from "./renderers/StringHourTime";
 import StringNotice from "./renderers/StringNotice";
+import StringPassword from "./renderers/StringPassword";
 
 import ArrayDefault from "./renderers/ArrayDefault";
 import ArrayTuple from "./renderers/ArrayTuple";

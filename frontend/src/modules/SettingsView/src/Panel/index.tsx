@@ -4,9 +4,9 @@ import { Route } from "react-router";
 import { withRouter } from "react-router-dom";
 
 import ExtensionsSettingsPanel from "../ExtensionsSettingsPanel";
+import InstanceSettingsPanel from "../InstanceSettingsPanel";
 import NotificationsSettingsPanel from "../NotificationsSettingsPanel";
 import ThemesSettingsPanel from "../ThemesSettingsPanel";
-import InstanceSettingsPanel from "../InstanceSettingsPanel";
 
 const PANELS = {
     "Integrations and Extensions": {

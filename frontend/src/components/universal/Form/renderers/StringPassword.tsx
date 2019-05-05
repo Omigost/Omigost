@@ -5,28 +5,27 @@ import WithErrors from "./utils/WithErrors";
 import WithMargins from "./utils/WithMargins";
 
 import TextInput from "../../TextInput";
-import { SimpleNode } from "../simpleNodes";
 
 import {
     FormContext,
+    Node,
     NodeStringSchema,
 } from "../schemaTypes";
 
-export default class StringPassword extends SimpleNode<string, NodeStringSchema> {
+export default class StringPassword extends Node<{ value: string; filled: boolean }, string, NodeStringSchema> {
     resolveInitialState() {
         return {
             value: "",
             filled: false,
         };
     }
-    
     getRawOutput() {
        if (this.getState().filled) {
            return null;
        }
        return this.getState().value;
     }
-    
+
     setValue(value) {
         if (this.getSchema().formatInput) {
             value = this.getSchema().formatInput(value);
@@ -36,14 +35,14 @@ export default class StringPassword extends SimpleNode<string, NodeStringSchema>
         }
     }
 
-    renderSimple(value: string, context: FormContext) {
+    render(context: FormContext) {
         return (
             <WithMargins parent={this}>
                 <WithErrors parent={this} context={context}>
                     <WithDescription parent={this}>
                         <TextInput
                             type="password"
-                            value={(this.getState().filled) ? ("DUMMY123") : (value)}
+                            value={(this.getState().filled) ? ("DUMMY123") : (this.getState().value)}
                             onChange={(text) => {
                                 this.setState({ value: text, filled: false });
                             }}

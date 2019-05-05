@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import { withTheme } from "styled-components";
 
 import { Route } from "react-router";
 import { withRouter } from "react-router-dom";
@@ -38,100 +37,99 @@ class InstanceSettingsPanel extends React.Component<any, undefined> {
                                                     {({data, error, loading}, refresh) => {
                                                         if (loading || !data) return null;
                                                         const settings = data.properties || {};
-                                                        
+
                                                         const checkAssign = (props, key, value) => {
-                                                            if (value !== null && typeof value !== 'undefined') {
+                                                            if (value !== null && typeof value !== "undefined") {
                                                                 props[key] = value;
                                                             }
                                                         };
-                                                        
+
                                                         return (
                                                             <this.props.app.UI.Form
                                                                 submitButton="Save the settings"
                                                                 onSubmit={(data) => {
                                                                     const awsProperties = {};
-                                                                    
-                                                                    checkAssign(awsProperties, 'logging.level.com.omigost.server', data.loggingLevel);
-                                                                    checkAssign(awsProperties, 'aws.region', data.awsRegion);
-                                                                    
-                                                                    checkAssign(awsProperties, 'aws.accessKey', data.AWSCredentials.accessKey);
-                                                                    checkAssign(awsProperties, 'aws.secretKey', data.AWSCredentials.secretKey);
-                                                                    
-                                                                    checkAssign(awsProperties, 'slack.oauth.bot.token', data.SlackCredentials.OAuthToken);
-                                                                    
-                                                                    checkAssign(awsProperties, 'spring.datasource.url', data.ServicesSetup.Database.url);
-                                                                    checkAssign(awsProperties, 'spring.datasource.username', data.ServicesSetup.Database.login);
-                                                                    checkAssign(awsProperties, 'spring.datasource.password', data.ServicesSetup.Database.password);
-                                                                    checkAssign(awsProperties, 'localstack.postgres.useExternal', !data.ServicesSetup.Database.notUseExternal);
-                                                                
-                                                                    checkAssign(awsProperties, 'localstack.services.ip', data.ServicesSetup.sns.ip);
-                                                                    checkAssign(awsProperties, 'localstack.services.sns.port', data.ServicesSetup.sns.port);
-                                                                    checkAssign(awsProperties, 'localstack.services.useExternal', !data.ServicesSetup.sns.useExternal);
-                                                                    
-                                                                    checkAssign(awsProperties, 'localstack.localAWSBudgets.ip', data.ServicesSetup.budgets.ip);
-                                                                    checkAssign(awsProperties, 'localstack.localAWSBudgets.port', data.ServicesSetup.budgets.port);
-                                                                    checkAssign(awsProperties, 'localstack.localAWSBudgets.useExternal', !data.ServicesSetup.budgets.useExternal);
-                                                                    
-                                                                    checkAssign(awsProperties, 'localstack.motocker.iam.ip', data.ServicesSetup.iam.ip);
-                                                                    checkAssign(awsProperties, 'localstack.motocker.iam.port', data.ServicesSetup.iam.port);
-                                                                    checkAssign(awsProperties, 'localstack.motocker.iam.useExternal', !data.ServicesSetup.iam.useExternal);
-                                                                    
-                                                                    checkAssign(awsProperties, 'localstack.motocker.ec2.ip', data.ServicesSetup.ec2.ip);
-                                                                    checkAssign(awsProperties, 'localstack.motocker.ec2.port', data.ServicesSetup.ec2.port);
-                                                                    checkAssign(awsProperties, 'localstack.motocker.ec2.useExternal', !data.ServicesSetup.ec2.useExternal);
-                                                                    
-                                                                    checkAssign(awsProperties, 'localstack.motocker.organizations.ip', data.ServicesSetup.organizations.ip);
-                                                                    checkAssign(awsProperties, 'localstack.motocker.organizations.port', data.ServicesSetup.organizations.port);
-                                                                    checkAssign(awsProperties, 'localstack.motocker.organizations.useExternal', !data.ServicesSetup.organizations.useExternal);
-                                                                
-                                                                    /*post(client => client.updateSettings({
+
+                                                                    checkAssign(awsProperties, "logging.level.com.omigost.server", data.loggingLevel);
+                                                                    checkAssign(awsProperties, "aws.region", data.awsRegion);
+
+                                                                    checkAssign(awsProperties, "aws.accessKey", data.AWSCredentials.accessKey);
+                                                                    checkAssign(awsProperties, "aws.secretKey", data.AWSCredentials.secretKey);
+
+                                                                    checkAssign(awsProperties, "slack.oauth.bot.token", data.SlackCredentials.OAuthToken);
+
+                                                                    checkAssign(awsProperties, "spring.datasource.url", data.ServicesSetup.Database.url);
+                                                                    checkAssign(awsProperties, "spring.datasource.username", data.ServicesSetup.Database.login);
+                                                                    checkAssign(awsProperties, "spring.datasource.password", data.ServicesSetup.Database.password);
+                                                                    checkAssign(awsProperties, "localstack.postgres.useExternal", !data.ServicesSetup.Database.notUseExternal);
+
+                                                                    checkAssign(awsProperties, "localstack.services.ip", data.ServicesSetup.sns.ip);
+                                                                    checkAssign(awsProperties, "localstack.services.sns.port", data.ServicesSetup.sns.port);
+                                                                    checkAssign(awsProperties, "localstack.services.useExternal", !data.ServicesSetup.sns.useExternal);
+
+                                                                    checkAssign(awsProperties, "localstack.localAWSBudgets.ip", data.ServicesSetup.budgets.ip);
+                                                                    checkAssign(awsProperties, "localstack.localAWSBudgets.port", data.ServicesSetup.budgets.port);
+                                                                    checkAssign(awsProperties, "localstack.localAWSBudgets.useExternal", !data.ServicesSetup.budgets.useExternal);
+
+                                                                    checkAssign(awsProperties, "localstack.motocker.iam.ip", data.ServicesSetup.iam.ip);
+                                                                    checkAssign(awsProperties, "localstack.motocker.iam.port", data.ServicesSetup.iam.port);
+                                                                    checkAssign(awsProperties, "localstack.motocker.iam.useExternal", !data.ServicesSetup.iam.useExternal);
+
+                                                                    checkAssign(awsProperties, "localstack.motocker.ec2.ip", data.ServicesSetup.ec2.ip);
+                                                                    checkAssign(awsProperties, "localstack.motocker.ec2.port", data.ServicesSetup.ec2.port);
+                                                                    checkAssign(awsProperties, "localstack.motocker.ec2.useExternal", !data.ServicesSetup.ec2.useExternal);
+
+                                                                    checkAssign(awsProperties, "localstack.motocker.organizations.ip", data.ServicesSetup.organizations.ip);
+                                                                    checkAssign(awsProperties, "localstack.motocker.organizations.port", data.ServicesSetup.organizations.port);
+                                                                    checkAssign(awsProperties, "localstack.motocker.organizations.useExternal", !data.ServicesSetup.organizations.useExternal);
+
+                                                                    post(client => client.updateSettings({
                                                                         properties: awsProperties,
                                                                     })).then(() => {
                                                                         refresh();
-                                                                    });*/
-                                                                    console.log(awsProperties);
+                                                                    });
                                                                 }}
                                                                 defaultValue={{
-                                                                    loggingLevel: settings['logging.level.com.omigost.server'],
-                                                                    awsRegion: settings['aws.region'],
+                                                                    loggingLevel: settings["logging.level.com.omigost.server"],
+                                                                    awsRegion: settings["aws.region"],
                                                                     AWSCredentials: {
-                                                                        accessKey: settings['aws.accessKey'],
-                                                                        secretKey: settings['aws.secretKey'],
+                                                                        accessKey: settings["aws.accessKey"],
+                                                                        secretKey: settings["aws.secretKey"],
                                                                     },
                                                                     SlackCredentials: {
-                                                                        OAuthToken: settings['slack.oauth.bot.token'],
+                                                                        OAuthToken: settings["slack.oauth.bot.token"],
                                                                     },
                                                                     ServicesSetup: {
                                                                         Database: {
-                                                                            url: settings['spring.datasource.url'],
-                                                                            login: settings['spring.datasource.username'],
-                                                                            password: settings['spring.datasource.password'],
-                                                                            notUseExternal: !settings['localstack.postgres.useExternal'],
+                                                                            url: settings["spring.datasource.url"],
+                                                                            login: settings["spring.datasource.username"],
+                                                                            password: settings["spring.datasource.password"],
+                                                                            notUseExternal: !settings["localstack.postgres.useExternal"],
                                                                         },
                                                                         sns: {
-                                                                            ip: settings['localstack.services.ip'],
-                                                                            port: settings['localstack.services.sns.port'],
-                                                                            notUseExternal: !settings['localstack.services.useExternal'],
+                                                                            ip: settings["localstack.services.ip"],
+                                                                            port: settings["localstack.services.sns.port"],
+                                                                            notUseExternal: !settings["localstack.services.useExternal"],
                                                                         },
                                                                         budgets: {
-                                                                            ip: settings['localstack.localAWSBudgets.ip'],
-                                                                            port: settings['localstack.localAWSBudgets.port'],
-                                                                            notUseExternal: !settings['localstack.localAWSBudgets.useExternal'],
+                                                                            ip: settings["localstack.localAWSBudgets.ip"],
+                                                                            port: settings["localstack.localAWSBudgets.port"],
+                                                                            notUseExternal: !settings["localstack.localAWSBudgets.useExternal"],
                                                                         },
                                                                         iam: {
-                                                                            ip: settings['localstack.motocker.iam.ip'],
-                                                                            port: settings['localstack.motocker.iam.port'],
-                                                                            notUseExternal: !settings['localstack.motocker.iam.useExternal'],
+                                                                            ip: settings["localstack.motocker.iam.ip"],
+                                                                            port: settings["localstack.motocker.iam.port"],
+                                                                            notUseExternal: !settings["localstack.motocker.iam.useExternal"],
                                                                         },
                                                                         ec2: {
-                                                                            ip: settings['localstack.motocker.ec2.ip'],
-                                                                            port: settings['localstack.motocker.ec2.port'],
-                                                                            notUseExternal: !settings['localstack.motocker.ec2.useExternal'],
+                                                                            ip: settings["localstack.motocker.ec2.ip"],
+                                                                            port: settings["localstack.motocker.ec2.port"],
+                                                                            notUseExternal: !settings["localstack.motocker.ec2.useExternal"],
                                                                         },
                                                                         organizations: {
-                                                                            ip: settings['localstack.motocker.organizations.ip'],
-                                                                            port: settings['localstack.motocker.organizations.port'],
-                                                                            notUseExternal: !settings['localstack.motocker.organizations.useExternal'],
+                                                                            ip: settings["localstack.motocker.organizations.ip"],
+                                                                            port: settings["localstack.motocker.organizations.port"],
+                                                                            notUseExternal: !settings["localstack.motocker.organizations.useExternal"],
                                                                         },
                                                                     },
                                                                 }}

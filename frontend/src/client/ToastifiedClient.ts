@@ -195,7 +195,7 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
         );
     }
-    
+
     getSettings(): ResponsePromise {
         return wrapPromise(
             this.client.getSettings(),
@@ -205,7 +205,7 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
         );
     }
-    
+
     updateSettings(data: any): ResponsePromise {
         return wrapPromise(
             this.client.updateSettings(data),

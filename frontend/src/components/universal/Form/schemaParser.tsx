@@ -136,7 +136,7 @@ export async function validateRoot(rootNode: RootNode) {
         allErrors: true,
         ...rootNode.getConfig().ajvOptions,
     });
-    console.log(rootNode.getJsonSchema());
+
     const validateSchema = ajv.compile(rootNode.getJsonSchema() as unknown as object);
     const output = rootNode.getOutput({ enableFormat: false });
 
