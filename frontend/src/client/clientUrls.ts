@@ -56,4 +56,11 @@ export default {
     getRecentEC2CostAllocationTags: {
         endpoint: ({data}) => `tag/cost/ec2?start=${data.startDate}&end=${data.endDate}`,
     },
+    getSettings: {
+        endpoint: "instance/settings",
+    },
+    updateSettings: {
+        endpoint: "instance/settings",
+        method: "post",
+    },
 };

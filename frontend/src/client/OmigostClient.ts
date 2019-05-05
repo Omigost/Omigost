@@ -39,6 +39,8 @@ export interface OmigostClientInterface {
     deleteUserCommunication(data: any): ResponsePromise;
     deleteAccountFromUser(data: any): ResponsePromise;
     getRecentEC2CostAllocationTags(): ResponsePromise;
+    getSettings(): ResponsePromise;
+    updateSettings(data: any): ResponsePromise;
 }
 
 export class OmigostClient implements OmigostClientInterface {
@@ -143,6 +145,14 @@ export class OmigostClient implements OmigostClientInterface {
                 endDate,
             },
         });
+    }
+    
+    getSettings(): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.getSettings });
+    }
+    
+    updateSettings(data: any): ResponsePromise {
+        return this.callEndpoint(null, { ...CLIENT_URLS.updateSettings, data });
     }
 
     callEndpoint(endpoint, options): ResponsePromise {
