@@ -4,6 +4,7 @@ import com.omigost.server.localstack.PostgresContainer;
 import com.omigost.server.settings.model.InstanceSettingsUpdateDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -26,10 +27,13 @@ public class InstanceSettingsService {
     @Autowired
     RestartEndpoint restartEndpoint;
 
+    @Value("${omigost.settings.instance.hiddenProperties}")
+    private List<String> hiddenProperties;
+
     private static final String RUNTIME_PROPERTIES_FILE_LOCATION = "app-properties.properties";
 
     private static Properties loadRuntimeProperties() {
-        Properties props = null;
+        Properties props = new Properties();
         try {
             props = new Properties();
 
@@ -64,7 +68,18 @@ public class InstanceSettingsService {
 
         Map<String, String> effectiveProperties = new HashMap<>();
         for (String propertyName: configurableProperties.keySet()) {
-            effectiveProperties.put(propertyName, env.getProperty(propertyName));
+            boolean foundMatch = false;
+            for (String hiddenPropRegex : hiddenProperties) {
+                if (propertyName.matches(hiddenPropRegex)) {
+                    foundMatch = true;
+                    break;
+                }
+            }
+            if (foundMatch) {
+                effectiveProperties.put(propertyName, "HIDDEN");
+            } else {
+                effectiveProperties.put(propertyName, env.getProperty(propertyName));
+            }
         }
 
         InstanceSettingsUpdateDTO result = new InstanceSettingsUpdateDTO();
@@ -76,6 +91,9 @@ public class InstanceSettingsService {
         Properties props = loadRuntimeProperties();
         props.putAll(updateParams.getProperties());
         storeRuntimeProperties(props);
+
+        restartEndpoint.restart();
+
         return updateParams;
     }
 
