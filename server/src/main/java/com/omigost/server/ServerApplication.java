@@ -19,5 +19,4 @@ public class ServerApplication {
         application.addInitializers(new AWSLocalstackConfig.Initializer());
         application.run(args);
     }
-
 }
