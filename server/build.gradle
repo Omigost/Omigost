@@ -32,7 +32,7 @@ repositories {
 bootJar {
     baseName = 'omigost-server'
     version = '0.1.0'
-
+    
     from('../frontend/dist') {
         into 'static'
     }
