@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 public class SlackService implements NotificationService {
     private static final String SLACK_API_URL = "https://slack.com/api/";
     private static final String USERS_LIST = "users.list";
-    private static final String IM_OPEN = "im.open";
+    private static final String IM_OPEN = "conversations.open";
     private static final String CHAT_POST_MESSAGE = "chat.postMessage";
 
     @Value("${slack.oauth.bot.token}")
@@ -67,7 +67,7 @@ public class SlackService implements NotificationService {
 
     private String getConversationId(String username) {
         MultiValueMap<String, String> args = getArgsMapWithAuth();
-        args.add("user", getUserId(username));
+        args.add("users", getUserId(username));
 
         ResponseEntity<JsonNode> response = restTemplate.postForEntity(
                 SLACK_API_URL + IM_OPEN,
