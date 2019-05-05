@@ -76,6 +76,10 @@ bootRun {
 }
 
 dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-commons', version: '2.1.0.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-context', version: '2.1.0.RELEASE'
+
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     testImplementation('org.springframework.boot:spring-boot-starter-test')

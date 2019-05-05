@@ -11,6 +11,7 @@ deployment/**/build/
 deployment/**/build/**
 deployment/**/__pycache__/
 deployment/**/__pycache__/**
+**/app-properties.properties
 
 ### STS ###
 .apt_generated
