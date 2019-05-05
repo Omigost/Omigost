@@ -48,7 +48,10 @@ class AddBudgetView extends React.Component<any, undefined> {
                                         >
                                             {({data, error, loading}, refresh) => {
                                                 if (loading || !data) return null;
-                                                const tagsData = data;
+                                                /*
+                                                 * TODO: Handle available tags there
+                                                 * const tagsData = data;
+                                                 */
                                                 return (
                                                     <this.props.app.client.component mutation>
                                                         {({data, error, loading}, post) => {
@@ -70,8 +73,8 @@ class AddBudgetView extends React.Component<any, undefined> {
                                                                                 linkedAccounts: data.accounts,
                                                                                 tags: tagMapping,
                                                                             };
-                                                                            
-                                                                            if(data.separateBudgets) {
+
+                                                                            if (data.separateBudgets) {
                                                                                 return client.createSeparateBudget(newBudgetData);
                                                                             } else {
                                                                                 return client.createBudget(newBudgetData);
@@ -108,7 +111,7 @@ class AddBudgetView extends React.Component<any, undefined> {
                                                                                     ui: "enum",
                                                                                     enumLabels: accountsData.map(account => ({
                                                                                         name: account.name,
-                                                                                        label: `${account.name} (${account.email})`
+                                                                                        label: `${account.name} (${account.email})`,
                                                                                     })),
                                                                                     enum: accountsData.map(account => account.name),
                                                                                     description: "Account",

@@ -45,7 +45,7 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
         );
     }
-    
+
     createSeparateBudget(data): ResponsePromise {
         return wrapPromise(
             this.client.createSeparateBudget(data),
@@ -109,7 +109,7 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
         );
     }
-    
+
     getUserSpendings(data): ResponsePromise {
         return wrapPromise(
             this.client.getUserSpendings(data),
@@ -131,7 +131,7 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
         );
     }
-    
+
     deleteUser(data): ResponsePromise {
         return wrapPromise(
             this.client.deleteUser(data),
@@ -153,7 +153,7 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
         );
     }
-    
+
     addAccountToUser(data): ResponsePromise {
         return wrapPromise(
             this.client.addAccountToUser(data),
@@ -175,7 +175,7 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
         );
     }
-    
+
     deleteAccountFromUser(data): ResponsePromise {
         return wrapPromise(
             this.client.deleteAccountFromUser(data),
@@ -185,7 +185,7 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
         );
     }
-    
+
     getRecentEC2CostAllocationTags(): ResponsePromise {
         return wrapPromise(
             this.client.getRecentEC2CostAllocationTags(),

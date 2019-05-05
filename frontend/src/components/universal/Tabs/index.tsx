@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled  from "styled-components";
 
-import { Tab, Tabs as TabsComponent, TabList, TabPanel } from 'react-tabs';
+import { Tab, Tabs as TabsComponent, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 
 const Wrapper = styled.div`
@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-export interface TabsSpecs {
+export interface TabSpecs {
     name: string;
     content: () => React.ReactNode;
 }

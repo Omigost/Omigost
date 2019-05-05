@@ -1,9 +1,8 @@
 import * as React from "react";
 
-import styled from "styled-components";
 
-import TabUsers from "../TabUsers";
 import TabAccounts from "../TabAccounts";
+import TabUsers from "../TabUsers";
 
 export default class MainView extends React.Component<any, undefined> {
 
@@ -17,12 +16,12 @@ export default class MainView extends React.Component<any, undefined> {
                 tabs={[
                     {
                         name: "Users",
-                        content: () => (<TabUsers app={this.props.app} />)
+                        content: () => (<TabUsers app={this.props.app} />),
                     },
                     {
                         name: "Accounts",
-                        content: () => (<TabAccounts app={this.props.app} />)
-                    }
+                        content: () => (<TabAccounts app={this.props.app} />),
+                    },
                 ]}
             />
         );

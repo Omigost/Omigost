@@ -2,7 +2,6 @@ import * as React from "react";
 import styled  from "styled-components";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CheckboxComponent from "rc-checkbox";
 
 import {
     faCheck,
@@ -20,12 +19,12 @@ const Box = styled.div`
   border-radius: 0.3vw;
   border: 0.1vw solid transparent;
   cursor: pointer;
-  
+
   &:hover {
       background: white;
       border: 0.1vw solid ${(props) => props.theme.colors.primary};
   }
-  
+
   &:hover .BoxTick {
       color: ${(props) => props.theme.colors.primary};
   }

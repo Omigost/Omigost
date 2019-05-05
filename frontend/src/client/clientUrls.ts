@@ -19,7 +19,7 @@ export default {
         endpoint: "config/users",
     },
     getAccounts: {
-        endpoint: "aws/organizations",  
+        endpoint: "aws/organizations",
     },
     getUserSpendings: {
         endpoint: "aws/spending/account",
@@ -54,6 +54,6 @@ export default {
         method: "post",
     },
     getRecentEC2CostAllocationTags: {
-        endpoint: ({data}) => `tag/cost/ec2?start=${data.startDate}&end=${data.endDate}`, 
+        endpoint: ({data}) => `tag/cost/ec2?start=${data.startDate}&end=${data.endDate}`,
     },
 };

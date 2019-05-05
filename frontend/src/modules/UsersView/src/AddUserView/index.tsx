@@ -20,7 +20,7 @@ class AddUserView extends React.Component<any, undefined> {
         const userEditMode = this.props.userEditMode;
         const userToEdit = (userEditMode) ? (this.props.userToEdit) : (undefined);
         const pathToSliceOnBack = (userEditMode) ? (3) : (2);
-        
+
         return (
             <div>
                 <PanelHeader>
@@ -70,7 +70,7 @@ class AddUserView extends React.Component<any, undefined> {
                                                                             userName: data.name,
                                                                             accountName: accounts[index],
                                                                         })).then(() => {
-                                                                            addNextAccount(index+1, callback);
+                                                                            addNextAccount(index + 1, callback);
                                                                         });
                                                                     };
                                                                     addNextAccount(0, () => {
@@ -85,7 +85,7 @@ class AddUserView extends React.Component<any, undefined> {
                                                                                 communicationName: communications[index].name,
                                                                                 communicationValue: communications[index].value,
                                                                             })).then(() => {
-                                                                                addNextCommunication(index+1, callback);
+                                                                                addNextCommunication(index + 1, callback);
                                                                             });
                                                                         };
                                                                         addNextCommunication(0, () => {
@@ -123,7 +123,7 @@ class AddUserView extends React.Component<any, undefined> {
                                                                         ui: "enum",
                                                                         enumLabels: accountsData.map(account => ({
                                                                             name: account.name,
-                                                                            label: `${account.name} (${account.email})`
+                                                                            label: `${account.name} (${account.email})`,
                                                                         })),
                                                                         enum: accountsData.map(account => account.name),
                                                                         description: "Account",

@@ -5,6 +5,8 @@ import ButtonPanel from "./ButtonPanel";
 import Card from "./Card";
 import CardVerticalList from "./CardVerticalList";
 import Chart, { ChartDataOptionsPanel, ChartTypeSwitchPanel } from "./Chart";
+import Checkbox from "./Checkbox";
+import ClipboardCopy from "./ClipboardCopy";
 import Collapse from "./Collapse";
 import CustomDataRenderer from "./CustomDataRenderer";
 import DataFilter from "./DataFilter";
@@ -30,8 +32,10 @@ import Page from "./Page";
 import PlainList from "./PlainList";
 import Popover from "./Popover";
 import SearchableList from "./SearchableList";
+import Select from "./Select";
 import SideMenu from "./SideMenu";
 import Slider from "./Slider";
+import Tabs from "./Tabs";
 import Text from "./Text";
 import TextBox from "./TextBox";
 import TextInput from "./TextInput";
@@ -39,10 +43,6 @@ import { ThemeSetter } from "./ThemeProvider";
 import TinyButtons from "./TinyButtons";
 import Toggle from "./Toggle";
 import Tooltip from "./Tooltip";
-import Tabs from "./Tabs";
-import ClipboardCopy from "./ClipboardCopy";
-import Select from "./Select";
-import Checkbox from "./Checkbox";
 
 export default {
     Button,

@@ -1,15 +1,15 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
     faAddressCard, faBoxOpen, faChartArea,
-    faChartBar, faChartLine, faCheckSquare, faClock, faCommentAlt,
-    faCommentDots, faCommentSlash, faCompress, faDollarSign,
-    faDownload, faEnvelope, faExclamationTriangle, faExpand, faFlag,
-    faHistory, faMoneyBillAlt, faPalette,
-    faPlus, faRedo, faRulerHorizontal, faRulerVertical, faSearchDollar,
-    faShieldAlt, faTachometerAlt, faTimes, faTools,
-    faUpload, faUser, faUserCircle,
-    faWindowClose, faWindowMaximize, faWindowMinimize, faWrench,
-    faCopy, faUserSlash, faCheck,
+    faChartBar, faChartLine, faCheck, faCheckSquare, faClock,
+    faCommentAlt, faCommentDots, faCommentSlash, faCompress,
+    faCopy, faDollarSign, faDownload, faEnvelope, faExclamationTriangle,
+    faExpand, faFlag, faHistory,
+    faMoneyBillAlt, faPalette, faPlus, faRedo, faRulerHorizontal,
+    faRulerVertical, faSearchDollar, faShieldAlt, faTachometerAlt,
+    faTimes, faTools, faUpload,
+    faUser, faUserCircle, faUserSlash, faWindowClose,
+    faWindowMaximize, faWindowMinimize, faWrench,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {

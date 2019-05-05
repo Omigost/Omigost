@@ -24,11 +24,11 @@ class Panel extends React.Component<any, any> {
                         >
                             {({data, error, loading}, refresh) => {
                                 if (loading || !data) return null;
-                                let userToEdit = data.find(user => parseInt(user.id) === parseInt(props.match.params.userID));
+                                const userToEdit = data.find(user => parseInt(user.id) === parseInt(props.match.params.userID));
                                 if (userToEdit) {
-                                    userToEdit.accounts = (userToEdit.accounts || []).map(account => account.name)
+                                    userToEdit.accounts = (userToEdit.accounts || []).map(account => account.name);
                                 }
-                                
+
                                 return (
                                     <AddUserView
                                         userEditMode

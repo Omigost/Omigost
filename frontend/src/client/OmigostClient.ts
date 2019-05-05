@@ -54,7 +54,7 @@ export class OmigostClient implements OmigostClientInterface {
     createBudget(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.createBudget, data });
     }
-    
+
     createSeparateBudget(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.createSeparateBudget, data });
     }
@@ -78,7 +78,7 @@ export class OmigostClient implements OmigostClientInterface {
     getUsers(): ResponsePromise {
         return this.callEndpoint(null, CLIENT_URLS.getUsers);
     }
-    
+
     getAccounts(): ResponsePromise {
         return this.callEndpoint(null, CLIENT_URLS.getAccounts);
     }
@@ -90,8 +90,8 @@ export class OmigostClient implements OmigostClientInterface {
     createUser(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.createUser, data });
     }
-    
-    deleteUser(data) : ResponsePromise {
+
+    deleteUser(data): ResponsePromise {
         return new Promise<ResponseData>((resolve, reject) => {
             this.getUsers().then(users => {
                 const userToDelete = users.find(user => user.name === data.name);
@@ -100,13 +100,13 @@ export class OmigostClient implements OmigostClientInterface {
                         userName: userToDelete.name,
                         communicationName: com.name,
                         communicationValue: com.value,
-                    }))
+                    })),
                 ).then(() => {
                     Promise.all(
                         userToDelete.accounts.map(acc => this.deleteAccountFromUser({
                             userName: userToDelete.name,
                             accountName: acc.name,
-                        }))
+                        })),
                     ).then(() => {
                         this.callEndpoint(null, { ...CLIENT_URLS.deleteUser, data }).then((outputData) => {
                             resolve(outputData);
@@ -120,7 +120,7 @@ export class OmigostClient implements OmigostClientInterface {
     addCommunicationToUser(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.addCommunicationToUser, data });
     }
-    
+
     addAccountToUser(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.addAccountToUser, data });
     }
@@ -132,7 +132,7 @@ export class OmigostClient implements OmigostClientInterface {
     deleteAccountFromUser(data): ResponsePromise {
         return this.callEndpoint(null, { ...CLIENT_URLS.deleteAccountFromUser, data });
     }
-    
+
     getRecentEC2CostAllocationTags(): ResponsePromise {
         const endDate = moment().format("YYYY-MM-DD");
         const startDate = moment().subtract(90, "days").format("YYYY-MM-DD");
@@ -144,7 +144,7 @@ export class OmigostClient implements OmigostClientInterface {
             },
         });
     }
-    
+
     callEndpoint(endpoint, options): ResponsePromise {
         return new Promise<ResponseData>((resolve, reject) => {
             let method = "get";

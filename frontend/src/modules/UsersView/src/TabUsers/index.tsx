@@ -229,7 +229,7 @@ class TabUsers extends React.Component<any, TabUsersState> {
                                                                                         const name = row.name;
                                                                                         const accounts = row.accounts || [];
                                                                                         const userID = row.id;
-                                                                                        
+
                                                                                         let communications = row.communications || [];
 
                                                                                         if (communications.length === 0) {

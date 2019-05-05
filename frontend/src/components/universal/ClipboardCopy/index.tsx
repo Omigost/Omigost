@@ -23,7 +23,7 @@ const ButtonWrapper = styled.div`
     display: inline-block;
 
     & button {
-        font-family: ${(props: ButtonComponentProps) => props.theme.primaryFont};
+        font-family: ${(props) => props.theme.primaryFont};
         color: gray;
         background: transparent;
         border: none;

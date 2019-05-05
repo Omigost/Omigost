@@ -22,7 +22,7 @@ export default class StringEnum extends SimpleNode<string, NodeStringSchema> {
         const enumOpts = (this.getSchema().enum || []).map(value => {
             let oLabel = value;
             let oVal = value;
-            
+
             if (enumLabels) {
                 const lbSpec = enumLabels.find(opt => opt.name === value);
                 if (lbSpec) {
@@ -30,14 +30,14 @@ export default class StringEnum extends SimpleNode<string, NodeStringSchema> {
                     oVal = lbSpec.name || value;
                 }
             }
-            
+
             return ({
                 name: oVal,
                 label: oLabel,
             });
         });
-        
-        const selectedValue = enumOpts.find(opt => opt.name == value) || null;
+
+        const selectedValue = enumOpts.find(opt => opt.name === value) || null;
         return (
             <WithMargins parent={this}>
                 <WithErrors parent={this} context={context}>
@@ -46,7 +46,7 @@ export default class StringEnum extends SimpleNode<string, NodeStringSchema> {
                             value={selectedValue}
                             options={enumOpts}
                             onChange={(option) => {
-                                this.setState({ value: option.name, });
+                                this.setState({ value: option.name });
                             }}
                         />
                     </WithDescription>

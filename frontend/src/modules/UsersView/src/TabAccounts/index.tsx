@@ -1,20 +1,16 @@
+import * as moment from "moment";
 import * as React from "react";
-import * as moment from 'moment';
 import styled from "styled-components";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { withRouter } from "react-router-dom";
 
 import {
-    faCommentAlt, faCommentDots, faCommentSlash,
-    faDownload, faEnvelope,
-    faPlus, faTimes, faTools,
+    faCommentAlt,
+    faDownload,
+    faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
-import {
-    faSlackHash,
-} from "@fortawesome/free-brands-svg-icons";
 
 
 import { Box, Flex } from "@rebass/grid";
@@ -32,12 +28,6 @@ const PanelHeader = styled.div`
   margin-top: 2vw;
 `;
 
-const UserItemIconWrapper = styled.span`
-  display: inline-block;
-  font-size: 1vw;
-  margin-left: 0.2vw;
-`;
-
 const UserNameWrapper = styled.div`
   display: inline-block;
   width: 10vw;
@@ -46,16 +36,12 @@ const UserNameWrapper = styled.div`
 const UserEmailWrapper = styled.i`
   display: inline-block;
   margin-left: 1wv;
-  
-`
+
+`;
 
 const UserIconsContainer = styled.div`
   display: inline-block;
   margin-left: 0.5vw;
-`;
-
-const UserItemIconDescription = styled.div`
-  max-width: 20vw;
 `;
 
 const UserDetailRow = styled.div`
@@ -74,8 +60,8 @@ const UserDetailValue = styled.div`
 `;
 
 const truncateWithEllipses = (text, max) => {
-    return text.substr(0,max-1)+(text.length>max?'...':''); 
-}
+    return text.substr(0,max - 1) + (text.length > max ? "..." :"");
+};
 
 interface TabAccountsState {
     activeItem: string;
@@ -190,7 +176,7 @@ class TabAccounts extends React.Component<any, TabAccountsState> {
                                                                                                             {email}
                                                                                                         </UserEmailWrapper>
                                                                                                         <UserIconsContainer>
-                                                                                                        
+
                                                                                                         </UserIconsContainer>
                                                                                                         <this.props.app.UI.Collapse
                                                                                                             collapsed={this.state.activeItem !== row.name}
