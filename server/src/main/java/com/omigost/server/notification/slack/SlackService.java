@@ -27,13 +27,26 @@ public class SlackService implements NotificationService {
     @Autowired
     private RestTemplate restTemplate;
 
+    private JsonNode getSlackBodyFrom(ResponseEntity<JsonNode> response) {
+        JsonNode body = response.getBody();
+
+        if (body == null) {
+            throw new RuntimeException("Null reponse from Slack API");
+        }
+        if (!body.get("ok").asBoolean()) {
+            throw new RuntimeException("Slack API access failed, see these response details:\n" + body.toString());
+        }
+
+        return body;
+    }
+
     private ArrayNode getUsers() {
         ResponseEntity<JsonNode> response = restTemplate.postForEntity(
                 SLACK_API_URL + USERS_LIST,
                 getArgsMapWithAuth(),
                 JsonNode.class);
 
-        return (ArrayNode) response.getBody().get("members");
+        return (ArrayNode) getSlackBodyFrom(response).get("members");
     }
 
     private String getUserId(String username) {
@@ -60,7 +73,8 @@ public class SlackService implements NotificationService {
                 SLACK_API_URL + IM_OPEN,
                 args,
                 JsonNode.class);
-        return response.getBody().get("channel").get("id").asText();
+
+        return getSlackBodyFrom(response).get("channel").get("id").asText();
     }
 
     private String pullCallbackId() {
