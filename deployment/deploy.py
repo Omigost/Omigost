@@ -14,13 +14,13 @@ from scripts.composecli import runComposeCli
 @click.option('--path', '-p', default='.', help='Path to deployment profiles directory')
 @click.option('--loggingLevel', '-l', default='INFO', type=click.Choice(['INFO', 'DEBUG']), help='Set logging level')
 @click.option('--outputJSON', '-o', default='Dockerrun.aws.json', help='File to store Dockerrun.aws.json config')
-@click.option('--dry', '-d', type=bool, default=False, help="Perform only configuration generation, save it and do not deploy anything")
+@click.option('--dry', '-d', is_flag=True, default=False, help="Perform only configuration generation, save it and do not deploy anything")
 @click.option('--newEnvName', '-env', default='omigost', help="Set the name of new EB environment")
 @click.option('--createNewEnv', '-e', default=True, help="Create new EB environment")
 @click.option('--newEnvInstance', '-i', default='t3.medium', help="Instance type for which new environment is created")
 @click.option('--newEnvOptions', '-envopt', default='[]', help="Additional options passed to EB Cli when creating new environment")
-@click.option('--cli', '-c', default=False, help='Enable non-interactive CLI mode')
-@click.option('--devCompose', '-d', default=False, help='Runs Omigost locally using pure local sources and Docker composer (disables all deployment features)')
+@click.option('--cli', '-c', is_flag=True, default=False, help='Enable non-interactive CLI mode')
+@click.option('--devCompose', '-d', is_flag=True, default=False, help='Runs Omigost locally using pure local sources and Docker composer (disables all deployment features)')
 def runCli(
         profile, keyenv, secretenv, path, logginglevel, outputjson, dry,
         newenvname, createnewenv, newenvinstance, newenvoptions, cli,
