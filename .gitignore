@@ -5,8 +5,8 @@ frontend/build/
 nohup.out
 deployment/venv/
 deployment/venv/**
-deployment/Dockerrun.aws.json
 deployment/*Dockerrun.aws.json*
+deployment/*docker-compose.dev.yml*
 deployment/**/build/
 deployment/**/build/**
 deployment/**/__pycache__/

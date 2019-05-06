@@ -73,6 +73,11 @@ bootRun {
   classpath = classpathJar.outputs.files + configurations.dev
   main = 'com.omigost.server.ServerApplication'
   args = ['--spring.profiles.active=dev', '--server.port=8100']
+  if (project.hasProperty('springArgs')) {
+      args = [args, project.springArgs.split('\\s+')].flatten()
+  }
+  println ("Using provided Spring CLI arguments for bootRun task:")
+  println args
 }
 
 dependencies {
