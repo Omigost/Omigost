@@ -18,7 +18,7 @@ public class Communication {
     Integer id;
 
     @NotNull
-    String name;
+    String type;
 
     @NotNull
     String value;
@@ -31,17 +31,19 @@ public class Communication {
 
     public Communication() {}
 
-    public Communication(String name, String value) {
-        this.name = name;
+    public Communication(String type, String value) {
+        this.type = type;
         this.value = value;
     }
 
     public NotificationService service() {
-        switch (name) {
+        switch (type) {
             case CommunicationType.SLACK:
                 return new SlackService();
             default:
                 throw new RuntimeException("Communication type not supported!");
         }
-    };
+    }
+
+    ;
 }

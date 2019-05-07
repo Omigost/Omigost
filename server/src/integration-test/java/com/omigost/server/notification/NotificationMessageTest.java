@@ -1,5 +1,6 @@
 package com.omigost.server.notification;
 
+import com.omigost.server.DevConfigTestTemplate;
 import com.omigost.server.config.AWSLocalstackConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,11 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Objects;
 
-@ActiveProfiles("dev")
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@ContextConfiguration(initializers = {AWSLocalstackConfig.Initializer.class})
-public class NotificationMessageTest {
+
+public class NotificationMessageTest extends DevConfigTestTemplate {
 
     @Test
     public void exampleNotificationMessageBuilds() {

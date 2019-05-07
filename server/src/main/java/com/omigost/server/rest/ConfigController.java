@@ -98,9 +98,9 @@ public class ConfigController {
                                                 @RequestParam String communicationValue) {
         User user = userRepository.getUserByName(userName);
         Communication communication =
-                communicationRepository.getCommunicationByNameAndValueAndUser(communicationName, communicationValue, user);
+                communicationRepository.getCommunicationByTypeAndValueAndUser(communicationName, communicationValue, user);
         if (communication == null) {
-            throw new NotFoundException("Communication by this name, value and username could not be found");
+            throw new NotFoundException("Communication of this type, value and username could not be found");
         }
 
         communicationRepository.delete(communication);
