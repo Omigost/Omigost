@@ -19,20 +19,24 @@ import java.util.stream.Collectors;
 public class MachineListingService {
     @Value("${aws.region}")
     private String region;
-    @Autowired
-    private OrganizationService organizationService;
 
     @Autowired
-    private AWSCredentialsProvider credentialsProvider;
-
-    @Autowired
-    private AmazonEC2 amazonEC2;
-
+    AWSRoleBasedCredentialProvider roleBasedCredentialProvider;
     @Getter
     private List<Account> accounts;
 
     // https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html
     private final String ownerFilterKey = "owner-id";
+
+
+    private AmazonEC2 getAmazonEC2ForClient(String userId) {
+        AWSCredentialsProvider userRoleProvider = roleBasedCredentialProvider.getCredentialsForUser(userId);
+        return AmazonEC2ClientBuilder
+                .standard()
+                .withCredentials(userRoleProvider)
+                .withRegion(region)
+                .build();
+    }
 
     private boolean isInstanceRunning(Instance instance) {
         return instance.getState().getName().equals(InstanceStateName.Running.toString());
@@ -48,6 +52,7 @@ public class MachineListingService {
     }
 
     private List<Reservation> getReservations(String userId) {
+        AmazonEC2 amazonEC2 = getAmazonEC2ForClient(userId);
         Filter ownerIdFilter = new Filter(ownerFilterKey, Collections.singletonList(userId));
         DescribeInstancesRequest request = new DescribeInstancesRequest().withFilters(ownerIdFilter);
         DescribeInstancesResult instancesResult = amazonEC2.describeInstances(request);
