@@ -15,7 +15,6 @@ import java.util.List;
 
 @Service
 public class OrganizationService {
-
     @Value("${aws.region}")
     private String region;
 
