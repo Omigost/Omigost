@@ -116,18 +116,5 @@ dependencies {
     integrationTestCompile 'com.amazonaws:aws-java-sdk-organizations:1.11.457'
     integrationTestCompile 'com.amazonaws:aws-java-sdk-budgets:1.11.475'
     integrationTestCompile 'com.amazonaws:aws-java-sdk:1.11.475'
-}
-
-task integrationTest(type: Test) {
-    testClassesDir = sourceSets.integrationTest.output.classesDir
-    classpath = sourceSets.integrationTest.runtimeClasspath
-}
-
-task startBackend {
-
-}
-
-gradle.projectsEvaluated {
-    bootJar.dependsOn ':frontend:build'
-    startBackend.dependsOn bootRun
+    
 }

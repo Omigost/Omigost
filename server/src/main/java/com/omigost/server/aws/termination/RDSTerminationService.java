@@ -4,11 +4,11 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.rds.AmazonRDS;
 import com.amazonaws.services.rds.AmazonRDSClientBuilder;
 import com.amazonaws.services.rds.model.StopDBInstanceRequest;
+import com.omigost.server.aws.AWSRoleBasedCredentialProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
@@ -16,16 +16,14 @@ public class RDSTerminationService {
     @Value("${aws.region}")
     private String region;
 
-    private AmazonRDS amazonRDS;
-
     @Autowired
-    private AWSCredentialsProvider awsCredentials;
+    public AWSRoleBasedCredentialProvider awsRoleBasedCredentialProvider;
 
-    @PostConstruct
-    private void init() {
-        amazonRDS = AmazonRDSClientBuilder.standard()
+    private AmazonRDS getAmazonRDSForUser(String userId) {
+        AWSCredentialsProvider awsCredentialsProvider = awsRoleBasedCredentialProvider.getCredentialsForUser(userId);
+        return AmazonRDSClientBuilder.standard()
                 .withRegion(region)
-                .withCredentials(awsCredentials)
+                .withCredentials(awsCredentialsProvider)
                 .build();
     }
 
@@ -33,13 +31,14 @@ public class RDSTerminationService {
         return new StopDBInstanceRequest().withDBInstanceIdentifier(dbName);
     }
 
-    public void stop(String rdsName) {
+    public void stop(String rdsName, String userId) {
         StopDBInstanceRequest request = stoppingRequest(rdsName);
-        amazonRDS.stopDBInstance(request);
+        getAmazonRDSForUser(userId).stopDBInstance(request);
     }
 
-    public void stop(List<String> rdsNames) {
-        rdsNames.forEach(this::stop);
+    public void stop(List<String> rdsNames, String userId) {
+        if (rdsNames.isEmpty()) return;
+        rdsNames.forEach(rds -> stop(rds, userId));
     }
 
 }

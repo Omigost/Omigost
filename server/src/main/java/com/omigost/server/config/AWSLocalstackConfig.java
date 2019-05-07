@@ -24,6 +24,7 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -84,10 +85,15 @@ public class AWSLocalstackConfig {
         }
     }
 
+    @Primary
     @Bean
     AWSCredentialsProvider credentials() {
         return creds.getProvider();
     }
+
+    //TODO get iam credentials for root
+    @Bean(name = "iamCredentials")
+    AWSCredentialsProvider iamRootCredentials() {return  awsContainer.getCredentialsProvider();}
 
     @Bean
     public AmazonIdentityManagement amazonIdentityManagement() {
