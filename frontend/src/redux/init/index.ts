@@ -1,14 +1,15 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
     faAddressCard, faBoxOpen, faChartArea,
-    faChartBar, faChartLine, faCheckSquare, faClock, faCommentAlt,
-    faCommentDots, faCommentSlash, faCompress, faDollarSign,
-    faDownload, faEnvelope, faExclamationTriangle, faExpand, faFlag,
-    faHistory, faMoneyBillAlt, faPalette,
-    faPlus, faRedo, faRulerHorizontal, faRulerVertical, faSearchDollar,
-    faShieldAlt, faTachometerAlt, faTimes, faTools,
-    faUpload, faUser, faUserCircle,
-    faWindowClose, faWindowMaximize, faWindowMinimize, faWrench,
+    faChartBar, faChartLine, faCheck, faCheckSquare, faClock,
+    faCommentAlt, faCommentDots, faCommentSlash, faCompress,
+    faCopy, faDollarSign, faDownload, faEnvelope, faExclamationTriangle,
+    faExpand, faFlag, faHistory,
+    faMoneyBillAlt, faPalette, faPlus, faRedo, faRulerHorizontal,
+    faRulerVertical, faSearchDollar, faShieldAlt, faTachometerAlt,
+    faTimes, faTools, faUpload,
+    faUser, faUserCircle, faUserSlash, faWindowClose,
+    faWindowMaximize, faWindowMinimize, faWrench,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -31,7 +32,8 @@ export function init(): Promise<InitState> {
             faTimes, faExpand, faMoneyBillAlt, faCheckSquare, faAddressCard,
             faUser, faCommentSlash, faCommentDots, faEnvelope,
             faSlackHash, faCompress, faBoxOpen, faExclamationTriangle,
-            faPalette, faWrench, faRedo, faHistory,
+            faPalette, faWrench, faRedo, faHistory, faCopy, faUserSlash,
+            faCheck,
         );
 
         resolve({

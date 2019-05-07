@@ -1,0 +1,20 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.21.0"
+  }
+}
+
+apply plugin: 'com.palantir.docker'
+
+docker {
+  name "omigost/omigost-localstack"
+  files "../../server/build/libs/omigost-server-0.1.0.jar", "application.properties"
+  dockerfile file('Dockerfile')
+  noCache true
+}

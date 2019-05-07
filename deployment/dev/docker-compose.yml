@@ -1,0 +1,51 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:11-alpine
+    container_name: "postgres"
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin1
+      POSTGRES_DB: docker_dev
+  budgets:
+    image: "omigost/local-aws-budgets"
+    container_name: "budgets"
+    restart: "on-failure"
+  localstack:
+    image: "localstack/localstack"
+    container_name: "localstack"
+    environment:
+      - SERVICES=sns,apigateway
+    restart: "on-failure"
+  iam:
+    image: "picadoh/motocker"
+    container_name: "iam"
+    environment:
+      - MOTO_SERVICE=iam
+    restart: "on-failure"
+  organizations:
+    image: "picadoh/motocker"
+    container_name: "organizations"
+    environment:
+      - MOTO_SERVICE=organizations
+    restart: "on-failure"
+  ec2:
+    image: "picadoh/motocker"
+    container_name: "ec2"
+    environment:
+      - MOTO_SERVICE=ec2
+    restart: "on-failure"
+  omigost:
+    image: "omigost/omigost-localstack"
+    container_name: "omigost"
+    links:
+      - postgres
+      - budgets
+      - localstack
+      - iam
+      - organizations
+      - ec2
+    ports:
+      - "80:8080"
+    restart: "on-failure"
