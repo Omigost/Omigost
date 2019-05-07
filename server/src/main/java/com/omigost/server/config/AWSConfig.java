@@ -53,7 +53,7 @@ public class AWSConfig {
     AWSCredentialsProvider iamRootCredentials() {
         return new AWSCredentialsProvider() {
             @Override
-            public AWSCredentials getCredentials() {
+            public com.amazonaws.auth.AWSCredentials getCredentials() {
                 return new BasicAWSCredentials(nonRootAccessKey, nonRootSecretKey);
             }
             @Override
@@ -61,6 +61,7 @@ public class AWSConfig {
             }
         };
     }
+    
     @Bean
     public AmazonIdentityManagement amazonIdentityManagement() {
         return AmazonIdentityManagementClientBuilder
