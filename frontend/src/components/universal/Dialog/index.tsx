@@ -108,9 +108,9 @@ class Dialog extends React.Component<DialogProps, DialogState> {
             return null;
         }
 
-        const showButtonFullscreen = (this.props.showButtonFullscreen === false) ? (false) : (true);
-        const showButtonMinimize = (this.props.showButtonMinimize === false) ? (false) : (true);
-        const showButtonClose = (this.props.showButtonClose === false) ? (false) : (true);
+        const showButtonFullscreen = this.props.showButtonFullscreen || false;
+        const showButtonMinimize = this.props.showButtonMinimize || false;
+        const showButtonClose = this.props.showButtonClose || false;
 
         return (
             <Modal
