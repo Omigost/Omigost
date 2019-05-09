@@ -67,7 +67,7 @@ public class SlackService implements NotificationService {
         return "42"; // TODO mock - not sure what the callback_id should be
     }
 
-    public void sendAlertToUser(Communication communication, NotificationMessage message) {
+    public void sendMessageTo(Communication communication, NotificationMessage message) {
         sendAlertToUser(communication.getValue(), new SlackMessage(message, pullCallbackId()));
     }
 

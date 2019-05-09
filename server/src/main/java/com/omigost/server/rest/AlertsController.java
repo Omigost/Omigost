@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping("/alerts")
 public class AlertsController {
@@ -25,9 +27,12 @@ public class AlertsController {
     private MainNotificationService notifications;
 
     @PostMapping("/requestLimitIncrease")
-    public void handleLimitIncreaseRequest(@RequestBody RequestLimitIncreaseRequest body) {
-        AlertResponseToken token = alerts.invalidateResponseToken(body.getToken());
-        notifications.requestLimitIncrease(body.getReason(), token);
+    @Transactional
+    public void handleLimitIncreaseRequest(@RequestBody LimitIncreaseRequestRequest body) {
+        AlertResponseToken token = alerts.requireAlertResponseToken(body.getToken());
+        String reason = body.getToken();
+
+        notifications.notifyOfLimitIncreaseRequest(response);
     }
 
     @PostMapping("/trigger")

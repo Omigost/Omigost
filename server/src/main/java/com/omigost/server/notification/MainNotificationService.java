@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class MainNotificationService {
+public class MainNotificationService implements NotificationService {
     @Autowired
     private AccountRepository accountRepository;
 
@@ -34,47 +34,19 @@ public class MainNotificationService {
         return result;
     }
 
-    public NotificationMessage budgetTriggeredMessage(Budget budget, AlertResponseToken responseToken) {
-        return budgetTriggeredMessage(budget, responseToken.token);
-    }
-
-    public NotificationMessage budgetTriggeredMessage(Budget budget, String tokenString) {
-        String respondLinkUrl = "/requestBudgetLimit?token=" + tokenString; // TODO add host domain
-
-        if (new BudgetDecorator(budget).isOverrun())
-            return budgetOverrunMessage(budget, respondLinkUrl);
-        return forecastedBudgetOverrunMessage(budget, respondLinkUrl);
-    }
-
-    class RequestLimitIncreaseMessage extends NotificationMessage {
-        RequestLimitIncreaseMessage(String mainText, String respondLinkUrl) {
-            super(NotificationMessage.builder()
-                    .mainText(mainText)
-                    .link(new NotificationMessageLink("Request limit increase", respondLinkUrl))
-                    .build()
-            );
+    public void sendMessageTo(User user, NotificationMessage message) {
+        for (Communication communication : user.getCommunications()) {
+            sendMessageTo(communication, message);
         }
     }
 
-    private NotificationMessage forecastedBudgetOverrunMessage(Budget budget, String respondLinkUrl) {
-        return new RequestLimitIncreaseMessage(String.format(
-                "Budget %s is forecasted to exceed its %s limit.",
-                budget.getBudgetName(),
-                budget.getBudgetLimit().getAmount()
-        ), respondLinkUrl);
+    public void sendMessageTo(Communication communication, NotificationMessage message) {
+        communication.service().sendMessageTo(communication, message);
     }
 
-    private NotificationMessage budgetOverrunMessage(Budget budget, String respondLinkUrl) {
-        return new RequestLimitIncreaseMessage(String.format(
-                "Budget %s has exceeded its %s limit.",
-                budget.getBudgetName(),
-                budget.getBudgetLimit().getAmount()
-        ), respondLinkUrl);
-    }
-
-    public void requestLimitIncrease(String requestBody, AlertResponseToken token) {
         // TODO find admin of the resource by token
         // TODO notify admin with a nice message
+    public void notifyOfLimitIncreaseRequest(AlertResponse request) {
     }
 }
 

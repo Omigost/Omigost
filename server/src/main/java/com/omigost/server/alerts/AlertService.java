@@ -7,6 +7,7 @@ import com.omigost.server.model.AlertResponseToken;
 import com.omigost.server.model.Communication;
 import com.omigost.server.notification.MainNotificationService;
 import com.omigost.server.notification.NotificationMessage;
+import com.omigost.server.notification.message.BudgetTriggeredMessage;
 import com.omigost.server.repository.AlertRepository;
 import com.omigost.server.repository.AlertResponseTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,9 @@ public class AlertService {
 
         alertRepo.save(alert);
 
-        NotificationMessage budgetTriggeredMessage = notifications.budgetTriggeredMessage(budget, token);
+        NotificationMessage budgetTriggeredMessage = new BudgetTriggeredMessage(budget, token);
 
-        communication.service().sendAlertToUser(communication, budgetTriggeredMessage);
+        notifications.sendMessageTo(communication, budgetTriggeredMessage);
     }
 
     public AlertResponseToken invalidateResponseToken(String tokenString) throws AccessForbiddenException {
