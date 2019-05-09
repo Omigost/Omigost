@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO should this be here or in AWS? If in AWS, reorganize code - split models and services in sections
 public class BudgetDecorator extends Budget {
     @Delegate(types=Budget.class)
     public final Budget budget;

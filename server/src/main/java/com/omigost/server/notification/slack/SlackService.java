@@ -2,6 +2,7 @@ package com.omigost.server.notification.slack;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.omigost.server.exception.BadServiceResponseException;
 import com.omigost.server.exception.NotFoundException;
 import com.omigost.server.model.Communication;
 import com.omigost.server.notification.NotificationMessage;
@@ -13,12 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class SlackService implements NotificationService {
     private static final String SLACK_API_URL = "https://slack.com/api/";
     private static final String USERS_LIST = "users.list";
-    private static final String IM_OPEN = "im.open";
+    private static final String IM_OPEN = "conversations.open";
     private static final String CHAT_POST_MESSAGE = "chat.postMessage";
 
     @Value("${slack.oauth.bot.token}")
@@ -27,13 +29,28 @@ public class SlackService implements NotificationService {
     @Autowired
     private RestTemplate restTemplate;
 
+    private JsonNode getSlackBodyFrom(ResponseEntity<JsonNode> response) {
+        JsonNode body = response.getBody();
+
+        if (body == null) {
+            throw new BadServiceResponseException("Null response from Slack API");
+        }
+        if (!body.get("ok").asBoolean()) {
+            throw new ResponseStatusException(response.getStatusCode(),
+                    "Slack API access failed, see these response details:\n" + body.toString()
+            );
+        }
+
+        return body;
+    }
+
     private ArrayNode getUsers() {
         ResponseEntity<JsonNode> response = restTemplate.postForEntity(
                 SLACK_API_URL + USERS_LIST,
                 getArgsMapWithAuth(),
                 JsonNode.class);
 
-        return (ArrayNode) response.getBody().get("members");
+        return (ArrayNode) getSlackBodyFrom(response).get("members");
     }
 
     private String getUserId(String username) {
@@ -54,13 +71,14 @@ public class SlackService implements NotificationService {
 
     private String getConversationId(String username) {
         MultiValueMap<String, String> args = getArgsMapWithAuth();
-        args.add("user", getUserId(username));
+        args.add("users", getUserId(username));
 
         ResponseEntity<JsonNode> response = restTemplate.postForEntity(
                 SLACK_API_URL + IM_OPEN,
                 args,
                 JsonNode.class);
-        return response.getBody().get("channel").get("id").asText();
+
+        return getSlackBodyFrom(response).get("channel").get("id").asText();
     }
 
     private String pullCallbackId() {

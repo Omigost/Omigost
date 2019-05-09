@@ -37,6 +37,7 @@ public class AlertResponseToken {
 
     public AlertResponseToken() {
         this.token = UUID.randomUUID().toString();
+        this.status = ACTIVE_STATUS;
     }
 
     public AlertResponseToken(String token, String status) {
