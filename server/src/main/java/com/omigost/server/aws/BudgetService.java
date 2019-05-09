@@ -2,10 +2,8 @@ package com.omigost.server.aws;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.budgets.AWSBudgets;
-import com.amazonaws.services.budgets.AWSBudgetsClientBuilder;
 import com.amazonaws.services.budgets.model.*;
 import com.amazonaws.services.sns.AmazonSNS;
-import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sns.model.CreateTopicRequest;
 import com.amazonaws.services.sns.model.CreateTopicResult;
 import com.amazonaws.services.sns.model.DeleteTopicRequest;
@@ -109,7 +107,9 @@ public class BudgetService {
 
     public Budget getBudgetByName(String name) {
         return budgetsClient
-                .describeBudget(new DescribeBudgetRequest().withBudgetName(name))
+                .describeBudget(new DescribeBudgetRequest()
+                        .withBudgetName(name)
+                        .withAccountId(masterUserProvider.getMasterUserId()))
                 .getBudget();
     }
 
