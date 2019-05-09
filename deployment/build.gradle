@@ -1,0 +1,21 @@
+task justBuildDockerImages {
+    dependsOn([ 'dev:docker' ])
+}
+
+task justPushDockerImages {
+    dependsOn([ 'dev:dockerPush' ])
+}
+
+task deploymentRequirementServerBuild {
+    dependsOn(':server:bootJar')
+}
+
+task buildDockerImages {
+    dependsOn([ justBuildDockerImages, deploymentRequirementServerBuild ])
+    justBuildDockerImages.mustRunAfter(deploymentRequirementServerBuild)
+}
+
+task pushDockerImages {
+    dependsOn([ justPushDockerImages, buildDockerImages ])
+    justPushDockerImages.mustRunAfter(buildDockerImages)
+}

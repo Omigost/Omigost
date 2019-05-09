@@ -9,11 +9,37 @@ import MainView from "../MainView";
 class Panel extends React.Component<any, any> {
 
     render() {
+        const { app } = this.props;
         return (
             <div>
                 <Route
                     path={`${this.props.match.url}/users/add`}
                     component={(props) => (<AddUserView {...this.props} {...props} />)}
+                />
+                <Route
+                    path={`${this.props.match.url}/users/edit/:userID`}
+                    component={(props) => (
+                        <app.client.component
+                            request={(client) => client.getUsers()}
+                        >
+                            {({data, error, loading}, refresh) => {
+                                if (loading || !data) return null;
+                                const userToEdit = data.find(user => parseInt(user.id) === parseInt(props.match.params.userID));
+                                if (userToEdit) {
+                                    userToEdit.accounts = (userToEdit.accounts || []).map(account => account.name);
+                                }
+
+                                return (
+                                    <AddUserView
+                                        userEditMode
+                                        userToEdit={userToEdit}
+                                        {...this.props}
+                                        {...props}
+                                    />
+                                );
+                            }}
+                        </app.client.component>
+                    )}
                 />
                 <Route
                     path={`${this.props.match.url}/users/:user/communication/:com`}

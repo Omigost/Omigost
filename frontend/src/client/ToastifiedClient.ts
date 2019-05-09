@@ -46,6 +46,18 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
         );
     }
 
+    createSeparateBudget(data): ResponsePromise {
+        return wrapPromise(
+            this.client.createSeparateBudget(data),
+            (data) => {
+                this.toastActions.displaySuccessToast("New budget was successfully created");
+            },
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not create new budget", error);
+            },
+        );
+    }
+
     getBudgets(data): ResponsePromise {
         return wrapPromise(
             this.client.getBudgets(data),
@@ -88,6 +100,16 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
         );
     }
 
+    getAccounts(): ResponsePromise {
+        return wrapPromise(
+            this.client.getAccounts(),
+            idFn,
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not get accounts from server", error);
+            },
+        );
+    }
+
     getUserSpendings(data): ResponsePromise {
         return wrapPromise(
             this.client.getUserSpendings(data),
@@ -110,6 +132,16 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
         );
     }
 
+    deleteUser(data): ResponsePromise {
+        return wrapPromise(
+            this.client.deleteUser(data),
+            (data) => {},
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not delete existing user", error);
+            },
+        );
+    }
+
     addCommunicationToUser(data): ResponsePromise {
         return wrapPromise(
             this.client.addCommunicationToUser(data),
@@ -122,6 +154,16 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
         );
     }
 
+    addAccountToUser(data): ResponsePromise {
+        return wrapPromise(
+            this.client.addAccountToUser(data),
+            (data) => {},
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not add account to the user", error);
+            },
+        );
+    }
+
     deleteUserCommunication(data): ResponsePromise {
         return wrapPromise(
             this.client.deleteUserCommunication(data),
@@ -130,6 +172,26 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
             },
             (error) => {
                 this.toastActions.displayExceptionToast("Could not remove the communication method for user", error);
+            },
+        );
+    }
+
+    deleteAccountFromUser(data): ResponsePromise {
+        return wrapPromise(
+            this.client.deleteAccountFromUser(data),
+            (data) => {},
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not remove the account for user", error);
+            },
+        );
+    }
+
+    getRecentEC2CostAllocationTags(): ResponsePromise {
+        return wrapPromise(
+            this.client.getRecentEC2CostAllocationTags(),
+            idFn,
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not get EC2 allocation tags", error);
             },
         );
     }
