@@ -1,10 +1,9 @@
 package com.omigost.server.notification;
 
 import com.amazonaws.services.budgets.model.Budget;
-import com.omigost.server.model.AlertResponseToken;
-import com.omigost.server.model.BudgetDecorator;
-import com.omigost.server.model.Communication;
-import com.omigost.server.model.User;
+import com.omigost.server.aws.MasterUserProvider;
+import com.omigost.server.model.*;
+import com.omigost.server.notification.message.LimitIncreaseRequestMessage;
 import com.omigost.server.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +16,9 @@ import java.util.Set;
 public class MainNotificationService implements NotificationService {
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private MasterUserProvider masterUserProvider;
 
     public Set<Communication> getBudgetOwnersCommunications(Budget budget) {
         Set<User> users = new HashSet<>();
@@ -44,9 +46,11 @@ public class MainNotificationService implements NotificationService {
         communication.service().sendMessageTo(communication, message);
     }
 
-        // TODO find admin of the resource by token
-        // TODO notify admin with a nice message
     public void notifyOfLimitIncreaseRequest(AlertResponse request) {
+        User applicant = request.getAlert().getCommunication().getUser();
+        User admin = masterUserProvider.omigostAdministratorUser();
+        LimitIncreaseRequestMessage message = new LimitIncreaseRequestMessage(applicant, request.getBody());
+        sendMessageTo(admin, message);
     }
 }
 
