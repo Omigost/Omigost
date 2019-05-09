@@ -62,6 +62,8 @@ public class BudgetService {
         String budgetName = BUDGET_NAME_PREFIX + nextBudgetNumber.getAndIncrement();
         createSNSTopic(budgetName, true); // TODO
 
+        linkedAccounts.forEach(this::validateAccountExist);
+
         CreateBudgetRequest createBudgetRequest = new NewBudgetRequestBuilder(masterUserProvider.getMasterUserId())
                 .withLimit(limit)
                 .withName(budgetName)
@@ -71,6 +73,13 @@ public class BudgetService {
                 .build();
 
         budgetsClient.createBudget(createBudgetRequest);
+    }
+
+    private void validateAccountExist(String accountName) {
+        Account account = accountRepository.getAccountByName(accountName);
+        if (account == null) {
+            throw new NotFoundException("Account by name " + accountName + " does not exist");
+        }
     }
 
     public void createBudget(int limit, List<String> linkedAccounts) {
