@@ -30,6 +30,7 @@ const TextWrapperInlineLabel = styled.div`
 const ContentWrapperInlineLabel = styled.div`
   margin-left: 1vw;
   display: inline-block;
+  width: 70%;
 `;
 
 const TitleExtraWrapper = styled.div`

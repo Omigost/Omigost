@@ -2,6 +2,7 @@ package com.omigost.server.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.budgets.AWSBudgets;
 import com.amazonaws.services.budgets.AWSBudgetsClientBuilder;
@@ -39,28 +40,29 @@ import java.util.stream.Collectors;
 @Profile("dev")
 public class AWSLocalstackConfig {
 
-    @Value("${aws.region}")
-    private String region;
+    @Autowired
+    private com.omigost.server.config.AWSCredentials creds;
 
-    @Value("${aws.accessKey}")
-    private String AWSAccessKey;
-
-    @Value("${aws.secretKey}")
-    private String AWSSecretkey;
+    private boolean wasInitialized = false;
 
     private static PostgresContainer postgresContainer;
     @Autowired
     private LocalstackContainer awsContainer;
     @Autowired
-    private MotoContainer motoIAM;
+    private MotoContainerIAM motoIAM;
     @Autowired
-    private MotoContainer motoOrganizations;
+    private MotoContainerOrganizations motoOrganizations;
     @Autowired
-    private MotoContainer motoEC2;
+    private MotoContainerEC2 motoEC2;
     @Autowired
     private BudgetsContainer budgetsContainer;
 
-    private void ensureLocalstackIsRunning() {
+    private synchronized void ensureLocalstackIsRunning() {
+        if (wasInitialized) {
+            return;
+        }
+
+        wasInitialized = true;
         List<ImageContainer> c = new ArrayList<ImageContainer>() {{
             add(budgetsContainer);
             add(motoEC2);
@@ -79,13 +81,14 @@ public class AWSLocalstackConfig {
             ).get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("Could not setup all containers", e);
+            System.exit(-1);
         }
     }
 
     @Primary
     @Bean
     AWSCredentialsProvider credentials() {
-        return awsContainer.getCredentialsProvider();
+        return creds.getProvider();
     }
 
     //TODO get iam credentials for root
@@ -116,17 +119,8 @@ public class AWSLocalstackConfig {
     public AWSCostExplorer awsCostExplorer() {
         return AWSCostExplorerClientBuilder
                 .standard()
-                .withCredentials(new AWSCredentialsProvider() {
-                    @Override
-                    public AWSCredentials getCredentials() {
-                        return new BasicAWSCredentials(AWSAccessKey, AWSSecretkey);
-                    }
-
-                    @Override
-                    public void refresh() {
-                    }
-                })
-                .withRegion(region)
+                .withCredentials(creds.getProvider())
+                .withRegion(creds.getAwsRegion())
                 .build();
     }
 
