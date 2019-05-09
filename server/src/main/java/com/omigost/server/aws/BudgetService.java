@@ -8,6 +8,8 @@ import com.amazonaws.services.sns.model.CreateTopicRequest;
 import com.amazonaws.services.sns.model.CreateTopicResult;
 import com.amazonaws.services.sns.model.DeleteTopicRequest;
 import com.amazonaws.services.sns.model.SubscribeRequest;
+import com.omigost.server.model.Account;
+import com.omigost.server.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,9 @@ public class BudgetService {
 
     @Autowired
     private AmazonSNS snsClient;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     private AWSCredentialsProvider awsCredentials;
     private MasterUserProvider masterUserProvider;
