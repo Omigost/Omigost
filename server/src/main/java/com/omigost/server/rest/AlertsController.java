@@ -4,8 +4,10 @@ import com.amazonaws.services.budgets.model.Budget;
 import com.omigost.server.alerts.AlertService;
 import com.omigost.server.aws.BudgetService;
 import com.omigost.server.model.AlertResponseToken;
+import com.omigost.server.model.AlertResponse;
 import com.omigost.server.notification.MainNotificationService;
-import com.omigost.server.rest.dto.RequestLimitIncreaseRequest;
+import com.omigost.server.repository.AlertRepository;
+import com.omigost.server.rest.dto.LimitIncreaseRequestRequest;
 import com.omigost.server.rest.dto.SubscriptionConfirmationRequest;
 import com.omigost.server.rest.exception.BudgetNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class AlertsController {
     private AlertService alerts;
 
     @Autowired
+    private AlertRepository alertRepository;
+
+    @Autowired
     private MainNotificationService notifications;
 
     @PostMapping("/requestLimitIncrease")
@@ -32,6 +37,7 @@ public class AlertsController {
         AlertResponseToken token = alerts.requireAlertResponseToken(body.getToken());
         String reason = body.getToken();
 
+        AlertResponse response = alerts.createAlertResponse(token, reason);
         notifications.notifyOfLimitIncreaseRequest(response);
     }
 

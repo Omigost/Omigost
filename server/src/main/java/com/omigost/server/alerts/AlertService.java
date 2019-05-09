@@ -11,6 +11,7 @@ import com.omigost.server.notification.NotificationMessage;
 import com.omigost.server.notification.message.BudgetTriggeredMessage;
 import com.omigost.server.repository.AlertRepository;
 import com.omigost.server.repository.AlertResponseTokenRepository;
+import com.omigost.server.repository.AlertResponseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ public class AlertService {
 
     @Autowired
     private AlertRepository alertRepo;
+
+    @Autowired
+    private AlertResponseRepository alertResponseRepository;
 
     public void handleBudgetTriggered(Budget budget) {
         for (Communication communication : notifications.getBudgetOwnersCommunications(budget)) {
@@ -51,7 +55,9 @@ public class AlertService {
 
     public AlertResponse createAlertResponse(AlertResponseToken token, String reason) {
         Alert alert = alertRepo.getAlertByToken(token);
+        AlertResponse response = AlertResponse.builder().alert(alert).body(reason).build();
         token.invalidate();
+        alertResponseRepository.save(response);
         tokenRepo.save(token);
         return response;
     }
