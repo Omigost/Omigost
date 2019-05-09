@@ -2,6 +2,7 @@ package com.omigost.server.notification.slack;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.omigost.server.exception.BadServiceResponseException;
 import com.omigost.server.exception.NotFoundException;
 import com.omigost.server.model.Communication;
 import com.omigost.server.notification.NotificationMessage;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class SlackService implements NotificationService {
@@ -31,10 +33,12 @@ public class SlackService implements NotificationService {
         JsonNode body = response.getBody();
 
         if (body == null) {
-            throw new RuntimeException("Null reponse from Slack API");
+            throw new BadServiceResponseException("Null response from Slack API");
         }
         if (!body.get("ok").asBoolean()) {
-            throw new RuntimeException("Slack API access failed, see these response details:\n" + body.toString());
+            throw new ResponseStatusException(response.getStatusCode(),
+                    "Slack API access failed, see these response details:\n" + body.toString()
+            );
         }
 
         return body;
