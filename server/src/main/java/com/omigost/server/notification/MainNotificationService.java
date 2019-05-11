@@ -31,7 +31,7 @@ public class MainNotificationService implements NotificationService {
     public Set<Communication> getBudgetOwnersCommunications(Budget budget) {
         Set<User> users = new HashSet<>();
         Set<Communication> result = new HashSet<>();
-        List<String> linkedAccounts = budget.getCostFilters().get(BudgetDecorator.LINKED_ACCOUNT_FILTER);
+        List<String> linkedAccounts = budget.getCostFilters().get(BudgetDecorator.LINKED_ACCOUNT_FILTER); // TODO fix nullpt/**/r
 
         for (String linkedAccount : linkedAccounts) {
             users.addAll(accountRepository.getAccountByName(linkedAccount).getUsers());
