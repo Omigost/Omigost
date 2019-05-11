@@ -42,9 +42,9 @@ public class SlackService implements NotificationService {
     }
 
     private ArrayNode getUsers() {
-        ResponseEntity<JsonNode> response = new RestTemplate().postForEntity(
-                SLACK_API_URL + USERS_LIST,
-                getArgsMapWithAuth(),
+        String getUsersUrlWithAuth = SLACK_API_URL + USERS_LIST + "?token=" + authToken;
+        ResponseEntity<JsonNode> response = new RestTemplate().getForEntity(
+                getUsersUrlWithAuth,
                 JsonNode.class);
 
         return (ArrayNode) getSlackBodyFrom(response).get("members");
