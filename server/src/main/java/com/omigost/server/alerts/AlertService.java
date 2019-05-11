@@ -43,11 +43,9 @@ public class AlertService {
     private void triggerBudgetTriggeredAlert(Communication communication, Budget budget) {
         AlertResponseToken token = new AlertResponseToken();
 
-        Alert alert = Alert
-                .builder()
-                .communication(communication)
-                .token(tokenRepo.save(token))
-                .build();
+        Alert alert = new Alert();
+        alert.setCommunication(communication);
+        alert.setToken(tokenRepo.save(token));
 
         alertRepo.save(alert);
 

@@ -1,14 +1,11 @@
 package com.omigost.server.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-@Builder
 @EqualsAndHashCode
 public class Alert {
     @Id
