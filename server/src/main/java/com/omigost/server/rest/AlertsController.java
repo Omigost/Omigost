@@ -35,7 +35,7 @@ public class AlertsController {
     @Transactional
     public void handleLimitIncreaseRequest(@RequestBody LimitIncreaseRequestRequest body) {
         AlertResponseToken token = alerts.requireAlertResponseToken(body.getToken());
-        String reason = body.getToken();
+        String reason = body.getReason();
 
         AlertResponse response = alerts.createAlertResponse(token, reason);
         notifications.notifyOfLimitIncreaseRequest(response);
