@@ -8,7 +8,7 @@ import com.omigost.server.model.Communication;
 import com.omigost.server.model.AlertResponse;
 import com.omigost.server.notification.MainNotificationService;
 import com.omigost.server.notification.NotificationMessage;
-import com.omigost.server.notification.message.BudgetTriggeredMessage;
+import com.omigost.server.notification.message.MessageProvider;
 import com.omigost.server.repository.AlertRepository;
 import com.omigost.server.repository.AlertResponseTokenRepository;
 import com.omigost.server.repository.AlertResponseRepository;
@@ -19,6 +19,9 @@ import java.util.Optional;
 
 @Service
 public class AlertService {
+    @Autowired
+    MessageProvider messageProvider;
+
     @Autowired
     private MainNotificationService notifications;
 
@@ -48,7 +51,7 @@ public class AlertService {
 
         alertRepo.save(alert);
 
-        NotificationMessage budgetTriggeredMessage = new BudgetTriggeredMessage(budget, token);
+        NotificationMessage budgetTriggeredMessage = messageProvider.budgetTriggeredMessage(budget, token);
 
         notifications.sendMessageTo(communication, budgetTriggeredMessage);
     }

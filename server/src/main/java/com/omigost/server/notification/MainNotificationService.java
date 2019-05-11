@@ -3,7 +3,7 @@ package com.omigost.server.notification;
 import com.amazonaws.services.budgets.model.Budget;
 import com.omigost.server.aws.MasterUserProvider;
 import com.omigost.server.model.*;
-import com.omigost.server.notification.message.LimitIncreaseRequestMessage;
+import com.omigost.server.notification.message.MessageProvider;
 import com.omigost.server.notification.slack.SlackService;
 import com.omigost.server.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,9 @@ import java.util.Set;
 
 @Service
 public class MainNotificationService implements NotificationService {
+    @Autowired
+    MessageProvider messageProvider;
+
     @Autowired
     private AccountRepository accountRepository;
 
@@ -64,7 +67,7 @@ public class MainNotificationService implements NotificationService {
     public void notifyOfLimitIncreaseRequest(AlertResponse request) {
         User applicant = request.getAlert().getCommunication().getUser();
         User admin = masterUserProvider.omigostAdministratorUser();
-        LimitIncreaseRequestMessage message = new LimitIncreaseRequestMessage(applicant, request.getBody());
+        NotificationMessage message = messageProvider.limitIncreaseRequestMessage(applicant, request.getBody());
         sendMessageTo(admin, message);
     }
 }
