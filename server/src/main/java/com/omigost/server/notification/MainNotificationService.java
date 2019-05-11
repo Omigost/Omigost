@@ -4,6 +4,7 @@ import com.amazonaws.services.budgets.model.Budget;
 import com.omigost.server.aws.MasterUserProvider;
 import com.omigost.server.model.*;
 import com.omigost.server.notification.message.LimitIncreaseRequestMessage;
+import com.omigost.server.notification.slack.SlackService;
 import com.omigost.server.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,10 @@ public class MainNotificationService implements NotificationService {
 
     @Autowired
     private MasterUserProvider masterUserProvider;
+
+    @Autowired
+    private SlackService slackService; // extract mapping to a single ServiceProvider
+                                       // when too many services need to be included here
 
     public Set<Communication> getBudgetOwnersCommunications(Budget budget) {
         Set<User> users = new HashSet<>();
@@ -42,8 +47,18 @@ public class MainNotificationService implements NotificationService {
         }
     }
 
+    private NotificationService getCommunicationService(Communication communication) {
+        switch (communication.getType()) {
+            case CommunicationType.SLACK:
+                return slackService;
+            default:
+                throw new RuntimeException("Communication type not supported!");
+        }
+    }
+
     public void sendMessageTo(Communication communication, NotificationMessage message) {
-        communication.service().sendMessageTo(communication, message);
+        getCommunicationService(communication)
+                .sendMessageTo(communication, message);
     }
 
     public void notifyOfLimitIncreaseRequest(AlertResponse request) {
