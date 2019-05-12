@@ -18,5 +18,12 @@ task startFrontend(type: NpmTask) {
   args = ['run', 'start-dev']
 }
 
+task fixNodeSassVersionCompat(type: NpmTask) {
+  args = ['rebuild', 'node-sass']
+}
+
 build.dependsOn(npm_install)
 startFrontend.dependsOn(npm_install)
+
+npm_install.dependsOn(fixNodeSassVersionCompat)
+

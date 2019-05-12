@@ -26,7 +26,7 @@ public class User {
     @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "users")
     Set<Account> accounts = new HashSet<>();
-
+    
     public User() {}
 
     public User(String name) {
