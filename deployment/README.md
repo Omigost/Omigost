@@ -35,13 +35,28 @@ You can change that using command with `-k` and `-s` options: `./deployment/depl
 The scripts looks for variables called `<env_key_name>` and `<env_secret_name>`. If they do not exist then it tries to
 use exact value specfied as parameter so you can directly pass your credentials:
 ```bash
-    ./deployment/deploy -k AWSKEY123123213 -s AWSSECRET213123
+    ./deployment/deploy -k AWSKEY123123213 -s AWSSECRET213123 dev
 ```
-Note that **it's very unsafe to pass credentails like this and you have been warned**
+Note that **it's very unsafe to pass credentials like this and you have been warned!**
 
 You can type the following command to get detailed info about script usage:
 ```bash
     $ ./deployment/deploy --help
+```
+
+## Run locally without deployment
+
+You can run Omigost locally using Docker compose.
+To do that simply add `-d` flag:
+```bash
+    $ ./deployment/deploy dev -d
+```
+This will launch all containers.
+
+If you want to restart just the Omigost service.
+Please perform a post request:
+```bash
+    $ curl --request POST http://localhost:8100/actuator/restart
 ```
 
 ## Notes for developers

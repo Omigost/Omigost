@@ -297,6 +297,40 @@ export class RootNode extends Node<any, any, NodeSchema> {
         return "root";
     }
 
+    getJsonSchema(): NodeSchema {
+        const compatID = "id-" + (Math.random() * 1000000000);
+        const recParse = (node, removeLabels) => {
+            if (!node || typeof node !== "object") {
+                return;
+            } else if (!removeLabels && node._jsonSchemaCompat === compatID) {
+                return;
+            } else if (removeLabels && !node._jsonSchemaCompat) {
+                return;
+            }
+
+            if (!removeLabels) {
+                node._jsonSchemaCompat = compatID;
+            } else {
+                delete node._jsonSchemaCompat;
+            }
+
+            if (!removeLabels) {
+                if (node.nullable && node.type && typeof node.type !== "object") {
+                    node.type = [node.type, "null"];
+                }
+            }
+            Object.keys(node).forEach(key => {
+                if (key !== "type") {
+                    recParse(node[key], removeLabels);
+                }
+            });
+        };
+        const schema = this.getSchema();
+        recParse(schema, false);
+        recParse(schema, true);
+        return schema;
+    }
+
     // FIXME: ROOT
     onChildStateChanged(state: NodeState<any>, source: NodeAny, originalSource?: NodeAny) {
         this.setState(state);

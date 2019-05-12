@@ -7,6 +7,7 @@ import StringDefault from "./renderers/StringDefault";
 import StringEnum from "./renderers/StringEnum";
 import StringHourTime from "./renderers/StringHourTime";
 import StringNotice from "./renderers/StringNotice";
+import StringPassword from "./renderers/StringPassword";
 
 import ArrayDefault from "./renderers/ArrayDefault";
 import ArrayTuple from "./renderers/ArrayTuple";
@@ -23,6 +24,7 @@ export const defaultParserConfig: SchemaParserConfig = {
         },
         STRING: {
             default: StringDefault,
+            password: StringPassword,
             notice:  StringNotice,
             colorPicker: StringColorPicker,
             hourTime: StringHourTime,

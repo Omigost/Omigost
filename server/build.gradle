@@ -73,13 +73,24 @@ bootRun {
   classpath = classpathJar.outputs.files + configurations.dev
   main = 'com.omigost.server.ServerApplication'
   args = ['--spring.profiles.active=dev', '--server.port=8100']
+  if (project.hasProperty('springArgs')) {
+      args = [args, project.springArgs.split('\\s+')].flatten()
+  }
+  println ("Using provided Spring CLI arguments for bootRun task:")
+  println args
 }
 
 dependencies {
+
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-commons', version: '2.1.0.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-context', version: '2.1.0.RELEASE'
+
     compileOnly('org.projectlombok:lombok:1.18.4')
     testCompileOnly('org.projectlombok:lombok:1.18.4')
     annotationProcessor('org.projectlombok:lombok:1.18.4')
     testAnnotationProcessor('org.projectlombok:lombok:1.18.4')
+
 
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
