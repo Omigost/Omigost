@@ -1,6 +1,5 @@
 package com.omigost.server.aws.termination;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omigost.server.model.Communication;
 import com.omigost.server.model.CommunicationType;
 import com.omigost.server.notification.NotificationMessage;
@@ -14,18 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
-@RestController
-@RequestMapping("${slack.response.endpoint}")
 @Slf4j
 public class SlackCommunicationService {
     @Autowired
@@ -38,7 +31,6 @@ public class SlackCommunicationService {
     private TerminationTokenService terminationTokenService;
     @Value("${communication.remind.period}")
     long remindPeriod;
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * returns the callback id for testing purposes
@@ -46,12 +38,12 @@ public class SlackCommunicationService {
     public String sendSlackReminder(String awsId, int instanceCount) {
         Collection<Communication> communications = communicationRepository.getCommunicationsForAWSId(awsId);
         String callbackId = terminationTokenService.serializeToken(awsId);
-        long currentTimestramp = System.currentTimeMillis() / 1000;
+        long currentTimestamp = System.currentTimeMillis() / 1000;
         for (Communication communication : communications) {
             if (!communication.getType().equals(CommunicationType.SLACK)) continue;
 
-            long timeAfterLastReminder = currentTimestramp - communication.getLastMessageTimestamp();
-            timeAfterLastReminder=timeAfterLastReminder/(60*60);//convert to hours
+            long timeAfterLastReminder = currentTimestamp - communication.getLastMessageTimestamp();
+            timeAfterLastReminder = timeAfterLastReminder / (60 * 60); //convert to hours
             if (remindPeriod > timeAfterLastReminder) continue;
 
             NotificationMessage notificationMessage = NotificationMessage.builder()
@@ -63,7 +55,7 @@ public class SlackCommunicationService {
                     .build();
 
             slackService.sendAlertToUser(communication, notificationMessage, callbackId);
-            communication.setLastMessageTimestamp(currentTimestramp);
+            communication.setLastMessageTimestamp(currentTimestamp);
             communicationRepository.save(communication);
 
             log.info("sent message via slack for ec2s working in account " + awsId);
@@ -71,12 +63,8 @@ public class SlackCommunicationService {
         return callbackId;
     }
 
-    //slack sends without application/json header, so conversion should be done manually
-    @PostMapping
-    public String slackResponseHandler(@RequestParam Map<String, String> body) throws IOException {
-        SlackResponseDTO responseDTO = objectMapper.readValue(body.get("payload"), SlackResponseDTO.class);
+    public String slackResponseHandler(SlackResponseDTO responseDTO) {
         Action action = responseDTO.getActions().get(0);
-
         String callBackId = responseDTO.getCallback_id();
         Optional<String> awsUserId = terminationTokenService.deserializeToken(callBackId);
         return awsUserId.map(s -> processInstanceAction(action.getValue(), s)).orElse("I am sorry, but the message token has timed out. :(");
