@@ -13,7 +13,7 @@ export interface LoginPanelProps {
     match: any;
 }
 
-class LoginPanel extends React.Component<LoginPanelProps, undefined> {
+export class LoginPanel extends React.Component<LoginPanelProps, undefined> {
     render() {
         return (
             <Description

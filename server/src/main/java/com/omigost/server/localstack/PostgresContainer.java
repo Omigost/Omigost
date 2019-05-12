@@ -12,30 +12,40 @@ import java.util.Map;
 public class PostgresContainer implements ImageContainer {
 
     private PostgreSQLContainer container;
+    private String imageName;
+    private boolean shouldLaunchDocker;
 
     public PostgresContainer(final String imageName) {
-        container = new PostgreSQLContainer(imageName);
+        this.container = null;
+        this.imageName = imageName;
+        this.shouldLaunchDocker = true;
     }
 
     public void launch() {
-        if (!container.isRunning()) {
+        if (container == null) {
+            container = new PostgreSQLContainer(imageName);
+        }
+        if (shouldLaunchDocker && !container.isRunning()) {
             container.start();
         }
     }
 
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-        launch();
+        if (configurableApplicationContext.getEnvironment().getProperty("localstack.postgres.useExternal", "false").equals("false")) {
+            launch();
+            ConfigurableEnvironment environment = new StandardEnvironment();
+            Map<String, Object> overrideConfig = new HashMap<String, Object>() {{
+                put("spring.datasource.url", container.getJdbcUrl());
+                put("spring.datasource.username", container.getUsername());
+                put("spring.datasource.password", container.getPassword());
+            }};
 
-        ConfigurableEnvironment environment = new StandardEnvironment();
-        Map<String, Object> overrideConfig = new HashMap<String, Object>() {{
-            put("spring.datasource.url", container.getJdbcUrl());
-            put("spring.datasource.username", container.getUsername());
-            put("spring.datasource.password", container.getPassword());
-        }};
-
-        ConfigurableEnvironment env = configurableApplicationContext.getEnvironment();
-        env.getPropertySources().addFirst(new MapPropertySource(this.getClass().getCanonicalName(), overrideConfig));
-        configurableApplicationContext.setEnvironment(env);
+            ConfigurableEnvironment env = configurableApplicationContext.getEnvironment();
+            env.getPropertySources().addFirst(new MapPropertySource(this.getClass().getCanonicalName(), overrideConfig));
+            configurableApplicationContext.setEnvironment(env);
+        } else {
+            shouldLaunchDocker = false;
+        }
     }
 
 }

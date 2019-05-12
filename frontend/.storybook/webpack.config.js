@@ -1,0 +1,1 @@
+module.exports = (require('ts-require')({ delTemp: true }))(require("path").resolve(__dirname, "../configs/webpack/storybook.ts")).default;

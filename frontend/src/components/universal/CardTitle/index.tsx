@@ -13,7 +13,7 @@ const Wrapper = styled.div<WrapperProps>`
 `;
 
 export interface CardTitleProps {
-    children: string;
+    children: React.ReactNode;
     fontSize?: string;
 }
 

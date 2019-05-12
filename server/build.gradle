@@ -76,10 +76,14 @@ bootRun {
 }
 
 dependencies {
+    compileOnly('org.projectlombok:lombok:1.18.4')
+    testCompileOnly('org.projectlombok:lombok:1.18.4')
+    annotationProcessor('org.projectlombok:lombok:1.18.4')
+    testAnnotationProcessor('org.projectlombok:lombok:1.18.4')
+
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
-    implementation('org.projectlombok:lombok:1.18.4')
 
     implementation('org.postgresql:postgresql:42.2.1')
     implementation('com.amazonaws:aws-java-sdk-iam:1.11.457')
@@ -98,7 +102,6 @@ dependencies {
     integrationTestCompile 'org.springframework.boot:spring-boot-starter-web'
     integrationTestCompile 'org.springframework.boot:spring-boot-starter-data-jpa'
     integrationTestCompile 'org.springframework.boot:spring-boot-starter-test'
-    integrationTestCompile 'org.projectlombok:lombok:1.18.4'
     integrationTestCompile 'junit:junit:4.12'
     integrationTestCompile 'org.assertj:assertj-core:3.0.0'
     integrationTestCompile 'com.amazonaws:aws-java-sdk-sqs:1.11.524'

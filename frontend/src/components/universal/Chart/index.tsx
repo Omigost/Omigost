@@ -152,7 +152,7 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
 
     renderAxesComponents(dataFormatOptions: DataFormatOptions) {
 
-        if (this.props.tiny && !this.props.showAxes) {
+        if ((this.props.tiny && !this.props.showAxes) || (this.props.showAxes === false)) {
             return null;
         }
 
@@ -192,7 +192,7 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
     }
 
     renderReferenceLines(dataFormatOptions: DataFormatOptions) {
-        if (this.props.tiny && !this.props.showReferenceLines) {
+        if ((this.props.tiny && !this.props.showReferenceLines) || (this.props.showReferenceLines === false)) {
             return null;
         }
 
@@ -236,11 +236,11 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
     }
 
     renderLegend() {
-        return (this.props.tiny && !this.props.showLegend) ? (null) :(<Legend />);
+        return ((this.props.tiny && !this.props.showLegend) || (this.props.showLegend === false)) ? (null) :(<Legend />);
     }
 
     renderTooltip(dataFormatOptions: DataFormatOptions) {
-        if (this.props.tiny && !this.props.showTooltip) {
+        if ((this.props.tiny && !this.props.showTooltip) || (this.props.showTooltip === false)) {
             return null;
         }
 
@@ -254,7 +254,7 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
     }
 
     renderGrid() {
-        return (this.props.tiny && !this.props.showGrid) ? (null) :(<CartesianGrid strokeDasharray="3 3"/>);
+        return ((this.props.tiny && !this.props.showGrid) || (this.props.showGrid === false)) ? (null) :(<CartesianGrid strokeDasharray="3 3"/>);
     }
 
     renderOutputColumns(getSeriesStyle: SeriesStylizer, dataFormatOptions: DataFormatOptions, SeriesComponent) {
@@ -336,6 +336,10 @@ class Chart extends React.Component<ChartProps, ChartState> implements ChartInst
         const dataFormatOptions: DataFormatOptions = {...this.props,
             graphType: this.state.graphType,
             rotate90: (this.state.graphOrientation === ChartOrientation.Horizontal)};
+
+        if (this.props.rotate90 !== null && typeof this.props.rotate90 !== "undefined") {
+            dataFormatOptions.rotate90 = this.props.rotate90;
+        }
 
         const ChartComponent: ChartComponentType = this.getChartComponent(dataFormatOptions);
         const SeriesComponent: ChartSeriesComponentType = this.getSeriesComponent(dataFormatOptions);

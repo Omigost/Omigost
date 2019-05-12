@@ -3,6 +3,15 @@
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 frontend/build/
+nohup.out
+deployment/venv/
+deployment/venv/**
+deployment/Dockerrun.aws.json
+deployment/*Dockerrun.aws.json*
+deployment/**/build/
+deployment/**/build/**
+deployment/**/__pycache__/
+deployment/**/__pycache__/**
 
 ### STS ###
 .apt_generated

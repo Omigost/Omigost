@@ -2,3 +2,5 @@ rootProject.name = 'Omigost'
 
 include 'frontend'
 include 'server'
+include 'deployment'
+include 'deployment:dev'

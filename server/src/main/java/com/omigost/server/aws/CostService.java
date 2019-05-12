@@ -71,6 +71,7 @@ public class CostService {
 
 
     public List<AWSDailySpendingDTO> getSpendingForAccount(DateInterval interval, String userId) {
+        // TODO: Change parameter name
         Expression linkedAccountFilter = new Expression()
                 .withDimensions(new DimensionValues().withKey(Dimension.LINKED_ACCOUNT).withValues(userId));
 

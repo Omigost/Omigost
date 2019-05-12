@@ -2,6 +2,7 @@ package com.omigost.server.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.budgets.AWSBudgets;
@@ -19,6 +20,7 @@ import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.omigost.server.localstack.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -39,19 +41,29 @@ import java.util.stream.Collectors;
 @Profile("dev")
 public class AWSLocalstackConfig {
 
+    @Autowired
+    private com.omigost.server.config.AWSCredentials creds;
+
+    private boolean wasInitialized = false;
+
     private static PostgresContainer postgresContainer;
     @Autowired
     private LocalstackContainer awsContainer;
     @Autowired
-    private MotoContainer motoIAM;
+    private MotoContainerIAM motoIAM;
     @Autowired
-    private MotoContainer motoOrganizations;
+    private MotoContainerOrganizations motoOrganizations;
     @Autowired
-    private MotoContainer motoEC2;
+    private MotoContainerEC2 motoEC2;
     @Autowired
     private BudgetsContainer budgetsContainer;
 
-    private void ensureLocalstackIsRunning() {
+    private synchronized void ensureLocalstackIsRunning() {
+        if (wasInitialized) {
+            return;
+        }
+
+        wasInitialized = true;
         List<ImageContainer> c = new ArrayList<ImageContainer>() {{
             add(budgetsContainer);
             add(motoEC2);
@@ -70,13 +82,14 @@ public class AWSLocalstackConfig {
             ).get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("Could not setup all containers", e);
+            System.exit(-1);
         }
     }
 
     @Primary
     @Bean
     AWSCredentialsProvider credentials() {
-        return awsContainer.getCredentialsProvider();
+        return creds.getProvider();
     }
 
     //TODO get iam credentials for root
@@ -107,11 +120,10 @@ public class AWSLocalstackConfig {
 
     @Bean
     public AWSCostExplorer awsCostExplorer() {
-        ensureLocalstackIsRunning();
         return AWSCostExplorerClientBuilder
                 .standard()
-                .withEndpointConfiguration(awsContainer.getEndpointNothing())
-                .withCredentials(credentials())
+                .withCredentials(creds.getProvider())
+                .withRegion(creds.getAwsRegion())
                 .build();
     }
 

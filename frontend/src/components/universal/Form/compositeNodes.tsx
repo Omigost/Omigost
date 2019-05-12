@@ -39,10 +39,29 @@ export abstract class CompositeNode<O, M extends NodeSchema> extends Node<NodeS,
         return initialState;
     }
 
-    getRawOutput() {
+    getValueMapFromValue(value: NodeOutputValue<O>): NodeOutputValue<O> {
+        return { ...value };
+    }
+
+    setValue(value: NodeOutputValue<O>) {
+        if (this.getSchema().formatInput) {
+            value = this.getSchema().formatInput(value);
+        }
+        value = this.getValueMapFromValue(value);
+
+        Object.keys(this.getChildrenMapFromSchema()).forEach(key => {
+            if (this.findChild(key)) {
+                this.findChild(key).setValue(value[key]);
+            }
+        });
+    }
+
+    getRawOutput(options) {
         const output = {};
         Object.keys(this.getChildrenMapFromSchema()).forEach(key => {
-            output[key] = this.findChild(key).getOutput();
+            if (this.findChild(key) && this.findChild(key).isOutputAvailable()) {
+                output[key] = this.findChild(key).getOutput(options);
+            }
         });
         return this.getCompositeOutput(output);
     }
@@ -67,7 +86,9 @@ export abstract class CompositeNode<O, M extends NodeSchema> extends Node<NodeS,
         const childrenMap: ChildrenMap<React.ReactNode> = {};
 
         Object.keys(this.getChildrenMapFromSchema()).forEach((key: string, index: number) => {
-            childrenMap[key] = this.findChild(key).render(context);
+            if (this.findChild(key)) {
+                childrenMap[key] = this.findChild(key).render(context);
+            }
         });
 
         return this.renderComposite(context, childrenMap);

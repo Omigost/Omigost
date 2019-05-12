@@ -7,6 +7,17 @@ import { FormContext, NodeAny, NodeState, RootNode, Schema } from "./schemaTypes
 
 const Wrapper = styled.div`
   width: 100%;
+  color: black;
+  font-family: ${(props) => props.theme.primaryFont};
+  font-size: 1vw;
+`;
+
+const SubmitButtonWrapper = styled.div`
+  width: 50%;
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+
+  width: 40%;
 `;
 
 export interface FormProps {
@@ -16,11 +27,31 @@ export interface FormProps {
     validateOnInit?: boolean;
     children: Schema;
     onSubmit: (data: any) => void;
+    onChange?: (data: any) => void;
+    submitButton?: any;
+    defaultValue?: any;
+    value?: any;
 }
 
 interface FormState {
     tree: RootNode;
     formContext: FormContext;
+    disableOnChangeListener: boolean;
+}
+
+function debounce(func: any, wait: number, immediate?: boolean) {
+    let timeout;
+    return function() {
+        const context = this, args = arguments;
+        const later = () => {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        const callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
 }
 
 export default class Form extends React.Component<FormProps, FormState> {
@@ -32,24 +63,37 @@ export default class Form extends React.Component<FormProps, FormState> {
 
         this.state = {
             tree: null,
+            disableOnChangeListener: false,
             formContext: {
                 errors: [],
                 getErrorsForNode: () => [],
             },
         };
+
+        this.handleChangeEvent = debounce(this.handleChangeEvent.bind(this), 250);
+    }
+
+    handleChangeEvent() {
+        if (this.state.disableOnChangeListener) return;
+        if (this.props.validateOnChange !== false) {
+            this.state.tree.validate();
+        }
+        if (this.state.tree && this.props.onChange) {
+            this.props.onChange(this.state.tree.getData());
+        }
     }
 
     handleFormStateUpdate(state: NodeState<any>, root: RootNode) {
+        if (this.state.disableOnChangeListener) return;
         this.setState({
             tree: root,
         }, () => {
-            if (this.props.validateOnChange !== false) {
-                this.state.tree.validate();
-            }
+            this.handleChangeEvent();
         });
     }
 
     handleFormContextUpdate(context: FormContext, source: NodeAny) {
+        if (this.state.disableOnChangeListener) return;
         this.setState({
             formContext: {
                 ...this.state.formContext,
@@ -59,6 +103,7 @@ export default class Form extends React.Component<FormProps, FormState> {
     }
 
     handleFormContextMapping(fn: (context: FormContext) => FormContext, source: NodeAny) {
+        if (this.state.disableOnChangeListener) return;
         this.handleFormContextUpdate(fn(this.state.formContext), source);
     }
 
@@ -73,6 +118,17 @@ export default class Form extends React.Component<FormProps, FormState> {
                     rootModifyContext: (fn: (context: FormContext) => FormContext, source: NodeAny) => this.handleFormContextMapping(fn, source),
                     rootState: {},
                 });
+
+                if (this.props.defaultValue) {
+                    this.setState({
+                        disableOnChangeListener: true,
+                    }, () => {
+                        tree.setValue(this.props.defaultValue);
+                        this.setState({
+                            disableOnChangeListener: false,
+                        });
+                    });
+                }
 
                 this.setState({
                     tree,
@@ -97,9 +153,10 @@ export default class Form extends React.Component<FormProps, FormState> {
                 {(this.state.tree) ? (this.state.tree.render(this.state.formContext)) : (null)}
                 {
                     (this.state.tree && this.props.onSubmit) ? (
-                        <div
+                        <SubmitButtonWrapper
                             style={{
-                                marginLeft: "-2vw",
+                                marginLeft: "30%",
+                                marginRight: "30%",
                             }}
                         >
                             <Button
@@ -109,9 +166,9 @@ export default class Form extends React.Component<FormProps, FormState> {
                                     }
                                 }}
                             >
-                                Save
+                                {this.props.submitButton || "Save"}
                             </Button>
-                        </div>
+                        </SubmitButtonWrapper>
                     ) :(null)
                 }
             </Wrapper>

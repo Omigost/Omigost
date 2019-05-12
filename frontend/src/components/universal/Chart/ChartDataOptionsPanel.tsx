@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 `;
 
 export interface ChartDataOptionsPanelProps {
-    chart: ChartInstance;
+    chart?: ChartInstance;
 }
 
 class ChartDataOptionsPanel extends React.Component<ChartDataOptionsPanelProps, any> {
@@ -43,8 +43,8 @@ class ChartDataOptionsPanel extends React.Component<ChartDataOptionsPanelProps, 
 
         return (
             <Wrapper>
-                <TinyButtons>
-                    {
+                <TinyButtons
+                    items={
                         [
                             {
                                 icon: faRulerHorizontal,
@@ -58,7 +58,7 @@ class ChartDataOptionsPanel extends React.Component<ChartDataOptionsPanelProps, 
                             },
                         ].map(generateButton)
                     }
-                </TinyButtons>
+                />
             </Wrapper>
 
         );

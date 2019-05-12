@@ -16,14 +16,16 @@
     "^langs/(.*)$": "<rootDir>/src/langs/$1",
     "^routes/(.*)$": "<rootDir>/src/routes/$1",
     "^themes/(.*)$": "<rootDir>/src/themes/$1",
-    "^modules/(.*)$": "<rootDir>/src/modules/$1"
+    "^modules/(.*)$": "<rootDir>/src/modules/$1",
+    "^react-toastify-redux$": "<rootDir>/node_modules/react-toastify-redux/src/index.ts"    
   },
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
   "transform": {
-    "^.+\\.(ts|tsx)$": "<rootDir>/configs/jest.preprocessor.js"
+    "^.+\\.(ts|tsx)$": "<rootDir>/configs/jest.preprocessor.js",
+    "^.+\\.(js|jsx)$": "babel-jest"
   },
   "transformIgnorePatterns": [
-    "/node_modules/"
+    "/node_modules/(?!.*react-toastify-redux.*)"
   ],
   "testRegex": "/tests/.*\\.(ts|tsx)$",
   "moduleDirectories": [

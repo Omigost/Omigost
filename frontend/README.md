@@ -1,39 +1,41 @@
-# Omigost
+# Omigost Project Frontend
 
 ![Omigost logo](https://raw.githubusercontent.com/Omigost/Omigost/master/frontend/src/assets/img/omigost_logo.svg)
 
 # About
 
-This is project that provides user interface and client-side code for Omigost.
+This project provides frontend interface for Omigost platform.
 
-## Installation
-1. Clone/download repo
-2. `yarn install` (or `npm install` for npm)
+## Development mode
 
-## Usage
-**Development**
+To run the server with hot-reload and other features please run the following command:
+```bash
+    $ ./gradlew startFrontend
+```
+This command will launch the server on `http://localhost:8080/`
 
-`yarn run start-dev`
+## Code style and static type validation
 
-* Build app continuously (HMR enabled)
-* App served @ `http://localhost:8080`
+To run linter and check types please execute the following command:
+```bash
+    $ yarn run lint
+```
 
-**Production**
+You can launch linter in auto-fixing mode:
+```bash
+    $ yarn run lint-fix
+```
 
-`yarn run start-prod`
+## Storybook
 
-* Build app once (HMR disabled)
-* App served @ `http://localhost:3000`
+To launch storybook please execute:
+```bash
+    $ yarn run storybook
+```
 
----
+## Testing
 
-**All commands**
-
-Command | Description
---- | ---
-`yarn run start-dev` | Build app continuously (HMR enabled) and serve @ `http://localhost:8080`
-`yarn run start-prod` | Build app once (HMR disabled) and serve @ `http://localhost:3000`
-`yarn run build` | Build production-ready app to `/dist/` run tests and generate documentation in `/docs/`
-`yarn run test` | Run tests
-`yarn run lint` | Run Typescript linter
-`yarn run start` | (alias of `yarn run start-dev`)
+to launch Jest test please call:
+```bash
+    $ yarn run test
+```

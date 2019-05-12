@@ -20,6 +20,7 @@ module.exports = {
                 }
             ).outputText;
 
+
             // update the path so babel can try and process the output
             path = path.substr(0, path.lastIndexOf('.')) + (isTs ? '.js' : '.jsx') || path;
         }

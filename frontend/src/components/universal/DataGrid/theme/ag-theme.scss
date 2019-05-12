@@ -1,5 +1,6 @@
 @import "./ag-theme-common";
-@import "~ag-grid-community/src/styles/flat-colors";
+@import "~ag-grid-community/src/styles/ag-theme-base/vars/_ag-theme-base-vars";
+@import "~ag-grid-community/src/styles/ag-theme-base/vars/_flat-colors";
 
 // theme shortcuts
 $default-background: white !default;

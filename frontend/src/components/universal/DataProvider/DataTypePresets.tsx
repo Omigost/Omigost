@@ -45,8 +45,12 @@ const PRESETS: PresetsMap = {
     "number": (typeOptions, type, point, options) => defaultNumberParsers(typeOptions),
     "ui-line": (typeOptions, type, point, options) => {
         const formatOutputCell = (point, options) => {
+            const fl = parseFloat(point.value);
+            if (isNaN(fl)) {
+                return "N/A";
+            }
             return (
-                <BarLine value={parseFloat(point.value)} />
+                <BarLine value={fl} />
             );
         };
 
@@ -61,7 +65,11 @@ const PRESETS: PresetsMap = {
         };
 
         const formatData = (point, options) => {
-            return `\$${parseFloat(point.value).toFixed(2)}`;
+            const fl = parseFloat(point.value);
+            if (isNaN(fl)) {
+                return "N/A";
+            }
+            return `\$${fl.toFixed(2)}`;
         };
 
         return {

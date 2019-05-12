@@ -1,23 +1,23 @@
 import * as React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styled, { ThemeProvider } from "styled-components";
-import defaultTheme from "themes/default";
+import styled from "styled-components";
 
-import { Box, Flex } from "@rebass/grid";
+import widgetsFactory from "../widgets";
+
+import {
+    faHistory, faPlus, faWrench,
+} from "@fortawesome/free-solid-svg-icons";
+
 
 const CursorIcon = styled.div`
-  margin-right: 0.3vw;
-  display: inline-block;
+    margin-right: 0.3vw;
+    display: inline-block;
 `;
 
-const GridWrapper = styled.div`
-  height: 50vh;
-  width: 100%;
-`;
-
-const TooltipContent = styled.div`
-  width: 10vw;
+const HeaderOptions = styled.div`
+    display: inline-block;
+    font-size: 1vw;
 `;
 
 const DATA = {
@@ -64,93 +64,188 @@ const DATA = {
     ],
 };
 
-export default class Panel extends React.Component<any, any> {
+const PanelHeader = styled.div`
+  font-family: ${(props) => props.theme.primaryFont};
+  font-size: ${(props) => props.theme.fontSize.XXL};
+  color: #727277;
+  margin-left: 1vw;
+  margin-top: 2vw;
+`;
+
+const WidgetDialogCardListContainer = styled.div`
+  width: 60vw;
+`;
+
+interface PanelState {
+    draggableMode: boolean;
+    layout: any;
+}
+
+const PreviewWidgetMask = styled.div`
+    width: 100%;
+    height: 10vw;
+    position: relative;
+    top: -220%;
+    z-index: 9999999;
+    background: transparent;
+`;
+
+const PreviewWidget = styled.div`
+    width: 200%;
+    height: 200%;
+    background: white;
+    overflow: hidden;
+    transform: scale(0.5) translateX(-15vw) translateY(-8vw);
+    user-select: none;
+    pointer-events: none;
+`;
+
+const PreviewWidgetContent = styled.div`
+    width: 100%;
+    height: 50vw;
+    padding-top: 1vw;
+`;
+
+export default class Panel extends React.Component<any, PanelState> {
+
+    state: PanelState;
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            draggableMode: false,
+            layout: this.props.settings.layout,
+        };
+    }
 
     render() {
         return (
-            <this.props.app.UI.DataProvider
-                data={DATA}
-            >
-                <Flex>
-                    <Box p={2} width={4 / 5}>
-                        <Flex flexDirection="column">
-                            <Box px={2} width={1}>
-                               <this.props.app.UI.Chart
-                                    graphType={"line"}
-                                    input={"x"}
-                                    output={["z", "y"]}
-                               >
-                                   <this.props.app.UI.ChartTypeSwitchPanel />
-                                   <this.props.app.UI.ChartDataOptionsPanel />
-                               </this.props.app.UI.Chart>
-                            </Box>
-                            <Box px={2} width={1}>
-                                <GridWrapper>
-                                    <this.props.app.UI.DataGrid
-                                        renderCell={(props) => {
-                                            const columns = props.columnApi.getColumnState();
-                                            const rightmostColumn = columns[columns.length - 1];
-                                            if (props.column.colId !== rightmostColumn.colId) {
-                                                return props.value;
-                                            }
-                                            return (
-                                                <this.props.app.UI.Tooltip
-                                                    show={props.node.data.hovered}
-                                                    content={
-                                                        <ThemeProvider theme={defaultTheme}>
-                                                            <TooltipContent>
-                                                                Hello!
-                                                                <this.props.app.UI.Chart
-                                                                    data={{...DATA,
-                                                                        rows: DATA.rows.filter(row => row.x === props.data.x)}}
-                                                                    graphType={"bar"}
-                                                                    input={"x"}
-                                                                    output={["z", "y"]}
-                                                                    tiny
-                                                                    showLegend
-                                                                    height={150}
-                                                               >
-                                                               </this.props.app.UI.Chart>
-                                                            </TooltipContent>
-                                                        </ThemeProvider>
-                                                    }
-                                                    theme={defaultTheme}
-                                                >
-                                                    <div>
-                                                        {props.value}
-                                                    </div>
-                                                </this.props.app.UI.Tooltip>
-                                            );
-                                        }}
-                                    />
-                                </GridWrapper>
-                            </Box>
-                        </Flex>
-                    </Box>
-                    <Box p={2} width={1 / 5}>
-                         <Flex flexDirection="column">
-                             <Box px={2} width={1}>
-                                 <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
-                                 <this.props.app.UI.Meter
-                                     value={30}
-                                     label="test"
-                                     format={(value) => `\$ ${value}`}
-                                     tooltipContent={<div>hello!</div>}
-                                 />
-                             </Box>
-                             <Box px={2} width={1}>
-                                 <this.props.app.UI.TinyButtons info="This meter shows something and here we have a little description of what exactly it shows."/>
-                                 <this.props.app.UI.Meter
-                                     value={30}
-                                     label="test"
-                                     format={(value) => `\$ ${value}`}
-                                     tooltipContent={<div>hello!</div>}
-                                 />
-                             </Box>
-                         </Flex>
-                    </Box>
-                </Flex>
-            </this.props.app.UI.DataProvider>
+            <this.props.app.UI.FloatingActionConsumer>
+                {({ showAction, cancelAction }) => {
+                    return (
+                        <this.props.app.UI.DialogsConsumer>
+                            {({ openDialog }) => {
+                                return (
+                                    <this.props.app.UI.DataProvider
+                                        data={DATA}
+                                    >
+                                        <PanelHeader>
+                                            Budgets dashboard
+
+                                            <this.props.app.UI.Dialog
+                                                name="add-widget-dialog"
+                                                transparent
+                                            >
+                                                {({ closeDialog, parameters }) => {
+                                                    return (
+                                                        <WidgetDialogCardListContainer>
+                                                            <this.props.app.UI.CardVerticalList
+                                                                disableHoverAnimaions
+                                                                onSelected={(item) => {
+                                                                    const widget = widgetsFactory(this.props.app).find(w => w.name === item.name);
+                                                                    const newLayout = this.props.app.UI.addItemToInteractiveGrid2Layout(this.state.layout, widget);
+
+                                                                    this.setState({
+                                                                        layout: newLayout,
+                                                                    }, () => { closeDialog(); });
+                                                                }}
+                                                                items={widgetsFactory(this.props.app).map(widget => {
+                                                                    return {
+                                                                        name: widget.name,
+                                                                        description: widget.description,
+                                                                        value: widget.name,
+                                                                        header: () => (
+                                                                            <>
+                                                                                <PreviewWidget>
+                                                                                    <PreviewWidgetContent>
+                                                                                        {widget.content(widget.initialOptions || {})}
+                                                                                    </PreviewWidgetContent>
+                                                                                </PreviewWidget>
+                                                                                <PreviewWidgetMask>
+                                                                                </PreviewWidgetMask>
+                                                                            </>
+                                                                        ),
+                                                                    };
+                                                                })}
+                                                            />
+                                                        </WidgetDialogCardListContainer>
+                                                    );
+                                                }}
+                                            </this.props.app.UI.Dialog>
+
+                                            <HeaderOptions>
+                                                <this.props.app.UI.TinyButtons
+                                                    items={[
+                                                        {
+                                                            icon: faWrench.iconName,
+                                                            tooltip: "Customize layout",
+                                                            tooltipClickTrigger: false,
+                                                            onClick: () => {
+                                                                this.setState({
+                                                                    draggableMode: !this.state.draggableMode,
+                                                                });
+                                                            },
+                                                        },
+                                                        {
+                                                            icon: faHistory.iconName,
+                                                            tooltip: "Reset layout",
+                                                            tooltipClickTrigger: false,
+                                                            onClick: () => {
+                                                                this.props.app.module.resetSettings();
+                                                            },
+                                                        },
+                                                        {
+                                                            icon: faPlus.iconName,
+                                                            tooltip: "Add new widget",
+                                                            tooltipClickTrigger: false,
+                                                            onClick: () => {
+                                                                openDialog("add-widget-dialog");
+                                                            },
+                                                        },
+                                                    ]}
+                                                />
+                                            </HeaderOptions>
+                                        </PanelHeader>
+
+                                        <this.props.app.UI.InteractiveGrid2
+                                            enableActionDrag={this.state.draggableMode}
+                                            enableActionRemove={this.state.draggableMode}
+                                            enableActionResize={this.state.draggableMode}
+                                            enableActionSettings={this.state.draggableMode}
+                                            layout={this.state.layout}
+                                            onLayoutChange={(layout) => {
+                                                showAction({
+                                                    title: "Save the layout",
+                                                    description: "Current layout was not saved click here to save it.",
+                                                    options: [
+                                                        {
+                                                            icon: faWrench.iconName,
+                                                            description: "Save the layout",
+                                                            onClick: () => {
+                                                                this.props.app.module.setSettings({
+                                                                    layout: this.state.layout,
+                                                                });
+                                                                cancelAction();
+                                                            },
+                                                        },
+                                                    ],
+                                                });
+
+                                                this.setState({
+                                                    layout,
+                                                });
+                                            }}
+                                            items={widgetsFactory(this.props.app)}
+                                        />
+
+                                    </this.props.app.UI.DataProvider>
+                                );
+                            }}
+                        </this.props.app.UI.DialogsConsumer>
+                    );
+                }}
+            </this.props.app.UI.FloatingActionConsumer>
         );
     }
 }

@@ -9,6 +9,12 @@ import {callFormEndpoint} from "./formHelpers";
 
 import fakeBudget from "./fakes/budget";
 
+function createSimplePromise(value: ResponseData): ResponsePromise {
+    return new Promise<ResponseData>((resolve, reject) => {
+        resolve(value);
+    });
+}
+
 export class OmigostFakeClient implements OmigostClientInterface {
 
     component: ClientAbstractComponent;
@@ -21,7 +27,10 @@ export class OmigostFakeClient implements OmigostClientInterface {
         return new Promise<ResponseData>((resolve, reject) => {
             resolve(null);
         });
-        //return (new OmigostClient()).createBudget(data);
+    }
+
+    createSeparateBudget(data: any): ResponsePromise {
+        return createSimplePromise(null);
     }
 
     getBudgets(): ResponsePromise {
@@ -47,6 +56,50 @@ export class OmigostFakeClient implements OmigostClientInterface {
             }, 600);
         });
         return callFormEndpoint(() => fakeRequest, formContext, data);
+    }
+
+    deleteBudget(data): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    getUsers(): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    getAccounts(): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    createUser(data): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    deleteUser(data: any): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    addCommunicationToUser(data): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    addAccountToUser(data: any): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    deleteUserCommunication(data): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    deleteAccountFromUser(data: any): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    getUserSpendings(data): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    getRecentEC2CostAllocationTags(): ResponsePromise {
+        return createSimplePromise(null);
     }
 
     callEndpoint(endpoint, options): ResponsePromise {
