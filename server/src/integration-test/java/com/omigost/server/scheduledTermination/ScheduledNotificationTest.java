@@ -33,8 +33,6 @@ public class ScheduledNotificationTest extends DevConfigTestTemplate {
     @Autowired
     SlackCommunicationService slackCommunicationService;
     @Autowired
-    ScheduledTerminationService scheduledNotificationService;
-    @Autowired
     TokenEncryptingService tokenEncryptingService;
 
     private final String testAwsId = "537952477028";
