@@ -2,14 +2,14 @@ package com.omigost.server.aws;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.budgets.AWSBudgets;
-import com.amazonaws.services.budgets.AWSBudgetsClientBuilder;
 import com.amazonaws.services.budgets.model.*;
 import com.amazonaws.services.sns.AmazonSNS;
-import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sns.model.CreateTopicRequest;
 import com.amazonaws.services.sns.model.CreateTopicResult;
 import com.amazonaws.services.sns.model.DeleteTopicRequest;
 import com.amazonaws.services.sns.model.SubscribeRequest;
+import com.omigost.server.model.Account;
+import com.omigost.server.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,6 +32,9 @@ public class BudgetService {
 
     @Autowired
     private AmazonSNS snsClient;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     private AWSCredentialsProvider awsCredentials;
     private MasterUserProvider masterUserProvider;
@@ -62,6 +65,8 @@ public class BudgetService {
         String budgetName = BUDGET_NAME_PREFIX + nextBudgetNumber.getAndIncrement();
         createSNSTopic(budgetName, true); // TODO
 
+        linkedAccounts.forEach(this::validateAccountExist);
+
         CreateBudgetRequest createBudgetRequest = new NewBudgetRequestBuilder(masterUserProvider.getMasterUserId())
                 .withLimit(limit)
                 .withName(budgetName)
@@ -71,6 +76,13 @@ public class BudgetService {
                 .build();
 
         budgetsClient.createBudget(createBudgetRequest);
+    }
+
+    private void validateAccountExist(String accountName) {
+        Account account = accountRepository.getAccountByName(accountName);
+        if (account == null) {
+            throw new NotFoundException("Account by name " + accountName + " does not exist");
+        }
     }
 
     public void createBudget(int limit, List<String> linkedAccounts) {
@@ -100,7 +112,9 @@ public class BudgetService {
 
     public Budget getBudgetByName(String name) {
         return budgetsClient
-                .describeBudget(new DescribeBudgetRequest().withBudgetName(name))
+                .describeBudget(new DescribeBudgetRequest()
+                        .withBudgetName(name)
+                        .withAccountId(masterUserProvider.getMasterUserId()))
                 .getBudget();
     }
 

@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+
 import org.springframework.context.annotation.Profile;
 
 @Configuration
@@ -56,12 +57,13 @@ public class AWSConfig {
             public com.amazonaws.auth.AWSCredentials getCredentials() {
                 return new BasicAWSCredentials(nonRootAccessKey, nonRootSecretKey);
             }
+
             @Override
             public void refresh() {
             }
         };
     }
-    
+
     @Bean
     public AmazonIdentityManagement amazonIdentityManagement() {
         return AmazonIdentityManagementClientBuilder

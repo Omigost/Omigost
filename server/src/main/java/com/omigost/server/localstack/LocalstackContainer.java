@@ -67,7 +67,7 @@ public class LocalstackContainer implements ImageContainer {
                 creds.getAwsRegion()
         );
     }
-
+  
     public AWSCredentialsProvider getCredentialsProvider() {
         return container.getDefaultCredentialsProvider();
     }

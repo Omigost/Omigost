@@ -29,6 +29,10 @@ export class OmigostFakeClient implements OmigostClientInterface {
         });
     }
 
+    createSeparateBudget(data: any): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
     getBudgets(): ResponsePromise {
         return new Promise<ResponseData>((resolve, reject) => {
             const budgets = [];
@@ -62,7 +66,15 @@ export class OmigostFakeClient implements OmigostClientInterface {
         return createSimplePromise(null);
     }
 
+    getAccounts(): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
     createUser(data): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    deleteUser(data: any): ResponsePromise {
         return createSimplePromise(null);
     }
 
@@ -70,11 +82,23 @@ export class OmigostFakeClient implements OmigostClientInterface {
         return createSimplePromise(null);
     }
 
+    addAccountToUser(data: any): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
     deleteUserCommunication(data): ResponsePromise {
         return createSimplePromise(null);
     }
 
+    deleteAccountFromUser(data: any): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
     getUserSpendings(data): ResponsePromise {
+        return createSimplePromise(null);
+    }
+
+    getRecentEC2CostAllocationTags(): ResponsePromise {
         return createSimplePromise(null);
     }
 

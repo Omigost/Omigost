@@ -39,6 +39,8 @@ function getHandlerForType<M extends NodeSchema>(node: M, config: SchemaParserCo
             return config.handlers.STRING;
         case NodeType.NUMBER:
             return config.handlers.NUMBER;
+        case NodeType.BOOLEAN:
+            return config.handlers.BOOLEAN;
         case NodeType.ARRAY:
             return config.handlers.ARRAY;
         case NodeType.ROOT:
