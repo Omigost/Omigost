@@ -9,6 +9,7 @@ import com.omigost.server.notification.slack.SlackService;
 import com.omigost.server.repository.CommunicationRepository;
 import com.omigost.server.rest.dto.SlackResponse.Action;
 import com.omigost.server.rest.dto.SlackResponse.SlackResponseDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import java.util.Map;
 @RestController
 //TODO should be in applications.properties
 @RequestMapping("/slackResponseHandler")
+@Slf4j
 public class SlackCommunicationService {
     @Autowired
     TokenEncryptingService tokenEncryptingService;
@@ -56,6 +58,7 @@ public class SlackCommunicationService {
                     .build();
 
             slackService.sendAlertToUser(communication, notificationMessage, callbackId);
+            log.info("sent message to " + communication.getUser() + " via " + communication.getType() + " for ec2s working in account " + awsId);
         }
         return callbackId;
     }
@@ -74,9 +77,12 @@ public class SlackCommunicationService {
     private String processInstanceAction(String action, String awsId) {
         if (InstanceActions.stop.equals(action)) {
             ec2TerminationService.stopRunningInstances(awsId);
+            log.info("stopped ec2 instances for account " + awsId);
+
         }
         if (InstanceActions.terminate.equals(action)) {
             ec2TerminationService.terminateRunningInstances(awsId);
+            log.info("terminated ec2 instances for account " + awsId);
         }
         if (InstanceActions.leaveThemAlone.equals(action)) {
             //TODO stop asking the user for termination
