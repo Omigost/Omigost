@@ -32,7 +32,7 @@ repositories {
 bootJar {
     baseName = 'omigost-server'
     version = '0.1.0'
-
+    
     from('../frontend/dist') {
         into 'static'
     }
@@ -56,23 +56,23 @@ sourceSets {
 }
 
 task classpathJar(type: Jar) {
-    inputs.files sourceSets.test.runtimeClasspath
+  inputs.files sourceSets.test.runtimeClasspath
 
-    archiveName = "omigost-server.jar"
-    doFirst {
-        // If run in configuration phase, some artifacts may not exist yet (after clean)
-        // and File.toURI canâ€™t figure out what is directory to add the critical trailing slash.
-        manifest {
-            def classpath = sourceSets.test.runtimeClasspath.files
-            attributes "Class-Path": classpath.collect { f -> f.toURI().toString() }.join(" ")
-        }
+  archiveName = "omigost-server.jar"
+  doFirst {
+    // If run in configuration phase, some artifacts may not exist yet (after clean)
+    // and File.toURI canâ€™t figure out what is directory to add the critical trailing slash.
+    manifest {
+      def classpath = sourceSets.test.runtimeClasspath.files
+      attributes "Class-Path": classpath.collect {f -> f.toURI().toString()}.join(" ")
     }
+  }
 }
 
 bootRun {
-    classpath = classpathJar.outputs.files + configurations.dev
-    main = 'com.omigost.server.ServerApplication'
-    args = ['--spring.profiles.active=dev', '--server.port=8100']
+  classpath = classpathJar.outputs.files + configurations.dev
+  main = 'com.omigost.server.ServerApplication'
+  args = ['--spring.profiles.active=dev', '--server.port=8100']
 }
 
 dependencies {
@@ -92,7 +92,6 @@ dependencies {
     //all of amazon aws sdk
     implementation('com.amazonaws:aws-java-sdk:1.11.475')
 
-
     compile 'org.testcontainers:postgresql:1.11.1'
     compile 'org.testcontainers:junit-jupiter:1.11.0'
     compile 'org.testcontainers:localstack:1.8.3'
@@ -111,5 +110,5 @@ dependencies {
     integrationTestCompile 'com.amazonaws:aws-java-sdk-organizations:1.11.457'
     integrationTestCompile 'com.amazonaws:aws-java-sdk-budgets:1.11.475'
     integrationTestCompile 'com.amazonaws:aws-java-sdk:1.11.475'
-
+    
 }

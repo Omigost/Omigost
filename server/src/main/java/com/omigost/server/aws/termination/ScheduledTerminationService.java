@@ -3,6 +3,7 @@ package com.omigost.server.aws.termination;
 import com.omigost.server.aws.MachineListingService;
 import com.omigost.server.model.Account;
 import com.omigost.server.repository.AccountRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
@@ -18,6 +19,7 @@ import java.util.concurrent.ScheduledFuture;
  * Terminates machines when running out of business hours
  */
 @Service
+@Slf4j
 public class ScheduledTerminationService {
     @Autowired
     MachineListingService machineListingService;
@@ -56,6 +58,7 @@ public class ScheduledTerminationService {
 
         CronTrigger trigger = new CronTrigger(cron);
         runningFuture = taskScheduler.schedule(this::notifyOutOfBusinessHours, trigger);
+        log.info("the termination cron changed to " + cron);
     }
 
 }
