@@ -56,12 +56,13 @@ public class AWSConfig {
             public com.amazonaws.auth.AWSCredentials getCredentials() {
                 return new BasicAWSCredentials(nonRootAccessKey, nonRootSecretKey);
             }
+
             @Override
             public void refresh() {
             }
         };
     }
-    
+
     @Bean
     public AmazonIdentityManagement amazonIdentityManagement() {
         return AmazonIdentityManagementClientBuilder

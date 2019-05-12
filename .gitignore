@@ -1,4 +1,4 @@
-.gradle
+.gradle/*
 .gradle/*
 /build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -6,13 +6,12 @@ frontend/build/
 nohup.out
 deployment/venv/
 deployment/venv/**
+deployment/Dockerrun.aws.json
 deployment/*Dockerrun.aws.json*
-deployment/*docker-compose.dev.yml*
 deployment/**/build/
 deployment/**/build/**
 deployment/**/__pycache__/
 deployment/**/__pycache__/**
-**/app-properties.properties
 
 ### STS ###
 .apt_generated
