@@ -95,6 +95,7 @@ public class AWSLocalstackConfig {
     //TODO get iam credentials for root
     @Bean(name = "iamCredentials")
     AWSCredentialsProvider iamRootCredentials() {
+        ensureLocalstackIsRunning();
         return awsContainer.getCredentialsProvider();
     }
 
