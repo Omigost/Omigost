@@ -66,7 +66,7 @@ def generateConfigComposeDev(envName='dev', path='.', logger=None, secretEnv=Non
     normalized_keys = services
 
     omigostService = normalized_keys["omigost"]
-    omigostService["volumes"] = [ "..:/opt/app/omigost" ]
+    omigostService["volumes"] = [ "..:/opt/app/omigost", "~/.gradle:/root/.gradle" ]
     omigostService["image"] = "openjdk:11"
     springArgs=" ".join([
         "--spring.datasource.url=jdbc:postgresql://postgres:5432/docker_dev",

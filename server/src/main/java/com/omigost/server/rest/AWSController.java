@@ -1,8 +1,12 @@
 package com.omigost.server.rest;
 
 import com.amazonaws.services.organizations.model.Account;
+import com.omigost.server.aws.CostService;
 import com.omigost.server.aws.OrganizationService;
 import com.omigost.server.aws.termination.ScheduledTerminationService;
+import com.omigost.server.rest.dto.AWSDailySpendingDTO;
+import com.omigost.server.rest.dto.AccountSpendingDTO;
+import com.omigost.server.rest.dto.TagSpendingDTO;
 import com.omigost.server.rest.dto.TerminationCronDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +20,22 @@ public class AWSController {
     private OrganizationService organization;
     @Autowired
     private ScheduledTerminationService terminationService;
+    @Autowired
+    private CostService costService;
 
     @GetMapping("/organizations")
     public List<Account> accounts() {
         return organization.fetchAccounts();
+    }
+
+    @PostMapping("/spending/account")
+    public List<AWSDailySpendingDTO> spending(@RequestBody AccountSpendingDTO request) {
+        return costService.getSpendingForAccount(request.getDateInterval(), request.getUserId());	
+    }
+
+    @PostMapping("/spending/tag")
+    public List<AWSDailySpendingDTO> tagSpending(@RequestBody TagSpendingDTO request) {
+        return costService.getSpendingForTags(request.getDateInterval(), request.getTags());	
     }
 
     @PostMapping("/machineTermination")

@@ -8,6 +8,7 @@ import com.omigost.server.model.User;
 import com.omigost.server.repository.AccountRepository;
 import com.omigost.server.repository.CommunicationRepository;
 import com.omigost.server.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -56,7 +57,7 @@ public class ConfigController {
             throw new NotFoundException("Account by this name could not be found");
         }
 
-        Account account = accountRepository.getOrCreate(accountName);
+        Account account = accountRepository.getOrCreate(accountName, organizationService.getAccount(accountName).getId());
 
         User user = userRepository.getUserByName(userName);
         if (user == null) {

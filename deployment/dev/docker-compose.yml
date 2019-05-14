@@ -29,10 +29,8 @@ services:
       - MOTO_SERVICE=iam
     restart: "on-failure"
   organizations:
-    image: "picadoh/motocker"
+    image: "omigost/local-aws-organizations"
     container_name: "organizations"
-    environment:
-      - MOTO_SERVICE=organizations
     restart: "on-failure"
   ec2:
     image: "picadoh/motocker"

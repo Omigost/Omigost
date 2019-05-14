@@ -12,9 +12,10 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     List<Account> getAllByScheduledNotification(boolean val);
 
-    default Account getOrCreate(String name) {
+    default Account getOrCreate(String name, final String awsId) {
         Account account = new Account();
         account.setName(name);
+        account.setAwsId(awsId);
 
         Optional<Account> maybeAccount = findOne(Example.of(account));
         if (maybeAccount.isPresent()) {

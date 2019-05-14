@@ -36,6 +36,9 @@ public class BudgetService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private OrganizationService organizationService;
+
     private AWSCredentialsProvider awsCredentials;
     private MasterUserProvider masterUserProvider;
     private String accountId;
@@ -79,10 +82,7 @@ public class BudgetService {
     }
 
     private void validateAccountExist(String accountName) {
-        Account account = accountRepository.getAccountByName(accountName);
-        if (account == null) {
-            throw new NotFoundException("Account by name " + accountName + " does not exist");
-        }
+        accountRepository.getOrCreate(accountName, organizationService.getAccount(accountName).getId());
     }
 
     public void createBudget(int limit, List<String> linkedAccounts) {
