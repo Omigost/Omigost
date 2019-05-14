@@ -82,7 +82,7 @@ class AddUserView extends React.Component<any, undefined> {
                                                                             }
                                                                             post(client => client.addCommunicationToUser({
                                                                                 userName: data.name,
-                                                                                communicationName: communications[index].name,
+                                                                                communicationName: communications[index].type,
                                                                                 communicationValue: communications[index].value,
                                                                             })).then(() => {
                                                                                 addNextCommunication(index + 1, callback);

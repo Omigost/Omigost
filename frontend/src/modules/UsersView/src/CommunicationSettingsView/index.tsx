@@ -43,7 +43,7 @@ class CommunicationSettingsView extends React.Component<any, undefined> {
                                             onClick: () => this.props.history.push(this.props.match.url.split("/").reverse().slice(4).reverse().join("/")),
                                         },
                                         {
-                                            name: `Communication via ${communicationData.name}`,
+                                            name: `Communication via ${communicationData.type}`,
                                         },
                                     ]}
                                 </this.props.app.UI.Breadcrumbs>
@@ -63,12 +63,12 @@ class CommunicationSettingsView extends React.Component<any, undefined> {
                                                         onSubmit={(data) => {
                                                             post(client => client.deleteUserCommunication({
                                                                 userName: userData.name,
-                                                                communicationName: communicationData.name,
+                                                                communicationName: communicationData.type,
                                                                 communicationValue: communicationData.value,
                                                             })).then(() => {
                                                                 post(client => client.addCommunicationToUser({
                                                                     userName: userData.name,
-                                                                    communicationName: communicationData.name,
+                                                                    communicationName: communicationData.type,
                                                                     communicationValue: data.value,
                                                                 })).then(() => {
                                                                     this.props.history.push(this.props.match.url.split("/").reverse().slice(4).reverse().join("/"));
