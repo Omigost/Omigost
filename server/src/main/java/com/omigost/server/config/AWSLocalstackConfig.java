@@ -65,7 +65,6 @@ public class AWSLocalstackConfig {
 
         wasInitialized = true;
         List<ImageContainer> c = new ArrayList<ImageContainer>() {{
-            add(budgetsContainer);
             add(motoEC2);
             add(motoIAM);
             add(awsContainer);
@@ -84,6 +83,10 @@ public class AWSLocalstackConfig {
             log.error("Could not setup all containers", e);
             System.exit(-1);
         }
+
+        budgetsContainer.setAwsSnsIP(awsContainer.getEndpointLocationSNS().getFirst());
+        budgetsContainer.setAwsSnsPort(awsContainer.getEndpointLocationSNS().getSecond());
+        budgetsContainer.launch();
     }
 
     @Primary
@@ -95,8 +98,10 @@ public class AWSLocalstackConfig {
     //TODO get iam credentials for root
     @Bean(name = "iamCredentials")
     AWSCredentialsProvider iamRootCredentials() {
-        ensureLocalstackIsRunning();
-        return awsContainer.getCredentialsProvider();
+        return creds.getProvider();
+        //FIXME: This was throwing null pointer exception every single time
+        //ensureLocalstackIsRunning();
+        //return awsContainer.getCredentialsProvider();
     }
 
     @Bean

@@ -5,6 +5,7 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.omigost.server.config.AWSCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 
@@ -44,6 +45,22 @@ public class LocalstackContainer implements ImageContainer {
             ensureContainerIsPresent();
             container.start();
         }
+    }
+
+    public Pair<String, Integer> getEndpointLocationNothing() {
+        if (useExternal) {
+            return Pair.of(externalIP, externalNothingPort);
+        }
+        ensureContainerIsPresent();
+        return Pair.of(container.getContainerIpAddress(), LocalStackContainer.Service.API_GATEWAY.getPort());
+    }
+
+    public Pair<String, Integer> getEndpointLocationSNS() {
+        if (useExternal) {
+            return Pair.of(externalIP, externalSNSPort);
+        }
+        ensureContainerIsPresent();
+        return Pair.of(container.getContainerIpAddress(), LocalStackContainer.Service.SNS.getPort());
     }
 
     public AwsClientBuilder.EndpointConfiguration getEndpointSNS() {

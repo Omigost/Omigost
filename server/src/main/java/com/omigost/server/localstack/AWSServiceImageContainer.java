@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
 import java.net.InetAddress;
@@ -71,12 +72,18 @@ public abstract class AWSServiceImageContainer implements ImageContainer {
         if (!wasInitialized) {
             if (!willIUseExternalizedContainer()) {
                 image = new AWSServiceImage(getServiceImageName());
+
                 configure();
                 image.withFileSystemBind("//var/run/docker.sock", "/var/run/docker.sock");
                 image.waitingFor(Wait.forLogMessage(".*" + getServiceStartMessage() + ".*", 1));
+
                 if (!image.isRunning()) {
                     image.start();
                 }
+
+                Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(log);
+                image.followOutput(logConsumer);
+
             }
             wasInitialized = true;
         }

@@ -31,13 +31,25 @@ public class OrganizationService {
         return result.getAccounts();
     }
 
-    public boolean doesAccountExist(String accountName) {
+    public Account findAccount(final String accountName) {
         for (com.amazonaws.services.organizations.model.Account acc : fetchAccounts()) {
             if (acc.getName().equals(accountName)) {
-                return true;
+                return acc;
             }
         }
 
-        return false;
+        return null;
+    }
+
+    public Account getAccount(final String accountName) {
+        final Account account = findAccount(accountName);
+        if (account == null) {
+            throw new RuntimeException("Acould not find AWS Organization account: "+accountName);
+        }
+        return account;
+    }
+
+    public boolean doesAccountExist(String accountName) {
+        return findAccount(accountName) != null;
     }
 }
