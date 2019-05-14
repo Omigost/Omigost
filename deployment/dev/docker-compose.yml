@@ -12,6 +12,10 @@ services:
     image: "omigost/local-aws-budgets"
     container_name: "budgets"
     restart: "on-failure"
+    environment:
+      - AWS_REGION=eu-central-1
+      - AWS_SNS_IP=localstack
+      - AWS_SNS_PORT=4575
   localstack:
     image: "localstack/localstack"
     container_name: "localstack"

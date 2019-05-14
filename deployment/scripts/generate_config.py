@@ -91,18 +91,28 @@ def generateConfigComposeDev(envName='dev', path='.', logger=None, secretEnv=Non
         "--localstack.motocker.organizations.port=5000"
     ])
 
-    commandStr = ("./gradlew bootRun -PspringArgs='{}' && ".format(springArgs) * 50) + "echo FINISHED"
+    commandStr = ("./gradlew bootRun -PspringArgs='{}' && ".format(springArgs) * 1) + "echo FINISHED"
     omigostService["command"] = "sh -c \"cd /opt/app/omigost && {}\"".format(commandStr)
-    omigostService["environment"] = [
-        "AWS_ACCESS_KEY={}".format(awsKey),
-        "AWS_SECRET_KEY={}".format(awsSecret)
-    ]
     omigostService["ports"].append("8100:8100")
 
     compose_config = {
         "version": "3",
         "services": normalized_keys
     }
+
+    for serviceName, service in normalized_keys.items():
+        if serviceName != "postgres":
+
+            new_keys = {
+               "AWS_ACCESS_KEY": awsKey,
+               "AWS_SECRET_KEY": awsSecret
+            }
+            if not "environment" in service:
+                service["environment"] = []
+            if isinstance(service["environment"], dict):
+                service["environment"] = {**service["environment"], **new_keys}
+            else:
+                service["environment"] = service["environment"] + [ "{}={}".format(key, value) for key, value in new_keys.items() ]
 
     if logger:
         logger.info('Generated configuration from {} file'.format(configInputPath))
