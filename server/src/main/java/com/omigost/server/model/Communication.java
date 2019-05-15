@@ -30,7 +30,11 @@ public class Communication {
     @EqualsAndHashCode.Exclude
     User user;
 
-    public Communication() {}
+    @NotNull
+    long lastMessageTimestamp = 0;
+
+    public Communication() {
+    }
 
     public Communication(String type, String value) {
         this.type = type;

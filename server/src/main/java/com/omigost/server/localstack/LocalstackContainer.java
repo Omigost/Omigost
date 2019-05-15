@@ -71,4 +71,5 @@ public class LocalstackContainer implements ImageContainer {
     public AWSCredentialsProvider getCredentialsProvider() {
         return container.getDefaultCredentialsProvider();
     }
+
 }

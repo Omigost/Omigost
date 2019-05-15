@@ -196,6 +196,26 @@ export class OmigostToastifiedClient implements OmigostClientInterface {
         );
     }
 
+    getSettings(): ResponsePromise {
+        return wrapPromise(
+            this.client.getSettings(),
+            idFn,
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not get the instance settings", error);
+            },
+        );
+    }
+
+    updateSettings(data: any): ResponsePromise {
+        return wrapPromise(
+            this.client.updateSettings(data),
+            idFn,
+            (error) => {
+                this.toastActions.displayExceptionToast("Could not update the instance settings", error);
+            },
+        );
+    }
+
     callEndpoint(endpoint, options): ResponsePromise {
         return this.client.callEndpoint(endpoint, options);
     }
