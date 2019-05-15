@@ -22,7 +22,7 @@ public class NotificationMessage {
     @Singular
     protected List<NotificationMessageLink> links;
 
-    protected NotificationMessage (NotificationMessage message) {
+    public NotificationMessage(NotificationMessage message) {
         this(message.mainText, message.attachmentText, message.actions, message.links);
     }
 }

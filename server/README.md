@@ -38,6 +38,13 @@ and open existing project *'server.ipr'*.
 
 Configuration is available in `src/main/resources/application.properties` file.
 
+### Admin name
+
+To be able to receive notifications about budget requests you need to:
+- use frontend to set up an admin user alongside other users,
+- create communications for that user there,
+- adjust `application.properties` `omigost.administratorUsername` property to reflect that user's name.
+
 # Slack Bot setup
 
 To be able to use Slack communication, first you need to enter https://api.slack.com/apps/

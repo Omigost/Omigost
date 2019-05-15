@@ -5,6 +5,7 @@ import com.omigost.server.notification.NotificationService;
 import com.omigost.server.notification.slack.SlackService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -39,15 +40,4 @@ public class Communication {
         this.type = type;
         this.value = value;
     }
-
-    public NotificationService service() {
-        switch (type) {
-            case CommunicationType.SLACK:
-                return new SlackService();
-            default:
-                throw new RuntimeException("Communication type not supported!");
-        }
-    }
-
-    ;
 }

@@ -14,6 +14,7 @@ public class SlackMessageLink extends NotificationMessageLink {
                 .put("type",  "button")
                 .put("text", this.text)
                 .put("url", this.url)
+                .put("name", this.text)
                 .put("style", this.style);
     }
 }
