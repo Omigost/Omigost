@@ -100,7 +100,7 @@ export class OmigostClient implements OmigostClientInterface {
                 Promise.all(
                     userToDelete.communications.map(com => this.deleteUserCommunication({
                         userName: userToDelete.name,
-                        communicationName: com.name,
+                        communicationName: com.type,
                         communicationValue: com.value,
                     })),
                 ).then(() => {

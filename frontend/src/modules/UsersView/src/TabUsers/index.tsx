@@ -66,17 +66,17 @@ const UserItemIconDescription = styled.div`
 let DATA = {};
 
 function getSpecsForCommunication(com) {
-    if (com.name === "slack") {
+    if (com.type === "slack") {
         return {
             description: "This user will be notified by slack",
             icon: faSlackHash,
         };
-    } else if (com.name === "email") {
+    } else if (com.type === "email") {
         return {
             description: "This user will be notified by an email message",
             icon: faEnvelope.iconName,
         };
-    } else if (com.name === "silent") {
+    } else if (com.type === "silent") {
         return {
             title: "No notifications",
             description: "This user won't receive any notifications. You can set them up via the settings button next to the user",
@@ -310,7 +310,7 @@ class TabUsers extends React.Component<any, TabUsersState> {
                                                                                                                                     <div>
                                                                                                                                         <FontAwesomeIcon icon={icon} />
                                                                                                                                         <CommunicationDescriptionName>
-                                                                                                                                            {title || com.name}
+                                                                                                                                            {title || com.type}
                                                                                                                                         </CommunicationDescriptionName>
                                                                                                                                     </div>
                                                                                                                                     <UserItemIconDescription>
@@ -365,14 +365,14 @@ class TabUsers extends React.Component<any, TabUsersState> {
                                                                                                                 <this.props.app.UI.PlainList
                                                                                                                     items={
                                                                                                                         communications.map((com, index) => {
-                                                                                                                            const comMethod = AVAILABLE_COMMUNICATION_METHODS.find(item => item.value === com.name);
+                                                                                                                            const comMethod = AVAILABLE_COMMUNICATION_METHODS.find(item => item.value === com.type);
                                                                                                                             if (!comMethod) {
                                                                                                                                 return null;
                                                                                                                             }
 
                                                                                                                             return {
                                                                                                                                 img: comMethod.img,
-                                                                                                                                name: comMethod.name || com.name,
+                                                                                                                                name: comMethod.type || com.type,
                                                                                                                                 actions: [
                                                                                                                                     {
                                                                                                                                         icon: faTimes.iconName,
@@ -380,7 +380,7 @@ class TabUsers extends React.Component<any, TabUsersState> {
                                                                                                                                         onClick: () => {
                                                                                                                                             post(client => client.deleteUserCommunication({
                                                                                                                                                 userName: row.name,
-                                                                                                                                                communicationName: com.name,
+                                                                                                                                                communicationName: com.type,
                                                                                                                                                 communicationValue: com.value,
                                                                                                                                             })).then(() => {
                                                                                                                                                 refresh();
