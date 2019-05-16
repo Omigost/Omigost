@@ -72,3 +72,9 @@ The toolkit exports the following tasks to create and publish docker images:
 The images are needed to deploy the application with `./deployment/deploy` script as the `Dockerrun.aws.json` uses images directly from DockerHub.
 
 That's why changing sources locally will take no effect on the deployed applciation. You must firstly build and deploy the image.
+
+The are cases when container teardown doesn't finish correctly and then restarted containers fail to connect to each other; in this case use
+```bash
+  docker rm $(docker ps -a -q)
+```
+
