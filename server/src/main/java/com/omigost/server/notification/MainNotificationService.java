@@ -8,12 +8,14 @@ import com.omigost.server.notification.slack.SlackService;
 import com.omigost.server.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Service
+@Slf4j
 public class MainNotificationService implements NotificationService {
     @Autowired
     MessageProvider messageProvider;
@@ -33,18 +35,25 @@ public class MainNotificationService implements NotificationService {
         Set<Communication> result = new HashSet<>();
         List<String> linkedAccounts = budget.getCostFilters().get(BudgetDecorator.LINKED_ACCOUNT_FILTER); // TODO fix nullpt/**/r
 
+        log.info("GetBudgetOwnersCommunications will search for matching owners...");
         for (String linkedAccount : linkedAccounts) {
+            log.info(" - Searching users for account ["+linkedAccount+"]");
             users.addAll(accountRepository.getAccountByName(linkedAccount).getUsers());
+            log.info(" - Matched "+((Object) accountRepository.getAccountByName(linkedAccount).getUsers().size()).toString()+" users to add");
         }
+        log.info("Notifications will be sent to "+((Object) users.size()).toString()+" user/-s");
 
         for (User user : users) {
             result.addAll(user.getCommunications());
         }
 
+        log.info("Generated "+((Object) result.size()).toString()+" communications to trigger");
+
         return result;
     }
 
     public void sendMessageTo(User user, NotificationMessage message) {
+        log.info("Sending new message to user");
         for (Communication communication : user.getCommunications()) {
             sendMessageTo(communication, message);
         }
@@ -60,6 +69,7 @@ public class MainNotificationService implements NotificationService {
     }
 
     public void sendMessageTo(Communication communication, NotificationMessage message) {
+        log.info("Sending new message via communication channel");
         getCommunicationService(communication)
                 .sendMessageTo(communication, message);
     }

@@ -1,6 +1,7 @@
 package com.omigost.server.rest;
 
 import com.amazonaws.services.budgets.model.Budget;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omigost.server.alerts.AlertService;
 import com.omigost.server.aws.BudgetService;
 import com.omigost.server.model.AlertResponseToken;
@@ -41,11 +42,16 @@ public class AlertsController {
         notifications.notifyOfLimitIncreaseRequest(response);
     }
 
-    @PostMapping("/trigger")
+    @PostMapping(value = "/trigger", consumes = "text/plain")
     public void handleAlertTrigger(@RequestParam String budgetName,
-                                   @RequestBody(required = false) SubscriptionConfirmationRequest subscriptionConfirmationRequest) {
-        if (subscriptionConfirmationRequest != null) {
-            confirmBudgetSubscription(subscriptionConfirmationRequest);
+                                   @RequestBody(required = false) String subscriptionPayload) {
+        if (subscriptionPayload != null && subscriptionPayload.length() > 0) {
+            try {
+	        final SubscriptionConfirmationRequest subscriptionConfirmationRequest = new ObjectMapper().readValue(subscriptionPayload, SubscriptionConfirmationRequest.class);
+                confirmBudgetSubscription(subscriptionConfirmationRequest);
+            } catch(Exception e) {
+                triggerBudget(budgetName);
+            }
         } else {
             triggerBudget(budgetName);
         }

@@ -15,8 +15,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class SlackService implements NotificationService {
     private static final String SLACK_API_URL = "https://slack.com/api/";
     private static final String USERS_LIST = "users.list";
@@ -99,6 +101,8 @@ public class SlackService implements NotificationService {
     }
 
     public void sendAlertToUser(String username, SlackMessage message) {
+        log.info("[SLACK] Send message to user: ["+username+"]");
+
         MultiValueMap<String, String> args = getArgsMapWithAuth();
         args.add("channel", getConversationId(username));
         args.add("text", message.getMainText());
