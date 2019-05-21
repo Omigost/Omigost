@@ -4,16 +4,17 @@ import com.omigost.server.settings.InstanceSettingsService;
 import com.omigost.server.config.AWSLocalstackConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableJpaRepositories(basePackages = {"com.omigost.server.repository"})
 @EnableScheduling
+@EnableTransactionManagement
 @Service
 public class ServerApplication {
     public static void main(String[] args) {
@@ -22,4 +23,5 @@ public class ServerApplication {
         application.addInitializers(new InstanceSettingsService.Initializer());
         application.run(args);
     }
+
 }

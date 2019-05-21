@@ -6,16 +6,18 @@ import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
- * //TODO temporary solution
  * The idea is to send the encrypted aws id with the request in base64 format then
  * when retrieving the token to convert back and stop the machines
  */
@@ -29,11 +31,11 @@ public class TokenEncryptingService {
     @Autowired
     private ApplicationSettingsRepository applicationSettingsRepository;
 
-    //TODO fix the key from properties
-    // now fixed during application runtime
     @PostConstruct
+    //do not allow 2 instances of application initialize different keys
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @SneakyThrows
-    private void setSecretKey() {
+    void setSecretKey() {
         List<ApplicationSettings> applicationSettingsList = applicationSettingsRepository.findAll();
         if (applicationSettingsList.isEmpty()) {
             KeyGenerator keyGenerator = KeyGenerator.getInstance(encryptionAlgorithm);
@@ -55,7 +57,7 @@ public class TokenEncryptingService {
     //Not sure about charset
     @SneakyThrows
     public String encryptMessage(String message) {
-        byte[] messageInBytes = message.getBytes("UTF8");
+        byte[] messageInBytes = message.getBytes(StandardCharsets.UTF_8);
         byte[] encryptedMaessage = encrypt(messageInBytes, secretKey);
         return Base64.encodeBase64String(encryptedMaessage);
     }
@@ -64,7 +66,7 @@ public class TokenEncryptingService {
     public String descryptMessage(String encMessage) {
         byte[] received = Base64.decodeBase64(encMessage);
         byte[] decryptedBytes = decrypt(received, secretKey);
-        return new String(decryptedBytes, "UTF8");
+        return new String(decryptedBytes, StandardCharsets.UTF_8);
     }
 
     @SneakyThrows
