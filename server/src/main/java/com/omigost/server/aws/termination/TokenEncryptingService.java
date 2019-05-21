@@ -1,13 +1,18 @@
 package com.omigost.server.aws.termination;
 
+import com.omigost.server.model.ApplicationSettings;
+import com.omigost.server.repository.ApplicationSettingsRepository;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.List;
 
 /**
  * //TODO temporary solution
@@ -20,17 +25,33 @@ public class TokenEncryptingService {
     private static Cipher cipher;
     private SecretKey secretKey;
 
+    private static final String encryptionAlgorithm = "DESede";
+    @Autowired
+    private ApplicationSettingsRepository applicationSettingsRepository;
+
     //TODO fix the key from properties
     // now fixed during application runtime
     @PostConstruct
     @SneakyThrows
     private void setSecretKey() {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("DESede");
-        // keysize must be equal to 112 or 168 for this provider
-        keyGenerator.init(168);
-        secretKey = keyGenerator.generateKey();
+        List<ApplicationSettings> applicationSettingsList = applicationSettingsRepository.findAll();
+        if (applicationSettingsList.isEmpty()) {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance(encryptionAlgorithm);
+            // keysize must be equal to 168 for this provider
+            keyGenerator.init(168);
+            secretKey = keyGenerator.generateKey();
+
+            ApplicationSettings newSetting = new ApplicationSettings();
+            newSetting.setEncryptionToken(Base64.encodeBase64String(secretKey.getEncoded()));
+            applicationSettingsRepository.save(newSetting);
+        } else {
+            ApplicationSettings applicationSettings = applicationSettingsList.get(0);
+            byte[] secretKeyRaw = Base64.decodeBase64(applicationSettings.getEncryptionToken());
+            secretKey = new SecretKeySpec(secretKeyRaw, encryptionAlgorithm);
+        }
         cipher = Cipher.getInstance("DESede");
     }
+
     //Not sure about charset
     @SneakyThrows
     public String encryptMessage(String message) {
@@ -43,7 +64,7 @@ public class TokenEncryptingService {
     public String descryptMessage(String encMessage) {
         byte[] received = Base64.decodeBase64(encMessage);
         byte[] decryptedBytes = decrypt(received, secretKey);
-        return new String(decryptedBytes,"UTF8");
+        return new String(decryptedBytes, "UTF8");
     }
 
     @SneakyThrows
