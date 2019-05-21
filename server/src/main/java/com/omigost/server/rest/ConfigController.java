@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/config")
@@ -81,9 +82,9 @@ public class ConfigController {
         User user = userRepository.getUserByName(userName);
 
         if (account == null) {
-            throw new NotFoundException("Account by this name could not be found");
+            throw new NotFoundException("Account by name " + accountName + " could not be found");
         } else if (user == null) {
-            throw new NotFoundException("User by this name could not be found");
+            throw new NotFoundException("User by name " + userName + " could not be found");
         }
 
         user.getAccounts().remove(account);
@@ -95,7 +96,7 @@ public class ConfigController {
     @DeleteMapping("/deleteUserCommunication")
     @Transactional
     public void deleteUserCommunication(@RequestParam String userName, @RequestParam String communicationName,
-                                                @RequestParam String communicationValue) {
+                                        @RequestParam String communicationValue) {
         User user = userRepository.getUserByName(userName);
         Communication communication =
                 communicationRepository.getCommunicationByTypeAndValueAndUser(communicationName, communicationValue, user);
@@ -104,6 +105,51 @@ public class ConfigController {
         }
 
         communicationRepository.delete(communication);
+    }
+
+
+    @PostMapping("/user/subscribeMachineTermination")
+    @Transactional
+    public void subscribeUserForMachineTermination(@RequestParam String userName) {
+        updateUserTerminationSubscription(userName, true);
+    }
+
+    @PostMapping("/user/unsubscribeMachineTermination")
+    @Transactional
+    public void unsubscribeUserForMachineTermination(@RequestParam String userName) {
+        updateUserTerminationSubscription(userName, false);
+    }
+
+    private void updateUserTerminationSubscription(String username, boolean subscribed) {
+        User user = userRepository.getUserByName(username);
+        if (user == null) {
+            throw new NotFoundException("User by name " + username + " could not be found");
+        }
+        Set<Account> accounts = user.getAccounts();
+        for (Account account : accounts) {
+            account.setScheduledNotification(subscribed);
+            accountRepository.save(account);
+        }
+    }
+
+    @PostMapping("/account/unsubscribeMachineTermination")
+    @Transactional
+    public void unsubscribeAccountForMachineTermination(@RequestParam String accountName) {
+        updateAccountTerminationSubscription(accountName, false);
+    }
+
+    @PostMapping("/account/subscribeMachineTermination")
+    @Transactional
+    public void subscribeAccountForMachineTermination(@RequestParam String accountName) {
+        updateAccountTerminationSubscription(accountName, true);
+    }
+
+    private void updateAccountTerminationSubscription(String accountName, boolean subscribed) {
+        Account account = accountRepository.getAccountByName(accountName);
+        if (account == null) {
+            throw new NotFoundException("Account by name " + accountName + " could not be found");
+        }
+        account.setScheduledNotification(subscribed);
     }
 
     @GetMapping("/users")

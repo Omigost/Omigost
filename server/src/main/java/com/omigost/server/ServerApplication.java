@@ -23,5 +23,4 @@ public class ServerApplication {
         application.addInitializers(new InstanceSettingsService.Initializer());
         application.run(args);
     }
-
 }
