@@ -26,9 +26,6 @@ public class SlackService implements NotificationService {
     @Value("${slack.oauth.bot.token}")
     private String authToken;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
     private JsonNode getSlackBodyFrom(ResponseEntity<JsonNode> response) {
         JsonNode body = response.getBody();
 
@@ -45,9 +42,9 @@ public class SlackService implements NotificationService {
     }
 
     private ArrayNode getUsers() {
-        ResponseEntity<JsonNode> response = restTemplate.postForEntity(
-                SLACK_API_URL + USERS_LIST,
-                getArgsMapWithAuth(),
+        String getUsersUrlWithAuth = SLACK_API_URL + USERS_LIST + "?token=" + authToken;
+        ResponseEntity<JsonNode> response = new RestTemplate().getForEntity(
+                getUsersUrlWithAuth,
                 JsonNode.class);
 
         return (ArrayNode) getSlackBodyFrom(response).get("members");
@@ -73,7 +70,7 @@ public class SlackService implements NotificationService {
         MultiValueMap<String, String> args = getArgsMapWithAuth();
         args.add("users", getUserId(username));
 
-        ResponseEntity<JsonNode> response = restTemplate.postForEntity(
+        ResponseEntity<JsonNode> response = new RestTemplate().postForEntity(
                 SLACK_API_URL + IM_OPEN,
                 args,
                 JsonNode.class);
@@ -85,7 +82,7 @@ public class SlackService implements NotificationService {
         return "42"; // TODO mock - not sure what the callback_id should be
     }
 
-    public void sendAlertToUser(Communication communication, NotificationMessage message) {
+    public void sendMessageTo(Communication communication, NotificationMessage message) {
         sendAlertToUser(communication.getValue(), new SlackMessage(message, pullCallbackId()));
     }
 
@@ -107,7 +104,7 @@ public class SlackService implements NotificationService {
         args.add("text", message.getMainText());
         args.add("attachments", message.getAttachmentsString());
 
-        restTemplate.postForEntity(
+        new RestTemplate().postForEntity(
                 SLACK_API_URL + CHAT_POST_MESSAGE,
                 args,
                 JsonNode.class

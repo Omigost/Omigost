@@ -5,10 +5,13 @@ import com.omigost.server.exception.AccessForbiddenException;
 import com.omigost.server.model.Alert;
 import com.omigost.server.model.AlertResponseToken;
 import com.omigost.server.model.Communication;
+import com.omigost.server.model.AlertResponse;
 import com.omigost.server.notification.MainNotificationService;
 import com.omigost.server.notification.NotificationMessage;
+import com.omigost.server.notification.message.MessageProvider;
 import com.omigost.server.repository.AlertRepository;
 import com.omigost.server.repository.AlertResponseTokenRepository;
+import com.omigost.server.repository.AlertResponseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,9 @@ import java.util.Optional;
 @Service
 public class AlertService {
     @Autowired
+    MessageProvider messageProvider;
+
+    @Autowired
     private MainNotificationService notifications;
 
     @Autowired
@@ -24,6 +30,9 @@ public class AlertService {
 
     @Autowired
     private AlertRepository alertRepo;
+
+    @Autowired
+    private AlertResponseRepository alertResponseRepository;
 
     public void handleBudgetTriggered(Budget budget) {
         for (Communication communication : notifications.getBudgetOwnersCommunications(budget)) {
@@ -34,24 +43,29 @@ public class AlertService {
     private void triggerBudgetTriggeredAlert(Communication communication, Budget budget) {
         AlertResponseToken token = new AlertResponseToken();
 
-        Alert alert = Alert
-                .builder()
-                .communication(communication)
-                .token(tokenRepo.save(token))
-                .build();
+        Alert alert = new Alert();
+        alert.setCommunication(communication);
+        alert.setToken(tokenRepo.save(token));
 
         alertRepo.save(alert);
 
-        NotificationMessage budgetTriggeredMessage = notifications.budgetTriggeredMessage(budget, token);
+        NotificationMessage budgetTriggeredMessage = messageProvider.budgetTriggeredMessage(budget, token);
 
-        communication.service().sendAlertToUser(communication, budgetTriggeredMessage);
+        notifications.sendMessageTo(communication, budgetTriggeredMessage);
     }
 
-    public AlertResponseToken invalidateResponseToken(String tokenString) throws AccessForbiddenException {
+    public AlertResponse createAlertResponse(AlertResponseToken token, String reason) {
+        Alert alert = alertRepo.getAlertByToken(token);
+        AlertResponse response = AlertResponse.builder().alert(alert).body(reason).build();
+        token.invalidate();
+        alertResponseRepository.save(response);
+        tokenRepo.save(token);
+        return response;
+    }
+
+    public AlertResponseToken requireAlertResponseToken(String tokenString) {
         Optional<AlertResponseToken> maybeToken = tokenRepo.findAlertResponseTokenByToken(tokenString);
         if (!maybeToken.isPresent()) throw new AccessForbiddenException("Alert Response Token is not valid");
-        AlertResponseToken token = maybeToken.get();
-        token.invalidate();
-        return tokenRepo.save(token);
+        return maybeToken.get();
     }
 }
