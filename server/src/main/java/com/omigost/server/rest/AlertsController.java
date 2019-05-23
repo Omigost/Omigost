@@ -4,13 +4,17 @@ import com.amazonaws.services.budgets.model.Budget;
 import com.omigost.server.alerts.AlertService;
 import com.omigost.server.aws.BudgetService;
 import com.omigost.server.model.AlertResponseToken;
+import com.omigost.server.model.AlertResponse;
 import com.omigost.server.notification.MainNotificationService;
-import com.omigost.server.rest.dto.RequestLimitIncreaseRequest;
+import com.omigost.server.repository.AlertRepository;
+import com.omigost.server.rest.dto.LimitIncreaseRequestRequest;
 import com.omigost.server.rest.dto.SubscriptionConfirmationRequest;
 import com.omigost.server.rest.exception.BudgetNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import javax.transaction.Transactional;
 
 @RestController
 @RequestMapping("/alerts")
@@ -22,12 +26,19 @@ public class AlertsController {
     private AlertService alerts;
 
     @Autowired
+    private AlertRepository alertRepository;
+
+    @Autowired
     private MainNotificationService notifications;
 
     @PostMapping("/requestLimitIncrease")
-    public void handleLimitIncreaseRequest(@RequestBody RequestLimitIncreaseRequest body) {
-        AlertResponseToken token = alerts.invalidateResponseToken(body.getToken());
-        notifications.requestLimitIncrease(body.getReason(), token);
+    @Transactional
+    public void handleLimitIncreaseRequest(@RequestBody LimitIncreaseRequestRequest body) {
+        AlertResponseToken token = alerts.requireAlertResponseToken(body.getToken());
+        String reason = body.getReason();
+
+        AlertResponse response = alerts.createAlertResponse(token, reason);
+        notifications.notifyOfLimitIncreaseRequest(response);
     }
 
     @PostMapping("/trigger")

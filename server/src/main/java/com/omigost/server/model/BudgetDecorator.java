@@ -36,7 +36,7 @@ public class BudgetDecorator extends Budget {
     }
 
     public Boolean isOverrun() {
-        BigDecimal actualSpend = getCalculatedSpend().getActualSpend().getAmount();
+        BigDecimal actualSpend = getCalculatedSpend().getActualSpend().getAmount(); // TODO nullptr
         BigDecimal budgetLimit = getBudgetLimit().getAmount();
         return budgetLimit.compareTo(actualSpend) < 0;
     }
