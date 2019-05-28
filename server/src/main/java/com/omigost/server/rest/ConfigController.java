@@ -111,25 +111,28 @@ public class ConfigController {
     @PostMapping("/user/machineTermination")
     @Transactional
     public void subscribeUserForMachineTermination(@RequestParam String userName, @RequestParam boolean subscription) {
-        User user = userRepository.getUserByName(userName);
-        if (user == null) {
+        List<User> users = userRepository.getUsersByName(userName);
+        if (users.isEmpty()) {
             throw new NotFoundException("User by name " + userName + " could not be found");
         }
-        Set<Account> accounts = user.getAccounts();
-        for (Account account : accounts) {
-            account.setScheduledNotification(subscription);
-            accountRepository.save(account);
+        for (User user : users) {
+            Set<Account> accounts = user.getAccounts();
+            for (Account account : accounts) {
+                account.setScheduledNotification(subscription);
+                accountRepository.save(account);
+            }
         }
     }
 
     @PostMapping("/account/machineTermination")
     @Transactional
     public void unsubscribeAccountForMachineTermination(@RequestParam String accountName, @RequestParam boolean subscription) {
-        Account account = accountRepository.getAccountByName(accountName);
-        if (account == null) {
+        List<Account> accounts = accountRepository.getAccountsByName(accountName);
+        if (accounts.isEmpty()) {
             throw new NotFoundException("Account by name " + accountName + " could not be found");
         }
-        account.setScheduledNotification(subscription);
+        accounts.forEach(e -> e.setScheduledNotification(subscription));
+        accounts.forEach(e -> accountRepository.save(e));
     }
 
     @GetMapping("/users")

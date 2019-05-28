@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     Account getAccountByName(String name);
 
+    List<Account> getAccountsByName(String name);
+
     List<Account> getAllByScheduledNotification(boolean val);
 
     default Account getOrCreate(String name) {
