@@ -108,48 +108,28 @@ public class ConfigController {
     }
 
 
-    @PostMapping("/user/subscribeMachineTermination")
+    @PostMapping("/user/machineTermination")
     @Transactional
-    public void subscribeUserForMachineTermination(@RequestParam String userName) {
-        updateUserTerminationSubscription(userName, true);
-    }
-
-    @PostMapping("/user/unsubscribeMachineTermination")
-    @Transactional
-    public void unsubscribeUserForMachineTermination(@RequestParam String userName) {
-        updateUserTerminationSubscription(userName, false);
-    }
-
-    private void updateUserTerminationSubscription(String username, boolean subscribed) {
-        User user = userRepository.getUserByName(username);
+    public void subscribeUserForMachineTermination(@RequestParam String userName, @RequestParam boolean subscription) {
+        User user = userRepository.getUserByName(userName);
         if (user == null) {
-            throw new NotFoundException("User by name " + username + " could not be found");
+            throw new NotFoundException("User by name " + userName + " could not be found");
         }
         Set<Account> accounts = user.getAccounts();
         for (Account account : accounts) {
-            account.setScheduledNotification(subscribed);
+            account.setScheduledNotification(subscription);
             accountRepository.save(account);
         }
     }
 
-    @PostMapping("/account/unsubscribeMachineTermination")
+    @PostMapping("/account/machineTermination")
     @Transactional
-    public void unsubscribeAccountForMachineTermination(@RequestParam String accountName) {
-        updateAccountTerminationSubscription(accountName, false);
-    }
-
-    @PostMapping("/account/subscribeMachineTermination")
-    @Transactional
-    public void subscribeAccountForMachineTermination(@RequestParam String accountName) {
-        updateAccountTerminationSubscription(accountName, true);
-    }
-
-    private void updateAccountTerminationSubscription(String accountName, boolean subscribed) {
+    public void unsubscribeAccountForMachineTermination(@RequestParam String accountName, @RequestParam boolean subscription) {
         Account account = accountRepository.getAccountByName(accountName);
         if (account == null) {
             throw new NotFoundException("Account by name " + accountName + " could not be found");
         }
-        account.setScheduledNotification(subscribed);
+        account.setScheduledNotification(subscription);
     }
 
     @GetMapping("/users")
