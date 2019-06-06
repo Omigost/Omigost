@@ -34,12 +34,12 @@ const Arrow = styled.div`
 
 const itemHoverStyle = `
   &:hover .ItemHeader {
-    height: 100%;
+    height: 40%;
   }
 
   &:hover .ItemSelectBoxIcon {
-    font-size: 6vw;
-    padding-top: 4vw;
+    padding-top: 0.5vw;
+    font-size: 3.5vw;
   }
 
   &:hover .ItemImage {
@@ -66,7 +66,7 @@ const ItemInner = styled.div`
 `;
 
 const ItemHeader = styled.div<ItemComponentProps>`
-  height: 40%;
+  height: 0%;
   width: 100%;
   background: ${(props: ItemComponentProps) => props.theme.colors.primaryGradient};
   text-align: center;
@@ -85,9 +85,9 @@ const ItemImage = styled.img`
 `;
 
 const ItemSelectBoxIcon = styled.div`
-  padding-top: 0.5vw;
-  font-size: 3.5vw;
   color: white;
+  font-size: 6vw;
+  padding-top: 4vw;
 
   transition: all 0.6s ease;
 `;
