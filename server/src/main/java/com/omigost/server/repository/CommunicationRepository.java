@@ -16,5 +16,7 @@ public interface CommunicationRepository extends JpaRepository<Communication, In
 
     @Query("select c from Communication  c join c.user.accounts ac where ac.awsId=:id")
     Set<Communication> getCommunicationsForAWSId(@Param(value = "id") String id);
+
+    Set<Communication> getAll();
 }
 

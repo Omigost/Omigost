@@ -6,6 +6,7 @@ import com.omigost.server.model.*;
 import com.omigost.server.notification.message.MessageProvider;
 import com.omigost.server.notification.slack.SlackService;
 import com.omigost.server.repository.AccountRepository;
+import com.omigost.server.repository.CommunicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +29,23 @@ public class MainNotificationService implements NotificationService {
     private SlackService slackService; // extract mapping to a single ServiceProvider
                                        // when too many services need to be included here
 
-    public Set<Communication> getBudgetOwnersCommunications(Budget budget) {
+    @Autowired
+    private CommunicationRepository communicationRepository;
+
+    public Set<Communication> globalBudgetCommunications() {
+        return communicationRepository.getAll();
+    }
+
+    private Set<Communication> budgetCommunicationsFromTagList(List<String> tagFilters) {
+        Set<Communication> result = new HashSet<>();
+
+        if (!tagFilters.isEmpty()) result.addAll(globalBudgetCommunications()); /* * TODO * */
+        return result;
+    }
+
+    private Set<Communication> budgetCommunicationsFromAccountIdentifiers(List<String> linkedAccounts) {
         Set<User> users = new HashSet<>();
         Set<Communication> result = new HashSet<>();
-        List<String> linkedAccounts = budget.getCostFilters().get(BudgetDecorator.LINKED_ACCOUNT_FILTER); // TODO fix nullpt/**/r
 
         for (String linkedAccount : linkedAccounts) {
             users.addAll(accountRepository.getAccountByName(linkedAccount).getUsers());
@@ -40,6 +54,20 @@ public class MainNotificationService implements NotificationService {
         for (User user : users) {
             result.addAll(user.getCommunications());
         }
+
+        return result;
+    }
+
+    public Set<Communication> getBudgetOwnersCommunications(Budget budget) {
+        List<String> linkedAccounts = budget.getCostFilters().get(BudgetDecorator.LINKED_ACCOUNT_FILTER);
+        List<String> tagFilters = budget.getCostFilters().get(BudgetDecorator.TAG_FILTER);
+
+        Set<Communication> result = new HashSet<>(globalBudgetCommunications());
+
+        if (!linkedAccounts.isEmpty())
+            result.retainAll(budgetCommunicationsFromAccountIdentifiers(linkedAccounts));
+        if (!tagFilters.isEmpty())
+            result.retainAll(budgetCommunicationsFromTagList(tagFilters));
 
         return result;
     }
