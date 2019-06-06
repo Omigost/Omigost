@@ -1,6 +1,7 @@
 package com.omigost.server.notification;
 
 import com.amazonaws.services.budgets.model.Budget;
+import com.omigost.server.aws.MachineListingService;
 import com.omigost.server.aws.MasterUserProvider;
 import com.omigost.server.model.*;
 import com.omigost.server.notification.message.MessageProvider;
@@ -10,9 +11,8 @@ import com.omigost.server.repository.CommunicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MainNotificationService implements NotificationService {
@@ -26,43 +26,62 @@ public class MainNotificationService implements NotificationService {
     private MasterUserProvider masterUserProvider;
 
     @Autowired
-    private SlackService slackService; // extract mapping to a single ServiceProvider
-                                       // when too many services need to be included here
+    private SlackService slackService; /* extract mapping to a single ServiceProvider
+                                       /  when too many services need to be included here */
 
     @Autowired
     private CommunicationRepository communicationRepository;
+
+    @Autowired
+    private MachineListingService machineListingService;
 
     public Set<Communication> globalBudgetCommunications() {
         return communicationRepository.getAll();
     }
 
-    private Set<Communication> budgetCommunicationsFromTagList(List<String> tagFilters) {
-        Set<Communication> result = new HashSet<>();
+    // TODO test if works
+    private Set<Communication> budgetCommunicationsFromTagList(Map<String, List<String>> tagFilters) {
+        Set<User> users = new HashSet<>();
 
         if (!tagFilters.isEmpty()) {
-            result.addAll(globalBudgetCommunications()); /* * TODO * */
+            for (Account account : accountRepository.getAll()) {
+                accountRepository.getAll();
+                if (machineListingService.accountHasMachinesWithTags(
+                        masterUserProvider.getMasterUserId(), account, tagFilters
+                )) {
+                    users.addAll(account.getUsers());
+                }
+            }
         }
-        return result;
+
+        return users.stream().map(User::getCommunications).flatMap(Set::stream).collect(Collectors.toSet());
     }
 
     private Set<Communication> budgetCommunicationsFromAccountIdentifiers(List<String> linkedAccounts) {
         Set<User> users = new HashSet<>();
-        Set<Communication> result = new HashSet<>();
 
         for (String linkedAccount : linkedAccounts) {
             users.addAll(accountRepository.getAccountByName(linkedAccount).getUsers());
         }
 
-        for (User user : users) {
-            result.addAll(user.getCommunications());
-        }
+        return users.stream().map(User::getCommunications).flatMap(Set::stream).collect(Collectors.toSet());
+    }
 
-        return result;
+    public Map<String, List<String>> toTagFilterMap(List<String> tagFilterDescriptions) {
+        Map<String, List<String>> results = new HashMap<>();
+        for (String tagDescr : tagFilterDescriptions) {
+            String[] tagComponents = tagDescr.split(":", 2);
+            List<String> oldValues = results.getOrDefault(tagComponents[0], new ArrayList<>());
+            oldValues.add(tagComponents[1]);
+
+            results.put(tagComponents[0], oldValues);
+        }
+        return results;
     }
 
     public Set<Communication> getBudgetOwnersCommunications(Budget budget) {
         List<String> linkedAccounts = budget.getCostFilters().get(BudgetDecorator.LINKED_ACCOUNT_FILTER);
-        List<String> tagFilters = budget.getCostFilters().get(BudgetDecorator.TAG_FILTER);
+        Map<String, List<String>> tagFilters = toTagFilterMap(budget.getCostFilters().get(BudgetDecorator.TAG_FILTER));
 
         Set<Communication> result = new HashSet<>(globalBudgetCommunications());
 

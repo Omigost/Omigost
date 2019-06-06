@@ -12,6 +12,8 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     List<Account> getAllByScheduledNotification(boolean val);
 
+    List<Account> getAll();
+
     default Account getOrCreate(String name) {
         Account account = new Account();
         account.setName(name);
