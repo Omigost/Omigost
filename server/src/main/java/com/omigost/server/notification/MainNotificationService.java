@@ -39,7 +39,9 @@ public class MainNotificationService implements NotificationService {
     private Set<Communication> budgetCommunicationsFromTagList(List<String> tagFilters) {
         Set<Communication> result = new HashSet<>();
 
-        if (!tagFilters.isEmpty()) result.addAll(globalBudgetCommunications()); /* * TODO * */
+        if (!tagFilters.isEmpty()) {
+            result.addAll(globalBudgetCommunications()); /* * TODO * */
+        }
         return result;
     }
 
@@ -68,6 +70,10 @@ public class MainNotificationService implements NotificationService {
             result.retainAll(budgetCommunicationsFromAccountIdentifiers(linkedAccounts));
         if (!tagFilters.isEmpty())
             result.retainAll(budgetCommunicationsFromTagList(tagFilters));
+
+        if (result.isEmpty()) result.addAll(
+                masterUserProvider.omigostAdministratorUser().getCommunications()
+        );
 
         return result;
     }
