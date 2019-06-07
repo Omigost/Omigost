@@ -21,6 +21,7 @@ const ButtonComponent = styled.button<ButtonComponentProps>`
   font-family: ${(props: ButtonComponentProps) => props.theme.primaryFont};
   font-size: ${(props: ButtonComponentProps) => props.theme.fontSize[props.fontSize || "default"]};
   color: ${(props: ButtonComponentProps) => props.theme.colors.accent};
+  cursor: pointer;
   padding-left: 3.5vw;
   padding-right: 3.5vw;
   padding-top: 0.5vw;
