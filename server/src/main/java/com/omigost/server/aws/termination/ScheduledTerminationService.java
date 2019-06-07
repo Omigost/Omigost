@@ -30,7 +30,9 @@ public class ScheduledTerminationService {
     @Autowired
     SlackCommunicationService slackCommunicationService;
 
-    private final String initialCron = "0 0/30 18-23,0-8 * * *";
+    //    this is the proper default cron but for demonstration purposes we use other one
+    //        "0 0/30 18-23,0-8 * * *"
+    private final String initialCron = "0 0/1 * * * ?";
 
     private ScheduledFuture<?> runningFuture = null;
     private TaskScheduler taskScheduler = new ConcurrentTaskScheduler();
