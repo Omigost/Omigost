@@ -35,14 +35,15 @@ const CardBoxHandle = styled.div`
 `;
 
 const CardBoxRemove = styled.div`
-  display: inline-block;
+  display: block;
   color: ${(props) => props.theme.colors.accent};
-  opacity: 0.3;
+  opacity: 0.5;
   position: relative;
-  top: 0.2vw;
-  left: 0.2vw;
   cursor: pointer;
-  margin-left: 0.4vw;
+  margin-left: auto;
+  width: 3vw;
+  height: 3vw;
+  text-align: center;
 
   &:hover {
     opacity: 1;
@@ -108,9 +109,10 @@ class Dialog extends React.Component<DialogProps, DialogState> {
             return null;
         }
 
-        const showButtonFullscreen = this.props.showButtonFullscreen || false;
-        const showButtonMinimize = this.props.showButtonMinimize || false;
-        const showButtonClose = this.props.showButtonClose || false;
+        const showButtonFullscreen = this.props.showButtonFullscreen || true;
+        const showButtonMinimize = this.props.showButtonMinimize || true;
+        const showButtonClose = this.props.showButtonClose || true;
+        const onClose = this.props.onClose;
 
         return (
             <Modal
@@ -118,7 +120,7 @@ class Dialog extends React.Component<DialogProps, DialogState> {
                 style={{
                     overlay: {
                         zIndex: "9999999",
-                        background: "rgba(0, 0, 0, 0.49019607843137253)",
+                        background: "rgba(0, 0, 0, 0.3)",
                     },
                     content: {
                         top: "50%",
@@ -139,6 +141,7 @@ class Dialog extends React.Component<DialogProps, DialogState> {
                 <ModalContent>
                     <Rnd
                         disableDragging
+                        enableResizing={false}
                         size={(this.props.isFullscreen) ? ({
                             width: "90vw",
                             height: "85vh",
@@ -146,13 +149,6 @@ class Dialog extends React.Component<DialogProps, DialogState> {
                             width: this.state.width,
                             height: this.state.height,
                         }))}
-                        onResize={(e, direction, ref, delta, position) => {
-                            this.setState({
-                                width: ref.style.width,
-                                height: ref.style.height,
-                                ...position,
-                            });
-                        }}
                     >
                         <CardBoxWrapper {...this.props}>
                             {
@@ -180,10 +176,10 @@ class Dialog extends React.Component<DialogProps, DialogState> {
                                 ) : (null)
                             }
                             {
-                                (!this.props.transparent && this.props.onClose && showButtonClose) ? (
+                                (onClose && showButtonClose) ? (
                                     <CardBoxRemove
                                         onClick={() => {
-                                            this.props.onClose();
+                                            onClose();
                                         }}
                                     >
                                         <FontAwesomeIcon icon="times" />
