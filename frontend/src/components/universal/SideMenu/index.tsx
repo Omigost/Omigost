@@ -41,6 +41,10 @@ const Wrapper = styled.aside`
   animation: ${menuResizeAnimationReversed} 0.5s normal ease-in-out;
   background: transparent;
 
+  .side-menu-button-icon {
+    width: 2.3vw;
+  }
+
   &:hover {
     width: 15vw;
     animation: ${menuResizeAnimation} 0.5s normal ease-in-out;
@@ -151,7 +155,9 @@ export default class SideMenu extends React.Component<SideMenuProps, SideMenuSta
                                     this.handleButtonClicked(menuOption, index);
                                 }}
                             >
-                                <MenuButtonIcon>
+                                <MenuButtonIcon
+                                    className="side-menu-button-icon"
+                                >
                                     <FontAwesomeIcon icon={menuOption.icon} />
                                 </MenuButtonIcon>
                                 <MenuButtonText
