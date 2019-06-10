@@ -106,8 +106,7 @@ class AddUserView extends React.Component<any, undefined> {
                                                         }}
                                                     >
                                                         {{
-                                                            title: "A registration form",
-                                                            description: "The description",
+                                                            title: "Add user",
                                                             type: "object",
                                                             properties: {
                                                                 "name": {
