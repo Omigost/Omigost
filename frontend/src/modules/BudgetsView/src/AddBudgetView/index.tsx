@@ -105,7 +105,7 @@ class AddBudgetView extends React.Component<any, undefined> {
                                                                             },
                                                                             "accounts": {
                                                                                 type: "array",
-                                                                                title: "Attached accounts",
+                                                                                title: "Linked accounts",
                                                                                 items: {
                                                                                     type: "string",
                                                                                     ui: "enum",
