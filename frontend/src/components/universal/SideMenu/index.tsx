@@ -41,20 +41,22 @@ const Wrapper = styled.aside`
   animation: ${menuResizeAnimationReversed} 0.5s normal ease-in-out;
   background: transparent;
 
+  .side-menu-button-icon {
+    width: 2.3vw;
+  }
+
   &:hover {
     width: 15vw;
     animation: ${menuResizeAnimation} 0.5s normal ease-in-out;
     background: ${(props: MenuButtonProps) => props.theme.colors.primaryGradient};
     box-shadow: 0.3vw 0.2vw 0 0 rgba(0,0,0,0.14);
-  }
-
-  &:hover .side-menu-button {
-    color: white;
-  }
-
-  &:hover .side-menu-button-name {
-    display: inline-block;
-    animation: ${menuItemsTextAnimation} 0.5s normal ease-in-out;
+    & .side-menu-button {
+      color: white;
+    }
+    & .side-menu-button-name {
+      display: inline-block;
+      animation: ${menuItemsTextAnimation} 0.55s normal cubic-bezier(0.92, -0.12, 0.68, 0.91);
+    }
   }
 `;
 
@@ -153,7 +155,9 @@ export default class SideMenu extends React.Component<SideMenuProps, SideMenuSta
                                     this.handleButtonClicked(menuOption, index);
                                 }}
                             >
-                                <MenuButtonIcon>
+                                <MenuButtonIcon
+                                    className="side-menu-button-icon"
+                                >
                                     <FontAwesomeIcon icon={menuOption.icon} />
                                 </MenuButtonIcon>
                                 <MenuButtonText

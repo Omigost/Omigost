@@ -22,7 +22,6 @@ const showActionAnimation = keyframes`
 
 const FloatingActionsContainer = styled.div`
   padding: 1.2vw;
-  width: 100%;
 `;
 
 const FloatingAction = styled.div`

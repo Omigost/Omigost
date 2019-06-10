@@ -89,13 +89,12 @@ class AddBudgetView extends React.Component<any, undefined> {
                                                                     }}
                                                                 >
                                                                     {{
-                                                                        title: "A registration form",
-                                                                        description: "The description",
+                                                                        title: "Add budget",
                                                                         type: "object",
                                                                         properties: {
                                                                             "limit": {
                                                                                 type: "string",
-                                                                                title: "The budget limit",
+                                                                                title: "Budget limit in USD",
                                                                                 minLength: 1,
                                                                             },
                                                                             "separateBudgets": {
@@ -105,7 +104,7 @@ class AddBudgetView extends React.Component<any, undefined> {
                                                                             },
                                                                             "accounts": {
                                                                                 type: "array",
-                                                                                title: "Attached accounts",
+                                                                                title: "Linked accounts",
                                                                                 items: {
                                                                                     type: "string",
                                                                                     ui: "enum",

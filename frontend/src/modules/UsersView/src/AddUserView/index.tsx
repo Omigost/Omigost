@@ -106,8 +106,7 @@ class AddUserView extends React.Component<any, undefined> {
                                                         }}
                                                     >
                                                         {{
-                                                            title: "A registration form",
-                                                            description: "The description",
+                                                            title: "Add user",
                                                             type: "object",
                                                             properties: {
                                                                 "name": {
@@ -117,7 +116,7 @@ class AddUserView extends React.Component<any, undefined> {
                                                                 },
                                                                 "accounts": {
                                                                     type: "array",
-                                                                    title: "Attached accounts",
+                                                                    title: "Linked accounts",
                                                                     items: {
                                                                         type: "string",
                                                                         ui: "enum",
