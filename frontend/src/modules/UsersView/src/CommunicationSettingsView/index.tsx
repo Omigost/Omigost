@@ -77,13 +77,12 @@ class CommunicationSettingsView extends React.Component<any, undefined> {
                                                         }}
                                                     >
                                                         {{
-                                                            title: "A registration form",
-                                                            description: "The description",
+                                                            title: "Configure communication",
                                                             type: "object",
                                                             properties: {
                                                                 "value": {
                                                                     type: "string",
-                                                                    title: "The communication value",
+                                                                    title: "The Slack user name", // TODO make this dependent on the communcation type
                                                                     minLength: 1,
                                                                 },
                                                             },

@@ -1,9 +1,10 @@
 # Omigost
 [![Build Status](https://travis-ci.org/Omigost/Omigost.svg?branch=master)](https://travis-ci.org/Omigost/Omigost)
 
+![Omigost Cloud](/images/cover_photo.jpg)
+
 Manage and optimize development cost for Amazon Web Services.
 
-## Project status: ** Early development not ready for public use yet **
 
 ## Why it's worth trying
 

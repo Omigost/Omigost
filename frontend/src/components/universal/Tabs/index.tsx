@@ -6,7 +6,6 @@ import "react-tabs/style/react-tabs.css";
 
 const Wrapper = styled.div`
   padding: 1.2vw;
-  width: 100%;
 `;
 
 export interface TabSpecs {
