@@ -80,8 +80,7 @@ class MainView extends React.Component<any, any> {
                                                                             }}
                                                                         >
                                                                             {{
-                                                                                title: "A registration form",
-                                                                                description: "The description",
+                                                                                title: "Delete budget",
                                                                                 type: "object",
                                                                                 properties: {
                                                                                     "notice": {

@@ -9,7 +9,7 @@ const Wrapper = styled.div``;
 
 const GridWrapper = styled.div`
   padding: 1.2vw;
-  width: 100vw;
+  width: 80vw;
   position: relative;
 `;
 
