@@ -22,7 +22,7 @@ jsonschema==2.6.0
 MarkupSafe==1.1.1
 pathspec==0.5.9
 python-dateutil==2.8.0
-PyYAML==3.13
+PyYAML==5.4
 requests==2.20.1
 semantic-version==2.5.0
 six==1.11.0
