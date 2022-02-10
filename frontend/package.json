@@ -68,7 +68,7 @@
     "image-webpack-loader": "^4.6.0",
     "jest": "^23.6.0",
     "jest-html-reporter": "^2.4.2",
-    "node-sass": "^4.10.0",
+    "node-sass": "^7.0.0",
     "nodemon": "^1.18.10",
     "react": "^16.6.3",
     "react-addons-test-utils": "^15.6.2",
