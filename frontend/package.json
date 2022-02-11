@@ -109,7 +109,7 @@
     "@types/styled-components": "^4.1.4",
     "ag-grid-community": "^20.2.0",
     "ag-grid-react": "^20.2.0",
-    "ajv": "6.8.1",
+    "ajv": "6.12.3",
     "axios": "^0.18.0",
     "connected-react-router": "^6.4.0",
     "deep-copy": "^1.4.2",
